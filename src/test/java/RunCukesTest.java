@@ -5,7 +5,7 @@
  * courses, books, articles, and the like. Contact us if you are in doubt.
  * We make no guarantees that this code is fit for any purpose. 
  * Visit http://www.pragmaticprogrammer.com/titles/srjcuc for more book information.
-***/
+ ***/
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.SnippetType;
@@ -13,6 +13,6 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin="pretty", snippets=SnippetType.CAMELCASE)
+@CucumberOptions(plugin = "pretty", snippets = SnippetType.CAMELCASE)
 public class RunCukesTest {
 }
