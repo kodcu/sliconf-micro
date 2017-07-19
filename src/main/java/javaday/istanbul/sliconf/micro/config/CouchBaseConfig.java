@@ -3,36 +3,63 @@ package javaday.istanbul.sliconf.micro.config;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.CouchbaseCluster;
-import com.couchbase.client.java.document.JsonDocument;
-import com.couchbase.client.java.document.json.JsonObject;
-import com.couchbase.client.java.search.SearchQuery;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Objects;
 
 
 /**
  * Created by ttayfur on 7/8/17.
  */
 public class CouchBaseConfig {
+    private final Logger logger = LogManager.getLogger(getClass());
 
-    private String HOST_NAME = "couchbase://127.0.0.1";
-    private String BUCKET_NAME = "sliconf";
-    private String BUCKET_PASS = "jfFMd8Nd";
+    private final static String HOST_NAME = "couchbase://127.0.0.1";
+    private final static String USERS_BUCKET_NAME = "users";
+    private final static String BUCKET_PASS = "jfFMd8Nd";
 
-    public void createCouchBase() {
-        Cluster cluster = CouchbaseCluster.create(HOST_NAME);
-        Bucket bucket = cluster.openBucket(BUCKET_NAME, BUCKET_PASS);
+    private static Cluster cluster;
+    private static Bucket usersBucket;
 
-        JsonObject user = JsonObject.create();
+    public CouchBaseConfig() {
+        if (Objects.isNull(cluster)) {
+            cluster = CouchbaseCluster.create(HOST_NAME);
+        }
 
-        user.put("firstname", "Talip");
-        user.put("lastname", "Tayfur");
-        user.put("username", "taifuru");
-        user.put("password", "12345");
+        try {
+            if (Objects.nonNull(cluster)) {
+                usersBucket = openUsersBucket();
+            }
 
-        JsonDocument document = JsonDocument.create("taliptayfur", user);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 
-        bucket.upsert(document);
+    private Bucket openUsersBucket() {
+        try {
+            if (Objects.nonNull(cluster)) {
+                usersBucket = cluster.openBucket(USERS_BUCKET_NAME, BUCKET_PASS);
+            } else {
+                usersBucket = null;
+            }
 
-        System.out.println(bucket.get("taliptayfur").content());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return usersBucket;
+    }
 
+    public Bucket getUsersBucket() {
+        if (Objects.nonNull(usersBucket)) {
+            return usersBucket;
+        } else {
+            return openUsersBucket();
+        }
+    }
+
+    public void setUsersBucket(Bucket usersBucket) {
+        this.usersBucket = usersBucket;
     }
 }

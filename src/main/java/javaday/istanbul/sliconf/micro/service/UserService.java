@@ -1,50 +1,47 @@
 package javaday.istanbul.sliconf.micro.service;
 
-import javaday.istanbul.sliconf.micro.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * Created by ttayfur on 7/6/17.
  */
 public class UserService {
-    private Map<String, User> users = new HashMap<>();
+    private Logger logger = LogManager.getLogger(getClass());
+    private PasswordEncryptionService encryptionService = new PasswordEncryptionService();
 
-    public List<User> getAllUsers() {
-        return new ArrayList<>(users.values());
-    }
+    public byte[] getSalt() {
+        byte[] salt = null;
 
-    public User getUser(String id) {
-        return users.get(id);
-    }
-
-    public User createUser(String name, String email) {
-        failIfInvalid(name, email);
-        User user = new User(name, email);
-        users.put(user.getId(), user);
-        return user;
-    }
-
-    public User updateUser(String id, String name, String email) {
-        User user = users.get(id);
-        if (user == null) {
-            throw new IllegalArgumentException("No user with id '" + id + "' found");
+        try {
+            salt = encryptionService.generateSalt();
+        } catch (NoSuchAlgorithmException e) {
+            logger.error(e.getMessage(), e);
         }
-        failIfInvalid(name, email);
-        user.setName(name);
-        user.setEmail(email);
-        return user;
+
+        return salt;
     }
 
-    private void failIfInvalid(String name, String email) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Parameter 'name' cannot be empty");
+    public byte[] getHashedPassword(String password, byte[] salt) {
+        byte[] ePass = null;
+
+        try {
+            ePass = encryptionService.getEncryptedPassword(password, salt);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            logger.error(e.getMessage(), e);
         }
-        if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Parameter 'email' cannot be empty");
+        return ePass;
+    }
+
+    public boolean checkPassword(String password, byte[] hashedPassword, byte[] salt) {
+        try {
+            return encryptionService.authenticate(password, hashedPassword, salt);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            logger.error(e.getMessage(), e);
+            return false;
         }
     }
 }
