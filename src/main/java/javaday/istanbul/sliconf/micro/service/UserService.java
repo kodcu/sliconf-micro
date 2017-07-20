@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.service;
 
+import javaday.istanbul.sliconf.micro.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,12 +37,27 @@ public class UserService {
         return ePass;
     }
 
-    public boolean checkPassword(String password, byte[] hashedPassword, byte[] salt) {
+    private boolean checkPassword(String password, byte[] hashedPassword, byte[] salt) {
         try {
             return encryptionService.authenticate(password, hashedPassword, salt);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             logger.error(e.getMessage(), e);
             return false;
         }
+    }
+
+    public boolean checkIfUserAuthenticated(String password, byte[] hashedPassword, byte[] salt) {
+        return checkPassword(password, hashedPassword, salt);
+    }
+
+    public User createNewUserWithHashedPassword(User user) {
+        byte[] salt = getSalt();
+        byte[] hashedPassword = getHashedPassword(user.getPassword(), salt);
+
+        user.setSalt(salt);
+        user.setHashedPassword(hashedPassword);
+
+        user.setPassword("");
+        return user;
     }
 }

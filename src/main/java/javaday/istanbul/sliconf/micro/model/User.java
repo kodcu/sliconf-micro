@@ -11,8 +11,8 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private transient byte[] hashedPassword;
-    private transient byte[] salt;
+    private byte[] hashedPassword;
+    private byte[] salt;
 
     public User(String id, String name, String email, String password) {
         if(Objects.isNull(id)) {

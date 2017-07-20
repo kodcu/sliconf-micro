@@ -13,6 +13,7 @@ public class RootController {
     public RootController() {
 
         post("/service/users/register", LoginController::createUser, JsonUtil.json());
+        post("/service/users/login", LoginController::loginUser, JsonUtil.json());
 
         // get("/users", (req, res) -> userService.getAllUsers(), JsonUtil.json());
 
