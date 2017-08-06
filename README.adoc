@@ -1,0 +1,48 @@
+
+= Sliconf Micro =
+
+Sliconf uygulamasının backend kısmı
+
+== Kurulum ==
+
+=== Sisteme Couchbase kurulumu
+
+https://www.couchbase.com/downloads adresinden Enterprise 4.6.x sürümünü indiriyoruz
+
+Linux sistemler için şu adımları takip ediyoruz:
+https://developer.couchbase.com/documentation/server/4.6/install/install-linux.html
+
+Windows sistemler için şu adımları takip ediyoruz:
+https://developer.couchbase.com/documentation/server/4.6/install/install-package-windows.html
+
+Mac Os X sistemler için şu adımları takip ediyoruz:
+https://developer.couchbase.com/documentation/server/4.6/install/macos-install.html
+
+Kurulum işlemleri bittikten sonra http://localhost:8091 adresi üzerinden Couchbase
+Server'a erişebilirsiniz.
+
+=== Cluster Ekleme ===
+http://localhost:8091/ui/index.html#/servers/active
+
+üzerinden sisteme bir cluster eklenmesi gerekiyor. Add Server Butonu ile yeni bir cluster
+ekleyelim.
+
+=== Bucket Ekleme ===
+http://localhost:8091/ui/index.html#/buckets
+
+üzerinden sisteme bir bucket ekleyeceğiz (Bu kısım şimdilik elle yapılıyor).
+Create New Data Bucket butonuna basarak gelen ekran üzerinde:
+
+Bucket Name kısmına "users" (tırnaklar olmadan) yazıyoruz.
+
+Access Control kısmında Standart port seçeneğinde bulunan password kısmına
+"jfFMd8Nd" (users bucket'imiz için erişim parolası olacak)yazıyoruz. Diğer kısımlar varsayılan olarak kalabilir.
+
+
+
+
+
+== Couchbase sample query for getting matching element of an array
+
+``SELECT FIRST t FOR t IN hashedPassword WHEN t.a1 = -74 END
+ FROM users WHERE ANY t IN hashedPassword SATISFIES t.a1 = -74 END;``

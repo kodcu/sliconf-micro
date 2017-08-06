@@ -6,6 +6,7 @@ import com.couchbase.client.java.CouchbaseCluster;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.management.MXBean;
 import java.util.Objects;
 
 
@@ -21,6 +22,7 @@ public class CouchBaseConfig {
 
     private static Cluster cluster;
     private static Bucket usersBucket;
+
 
     public CouchBaseConfig() {
         if (Objects.isNull(cluster)) {
@@ -60,6 +62,15 @@ public class CouchBaseConfig {
     }
 
     public void setUsersBucket(Bucket usersBucket) {
-        this.usersBucket = usersBucket;
+        CouchBaseConfig.usersBucket = usersBucket;
     }
+
+    private void createNewCluster() {
+
+    }
+
+    private void createNewBucket() {
+
+    }
+
 }

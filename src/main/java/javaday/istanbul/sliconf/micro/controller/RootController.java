@@ -1,6 +1,8 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.model.ResponseError;
+import javaday.istanbul.sliconf.micro.model.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 
 import static spark.Spark.*;
@@ -10,12 +12,42 @@ import static spark.Spark.*;
  * Created by ttayfur on 7/6/17.
  */
 public class RootController {
+
+    private final LoginController loginController = new LoginController();
+
+    private final LoginControllerMessageProvider loginControllerMessageProvider = LoginControllerMessageProvider.instance();
+
     public RootController() {
 
-        post("/service/users/register", LoginController::createUser, JsonUtil.json());
-        post("/service/users/login", LoginController::loginUser, JsonUtil.json());
+        before((request, response) -> {
+            String token = request.queryParams("token");
 
-        // get("/users", (req, res) -> userService.getAllUsers(), JsonUtil.json());
+            // ... check if authenticated
+            if (!"auth".equals(token)) {
+                ResponseMessage responseMessage = new ResponseMessage();
+                responseMessage.setStatus(false);
+                responseMessage.setMessage(loginControllerMessageProvider.getMessage("notAuthenticated"));
+                responseMessage.setReturnObject(new Object());
+                halt(401, JsonUtil.toJson(responseMessage));
+            }
+        });
+
+        // post("/service/users/register", LoginController::createUser, JsonUtil.json());
+
+
+        path("/service", () -> {
+            path("/users", () -> {
+                post("/login", loginController::loginUser, JsonUtil.json());
+
+                post("/register", loginController::createUser, JsonUtil.json());
+            });
+
+            path("/events", () -> {
+                post("/create-event", null, JsonUtil.json());
+                post("/list-event", null, JsonUtil.json());
+                post("/search-event", null, JsonUtil.json());
+            });
+        });
 
         /*
         get("/users/:id", (req, res) -> {
@@ -39,13 +71,23 @@ public class RootController {
         ), JsonUtil.json());
         */
 
-        after((req, res) -> {
-            res.type("application/json");
-        });
+        after((req, res) -> res.type("application/json"));
 
         exception(IllegalArgumentException.class, (e, req, res) -> {
             res.status(400);
             res.body(JsonUtil.toJson(new ResponseError(e)));
+        });
+
+        // Using Route
+        notFound((req, res) -> {
+            res.type("application/json");
+
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setMessage("The page you looking for not found!");
+            responseMessage.setReturnObject(new Object());
+            responseMessage.setStatus(false);
+
+            return responseMessage;
         });
     }
 }
