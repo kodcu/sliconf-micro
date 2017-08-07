@@ -15,7 +15,7 @@ public class User {
     private byte[] salt;
 
     public User(String id, String name, String email, String password) {
-        if(Objects.isNull(id)) {
+        if (Objects.isNull(id)) {
             this.id = UUID.randomUUID().toString();
         } else {
             this.id = id;
@@ -75,6 +75,6 @@ public class User {
     }
 
     public void generateId() {
-        this.id = UUID.randomUUID().toString();
+        this.id = this.name + "-" + this.email + "-" + UUID.randomUUID().toString();
     }
 }

@@ -78,6 +78,16 @@ public class CouchBaseConfig {
         CouchBaseConfig.usersBucket = usersBucket;
     }
 
+    public Bucket getEventsBucket() {
+        if (Objects.nonNull(eventsBucket)) {
+            return eventsBucket;
+        } else {
+            return openEventsBucket();
+        }
+    }
+
+    public void setEventsBucket(Bucket eventsBucket) { CouchBaseConfig.eventsBucket = eventsBucket; }
+
     private void createNewCluster() {
 
     }

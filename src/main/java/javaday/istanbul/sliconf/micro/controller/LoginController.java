@@ -1,10 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
 
-import com.couchbase.client.java.document.RawJsonDocument;
-import com.couchbase.client.java.document.json.JsonObject;
-import com.google.gson.Gson;
-import javaday.istanbul.sliconf.micro.Main;
 import javaday.istanbul.sliconf.micro.dao.UserDao;
 import javaday.istanbul.sliconf.micro.model.ResponseMessage;
 import javaday.istanbul.sliconf.micro.model.User;
@@ -32,21 +28,20 @@ public class LoginController {
 
 
     public ResponseMessage createUser(Request request, Response response) {
-        ResponseMessage responseMessage = new ResponseMessage();
+        ResponseMessage responseMessage;
 
         String body = request.body();
-        User user = (User) JsonUtil.fromJson(body);
+        User user = JsonUtil.fromJson(body, User.class);
+
+        User dbUser = userDao.getUser(user);
 
         // eger user yoksa kayit et
-        if (!userDao.getUser(user).isEmpty()) {
-            responseMessage.setStatus(false);
-            // Todo mesajlari properties dosyalarindan oku
-            responseMessage.setMessage(loginControllerMessageProvider.getMessage("userNameAlreadyUsed"));
-            responseMessage.setReturnObject(new Object());
+        if (Objects.nonNull(dbUser)) {
+            responseMessage = new ResponseMessage(false,
+                    loginControllerMessageProvider.getMessage("userNameAlreadyUsed"), new Object());
             return responseMessage;
         }
 
-        // Todo unique id random olmamali belirli bir kurali olmali
         user.generateId(); // id bos kalmasin dbye yazarken gerekli
 
         // Todo make a standalone class for writing to db
@@ -60,44 +55,42 @@ public class LoginController {
         user.setPassword("");
 
         // todo yazilip yazilmadigini kontrol et
-        saveUserDB(user);
+        ResponseMessage dbResponse = userDao.saveUser(user);
+
+        if (!dbResponse.isStatus()) {
+            return dbResponse;
+        }
 
         user.setHashedPassword(null);
         user.setSalt(null);
 
-        responseMessage.setStatus(true);
-        responseMessage.setMessage(loginControllerMessageProvider.getMessage("userSaveSuccessful"));
-        responseMessage.setReturnObject(user);
+        responseMessage = new ResponseMessage(true,
+                loginControllerMessageProvider.getMessage("userSaveSuccessful"), user);
 
         return responseMessage;
     }
 
-    public boolean loginUser(Request request, Response response) {
+    public ResponseMessage loginUser(Request request, Response response) {
         String body = request.body();
-        User requestUser = (User) JsonUtil.fromJson(body);
+        User requestUser = JsonUtil.fromJson(body, User.class);
 
-        JsonObject jsonObject = userDao.getUser(requestUser);
+        User userFromDB = userDao.getUser(requestUser);
 
-        if (!jsonObject.isEmpty()) {
-            User userFromDB = (User) JsonUtil.fromJson(jsonObject.get("users").toString());
+        if (Objects.nonNull(userFromDB) &&
+                Objects.nonNull(userFromDB.getHashedPassword()) &&
+                Objects.nonNull(userFromDB.getSalt())) {
 
-            if (Objects.nonNull(userFromDB) &&
-                    Objects.nonNull(userFromDB.getHashedPassword()) &&
-                    Objects.nonNull(userFromDB.getSalt())) {
-                UserService userService = new UserService();
+            UserService userService = new UserService();
 
-                return userService.checkIfUserAuthenticated(requestUser.getPassword(), userFromDB.getHashedPassword(), userFromDB.getSalt());
-            } else {
-                return false;
+            if (userService.checkIfUserAuthenticated(
+                    requestUser.getPassword(), userFromDB.getHashedPassword(), userFromDB.getSalt())) {
+                return new ResponseMessage(true, "User successfully logged in", userFromDB);
             }
-        } else {
-            return false;
+
         }
+
+        return new ResponseMessage(false, "Wrong user name or password", new Object());
     }
 
-    private static void saveUserDB(User user) {
-        RawJsonDocument document1 = RawJsonDocument.create(user.getId(), new Gson().toJson(user));
-        Main.couchBaseConfig.getUsersBucket().upsert(document1);
 
-    }
 }
