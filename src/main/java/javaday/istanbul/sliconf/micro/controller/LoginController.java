@@ -7,8 +7,10 @@ import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.UserService;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
 
@@ -18,14 +20,22 @@ import java.util.Objects;
 /**
  * Created by ttayfur on 7/18/17.
  */
+@Component
 public class LoginController {
 
-    private final static Logger logger = LogManager.getLogger(LoginController.class);
+    //private final static Logger logger = LogManager.getLogger(LoginController.class);
 
     private final static UserDao userDao = new UserDao();
 
-    private final LoginControllerMessageProvider loginControllerMessageProvider = LoginControllerMessageProvider.instance();
+    @Autowired
+    private LoginControllerMessageProvider loginControllerMessageProvider;
 
+
+    public ResponseMessage test(Request request, Response response) {
+        return new ResponseMessage(true, "selam talip", new Object());
+    }
+
+    /*
 
     public ResponseMessage createUser(Request request, Response response) {
         ResponseMessage responseMessage;
@@ -92,5 +102,6 @@ public class LoginController {
         return new ResponseMessage(false, "Wrong user name or password", new Object());
     }
 
+*/
 
 }

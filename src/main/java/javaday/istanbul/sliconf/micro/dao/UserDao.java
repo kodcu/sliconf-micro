@@ -11,8 +11,8 @@ import javaday.istanbul.sliconf.micro.Main;
 import javaday.istanbul.sliconf.micro.model.ResponseMessage;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,7 @@ import static com.couchbase.client.java.query.dsl.Expression.x;
  * Created by ttayfur on 7/31/17.
  */
 public class UserDao {
+    /*
 
     private Logger logger = LogManager.getLogger(UserDao.class);
 
@@ -74,5 +75,6 @@ public class UserDao {
 
         return message;
     }
+    */
 
 }

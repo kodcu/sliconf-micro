@@ -12,6 +12,7 @@ import spark.Response;
 import java.util.Objects;
 
 public class CreateEventController {
+    /*
 
     private final EventDao eventDao = new EventDao();
 
@@ -47,5 +48,6 @@ public class CreateEventController {
 
         return responseMessage;
     }
+    */
 
 }

@@ -11,8 +11,8 @@ import javaday.istanbul.sliconf.micro.model.ResponseMessage;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,7 @@ import static com.couchbase.client.java.query.dsl.Expression.i;
 import static com.couchbase.client.java.query.dsl.Expression.x;
 
 public class EventDao {
+    /*
 
     private Logger logger = LogManager.getLogger(EventDao.class);
 
@@ -71,4 +72,5 @@ public class EventDao {
             return null;
         }
     }
+    */
 }
