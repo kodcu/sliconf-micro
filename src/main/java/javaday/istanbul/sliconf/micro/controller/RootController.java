@@ -3,6 +3,7 @@ package javaday.istanbul.sliconf.micro.controller;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.model.ResponseError;
 import javaday.istanbul.sliconf.micro.model.ResponseMessage;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,11 +17,22 @@ import static spark.Spark.*;
 @Component
 public class RootController {
 
-    private LoginController loginController = new LoginController();
+
+    private LoginController loginController;
+
+
     private LoginControllerMessageProvider loginControllerMessageProvider;
 
+
+    //private final LoginControllerMessageProvider loginControllerMessageProvider = LoginControllerMessageProvider.instance();
+
     @Autowired
-    public RootController() {
+    public RootController(LoginControllerMessageProvider loginControllerMessageProvider, LoginController loginController) {
+
+        this.loginController = loginController;
+        this.loginControllerMessageProvider = loginControllerMessageProvider;
+
+        port(Constants.SERVER_PORT);
 
         before((request, response) -> {
             String token = request.queryParams("token");
@@ -29,7 +41,7 @@ public class RootController {
             if (!"auth".equals(token)) {
                 ResponseMessage responseMessage = new ResponseMessage();
                 responseMessage.setStatus(false);
-                //responseMessage.setMessage(loginControllerMessageProvider.getMessage("notAuthenticated"));
+                responseMessage.setMessage(loginControllerMessageProvider.getMessage("notAuthenticated"));
                 responseMessage.setReturnObject(new Object());
                 halt(401, JsonUtil.toJson(responseMessage));
             }
@@ -79,7 +91,7 @@ public class RootController {
 
         exception(IllegalArgumentException.class, (e, req, res) -> {
             res.status(400);
-            res.body(JsonUtil.toJson(new ResponseError(e)));
+            //res.body(JsonUtil.toJson(new ResponseError(e)));
         });
 
         // Using Route

@@ -1,14 +1,11 @@
 package javaday.istanbul.sliconf.micro.config;
 
-import com.couchbase.client.java.env.CouchbaseEnvironment;
-import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -37,6 +34,11 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
     @Override
     protected String getBucketPassword() {
         return BUCKET_PASS;
+    }
+
+    @Override
+    protected String getMappingBasePackage() {
+        return "javaday.istanbul.sliconf.micro.model";
     }
 
 

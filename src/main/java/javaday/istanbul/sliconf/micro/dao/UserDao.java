@@ -1,5 +1,5 @@
 package javaday.istanbul.sliconf.micro.dao;
-
+/*
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.document.RawJsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
@@ -21,7 +21,7 @@ import java.util.Objects;
 import static com.couchbase.client.java.query.Select.select;
 import static com.couchbase.client.java.query.dsl.Expression.i;
 import static com.couchbase.client.java.query.dsl.Expression.x;
-
+*/
 /**
  * Created by ttayfur on 7/31/17.
  */

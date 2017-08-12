@@ -1,5 +1,5 @@
 package javaday.istanbul.sliconf.micro.util;
-
+/*
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -10,19 +10,23 @@ import spark.ResponseTransformer;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+*/
+
+import com.google.gson.Gson;
+import spark.ResponseTransformer;
 
 /**
  * Created by ttayfur on 7/6/17.
  */
 public class JsonUtil {
 
+    /*  private static final Logger logger = LogManager.getLogger(JsonUtil.class);
 
-    //private static final Logger logger = LogManager.getLogger(JsonUtil.class);
-
+  */
     public static String toJson(Object object) {
         return new Gson().toJson(object);
     }
-
+/*
     public static <T> T fromJson(String string, Class<T> clazz) {
         T returnedClass = null;
 
@@ -40,6 +44,7 @@ public class JsonUtil {
         Map<String, Object> myMap = new Gson().fromJson(toJson(object), type);
         return myMap;
     }
+    */
 
     public static ResponseTransformer json() {
         return JsonUtil::toJson;

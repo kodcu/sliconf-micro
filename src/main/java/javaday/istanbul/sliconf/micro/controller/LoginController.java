@@ -2,9 +2,12 @@ package javaday.istanbul.sliconf.micro.controller;
 
 
 import javaday.istanbul.sliconf.micro.dao.UserDao;
+import javaday.istanbul.sliconf.micro.model.Person;
 import javaday.istanbul.sliconf.micro.model.ResponseMessage;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.repository.PersonRepository;
+import javaday.istanbul.sliconf.micro.service.PersonRepositoryService;
 import javaday.istanbul.sliconf.micro.service.UserService;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 //import org.apache.logging.log4j.LogManager;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
 
+import javax.annotation.Resource;
 import java.util.Objects;
 
 
@@ -27,14 +31,29 @@ public class LoginController {
 
     private final static UserDao userDao = new UserDao();
 
-    @Autowired
+
     private LoginControllerMessageProvider loginControllerMessageProvider;
 
+    private PersonRepositoryService personRepositoryService;
 
-    public ResponseMessage test(Request request, Response response) {
-        return new ResponseMessage(true, "selam talip", new Object());
+
+    @Autowired
+    public LoginController(PersonRepositoryService personRepositoryService,
+                           LoginControllerMessageProvider loginControllerMessageProvider) {
+        this.loginControllerMessageProvider = loginControllerMessageProvider;
+        this.personRepositoryService = personRepositoryService;
     }
 
+    public ResponseMessage test(Request request, Response response) {
+
+        Person person = new Person();
+        person.setFirstName("talip");
+        person.setLastName("tayfur");
+
+        personRepositoryService.save(person);
+
+        return new ResponseMessage(true, "selam talip", new Object());
+    }
     /*
 
     public ResponseMessage createUser(Request request, Response response) {

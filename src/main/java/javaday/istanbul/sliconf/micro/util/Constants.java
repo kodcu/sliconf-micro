@@ -10,8 +10,7 @@ public class Constants {
     public static final String PROTECTED_DATABASE = "admin";
     public static final String DATABASE_NAME = "sliconfMicro";
 
-    public static final String MONGO_HOST = "127.0.0.1";
-    public static final int MONGO_PORT = 27017;
+    public static final int SERVER_PORT = 8080;
 
     private Constants() {
     }
