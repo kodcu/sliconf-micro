@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import javaday.istanbul.sliconf.micro.model.response.ResponseError;
+import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
-import javaday.istanbul.sliconf.micro.model.ResponseError;
-import javaday.istanbul.sliconf.micro.model.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +17,10 @@ import static spark.Spark.*;
 @Component
 public class RootController {
 
-
     private LoginController loginController;
-
 
     private LoginControllerMessageProvider loginControllerMessageProvider;
 
-
-    //private final LoginControllerMessageProvider loginControllerMessageProvider = LoginControllerMessageProvider.instance();
 
     @Autowired
     public RootController(LoginControllerMessageProvider loginControllerMessageProvider, LoginController loginController) {
@@ -52,9 +48,8 @@ public class RootController {
 
         path("/service", () -> {
             path("/users", () -> {
-                //post("/login", loginController::loginUser, JsonUtil.json());
-
-                // post("/register", loginController::createUser, JsonUtil.json());
+                post("/login", loginController::loginUser, JsonUtil.json());
+                post("/register", loginController::createUser, JsonUtil.json());
                 post("/test", loginController::test, JsonUtil.json());
             });
 
@@ -91,7 +86,7 @@ public class RootController {
 
         exception(IllegalArgumentException.class, (e, req, res) -> {
             res.status(400);
-            //res.body(JsonUtil.toJson(new ResponseError(e)));
+            res.body(JsonUtil.toJson(new ResponseError(e)));
         });
 
         // Using Route

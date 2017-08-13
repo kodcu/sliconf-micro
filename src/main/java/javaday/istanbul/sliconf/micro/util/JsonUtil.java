@@ -13,6 +13,7 @@ import java.util.Map;
 */
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import spark.ResponseTransformer;
 
 /**
@@ -26,7 +27,7 @@ public class JsonUtil {
     public static String toJson(Object object) {
         return new Gson().toJson(object);
     }
-/*
+
     public static <T> T fromJson(String string, Class<T> clazz) {
         T returnedClass = null;
 
@@ -37,7 +38,7 @@ public class JsonUtil {
         }
         return returnedClass;
     }
-
+/*
     public static Map<String, Object> mapFromObject(Object object) {
         Type type = new TypeToken<Map<String, Object>>() {
         }.getType();

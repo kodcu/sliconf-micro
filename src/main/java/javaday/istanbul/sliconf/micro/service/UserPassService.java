@@ -10,7 +10,7 @@ import java.security.spec.InvalidKeySpecException;
 /**
  * Created by ttayfur on 7/6/17.
  */
-public class UserService {
+public class UserPassService {
     //private Logger logger = LogManager.getLogger(getClass());
     private PasswordEncryptionService encryptionService = new PasswordEncryptionService();
 

@@ -13,18 +13,12 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan("javaday.istanbul.sliconf.micro")
 public class Main {
-    // public static CouchBaseConfig couchBaseConfig;
-
 
     @Autowired
     public RootController rootController;
 
     public static void main(String[] args) {
-        // couchBaseConfig = new CouchBaseConfig();
 
-        // rootController = new RootController();
-
-        ApplicationContext context =
-                new AnnotationConfigApplicationContext(Main.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
     }
 }

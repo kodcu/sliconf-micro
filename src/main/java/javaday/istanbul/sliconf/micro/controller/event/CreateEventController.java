@@ -1,16 +1,5 @@
 package javaday.istanbul.sliconf.micro.controller.event;
 
-import javaday.istanbul.sliconf.micro.dao.EventDao;
-import javaday.istanbul.sliconf.micro.model.ResponseMessage;
-import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.provider.EventControllerMessageProvider;
-import javaday.istanbul.sliconf.micro.service.UserService;
-import javaday.istanbul.sliconf.micro.util.JsonUtil;
-import spark.Request;
-import spark.Response;
-
-import java.util.Objects;
-
 public class CreateEventController {
     /*
 

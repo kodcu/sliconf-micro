@@ -8,7 +8,7 @@ import com.couchbase.client.java.query.N1qlQueryRow;
 import com.couchbase.client.java.query.Statement;
 import com.google.gson.Gson;
 import javaday.istanbul.sliconf.micro.Main;
-import javaday.istanbul.sliconf.micro.model.ResponseMessage;
+import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 //import org.apache.logging.log4j.LogManager;
