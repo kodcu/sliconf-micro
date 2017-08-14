@@ -1,7 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
 
-import javaday.istanbul.sliconf.micro.dao.UserDao;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
@@ -9,6 +8,8 @@ import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserTemplateService;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -17,9 +18,6 @@ import spark.Response;
 import java.util.List;
 import java.util.Objects;
 
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
-
 
 /**
  * Created by ttayfur on 7/18/17.
@@ -27,10 +25,7 @@ import java.util.Objects;
 @Component
 public class LoginController {
 
-    //private final static Logger logger = LogManager.getLogger(LoginController.class);
-
-    private final static UserDao userDao = new UserDao();
-
+    private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     private LoginControllerMessageProvider loginControllerMessageProvider;
 
@@ -69,20 +64,11 @@ public class LoginController {
             return responseMessage;
         }
 
-        // user.generateId(); // id bos kalmasin dbye yazarken gerekli
 
-        // Todo make a standalone class for writing to db
         UserPassService userPassService = new UserPassService();
-        byte[] salt = userPassService.getSalt();
-        byte[] hashedPassword = userPassService.getHashedPassword(user.getPassword(), salt);
+        User saltedUser = userPassService.createNewUserWithHashedPassword(user);
 
-        user.setSalt(salt);
-        user.setHashedPassword(hashedPassword);
-
-        user.setPassword("");
-
-        // todo yazilip yazilmadigini kontrol et
-        ResponseMessage dbResponse = userRepositoryService.save(user);
+        ResponseMessage dbResponse = userRepositoryService.save(saltedUser);
 
         if (!dbResponse.isStatus()) {
             return dbResponse;
@@ -105,21 +91,18 @@ public class LoginController {
 
             User dbUser = userList.get(0);
 
-            if( Objects.nonNull(dbUser) && Objects.nonNull(dbUser.getHashedPassword()) && Objects.nonNull(dbUser.getSalt())) {
+            if (Objects.nonNull(dbUser) && Objects.nonNull(dbUser.getHashedPassword()) && Objects.nonNull(dbUser.getSalt())) {
                 UserPassService userService = new UserPassService();
 
-                if (userService.checkIfUserAuthenticated(
-                        requestUser.getPassword(), dbUser.getHashedPassword(), dbUser.getSalt())) {
+                if (userService.checkIfUserAuthenticated(dbUser, requestUser)) {
+                    dbUser.setHashedPassword(null);
+                    dbUser.setSalt(null);
+
                     return new ResponseMessage(true, "User successfully logged in", dbUser);
                 }
             }
-
-
-
         }
 
         return new ResponseMessage(false, "Wrong user name or password", new Object());
     }
-
-
 }

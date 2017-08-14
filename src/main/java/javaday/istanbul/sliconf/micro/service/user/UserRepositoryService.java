@@ -1,8 +1,10 @@
 package javaday.istanbul.sliconf.micro.service.user;
 
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.model.User;
+import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,8 @@ import java.util.Objects;
 @Component
 @Qualifier("UserRepositoryService")
 public class UserRepositoryService implements UserService {
+
+    private Logger logger = LoggerFactory.getLogger(UserRepositoryService.class);
 
     @Autowired
     private UserRepository repo;
@@ -53,15 +57,14 @@ public class UserRepositoryService implements UserService {
                 message.setStatus(true);
                 message.setMessage("User saved successfully!");
 
-                savedUser.setHashedPassword("");
-                savedUser.setSalt("");
+                savedUser.setHashedPassword(null);
+                savedUser.setSalt(null);
 
                 message.setReturnObject(savedUser);
             }
 
         } catch (Exception e) {
-            // Todo loggger
-            // logger.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
 
         return message;

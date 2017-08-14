@@ -1,29 +1,24 @@
 package javaday.istanbul.sliconf.micro.util;
-/*
+
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spark.ResponseTransformer;
 
 import java.lang.reflect.Type;
 import java.util.Map;
 
-*/
-
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import spark.ResponseTransformer;
 
 /**
  * Created by ttayfur on 7/6/17.
  */
 public class JsonUtil {
 
-    /*  private static final Logger logger = LogManager.getLogger(JsonUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
-  */
     public static String toJson(Object object) {
         return new Gson().toJson(object);
     }
@@ -34,18 +29,17 @@ public class JsonUtil {
         try {
             returnedClass = new Gson().fromJson(string, clazz);
         } catch (JsonSyntaxException e) {
-            //logger.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return returnedClass;
     }
-/*
+
     public static Map<String, Object> mapFromObject(Object object) {
         Type type = new TypeToken<Map<String, Object>>() {
         }.getType();
-        Map<String, Object> myMap = new Gson().fromJson(toJson(object), type);
-        return myMap;
+
+        return new Gson().fromJson(toJson(object), type);
     }
-    */
 
     public static ResponseTransformer json() {
         return JsonUtil::toJson;

@@ -1,15 +1,14 @@
 package javaday.istanbul.sliconf.micro.config;
 
-import com.couchbase.client.deps.com.fasterxml.jackson.databind.JavaType;
-import com.couchbase.client.deps.com.fasterxml.jackson.databind.type.SimpleType;
-import com.couchbase.client.deps.com.fasterxml.jackson.databind.type.TypeFactory;
-import com.couchbase.client.deps.com.fasterxml.jackson.databind.util.Converter;
 import com.couchbase.client.java.Bucket;
 import javaday.istanbul.sliconf.micro.model.User;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.core.CouchbaseTemplate;
 import org.springframework.data.couchbase.core.convert.CustomConversions;
@@ -27,6 +26,8 @@ import java.util.List;
 @Configuration
 @EnableCouchbaseRepositories(basePackages = {"javaday.istanbul.sliconf.micro.repository"})
 public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
+
+    private final Logger logger = LoggerFactory.getLogger(CouchBaseConfig.class);
 
     private final static String HOST_NAME = "127.0.0.1";
     private final static String BUCKET_PASS = "jfFMd8Nd";
@@ -76,8 +77,33 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
         try {
             baseMapping.mapEntity(User.class, usersTemplate());
         } catch (Exception e) {
-            LoggerFactory.getLogger("asd").error(e.getMessage(), e);
-            // Todo custom Exception handling
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public CustomConversions customConversions() {
+        return new CustomConversions(Arrays.asList(StringToByteConverter.INSTANCE,
+                ByteToStringConverter.INSTANCE));
+    }
+
+    @ReadingConverter
+    public enum StringToByteConverter implements Converter<String, byte[]> {
+        INSTANCE;
+
+        @Override
+        public byte[] convert(String source) {
+            return Base64.getDecoder().decode(source);
+        }
+    }
+
+    @WritingConverter
+    public enum ByteToStringConverter implements Converter<byte[], String> {
+        INSTANCE;
+
+        @Override
+        public String convert(byte[] bytes) {
+            return Base64.getEncoder().encodeToString(bytes);
         }
     }
 
