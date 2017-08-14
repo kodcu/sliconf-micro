@@ -1,9 +1,12 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import javaday.istanbul.sliconf.micro.model.response.ResponseError;
+import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
-import javaday.istanbul.sliconf.micro.model.ResponseError;
-import javaday.istanbul.sliconf.micro.model.ResponseMessage;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import static spark.Spark.*;
 
@@ -11,13 +14,21 @@ import static spark.Spark.*;
 /**
  * Created by ttayfur on 7/6/17.
  */
+@Component
 public class RootController {
 
-    private final LoginController loginController = new LoginController();
+    private LoginController loginController;
 
-    private final LoginControllerMessageProvider loginControllerMessageProvider = LoginControllerMessageProvider.instance();
+    private LoginControllerMessageProvider loginControllerMessageProvider;
 
-    public RootController() {
+
+    @Autowired
+    public RootController(LoginControllerMessageProvider loginControllerMessageProvider, LoginController loginController) {
+
+        this.loginController = loginController;
+        this.loginControllerMessageProvider = loginControllerMessageProvider;
+
+        port(Constants.SERVER_PORT);
 
         before((request, response) -> {
             String token = request.queryParams("token");
@@ -38,14 +49,14 @@ public class RootController {
         path("/service", () -> {
             path("/users", () -> {
                 post("/login", loginController::loginUser, JsonUtil.json());
-
                 post("/register", loginController::createUser, JsonUtil.json());
+                post("/test", loginController::test, JsonUtil.json());
             });
 
             path("/events", () -> {
-                post("/create-event", null, JsonUtil.json());
-                post("/list-event", null, JsonUtil.json());
-                post("/search-event", null, JsonUtil.json());
+                //post("/create-event", null, JsonUtil.json());
+                //post("/list-event", null, JsonUtil.json());
+                //post("/search-event", null, JsonUtil.json());
             });
         });
 

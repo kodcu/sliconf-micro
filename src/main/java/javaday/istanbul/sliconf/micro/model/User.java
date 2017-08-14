@@ -1,29 +1,45 @@
 package javaday.istanbul.sliconf.micro.model;
 
-import java.util.Objects;
-import java.util.UUID;
+import com.couchbase.client.java.repository.annotation.Field;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+
+import javax.validation.constraints.NotNull;
+
+import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
 /**
  * Created by ttayfur on 7/6/17.
  */
+@Document
 public class User {
+    @Id
+    @GeneratedValue(strategy = UNIQUE)
     private String id;
+
+    @Field
+    @NotNull
     private String name;
+
+    @Field
+    @NotNull
     private String email;
+
+    @Field
+    @NotNull
     private String password;
+
+    @Field
+    @NotNull
     private byte[] hashedPassword;
+
+    @Field
+    @NotNull
     private byte[] salt;
 
-    public User(String id, String name, String email, String password) {
-        if (Objects.isNull(id)) {
-            this.id = UUID.randomUUID().toString();
-        } else {
-            this.id = id;
-        }
 
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public User() {
     }
 
     public String getId() {
@@ -72,9 +88,5 @@ public class User {
 
     public void setSalt(byte[] salt) {
         this.salt = salt;
-    }
-
-    public void generateId() {
-        this.id = this.name + "-" + this.email + "-" + UUID.randomUUID().toString();
     }
 }

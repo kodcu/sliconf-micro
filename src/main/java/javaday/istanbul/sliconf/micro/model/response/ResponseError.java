@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.model;
+package javaday.istanbul.sliconf.micro.model.response;
 
 /**
  * Created by ttayfur on 7/6/17.

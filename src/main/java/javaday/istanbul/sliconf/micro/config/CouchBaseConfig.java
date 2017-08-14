@@ -1,99 +1,110 @@
 package javaday.istanbul.sliconf.micro.config;
 
 import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.CouchbaseCluster;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import javaday.istanbul.sliconf.micro.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+import org.springframework.data.couchbase.core.CouchbaseTemplate;
+import org.springframework.data.couchbase.core.convert.CustomConversions;
+import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
+import org.springframework.data.couchbase.repository.config.RepositoryOperationsMapping;
 
-import javax.management.MXBean;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
  * Created by ttayfur on 7/8/17.
  */
-public class CouchBaseConfig {
-    private final Logger logger = LogManager.getLogger(getClass());
+@Configuration
+@EnableCouchbaseRepositories(basePackages = {"javaday.istanbul.sliconf.micro.repository"})
+public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
-    private final static String HOST_NAME = "couchbase://127.0.0.1";
+    private final Logger logger = LoggerFactory.getLogger(CouchBaseConfig.class);
+
+    private final static String HOST_NAME = "127.0.0.1";
     private final static String BUCKET_PASS = "jfFMd8Nd";
 
     private final static String USERS_BUCKET_NAME = "users";
     private final static String EVENTS_BUCKET_NAME = "events";
+    private final static String DEFAULT_BUCKET_NAME = "default";
 
-    private static Cluster cluster;
-    private static Bucket usersBucket;
-    private static Bucket eventsBucket;
+    @Override
+    protected List<String> getBootstrapHosts() {
+        return Arrays.asList("localhost", HOST_NAME);
+    }
+
+    @Override
+    protected String getBucketName() {
+        return DEFAULT_BUCKET_NAME;
+    }
+
+    @Override
+    protected String getBucketPassword() {
+        return "";
+    }
 
 
-    public CouchBaseConfig() {
-        if (Objects.isNull(cluster)) {
-            cluster = CouchbaseCluster.create(HOST_NAME);
-        }
+    @Override
+    protected String getMappingBasePackage() {
+        return "javaday.istanbul.sliconf.micro";
+    }
 
+
+    @Bean
+    public Bucket usersBucket() throws Exception {
+        return couchbaseCluster().openBucket(USERS_BUCKET_NAME, BUCKET_PASS);
+    }
+
+    @Bean(name = "usersTemplate")
+    public CouchbaseTemplate usersTemplate() throws Exception {
+        CouchbaseTemplate template = new CouchbaseTemplate(
+                couchbaseClusterInfo(), usersBucket(),
+                mappingCouchbaseConverter(), translationService());
+        template.setDefaultConsistency(getDefaultConsistency());
+        return template;
+    }
+
+    @Override
+    public void configureRepositoryOperationsMapping(RepositoryOperationsMapping baseMapping) {
         try {
-            if (Objects.nonNull(cluster)) {
-                usersBucket = openUsersBucket();
-                eventsBucket = openEventsBucket();
-            }
-
+            baseMapping.mapEntity(User.class, usersTemplate());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
-    private Bucket openBucket(String bucketName, Bucket bucket) {
-        try {
-            if (Objects.nonNull(cluster)) {
-                bucket = cluster.openBucket(bucketName, BUCKET_PASS);
-            } else {
-                bucket = null;
-            }
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return bucket;
+    @Override
+    public CustomConversions customConversions() {
+        return new CustomConversions(Arrays.asList(StringToByteConverter.INSTANCE,
+                ByteToStringConverter.INSTANCE));
     }
 
-    private Bucket openUsersBucket() {
-        return openBucket(USERS_BUCKET_NAME, usersBucket);
-    }
+    @ReadingConverter
+    public enum StringToByteConverter implements Converter<String, byte[]> {
+        INSTANCE;
 
-    private Bucket openEventsBucket() {
-        return openBucket(EVENTS_BUCKET_NAME, eventsBucket);
-    }
-
-    public Bucket getUsersBucket() {
-        if (Objects.nonNull(usersBucket)) {
-            return usersBucket;
-        } else {
-            return openUsersBucket();
+        @Override
+        public byte[] convert(String source) {
+            return Base64.getDecoder().decode(source);
         }
     }
 
-    public void setUsersBucket(Bucket usersBucket) {
-        CouchBaseConfig.usersBucket = usersBucket;
-    }
+    @WritingConverter
+    public enum ByteToStringConverter implements Converter<byte[], String> {
+        INSTANCE;
 
-    public Bucket getEventsBucket() {
-        if (Objects.nonNull(eventsBucket)) {
-            return eventsBucket;
-        } else {
-            return openEventsBucket();
+        @Override
+        public String convert(byte[] bytes) {
+            return Base64.getEncoder().encodeToString(bytes);
         }
-    }
-
-    public void setEventsBucket(Bucket eventsBucket) { CouchBaseConfig.eventsBucket = eventsBucket; }
-
-    private void createNewCluster() {
-
-    }
-
-    private void createNewBucket() {
-
     }
 
 }
