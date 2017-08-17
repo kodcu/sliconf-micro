@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.config;
 
 import com.couchbase.client.java.Bucket;
-import javaday.istanbul.sliconf.micro.model.User;
+import javaday.istanbul.sliconf.micro.model.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -29,12 +29,12 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(CouchBaseConfig.class);
 
-    private final static String HOST_NAME = "127.0.0.1";
-    private final static String BUCKET_PASS = "jfFMd8Nd";
+    private static final String HOST_NAME = "127.0.0.1";
+    private static final String BUCKET_PASS = "jfFMd8Nd";
 
-    private final static String USERS_BUCKET_NAME = "users";
-    private final static String EVENTS_BUCKET_NAME = "events";
-    private final static String DEFAULT_BUCKET_NAME = "default";
+    private static final String USERS_BUCKET_NAME = "users";
+    private static final String EVENTS_BUCKET_NAME = "events";
+    private static final String DEFAULT_BUCKET_NAME = "default";
 
     @Override
     protected List<String> getBootstrapHosts() {
@@ -72,10 +72,24 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
         return template;
     }
 
+    @Bean
+    public Bucket eventsBucket() throws Exception {
+        return couchbaseCluster().openBucket(EVENTS_BUCKET_NAME, BUCKET_PASS);
+    }
+
+    @Bean(name = "eventsTemplate")
+    public CouchbaseTemplate eventsTemplate() throws Exception {
+        CouchbaseTemplate template = new CouchbaseTemplate(
+                couchbaseClusterInfo(), eventsBucket(),
+                mappingCouchbaseConverter(), translationService());
+        template.setDefaultConsistency(getDefaultConsistency());
+        return template;
+    }
+
     @Override
     public void configureRepositoryOperationsMapping(RepositoryOperationsMapping baseMapping) {
         try {
-            baseMapping.mapEntity(User.class, usersTemplate());
+            baseMapping.mapEntity(Event.class, eventsTemplate());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

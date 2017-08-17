@@ -1,8 +1,6 @@
 package javaday.istanbul.sliconf.micro.model.response;
 
 
-import java.util.Objects;
-
 /**
  * Created by ttayfur on 7/20/17.
  */
@@ -11,7 +9,8 @@ public class ResponseMessage {
     private String message;
     private Object returnObject;
 
-    public ResponseMessage() {}
+    public ResponseMessage() {
+    }
 
     public ResponseMessage(boolean status, String message, Object returnObject) {
         this.status = status;

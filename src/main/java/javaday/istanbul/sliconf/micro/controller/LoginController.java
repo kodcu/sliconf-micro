@@ -6,10 +6,7 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
-import javaday.istanbul.sliconf.micro.service.user.UserTemplateService;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -25,23 +22,16 @@ import java.util.Objects;
 @Component
 public class LoginController {
 
-    private final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
     private LoginControllerMessageProvider loginControllerMessageProvider;
 
-
     private UserRepositoryService userRepositoryService;
-
-    private UserTemplateService userTemplateService;
 
 
     @Autowired
     public LoginController(LoginControllerMessageProvider loginControllerMessageProvider,
-                           UserRepositoryService userRepositoryService,
-                           UserTemplateService userTemplateService) {
+                           UserRepositoryService userRepositoryService) {
         this.loginControllerMessageProvider = loginControllerMessageProvider;
         this.userRepositoryService = userRepositoryService;
-        this.userTemplateService = userTemplateService;
     }
 
     public ResponseMessage test(Request request, Response response) {

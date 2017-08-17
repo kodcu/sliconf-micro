@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import javaday.istanbul.sliconf.micro.controller.event.CreateEventController;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
@@ -18,17 +19,23 @@ import static spark.Spark.*;
 public class RootController {
 
     private LoginController loginController;
-
+    private CreateEventController eventController;
     private LoginControllerMessageProvider loginControllerMessageProvider;
 
-
     @Autowired
-    public RootController(LoginControllerMessageProvider loginControllerMessageProvider, LoginController loginController) {
-
-        this.loginController = loginController;
+    public RootController(LoginControllerMessageProvider loginControllerMessageProvider,
+                          LoginController loginController,
+                          CreateEventController eventController) {
         this.loginControllerMessageProvider = loginControllerMessageProvider;
+        this.loginController = loginController;
+        this.eventController = eventController;
 
         port(Constants.SERVER_PORT);
+
+        this.setPaths();
+    }
+
+    private void setPaths() {
 
         before((request, response) -> {
             String token = request.queryParams("token");
@@ -43,9 +50,6 @@ public class RootController {
             }
         });
 
-        // post("/service/users/register", LoginController::createUser, JsonUtil.json());
-
-
         path("/service", () -> {
             path("/users", () -> {
                 post("/login", loginController::loginUser, JsonUtil.json());
@@ -54,35 +58,15 @@ public class RootController {
             });
 
             path("/events", () -> {
-                //post("/create-event", null, JsonUtil.json());
-                //post("/list-event", null, JsonUtil.json());
-                //post("/search-event", null, JsonUtil.json());
+                post("/create", eventController::createEvent, JsonUtil.json());
+                post("/list", null, JsonUtil.json());
+                post("/search", null, JsonUtil.json());
             });
         });
 
-        /*
-        get("/users/:id", (req, res) -> {
-            String id = req.params(":id");
-
-            User user = userService.getUser(id);
-
-            if (user != null) {
-                return user;
-            }
-            res.status(400);
-            return new ResponseError("No user with id '%s' found", id);
-        }, JsonUtil.json());
-*/
-
-        /*
-        put("/users/:id", (req, res) -> userService.updateUser(
-                req.params(":id"),
-                req.queryParams("name"),
-                req.queryParams("email")
-        ), JsonUtil.json());
-        */
-
         after((req, res) -> res.type("application/json"));
+
+        // Todo spark-java ile exception handling yapabilir miyiz?
 
         exception(IllegalArgumentException.class, (e, req, res) -> {
             res.status(400);
