@@ -1,32 +1,44 @@
 package javaday.istanbul.sliconf.micro.controller.event;
 
+import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.provider.EventControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.util.JsonUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import spark.Request;
+import spark.Response;
+
+import java.util.List;
+import java.util.Objects;
+
+@Component
 public class CreateEventController {
-    /*
 
-    private final EventDao eventDao = new EventDao();
+    @Autowired
+    private EventControllerMessageProvider messageProvider;
 
-    private final EventControllerMessageProvider messageProvider = EventControllerMessageProvider.instance();
+    @Autowired
+    private EventRepositoryService repositoryService;
 
-    public ResponseMessage createUser(Request request, Response response) {
-
-        // Todo event olusturma kurallari belirlenmeli
-
+    public ResponseMessage createEvent(Request request, Response response) {
         ResponseMessage responseMessage;
 
         String body = request.body();
         Event event = JsonUtil.fromJson(body, Event.class);
 
-        Event dbEvent = eventDao.getEvent(event);
+        List<Event> dbEvents = repositoryService.findByName(event.getName());
 
-        // eger user yoksa kayit et
-        if (Objects.nonNull(dbEvent)) {
+        // eger event yoksa kayit et
+        if (Objects.nonNull(dbEvents) && !dbEvents.isEmpty()) {
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventAlreadyRegistered"), new Object());
             return responseMessage;
         }
 
         // todo yazilip yazilmadigini kontrol et
-        ResponseMessage dbResponse = eventDao.saveEvent(event);
+        ResponseMessage dbResponse = repositoryService.save(event);
 
         if (!dbResponse.isStatus()) {
             return dbResponse;
@@ -37,6 +49,5 @@ public class CreateEventController {
 
         return responseMessage;
     }
-    */
 
 }

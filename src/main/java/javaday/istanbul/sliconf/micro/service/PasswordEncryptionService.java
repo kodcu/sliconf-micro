@@ -13,18 +13,18 @@ import java.util.Arrays;
  */
 public class PasswordEncryptionService {
 
-    private final String SECURE_RANDOM_INSTANCE = "SHA1PRNG";
+    private static final String SECURE_RANDOM_INSTANCE = "SHA1PRNG";
 
     // PBKDF2 with SHA-1 as the hashing algorithm. Note that the NIST
     // specifically names SHA-1 as an acceptable hashing algorithm for PBKDF2
-    private final String ALGORITHM = "PBKDF2WithHmacSHA1";
+    private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
 
     // Pick an iteration count that works for you. The NIST recommends at
     // least 1,000 iterations:
     // http://csrc.nist.gov/publications/nistpubs/800-132/nist-sp800-132.pdf
     // iOS 4.x reportedly uses 10,000:
     // http://blog.crackpassword.com/2010/09/smartphone-forensics-cracking-blackberry-backup-passwords/
-    private final short ITERATIONS = 20000;
+    private static final short ITERATIONS = 20000;
 
     public boolean authenticate(String attemptedPassword, byte[] encryptedPassword, byte[] salt)
             throws NoSuchAlgorithmException, InvalidKeySpecException {

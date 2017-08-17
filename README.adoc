@@ -46,3 +46,9 @@ Access Control kısmında Standart port seçeneğinde bulunan password kısmına
 
 ``SELECT FIRST t FOR t IN hashedPassword WHEN t.a1 = -74 END
  FROM users WHERE ANY t IN hashedPassword SATISFIES t.a1 = -74 END;``
+
+
+== Couchbase Backup ==
+cd /opt/couchbase/bin
+
+./cbbackup http://localhost:8091 /home/ttayfur/couchbase-backup/back-15-08-17 -u admin -p jfFMd8Nd
