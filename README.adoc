@@ -81,7 +81,7 @@ https://www.jetbrains.com/help/idea/installing-and-launching.html
 
 Import ederken maven'ı seçip jdk'nın doğru seçildiğine emin olduktan sonra src/main/java/Main.java'ya girip solda fonksiyonların yanındaki yeşil oklardan birini tıklayarak ilk kez çalıştırıyoruz.Çalıştırmadan biraz beklemeniz gerekebilir IDE gerekli dependancyleri çekiceğinden.Bir sonraki kullanımlarda yukarıda ki okları kullanabilirsiniz.
 
-===Postman
+=== Postman
 
 Chromeun Postman eklentisi deneme amaçlı POST/GET vb istekleri göndermek için bir eklentidir.Kullanım  sistemin çalışması için gerekli değildir.
 https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en
