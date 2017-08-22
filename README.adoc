@@ -4,6 +4,26 @@
 Sliconf uygulamasının backend kısmı
 
 == Kurulum ==
+Linkteki dosyaları bilgisayara indiriyoruz:
+https://github.com/altuga/sliconf-micro
+
+Dosyaları almakta sıkıntı yaşanırsa bu yöntemlerle  indirebilirsiniz
+
+Windows:
+https://stackoverflow.com/questions/6466945/fastest-way-to-download-a-github-project
+yada
+https://help.github.com/articles/cloning-a-repository/
+
+Linux:
+https://help.github.com/articles/cloning-a-repository/#platform-linux
+
+Mac:
+https://help.github.com/articles/cloning-a-repository/#platform-mac
+
+
+=== Jdk kurulumu:
+Gerekli bilgilar bu linkte:
+http://docs.oracle.com/javase/7/docs/webnotes/install/index.html
 
 === Sisteme Couchbase kurulumu
 
@@ -21,6 +41,8 @@ https://developer.couchbase.com/documentation/server/4.6/install/macos-install.h
 Kurulum işlemleri bittikten sonra http://localhost:8091 adresi üzerinden Couchbase
 Server'a erişebilirsiniz.
 
+İlk kurulumda şifreyi girip , çıkan herşeye next demeniz yeterlidir.
+
 === Cluster Ekleme ===
 http://localhost:8091/ui/index.html#/servers/active
 
@@ -35,11 +57,37 @@ Create New Data Bucket butonuna basarak gelen ekran üzerinde:
 
 Bucket Name kısmına "users" (tırnaklar olmadan) yazıyoruz.
 
+Bucketler 300 mb yeterlidir.
+
 Access Control kısmında Standart port seçeneğinde bulunan password kısmına
 "jfFMd8Nd" (users bucket'imiz için erişim parolası olacak)yazıyoruz. Diğer kısımlar varsayılan olarak kalabilir.
+Aynı şeyleri default ve events bucketları için yapıyoruz.Defaultta şifre sormayacak.
 
+=== Index Ekleme ===
+http://localhost:8091/ui/index.html#/query/workbench
 
+Queryler kısmından sıra sıra alttaki kodları çalıştırıyoruz:
+create primary index on users;
+create primary index on events;
+create primary index on default;
 
+=== Intellij IDEA kurulumu
+
+Buradan sisteme göre gerekli dosyaları indiriyoruz:
+https://www.jetbrains.com/idea/download/#section=windows 
+
+Kurulum için gerekli bilgiler burada:
+https://www.jetbrains.com/help/idea/installing-and-launching.html 
+
+Import ederken maven'ı seçip jdk'nın doğru seçildiğine emin olduktan sonra src/main/java/Main.java'ya girip solda fonksiyonların yanındaki yeşil oklardan birini tıklayarak ilk kez çalıştırıyoruz.Çalıştırmadan biraz beklemeniz gerekebilir IDE gerekli dependancyleri çekiceğinden.Bir sonraki kullanımlarda yukarıda ki okları kullanabilirsiniz.
+
+===Postman
+
+Chromeun Postman eklentisi deneme amaçlı POST/GET vb istekleri göndermek için bir eklentidir.Kullanım  sistemin çalışması için gerekli değildir.
+https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en
+
+Gerekli routeların kontrolü için bu link size yardımcı olacaktır.Sadece chromeda çalışır.
+https://www.getpostman.com/collections/dae7508c1fe7667f32bd
 
 
 == Couchbase sample query for getting matching element of an array
