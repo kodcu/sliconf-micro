@@ -1,6 +1,7 @@
 package javaday.istanbul.sliconf.micro;
 
 
+import javaday.istanbul.sliconf.micro.config.CorsFilter;
 import javaday.istanbul.sliconf.micro.controller.RootController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,8 @@ public class Main {
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
+        //Enable CORS
+        CorsFilter.apply();
         logger.info(context.getApplicationName() + ": is started!");
     }
 }
