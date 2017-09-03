@@ -29,7 +29,7 @@ public class UserRepositoryService implements UserService {
     }
 
     public List<User> findAll() {
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
 
         for (User user : repo.findAll()) {
             users.add(user);
