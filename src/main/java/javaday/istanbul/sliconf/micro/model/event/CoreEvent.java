@@ -7,6 +7,7 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
@@ -30,7 +31,7 @@ public class CoreEvent {
 
     @Field
     @NotNull
-    private LocalDate date;
+    private LocalDateTime date;
 
     public String getId() {
         return id;
@@ -64,11 +65,11 @@ public class CoreEvent {
         this.logoPath = logoPath;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }

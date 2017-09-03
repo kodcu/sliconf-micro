@@ -1,4 +1,4 @@
-/***
+package javaday.istanbul.sliconf.micro; /***
  * Excerpted from "The Cucumber for Java Book",
  * published by The Pragmatic Bookshelf.
  * Copyrights apply to this code. It may not be used to create training material, 
@@ -8,11 +8,14 @@
  ***/
 
 import cucumber.api.CucumberOptions;
-import cucumber.api.SnippetType;
 import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = "pretty", snippets = SnippetType.CAMELCASE)
+@CucumberOptions(
+        format = { "pretty", "html:target/cucumber" },
+        glue = {"javaday.istanbul.sliconf.micro.steps"}
+)
 public class RunCukesTest {
+
 }

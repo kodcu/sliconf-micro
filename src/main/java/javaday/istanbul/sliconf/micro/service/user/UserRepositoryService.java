@@ -69,4 +69,26 @@ public class UserRepositoryService implements UserService {
 
         return message;
     }
+
+    /**
+     * Verilen email ile bulunan kullanicilari dondurur.
+     * Eger liste null ise bos liste dondurur
+     *
+     * @param email
+     * @return
+     */
+    private List<User> findByEmail(String email) {
+        List<User> users = repo.findByEmail(email);
+        return Objects.nonNull(users) ? users : new ArrayList<>();
+    }
+
+    /**
+     * Eger verilen email ile baska bir kullanici var ise true doner
+     *
+     * @param email
+     * @return
+     */
+    public boolean controlIfEmailIsExists(String email) {
+        return !findByEmail(email).isEmpty();
+    }
 }

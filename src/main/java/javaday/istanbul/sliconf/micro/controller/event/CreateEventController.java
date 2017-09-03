@@ -37,7 +37,6 @@ public class CreateEventController {
             return responseMessage;
         }
 
-        // todo yazilip yazilmadigini kontrol et
         ResponseMessage dbResponse = repositoryService.save(event);
 
         if (!dbResponse.isStatus()) {
