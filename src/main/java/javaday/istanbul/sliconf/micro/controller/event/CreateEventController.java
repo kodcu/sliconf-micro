@@ -4,6 +4,7 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.util.EventUtil;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,18 +28,27 @@ public class CreateEventController {
 
         String body = request.body();
         Event event = JsonUtil.fromJson(body, Event.class);
-
+        //isim uzunluğu minimumdan düşük mü diye kontrol et
+        if(EventUtil.checkEventName(event, 4)){
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventNameTooShort"), new Object());
+            return responseMessage;
+        }
+        //event tarihinin geçip geçmediğin, kontrol et
+//        if(!EventUtil.checkIfEventDateAfterOrInNow(event)){
+//            responseMessage = new ResponseMessage(false,
+//                    messageProvider.getMessage("eventDataInvalid"), new Object());
+//            return responseMessage;
+//        }
+        // event var mı diye kontrol et
         List<Event> dbEvents = repositoryService.findByName(event.getName());
-
-        // eger event yoksa kayit et
         if (Objects.nonNull(dbEvents) && !dbEvents.isEmpty()) {
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventAlreadyRegistered"), new Object());
             return responseMessage;
         }
-
+        // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
-
         if (!dbResponse.isStatus()) {
             return dbResponse;
         }

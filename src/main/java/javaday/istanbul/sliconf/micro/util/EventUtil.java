@@ -19,7 +19,7 @@ public class EventUtil {
      */
     public static boolean checkEventName(Event event, int nameLength) {
 
-        return event.getName().length() >= nameLength;
+        return event.getName().length() <= nameLength;
     }
 
     /**
