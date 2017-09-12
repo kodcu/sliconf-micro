@@ -1,14 +1,15 @@
 package javaday.istanbul.sliconf.micro.util;
 
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.ResponseTransformer;
 
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 
@@ -19,15 +20,21 @@ public class JsonUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class,
+                    (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext)
+                            -> LocalDateTime.parse(json.getAsJsonPrimitive().getAsString()))
+            .create();
+
     public static String toJson(Object object) {
-        return new Gson().toJson(object);
+        return gson.toJson(object);
     }
 
     public static <T> T fromJson(String string, Class<T> clazz) {
         T returnedClass = null;
 
         try {
-            returnedClass = new Gson().fromJson(string, clazz);
+            returnedClass = gson.fromJson(string, clazz);
         } catch (JsonSyntaxException e) {
             logger.error(e.getMessage(), e);
         }
@@ -38,7 +45,7 @@ public class JsonUtil {
         Type type = new TypeToken<Map<String, Object>>() {
         }.getType();
 
-        return new Gson().fromJson(toJson(object), type);
+        return gson.fromJson(toJson(object), type);
     }
 
     public static ResponseTransformer json() {
