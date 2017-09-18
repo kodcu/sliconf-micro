@@ -35,7 +35,8 @@ public class EventUtil {
 
     public static String generateKanbanNumber(Event event) {
         // Todo burayi duzenle daha iyi bir algoritma yaz
-        event.setKey("K123");
+        String key = RandomGenerator.generateRandom(4);
+        event.setKey(key);
         return event.getKey();
     }
 }
