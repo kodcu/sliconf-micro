@@ -35,11 +35,11 @@ public class CreateEventController {
             return responseMessage;
         }
         //event tarihinin geçip geçmediğin, kontrol et
-//        if(!EventUtil.checkIfEventDateAfterOrInNow(event)){
-//            responseMessage = new ResponseMessage(false,
-//                    messageProvider.getMessage("eventDataInvalid"), new Object());
-//            return responseMessage;
-//        }
+        if(!EventUtil.checkIfEventDateAfterOrInNow(event)){
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventDataInvalid"), new Object());
+            return responseMessage;
+        }
         // event var mı diye kontrol et
         List<Event> dbEvents = repositoryService.findByName(event.getName());
         if (Objects.nonNull(dbEvents) && !dbEvents.isEmpty()) {
