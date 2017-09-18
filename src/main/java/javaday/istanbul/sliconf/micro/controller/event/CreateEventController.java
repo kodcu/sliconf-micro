@@ -48,7 +48,7 @@ public class CreateEventController {
             return responseMessage;
         }
         //Kanban numarası oluştur
-        String kanbanNumber = EventUtil.generateKanbanNumber(event);
+        EventUtil.generateKanbanNumber(event);
         // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
         if (!dbResponse.isStatus()) {
