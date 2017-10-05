@@ -19,6 +19,7 @@
         <google-oauth.version>1.22.0</google-oauth.version>
         <couch-base.version>2.4.6</couch-base.version>
         <gson.version>2.2.4</gson.version>
+        <sonar.host.url>http://51.15.199.22:9001</sonar.host.url>
         <sonar.sources>src/main/java,src/test/resources/</sonar.sources>
         <sonar.tests>src/test/java</sonar.tests>
         <sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>

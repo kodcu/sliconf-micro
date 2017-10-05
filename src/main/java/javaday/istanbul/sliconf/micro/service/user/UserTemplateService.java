@@ -56,4 +56,9 @@ public class UserTemplateService implements UserService {
         template.save(user);
         return null;
     }
+
+    @Override
+    public User findFirstByEmailEquals(String email) {
+        return null;
+    }
 }

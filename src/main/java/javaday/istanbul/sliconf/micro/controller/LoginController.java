@@ -35,7 +35,7 @@ public class LoginController {
     }
 
     public ResponseMessage test(Request request, Response response) {
-        return new ResponseMessage(true, "selam talip", new Object());
+        return new ResponseMessage(true, "Hi, son of Earth!", new Object());
     }
 
 

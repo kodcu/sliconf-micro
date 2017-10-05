@@ -5,10 +5,12 @@ import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.builder.EventBuilder;
 import javaday.istanbul.sliconf.micro.builder.UserBuilder;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.EventUtil;
@@ -22,7 +24,6 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = {CucumberConfiguration.class})
 public class F633 {
 
-
     @Autowired
     EventRepositoryService eventRepositoryService;
 
@@ -34,10 +35,8 @@ public class F633 {
 
     @Diyelimki("^potansiyel etkinlik sahibi JugEvents sisteminde yeni bir etkinlik açmak istedi$")
     public void potansiyelEtkinlikSahibiJugEventsSistemindeYeniBirEtkinlikAçmakIstedi() throws Throwable {
-        event = new Event();
-
-        event.setName("javaday 2018");
-        event.setDate(LocalDateTime.of(2018, 5, 27, 10, 0));
+        event = new EventBuilder().setName("javaday 2018").
+                setDate(LocalDateTime.of(2018, 5, 27, 10, 0)).build();
 
         assertNotNull(event);
     }
@@ -49,6 +48,9 @@ public class F633 {
                 .setEmail("osman@osman.com")
                 .setPassword("1234!")
                 .build();
+
+        UserPassService userPassService = new UserPassService();
+        user = userPassService.createNewUserWithHashedPassword(user);
 
         assertNotNull(user);
     }
@@ -68,6 +70,16 @@ public class F633 {
         assertTrue(EventUtil.checkIfEventDateAfterOrInNow(event));
     }
 
+    @Ozaman("^sistem etkinliğe özel ve eşşiz bir etkinlik kodu üretir\\.$")
+    public void sistemEtkinliğeÖzelVeEşşizBirEtkinlikKoduÜretir() throws Throwable {
+
+        String kanbanNumber = EventUtil.generateKanbanNumber(event);
+
+        event.setExecutiveUser(user.getId());
+
+        assertEquals(kanbanNumber.length(), 4);
+    }
+
     @Ozaman("^sistem etkinlik sahibini kayıt eder ve etkinlik oluşturulmuş olur$")
     public void sistemEtkinlikSahibiniKayıtEderVeEtkinlikOluşturulmuşOlur() throws Throwable {
         ResponseMessage userMessage = userRepositoryService.save(user);
@@ -75,12 +87,5 @@ public class F633 {
 
         assertTrue(userMessage.isStatus());
         assertTrue(eventMessage.isStatus());
-    }
-
-    @Ozaman("^sistem etkinliğe özel ve eşşiz bir etkinlik kodu üretir\\.$")
-    public void sistemEtkinliğeÖzelVeEşşizBirEtkinlikKoduÜretir() throws Throwable {
-
-        String kanbanNumber = EventUtil.generateKanbanNumber(event);
-        assertEquals(kanbanNumber.length(), 4);
     }
 }

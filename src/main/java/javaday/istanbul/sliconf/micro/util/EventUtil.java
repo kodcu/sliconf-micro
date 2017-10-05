@@ -18,8 +18,7 @@ public class EventUtil {
      * @return
      */
     public static boolean checkEventName(Event event, int nameLength) {
-
-        return event.getName().length() <= nameLength;
+        return event.getName().length() >= nameLength;
     }
 
     /**
@@ -33,8 +32,16 @@ public class EventUtil {
         return now.isBefore(event.getDate());
     }
 
+    /**
+     * Event'in tarihi verilen tarihten sonra mi kontrolu
+     * @param event
+     * @return
+     */
+    public static boolean checkIfEventDateAfterFromGivenDate(Event event, LocalDateTime dateTime) {
+        return dateTime.isBefore(event.getDate());
+    }
+
     public static String generateKanbanNumber(Event event) {
-        // Todo burayi duzenle daha iyi bir algoritma yaz
         String key = RandomGenerator.generateRandom(4);
         event.setKey(key);
         return event.getKey();

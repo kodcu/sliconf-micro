@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -34,10 +35,13 @@ public class JsonUtil {
         T returnedClass = null;
 
         try {
-            returnedClass = gson.fromJson(string, clazz);
+            if(Objects.nonNull(string) && Objects.nonNull(clazz)) {
+                returnedClass = gson.fromJson(string, clazz);
+            }
         } catch (JsonSyntaxException e) {
             logger.error(e.getMessage(), e);
         }
+
         return returnedClass;
     }
 

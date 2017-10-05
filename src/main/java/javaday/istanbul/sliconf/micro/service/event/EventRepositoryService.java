@@ -3,6 +3,7 @@ package javaday.istanbul.sliconf.micro.service.event;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.repository.EventRepository;
+import javaday.istanbul.sliconf.micro.util.EventUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @Component
@@ -65,4 +65,34 @@ public class EventRepositoryService implements EventService {
 
         return message;
     }
+
+    @Override
+    public Event findEventByKeyEquals(String key) {
+        return repo.findEventByKeyEquals(key);
+    }
+
+    @Override
+    public Map<String, Event> findByExecutiveUser(String executiveUser) {
+        Map<String, Event> events = new HashMap<>();
+
+        final List<Event> eventList = repo.findAllByExecutiveUserEquals(executiveUser);
+
+        final LocalDateTime now = LocalDateTime.now();
+
+        if (Objects.nonNull(eventList)) {
+            eventList.forEach(event -> {
+                if (Objects.nonNull(event) && Objects.nonNull(event.getDate())) {
+                    if (EventUtil.checkIfEventDateAfterFromGivenDate(event, now)) {
+                        events.put("active", event);
+                    } else {
+                        events.put("passive", event);
+                    }
+                }
+            });
+        }
+
+        return events;
+    }
+
+
 }

@@ -35,7 +35,6 @@ public class UserRepositoryService implements UserService {
             users.add(user);
         }
 
-
         return users;
     }
 
@@ -77,9 +76,13 @@ public class UserRepositoryService implements UserService {
      * @param email
      * @return
      */
-    private List<User> findByEmail(String email) {
+    public List<User> findByEmail(String email) {
         List<User> users = repo.findByEmail(email);
         return Objects.nonNull(users) ? users : new ArrayList<>();
+    }
+
+    public User findFirstByEmailEquals(String email) {
+        return repo.findFirstByEmail(email);
     }
 
     /**

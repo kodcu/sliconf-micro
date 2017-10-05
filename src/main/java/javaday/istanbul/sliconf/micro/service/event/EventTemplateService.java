@@ -12,6 +12,7 @@ import org.springframework.data.couchbase.core.CouchbaseTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.couchbase.client.java.query.Select.select;
 import static com.couchbase.client.java.query.dsl.Expression.i;
@@ -48,12 +49,22 @@ public class EventTemplateService implements EventService {
         return template.findByN1QL(q, Event.class);
     }
 
+    @Override
+    public Event findEventByKeyEquals(String key) {
+        return null;
+    }
+
     public void delete(Event event) {
         template.remove(event);
     }
 
     public ResponseMessage save(Event event) {
         template.save(event);
+        return null;
+    }
+
+    @Override
+    public Map<String, Event> findByExecutiveUser(String executiveUser) {
         return null;
     }
 }

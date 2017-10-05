@@ -1,6 +1,7 @@
 package javaday.istanbul.sliconf.micro.config;
 
 import com.couchbase.client.java.Bucket;
+import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +91,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
     public void configureRepositoryOperationsMapping(RepositoryOperationsMapping baseMapping) {
         try {
             baseMapping.mapEntity(Event.class, eventsTemplate());
+            baseMapping.mapEntity(User.class, usersTemplate());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

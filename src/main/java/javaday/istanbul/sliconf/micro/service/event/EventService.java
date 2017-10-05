@@ -4,6 +4,7 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EventService {
     Event findOne(String id);
@@ -12,7 +13,11 @@ public interface EventService {
 
     List<Event> findByName(String name);
 
+    Event findEventByKeyEquals(String key);
+
     void delete(Event event);
 
     ResponseMessage save(Event event);
+
+    Map<String, Event> findByExecutiveUser(String executiveUser);
 }

@@ -15,4 +15,6 @@ public interface UserService {
     void delete(User user);
 
     ResponseMessage save(User user);
+
+    User findFirstByEmailEquals(String email);
 }

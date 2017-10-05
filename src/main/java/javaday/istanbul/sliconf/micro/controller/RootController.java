@@ -1,6 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
-import javaday.istanbul.sliconf.micro.controller.event.CreateEventController;
+import javaday.istanbul.sliconf.micro.controller.event.EventController;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
@@ -19,13 +19,13 @@ import static spark.Spark.*;
 public class RootController {
 
     private LoginController loginController;
-    private CreateEventController eventController;
+    private EventController eventController;
     private LoginControllerMessageProvider loginControllerMessageProvider;
 
     @Autowired
     public RootController(LoginControllerMessageProvider loginControllerMessageProvider,
                           LoginController loginController,
-                          CreateEventController eventController) {
+                          EventController eventController) {
         this.loginControllerMessageProvider = loginControllerMessageProvider;
         this.loginController = loginController;
         this.eventController = eventController;
@@ -38,6 +38,9 @@ public class RootController {
     private void setPaths() {
 
         before((request, response) -> {
+
+            // Todo auth sistemini devreye alinca kullan
+            /*
             String token = request.queryParams("token");
 
             // ... check if authenticated
@@ -48,19 +51,25 @@ public class RootController {
                 responseMessage.setReturnObject(new Object());
                 halt(401, JsonUtil.toJson(responseMessage));
             }
+            */
         });
 
-        path("/service", () -> {
-            path("/users", () -> {
-                post("/login", loginController::loginUser, JsonUtil.json());
-                post("/register", loginController::createUser, JsonUtil.json());
-                post("/test", loginController::test, JsonUtil.json());
+        path("/service/", () -> {
+            path("users/", () -> {
+                post("login", loginController::loginUser, JsonUtil.json());
+                post("register", loginController::createUser, JsonUtil.json());
+                post("test", loginController::test, JsonUtil.json());
             });
 
-            path("/events", () -> {
-                post("/create", eventController::createEvent, JsonUtil.json());
-                post("/list", null, JsonUtil.json());
-                post("/search", null, JsonUtil.json());
+            path("events/", () -> {
+                post("create/:userId", eventController::createEvent, JsonUtil.json());
+                post("list/:userId", eventController::listEvents, JsonUtil.json());
+                post("search", null, JsonUtil.json());
+
+                path("/get/", () -> {
+                    post("with-key/:key", eventController::getEventWithKey, JsonUtil.json());
+                    // post("user-events", eventController::getUsersEvent, JsonUtil.json());
+                });
             });
         });
 

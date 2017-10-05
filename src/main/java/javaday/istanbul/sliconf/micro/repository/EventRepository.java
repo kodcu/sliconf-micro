@@ -10,4 +10,8 @@ import java.util.List;
 @Repository
 public interface EventRepository extends CrudRepository<Event, String> {
     List<Event> findByName(String name);
+
+    Event findEventByKeyEquals(String key);
+
+    List<Event> findAllByExecutiveUserEquals(String executiveUser);
 }
