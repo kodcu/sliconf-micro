@@ -4,7 +4,7 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.util.EventUtil;
+import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,14 +46,14 @@ public class EventController {
         Event event = JsonUtil.fromJson(body, Event.class);
 
         //isim uzunluğu minimumdan düşük mü diye kontrol et
-        if(EventUtil.checkEventName(event, 4)){
+        if(EventSpecs.checkEventName(event, 4)){
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventNameTooShort"), new Object());
             return responseMessage;
         }
 
         //event tarihinin geçip geçmediğin, kontrol et
-        if(!EventUtil.checkIfEventDateAfterOrInNow(event)){
+        if(!EventSpecs.checkIfEventDateAfterOrInNow(event)){
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventDataInvalid"), new Object());
             return responseMessage;
@@ -69,7 +69,7 @@ public class EventController {
         }
 
         //Kanban numarası oluştur
-        EventUtil.generateKanbanNumber(event);
+        EventSpecs.generateKanbanNumber(event);
 
         event.setExecutiveUser(userId);
 

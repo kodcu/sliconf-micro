@@ -3,7 +3,7 @@ package javaday.istanbul.sliconf.micro.service.event;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.repository.EventRepository;
-import javaday.istanbul.sliconf.micro.util.EventUtil;
+import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +82,7 @@ public class EventRepositoryService implements EventService {
         if (Objects.nonNull(eventList)) {
             eventList.forEach(event -> {
                 if (Objects.nonNull(event) && Objects.nonNull(event.getDate())) {
-                    if (EventUtil.checkIfEventDateAfterFromGivenDate(event, now)) {
+                    if (EventSpecs.checkIfEventDateAfterFromGivenDate(event, now)) {
                         events.put("active", event);
                     } else {
                         events.put("passive", event);

@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.steps;
 
+import cucumber.api.java.Before;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
@@ -13,18 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @ContextConfiguration(classes = {CucumberConfiguration.class})
 public class G793 {
-
-    @Autowired
-    UserRepositoryService userRepositoryService;
+    private UserRepositoryService userRepositoryService;
 
     @Autowired
     private LoginControllerMessageProvider loginControllerMessageProvider;
 
     private User user;
+
+    @Before
+    public void init() {
+        userRepositoryService = mock(UserRepositoryService.class);
+    }
 
     @Eğerki("^eposta adresi sistemde daha önceden kayıtlı ise$")
     public void eposta_adresi_sistemde_daha_önceden_kayıtlı_ise() throws Throwable {
@@ -43,6 +49,8 @@ public class G793 {
     @Ozaman("^sistem potansiyel etkinlik sahibini çelişkiyi haber verir\\.$")
     public void sistem_potansiyel_etkinlik_sahibini_çelişkiyi_haber_verir() throws Throwable {
         ResponseMessage responseMessage = null;
+
+        when(userRepositoryService.controlIfEmailIsExists(user.getEmail())).thenReturn(true);
 
         if (userRepositoryService.controlIfEmailIsExists(user.getEmail())) {
             responseMessage = new ResponseMessage(false,

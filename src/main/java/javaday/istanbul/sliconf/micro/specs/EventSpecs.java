@@ -1,6 +1,7 @@
-package javaday.istanbul.sliconf.micro.util;
+package javaday.istanbul.sliconf.micro.specs;
 
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.util.RandomGenerator;
 
 import java.time.LocalDateTime;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 /**
  * Event ile ilgili cok kullanilan isleri barindiran sinif
  */
-public class EventUtil {
+public class EventSpecs {
 
     /**
      * Event name'in minimum uzunlugunu gelen parametreye gore kontrol eder
