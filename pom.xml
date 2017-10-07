@@ -22,9 +22,14 @@
         <sonar.host.url>http://51.15.199.22:9001</sonar.host.url>
         <sonar.sources>src/main/java,src/test/resources/</sonar.sources>
         <sonar.tests>src/test/java</sonar.tests>
-        <sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
+        <!--<sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>-->
+        <sonar.jacoco.reportPaths>target/coverage-reports/jacoco.exec</sonar.jacoco.reportPaths>
+
         <spring.mock.version>2.0.8</spring.mock.version>
         <mockito.version>2.0.2-beta</mockito.version>
+
+        <cargo-maven2-plugin.version>1.6.4</cargo-maven2-plugin.version>
+        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -40,31 +45,6 @@
             <artifactId>spring-core</artifactId>
             <version>4.3.10.RELEASE</version>
         </dependency>
-        <!--
-            <dependency>
-              <groupId>org.apache.logging.log4j</groupId>
-              <artifactId>log4j-web</artifactId>
-              <version>${logger.version}</version>
-              <scope>runtime</scope>
-            </dependency>
-
-            <dependency>
-              <groupId>org.apache.logging.log4j</groupId>
-              <artifactId>log4j-slf4j-impl</artifactId>
-              <version>${logger.version}</version>
-            </dependency>
-
-            <dependency>
-              <groupId>org.apache.logging.log4j</groupId>
-              <artifactId>log4j-api</artifactId>
-              <version>${logger.version}</version>
-            </dependency>
-
-            <dependency>
-              <groupId>org.apache.logging.log4j</groupId>
-              <artifactId>log4j-core</artifactId>
-              <version>${logger.version}</version>
-            </dependency>-->
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -170,6 +150,7 @@
                     <argLine>-Xmx1024m</argLine>
                     <argLine>-XX:MaxPermSize=256m</argLine>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
+                    <argLine>${surefireJacocoAgent}</argLine>
                     <useFile>false</useFile>
                 </configuration>
             </plugin>
@@ -186,8 +167,79 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>2.7.1</version>
-
             </plugin>
+
+            <!--Running app locally-->
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>${cargo-maven2-plugin.version}</version>
+                <configuration>
+                    <configuration>
+                        <properties>
+                            <cargo.servlet.port>9898</cargo.servlet.port>
+                            <cargo.logging>medium</cargo.logging>
+                            <cargo.jvmargs>
+                                -Xdebug
+                                -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=12345
+                                -Xnoagent
+                                -Djava.compiler=NONE
+                            </cargo.jvmargs>
+                        </properties>
+                    </configuration>
+                </configuration>
+            </plugin>
+
+            <!-- Configuring and running Jacoco reports -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/coverage-reports/jacoco.exec</destFile>
+                            <propertyName>surefireJacocoAgent</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+                            <propertyName>failsafeJacocoAgent</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>
