@@ -19,15 +19,15 @@ import static com.couchbase.client.java.query.dsl.Expression.i;
 import static com.couchbase.client.java.query.dsl.Expression.x;
 
 @Service
-@Qualifier("EventTemplateService")
 public class EventTemplateService implements EventService {
 
     private static final String DESIGN_DOC = "event";
 
     private CouchbaseTemplate template;
 
-    @Autowired
-    public void setCouchbaseTemplate(@Qualifier("eventsTemplate") CouchbaseTemplate eventsTemplate) {
+    @Autowired(required=false)
+    @Qualifier("eventsTemplate")
+    public void setCouchbaseTemplate(CouchbaseTemplate eventsTemplate) {
         this.template = eventsTemplate;
     }
 

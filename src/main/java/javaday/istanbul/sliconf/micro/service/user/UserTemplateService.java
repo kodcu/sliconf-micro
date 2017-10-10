@@ -18,7 +18,6 @@ import static com.couchbase.client.java.query.dsl.Expression.i;
 import static com.couchbase.client.java.query.dsl.Expression.x;
 
 @Service
-@Qualifier("UserTemplateService")
 public class UserTemplateService implements UserService {
 
     private static final String DESIGN_DOC = "user";
@@ -26,7 +25,8 @@ public class UserTemplateService implements UserService {
     private CouchbaseTemplate template;
 
     @Autowired
-    public void setCouchbaseTemplate(@Qualifier("usersTemplate") CouchbaseTemplate usersTemplate) {
+    @Qualifier(value="usersTemplate")
+    public void setCouchbaseTemplate(CouchbaseTemplate usersTemplate) {
         this.template = usersTemplate;
     }
 
