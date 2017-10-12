@@ -8,14 +8,18 @@ package javaday.istanbul.sliconf.micro; /***
  ***/
 
 import cucumber.api.CucumberOptions;
+import cucumber.api.SnippetType;
 import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        format = { "pretty", "html:target/cucumber" },
-        glue = {"javaday.istanbul.sliconf.micro.steps"}
-)
+        features = "src/test/resources",
+        plugin = "pretty",
+        snippets = SnippetType.CAMELCASE,
+        strict = true)
+@ActiveProfiles("test")
 public class RunCukesTest {
 
 }

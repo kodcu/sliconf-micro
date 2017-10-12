@@ -30,9 +30,9 @@ public class RootController {
         this.loginController = loginController;
         this.eventController = eventController;
 
-        port(Constants.SERVER_PORT);
+        // port(Constants.SERVER_PORT);
 
-        this.setPaths();
+        // this.setPaths();
     }
 
     private void setPaths() {

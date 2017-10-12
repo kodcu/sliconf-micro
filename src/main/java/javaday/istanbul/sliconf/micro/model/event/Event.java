@@ -18,23 +18,18 @@ public class Event {
     private String id;
 
     @Field
-    @NotNull
     private String key;
 
     @Field
-    @NotNull
     private String name;
 
     @Field
-    @NotNull
     private String logoPath;
 
     @Field
-    @NotNull
     private LocalDateTime date;
 
     @Field
-    @NotNull
     private String executiveUser;
 
     private List<AgendaElement> agenda;

@@ -11,7 +11,12 @@ import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -19,6 +24,10 @@ import static org.mockito.Mockito.when;
 
 
 @ContextConfiguration(classes = {CucumberConfiguration.class})
+@WebAppConfiguration
+@AutoConfigureMockMvc
+@SpringBootTest
+@ActiveProfiles("test")
 public class G793 {
     private UserRepositoryService userRepositoryService;
 

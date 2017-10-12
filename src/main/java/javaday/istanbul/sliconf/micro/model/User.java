@@ -19,23 +19,18 @@ public class User {
     private String id;
 
     @Field
-    @NotNull
     private String name;
 
     @Field
-    @NotNull
     private String email;
 
     @Field
-    @NotNull
     private String password;
 
     @Field
-    @NotNull
     private byte[] hashedPassword;
 
     @Field
-    @NotNull
     private byte[] salt;
 
 

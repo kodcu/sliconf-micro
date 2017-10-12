@@ -11,7 +11,12 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +28,10 @@ import static org.mockito.Mockito.when;
 
 
 @ContextConfiguration(classes = {CucumberConfiguration.class})
-
+@WebAppConfiguration
+@AutoConfigureMockMvc
+@SpringBootTest
+@ActiveProfiles("test")
 public class G685 {
 
     private User user;
