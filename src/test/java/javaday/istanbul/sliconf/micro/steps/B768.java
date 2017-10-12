@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.steps;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
@@ -22,61 +23,44 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 @ContextConfiguration(classes = {CucumberConfiguration.class})
-
-public class G685 {
+public class B768 {
 
     private User user;
     private User dbUser;
 
     private UserRepositoryService userRepositoryService;
     private EventRepositoryService eventRepositoryService;
-
     private UserPassService userPassService = new UserPassService();
+
 
     @Before
     public void init() {
         userRepositoryService = mock(UserRepositoryService.class);
         eventRepositoryService = mock(EventRepositoryService.class);
+        dbUser=userPassService.createNewUserWithHashedPassword(new UserBuilder().setEmail("osman@osman.com").setPassword("1234!").build());
     }
 
-    @Diyelimki("^etkinlik sahibi daha önceden JugEvents sistemine başarılı bir şekilde kayıt olmuş$")
-    public void etkinlik_sahibi_daha_önceden_JugEvents_sistemine_başarılı_bir_şekilde_kayıt_olmuş() throws Throwable {
+    @Diyelimki("^etkinlik sahibi sisteme başarılı bir şekilde giriş yaptı, herşey yolunda$")
+    public void etkinlik_sahibi_sisteme_başarılı_bir_şekilde_giriş_yaptı_herşey_yolunda() throws Throwable {
         user = new UserBuilder()
-                .setName("Osman Uykulu")
                 .setEmail("osman@osman.com")
                 .setPassword("1234!")
                 .build();
-
-        assertNotNull(user);
+        if(userRepositoryService.controlIfEmailIsExists(user.getEmail())){
+            assertTrue(userPassService.checkIfUserAuthenticated(dbUser,user));
+        }
     }
 
-    @Eğerki("^etkinlik sahibi,  kulanıcı adı ve şifresini doğru bir şekilde girerse$")
-    public void etkinlik_sahibi_kulanıcı_adı_ve_şifresini_doğru_bir_şekilde_girerse() throws Throwable {
-
-        User tempUser = new UserBuilder()
-                .setName("Osman Uykulu")
-                .setEmail("osman@osman.com")
-                .setPassword("1234!")
-                .build();
-
-        tempUser = userPassService.createNewUserWithHashedPassword(tempUser);
-        when(userRepositoryService.findFirstByEmailEquals(this.user.getEmail())).thenReturn(tempUser);
-
-        dbUser = userRepositoryService.findFirstByEmailEquals(this.user.getEmail());
-
-        assertTrue(userPassService.checkIfUserAuthenticated(dbUser, user));
-    }
-
-    @Ozaman("^sistem etkinlik sahibininin açmış olduğu aktif ve/veya pasif etkinlikleri getirmeli\\.$")
-    public void sistem_etkinlik_sahibininin_açmış_olduğu_aktif_ve_veya_pasif_etkinlikleri_getirmeli() throws Throwable {
-
+    @Eğerki("^etkinlik sahibi etkinliklerini listelemek isterse$")
+    public void etkinlik_sahibi_etkinliklerini_listelemek_isterse() throws Throwable {
         when(eventRepositoryService.findByExecutiveUser(dbUser.getId())).thenReturn(new HashMap<>());
+    }
+
+    @Ozaman("^sistem etkinlik sahibinin geçmiş ve gelecek tüm etkinliklerini listeler$")
+    public void sistem_etkinlik_sahibinin_geçmiş_ve_gelecek_tüm_etkinliklerini_listeler() throws Throwable {
 
         Map<String, List<Event>> events = eventRepositoryService.findByExecutiveUser(dbUser.getId());
-
         assertNotNull(events);
     }
-
 }

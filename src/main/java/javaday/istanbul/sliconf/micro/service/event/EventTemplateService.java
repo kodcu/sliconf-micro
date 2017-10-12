@@ -64,7 +64,7 @@ public class EventTemplateService implements EventService {
     }
 
     @Override
-    public Map<String, Event> findByExecutiveUser(String executiveUser) {
+    public Map<String, List<Event>> findByExecutiveUser(String executiveUser) {
         return null;
     }
 }

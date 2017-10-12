@@ -29,7 +29,7 @@ public class EventController {
 
         String body = request.body();
 
-        String userId = request.queryParams(":userId");
+        String userId = request.params("userId");
 
         if (Objects.isNull(userId)) {
             responseMessage = new ResponseMessage(false,
@@ -46,7 +46,7 @@ public class EventController {
         Event event = JsonUtil.fromJson(body, Event.class);
 
         //isim uzunluğu minimumdan düşük mü diye kontrol et
-        if(EventSpecs.checkEventName(event, 4)){
+        if(!EventSpecs.checkEventName(event, 4)){
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventNameTooShort"), new Object());
             return responseMessage;
@@ -89,7 +89,7 @@ public class EventController {
     public ResponseMessage getEventWithKey(Request request, Response response) {
         ResponseMessage responseMessage;
 
-        String key = request.queryParams(":key");
+        String key = request.params("key");
 
         // event var mı diye kontrol et
         Event event = repositoryService.findEventByKeyEquals(key);
@@ -109,10 +109,10 @@ public class EventController {
     public ResponseMessage listEvents(Request request, Response response) {
         ResponseMessage responseMessage;
 
-        String userId = request.queryParams(":userId");
+        String userId = request.params("userId");
 
         // event var mı diye kontrol et
-        Map<String, Event> events = repositoryService.findByExecutiveUser(userId);
+        Map<String, List<Event>> events = repositoryService.findByExecutiveUser(userId);
 
         if (Objects.isNull(events)) {
             responseMessage = new ResponseMessage(false,
@@ -121,8 +121,7 @@ public class EventController {
         }
 
         responseMessage = new ResponseMessage(true,
-                messageProvider.getMessage("eventCreatedSuccessfully"), events);
-
+                messageProvider.getMessage("eventListedSuccessfully"), events);
         return responseMessage;
     }
 }

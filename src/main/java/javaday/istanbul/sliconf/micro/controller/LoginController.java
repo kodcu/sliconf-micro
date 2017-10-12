@@ -1,17 +1,21 @@
 package javaday.istanbul.sliconf.micro.controller;
 
 
+import com.couchbase.client.java.document.json.JsonObject;
+import javaday.istanbul.sliconf.micro.builder.UserBuilder;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.specs.UserSpecs;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -96,6 +100,40 @@ public class LoginController {
                     return new ResponseMessage(true, "User successfully logged in", dbUser);
                 }
             }
+        }
+
+        return new ResponseMessage(false, "Wrong user name or password", new Object());
+    }
+
+    public ResponseMessage updateUser(Request request, Response response) {
+        List<Boolean> validationList=new ArrayList<>();
+        String body = request.body();
+        JsonObject updateParams =JsonObject.fromJson(body);
+        User user =userRepositoryService.findFirstByEmailEquals(updateParams.getString("email"));
+        if(Objects.nonNull(user)){
+            if(Objects.nonNull(updateParams.getString("name"))) {
+                if(UserSpecs.checkUserParams(updateParams.getString("name"),4)) {
+                    user.setName(updateParams.getString("name"));
+                    validationList.add(true);
+                }else
+                    validationList.add(false);
+            }
+            if(Objects.nonNull(updateParams.getString("pass"))){
+                if(UserSpecs.checkUserParams(updateParams.getString("pass"),4)) {
+                    UserPassService userPassService = new UserPassService();
+                    user.setPassword(updateParams.getString("pass"));
+                    user = userPassService.createNewUserWithHashedPassword(user);
+                }else
+                    validationList.add(false);
+            }
+
+            // TODO: Update fonksiyonunu arastir.
+            if(!validationList.contains(false)) {
+                userRepositoryService.save(user);
+                return new ResponseMessage(true, "User successfully updated", user);
+            }else
+                return new ResponseMessage(false, "Wrong user name or password", new Object());
+
         }
 
         return new ResponseMessage(false, "Wrong user name or password", new Object());

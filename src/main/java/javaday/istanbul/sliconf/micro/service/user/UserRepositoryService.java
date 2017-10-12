@@ -66,6 +66,7 @@ public class UserRepositoryService implements UserService {
             logger.error(e.getMessage(), e);
         }
 
+
         return message;
     }
 
@@ -82,6 +83,7 @@ public class UserRepositoryService implements UserService {
     }
 
     public User findFirstByEmailEquals(String email) {
+        /// TODO: find first yerine uygun bir metod yazılacak
         return repo.findFirstByEmail(email);
     }
 
