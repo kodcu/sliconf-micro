@@ -26,8 +26,6 @@ import java.util.List;
  * Created by ttayfur on 7/8/17.
  */
 @Configuration
-@EnableCouchbaseRepositories(basePackages = {"javaday.istanbul.sliconf.micro.repository"})
-@Profile("prod")
 public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(CouchBaseConfig.class);

@@ -1,0 +1,16 @@
+<web-app>
+
+    <filter>
+        <filter-name>SparkFilter</filter-name>
+        <filter-class>spark.servlet.SparkFilter</filter-class>
+        <init-param>
+            <param-name>applicationClass</param-name>
+            <param-value>javaday.istanbul.sliconf.micro.SliconfMicroApp</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SparkFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+</web-app>

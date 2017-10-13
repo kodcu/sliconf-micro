@@ -3,6 +3,7 @@ package javaday.istanbul.sliconf.micro.model.event;
 
 import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
+@Document
 public class Event {
 
     @Id

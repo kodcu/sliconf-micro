@@ -1,30 +1,38 @@
 package javaday.istanbul.sliconf.micro;
 
 
+import javaday.istanbul.sliconf.micro.config.CorsFilter;
 import javaday.istanbul.sliconf.micro.controller.RootController;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import spark.Spark;
+import spark.servlet.SparkApplication;
+
+import static spark.Spark.port;
 
 /**
  * Created by ttayfur on 7/4/17.
  */
 
 @SpringBootApplication
-@EnableSwagger2
-public class SliconfMicroApp {
+public class SliconfMicroApp implements SparkApplication {
 
     @Autowired
     public static RootController rootController;
 
     public static void main(String[] args) {
         SpringApplication application = new SpringApplication(SliconfMicroApp.class);
-//        SpringApplication.run(SliconfMicroApp.class, args);
-
         application.run(args);
+    }
+
+    @Override
+    public void init() {
 
         //Enable CORS
-        //CorsFilter.apply();
+        CorsFilter.apply();
+
+        RootController.setPaths();
     }
 }

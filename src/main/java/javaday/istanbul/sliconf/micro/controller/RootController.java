@@ -18,24 +18,22 @@ import static spark.Spark.*;
 @Component
 public class RootController {
 
-    private LoginController loginController;
-    private EventController eventController;
-    private LoginControllerMessageProvider loginControllerMessageProvider;
+    private static LoginController loginController;
+    private static EventController eventController;
+    private static LoginControllerMessageProvider loginControllerMessageProvider;
 
     @Autowired
     public RootController(LoginControllerMessageProvider loginControllerMessageProvider,
                           LoginController loginController,
                           EventController eventController) {
-        this.loginControllerMessageProvider = loginControllerMessageProvider;
-        this.loginController = loginController;
-        this.eventController = eventController;
+        RootController.loginControllerMessageProvider = loginControllerMessageProvider;
+        RootController.loginController = loginController;
+        RootController.eventController = eventController;
 
-        // port(Constants.SERVER_PORT);
 
-        // this.setPaths();
     }
 
-    private void setPaths() {
+    public static void setPaths() {
 
         before((request, response) -> {
 
