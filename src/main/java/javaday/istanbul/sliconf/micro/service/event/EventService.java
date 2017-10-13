@@ -19,5 +19,5 @@ public interface EventService {
 
     ResponseMessage save(Event event);
 
-    Map<String, Event> findByExecutiveUser(String executiveUser);
+    Map<String, List<Event>> findByExecutiveUser(String executiveUser);
 }

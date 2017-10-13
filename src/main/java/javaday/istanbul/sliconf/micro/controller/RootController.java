@@ -57,6 +57,7 @@ public class RootController {
                 post("login", loginController::loginUser, JsonUtil.json());
                 post("register", loginController::createUser, JsonUtil.json());
                 post("test", loginController::test, JsonUtil.json());
+                post("update",loginController::updateUser,JsonUtil.json());
             });
 
             path("events/", () -> {

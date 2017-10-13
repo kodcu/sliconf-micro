@@ -69,25 +69,27 @@ public class EventRepositoryService implements EventService {
     }
 
     @Override
-    public Map<String, Event> findByExecutiveUser(String executiveUser) {
-        Map<String, Event> events = new HashMap<>();
+    public Map<String, List<Event>> findByExecutiveUser(String executiveUser) {
+        Map<String, List<Event>> events = new HashMap<>();
 
         final List<Event> eventList = repo.findAllByExecutiveUserEquals(executiveUser);
-
+        List<Event> activeList = new ArrayList<>();
+        List<Event> passiveList = new ArrayList<>();
         final LocalDateTime now = LocalDateTime.now();
 
         if (Objects.nonNull(eventList)) {
             eventList.forEach(event -> {
                 if (Objects.nonNull(event) && Objects.nonNull(event.getDate())) {
                     if (EventSpecs.checkIfEventDateAfterFromGivenDate(event, now)) {
-                        events.put("active", event);
+                        activeList.add(event);
                     } else {
-                        events.put("passive", event);
+                        passiveList.add(event);
                     }
                 }
             });
         }
-
+        events.put("active", activeList);
+        events.put("passive", passiveList);
         return events;
     }
 

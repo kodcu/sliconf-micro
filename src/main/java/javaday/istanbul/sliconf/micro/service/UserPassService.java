@@ -57,6 +57,7 @@ public class UserPassService {
         return checkPassword(targetUser.getPassword(), hashedPassword, salt);
     }
 
+    // TODO:Yorum satirlari eklenecek
     public User createNewUserWithHashedPassword(User user) {
         byte[] salt = getSalt();
         byte[] hashedPassword = getHashedPassword(user.getPassword(), salt);

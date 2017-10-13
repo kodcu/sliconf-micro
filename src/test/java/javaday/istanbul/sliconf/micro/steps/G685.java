@@ -19,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
@@ -81,7 +82,7 @@ public class G685 {
 
         when(eventRepositoryService.findByExecutiveUser(dbUser.getId())).thenReturn(new HashMap<>());
 
-        Map<String, Event> events = eventRepositoryService.findByExecutiveUser(dbUser.getId());
+        Map<String, List<Event>> events = eventRepositoryService.findByExecutiveUser(dbUser.getId());
 
         assertNotNull(events);
     }
