@@ -8,21 +8,27 @@ import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
 import javaday.istanbul.sliconf.micro.builder.UserBuilder;
-import javaday.istanbul.sliconf.micro.controller.LoginController;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static javaday.istanbul.sliconf.micro.specs.UserSpecs.checkUserParams;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {CucumberConfiguration.class})
+@WebAppConfiguration
+@AutoConfigureMockMvc
+@SpringBootTest
+@ActiveProfiles("test")
 public class A265 {
     private User user;
     private User dbUser;
@@ -30,13 +36,13 @@ public class A265 {
     private UserRepositoryService userRepositoryService;
     private UserPassService userPassService = new UserPassService();
 
-    private JsonObject request=JsonObject.create();
+    private JsonObject request = JsonObject.create();
 
     @Before
     public void init() {
         request.put("email", "osman@osman.com");
         userRepositoryService = mock(UserRepositoryService.class);
-        dbUser=userPassService.createNewUserWithHashedPassword(new UserBuilder().setName("Osman Uykulu").setEmail("osman@osman.com").setPassword("1234!").build());
+        dbUser = userPassService.createNewUserWithHashedPassword(new UserBuilder().setName("Osman Uykulu").setEmail("osman@osman.com").setPassword("1234!").build());
     }
 
     @Diyelimki("^etkinlik sahibi ismini değiştimek istiyor$")
@@ -46,16 +52,16 @@ public class A265 {
                 .setEmail("osman@osman.com")
                 .setPassword("1234!")
                 .build();
-        if(userRepositoryService.controlIfEmailIsExists(user.getEmail())){
-            assertTrue(userPassService.checkIfUserAuthenticated(dbUser,user));
+        if (userRepositoryService.controlIfEmailIsExists(user.getEmail())) {
+            assertTrue(userPassService.checkIfUserAuthenticated(dbUser, user));
         }
-        request.put("name","Anıl Müslüm");
+        request.put("name", "Anıl Müslüm");
 
     }
 
     @Eğerki("^yeni ismi asgari (\\d+) harf girilmişse$")
     public void yeni_ismi_asgari_harf_girilmişse(int arg1) throws Throwable {
-        assertTrue(checkUserParams(request.getString("name"),arg1));
+        assertTrue(checkUserParams(request.getString("name"), arg1));
     }
 
     @Ozaman("^sistem isim değişikliğe izin verir$")
@@ -64,17 +70,17 @@ public class A265 {
         ResponseMessage userMsg = new ResponseMessage(true, "User saved successfully!", user);
         when(userRepositoryService.save(user)).thenReturn(userMsg);
         ResponseMessage responseMessage = userRepositoryService.save(user);
-        assertEquals(user.getName(),request.getString("name"));
+        assertEquals(user.getName(), request.getString("name"));
     }
 
     @Diyelimki("^etkinlik sahibi şifresini değiştimek istiyor$")
     public void etkinlik_sahibi_şifresini_değiştimek_istiyor() throws Throwable {
-        request.put("pass","kodcu");
+        request.put("pass", "kodcu");
     }
 
     @Eğerki("^etkinlik sahibi şifresini asgari (\\d+) harf girmişse$")
     public void etkinlik_sahibi_şifresini_asgari_harf_girmişse(int arg1) throws Throwable {
-        assertTrue(checkUserParams(request.getString("pass"),arg1));
+        assertTrue(checkUserParams(request.getString("pass"), arg1));
     }
 
     @Ozaman("^sistem şifre değişikliğe izin verir$")
@@ -83,13 +89,13 @@ public class A265 {
         ResponseMessage userMsg = new ResponseMessage(true, "User saved successfully!", user);
         when(userRepositoryService.save(user)).thenReturn(userMsg);
         ResponseMessage responseMessage = userRepositoryService.save(user);
-        assertEquals(user.getPassword(),request.getString("pass"));
+        assertEquals(user.getPassword(), request.getString("pass"));
 
     }
 
     @Diyelimki("^etkinlik sahibi eposta epostasını değiştirmek istiyor$")
     public void etkinlik_sahibi_eposta_epostasını_değiştirmek_istiyor() throws Throwable {
-        request.put("email","kodcu@kodcu.com");
+        request.put("email", "kodcu@kodcu.com");
     }
 
     @Ozaman("^sistem eposta değişikliğe izin verir vermemeli$")
@@ -98,7 +104,7 @@ public class A265 {
         ResponseMessage userMsg = new ResponseMessage(true, "You cannot change email!", user);
         when(userRepositoryService.save(user)).thenReturn(userMsg);
         ResponseMessage responseMessage = userRepositoryService.save(user);
-        assertEquals(responseMessage.getMessage(),"You cannot change email!");
+        assertEquals(responseMessage.getMessage(), "You cannot change email!");
     }
 
 }

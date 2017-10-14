@@ -10,7 +10,7 @@
     <logger name="javaday.istanbul.sliconf.micro" level="TRACE"/>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>log/datassist_sso.log</file>
+        <file>log/sliconf-micro.log</file>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
         </layout>
