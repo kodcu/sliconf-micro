@@ -7,7 +7,7 @@ public class Comment {
     private LocalDateTime time;
     private int like;
     private int dislike;
-    private String comment;
+    private String commentValue;
 
     public String getUser() {
         return user;
@@ -41,11 +41,11 @@ public class Comment {
         this.dislike = dislike;
     }
 
-    public String getComment() {
-        return comment;
+    public String getCommentValue() {
+        return commentValue;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setCommentValue(String commentValue) {
+        this.commentValue = commentValue;
     }
 }

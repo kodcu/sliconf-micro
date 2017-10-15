@@ -29,6 +29,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @ActiveProfiles("test")
 public class G793 {
+
+    @Autowired
     private UserRepositoryService userRepositoryService;
 
     @Autowired
@@ -38,19 +40,21 @@ public class G793 {
 
     @Before
     public void init() {
-        userRepositoryService = mock(UserRepositoryService.class);
+        // userRepositoryService = mock(UserRepositoryService.class);
     }
 
     @Eğerki("^eposta adresi sistemde daha önceden kayıtlı ise$")
     public void eposta_adresi_sistemde_daha_önceden_kayıtlı_ise() throws Throwable {
         user = new UserBuilder()
                 .setName("Osman Uykulu")
-                .setEmail("osman@osman.com")
+                .setEmail("osman14@osman.com")
                 .setPassword("1234!")
                 .build();
 
         UserPassService userPassService = new UserPassService();
         user = userPassService.createNewUserWithHashedPassword(user);
+
+        userRepositoryService.save(user);
 
         assertNotNull(user);
     }
@@ -59,7 +63,7 @@ public class G793 {
     public void sistem_potansiyel_etkinlik_sahibini_çelişkiyi_haber_verir() throws Throwable {
         ResponseMessage responseMessage = null;
 
-        when(userRepositoryService.controlIfEmailIsExists(user.getEmail())).thenReturn(true);
+        //when(userRepositoryService.controlIfEmailIsExists(user.getEmail())).thenReturn(true);
 
         if (userRepositoryService.controlIfEmailIsExists(user.getEmail())) {
             responseMessage = new ResponseMessage(false,

@@ -50,6 +50,12 @@ public class UserPassService {
         return isOk;
     }
 
+    /**
+     *
+     * @param sourceUser db den cekilmis salt bulunduran user
+     * @param targetUser sifresi bulunan ve db user ile karsilastirilacak user
+     * @return
+     */
     public boolean checkIfUserAuthenticated(User sourceUser, User targetUser) {
         byte[] salt = sourceUser.getSalt();
         byte[] hashedPassword = sourceUser.getHashedPassword();

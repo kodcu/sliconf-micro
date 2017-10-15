@@ -11,6 +11,7 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
@@ -38,22 +39,25 @@ public class G685 {
     private User user;
     private User dbUser;
 
+    @Autowired
     private UserRepositoryService userRepositoryService;
+
+    @Autowired
     private EventRepositoryService eventRepositoryService;
 
     private UserPassService userPassService = new UserPassService();
 
     @Before
     public void init() {
-        userRepositoryService = mock(UserRepositoryService.class);
-        eventRepositoryService = mock(EventRepositoryService.class);
+        // userRepositoryService = mock(UserRepositoryService.class);
+        // eventRepositoryService = mock(EventRepositoryService.class);
     }
 
     @Diyelimki("^etkinlik sahibi daha önceden JugEvents sistemine başarılı bir şekilde kayıt olmuş$")
     public void etkinlik_sahibi_daha_önceden_JugEvents_sistemine_başarılı_bir_şekilde_kayıt_olmuş() throws Throwable {
         user = new UserBuilder()
                 .setName("Osman Uykulu")
-                .setEmail("osman@osman.com")
+                .setEmail("osman13@osman.com")
                 .setPassword("1234!")
                 .build();
 
@@ -65,22 +69,23 @@ public class G685 {
 
         User tempUser = new UserBuilder()
                 .setName("Osman Uykulu")
-                .setEmail("osman@osman.com")
+                .setEmail("osman13@osman.com")
                 .setPassword("1234!")
                 .build();
 
         tempUser = userPassService.createNewUserWithHashedPassword(tempUser);
-        when(userRepositoryService.findFirstByEmailEquals(this.user.getEmail())).thenReturn(tempUser);
 
-        dbUser = userRepositoryService.findFirstByEmailEquals(this.user.getEmail());
+        userRepositoryService.save(tempUser);
 
-        assertTrue(userPassService.checkIfUserAuthenticated(dbUser, user));
+        dbUser = userRepositoryService.findByEmail(this.user.getEmail());
+
+        assertTrue(userPassService.checkIfUserAuthenticated(tempUser, user));
     }
 
     @Ozaman("^sistem etkinlik sahibininin açmış olduğu aktif ve/veya pasif etkinlikleri getirmeli\\.$")
     public void sistem_etkinlik_sahibininin_açmış_olduğu_aktif_ve_veya_pasif_etkinlikleri_getirmeli() throws Throwable {
 
-        when(eventRepositoryService.findByExecutiveUser(dbUser.getId())).thenReturn(new HashMap<>());
+        // when(eventRepositoryService.findByExecutiveUser(dbUser.getId())).thenReturn(new HashMap<>());
 
         Map<String, List<Event>> events = eventRepositoryService.findByExecutiveUser(dbUser.getId());
 

@@ -1,6 +1,7 @@
 package javaday.istanbul.sliconf.micro.config;
 
 import com.couchbase.client.java.Bucket;
+import javaday.istanbul.sliconf.micro.model.token.Token;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.core.CouchbaseTemplate;
 import org.springframework.data.couchbase.core.convert.CustomConversions;
-import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
 import org.springframework.data.couchbase.repository.config.RepositoryOperationsMapping;
 
 import java.util.Arrays;
@@ -37,6 +37,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
     private static final String USERS_BUCKET_NAME = "users";
     private static final String EVENTS_BUCKET_NAME = "events";
     private static final String DEFAULT_BUCKET_NAME = "default";
+    private static final String TOKENS_BUCKET_NAME = "tokens";
 
     @Override
     protected List<String> getBootstrapHosts() {
@@ -88,11 +89,26 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
         return template;
     }
 
+    @Bean
+    public Bucket tokensBucket() throws Exception {
+        return couchbaseCluster().openBucket(TOKENS_BUCKET_NAME, BUCKET_PASS);
+    }
+
+    @Bean(name = "tokensTemplate")
+    public CouchbaseTemplate tokensTemplate() throws Exception {
+        CouchbaseTemplate template = new CouchbaseTemplate(
+                couchbaseClusterInfo(), tokensBucket(),
+                mappingCouchbaseConverter(), translationService());
+        template.setDefaultConsistency(getDefaultConsistency());
+        return template;
+    }
+
     @Override
     public void configureRepositoryOperationsMapping(RepositoryOperationsMapping baseMapping) {
         try {
             baseMapping.mapEntity(Event.class, eventsTemplate());
             baseMapping.mapEntity(User.class, usersTemplate());
+            baseMapping.mapEntity(Token.class, tokensTemplate());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

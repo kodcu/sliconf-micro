@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
  */
 public class EventSpecs {
 
+    private EventSpecs() {
+        // private constructor for static
+    }
+
     /**
      * Event name'in minimum uzunlugunu gelen parametreye gore kontrol eder
      *

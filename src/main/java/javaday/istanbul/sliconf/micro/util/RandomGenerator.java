@@ -7,6 +7,7 @@ public class RandomGenerator {
     private static final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
 
     public static String generateRandom(int length) {
+        // Todo make more useful generator
         Random random = new SecureRandom();
         if (length <= 0) {
             throw new IllegalArgumentException("String length must be a positive integer");

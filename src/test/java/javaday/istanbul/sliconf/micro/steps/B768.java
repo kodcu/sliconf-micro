@@ -11,20 +11,18 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {CucumberConfiguration.class})
 @WebAppConfiguration
@@ -36,24 +34,33 @@ public class B768 {
     private User user;
     private User dbUser;
 
+    @Autowired
     private UserRepositoryService userRepositoryService;
+
+    @Autowired
     private EventRepositoryService eventRepositoryService;
+
     private UserPassService userPassService = new UserPassService();
 
 
     @Before
     public void init() {
-        userRepositoryService = mock(UserRepositoryService.class);
-        eventRepositoryService = mock(EventRepositoryService.class);
-        dbUser = userPassService.createNewUserWithHashedPassword(new UserBuilder().setEmail("osman@osman.com").setPassword("1234!").build());
+        // userRepositoryService = mock(UserRepositoryService.class);
+        // eventRepositoryService = mock(EventRepositoryService.class);
+        dbUser = userPassService.createNewUserWithHashedPassword(
+                new UserBuilder().setEmail("osman1@osman.com").setPassword("1234!").build()
+        );
+
+        userRepositoryService.save(dbUser);
     }
 
     @Diyelimki("^etkinlik sahibi sisteme başarılı bir şekilde giriş yaptı, herşey yolunda$")
     public void etkinlik_sahibi_sisteme_başarılı_bir_şekilde_giriş_yaptı_herşey_yolunda() throws Throwable {
         user = new UserBuilder()
-                .setEmail("osman@osman.com")
+                .setEmail("osman1@osman.com")
                 .setPassword("1234!")
                 .build();
+
         if (userRepositoryService.controlIfEmailIsExists(user.getEmail())) {
             assertTrue(userPassService.checkIfUserAuthenticated(dbUser, user));
         }
@@ -61,7 +68,7 @@ public class B768 {
 
     @Eğerki("^etkinlik sahibi etkinliklerini listelemek isterse$")
     public void etkinlik_sahibi_etkinliklerini_listelemek_isterse() throws Throwable {
-        when(eventRepositoryService.findByExecutiveUser(dbUser.getId())).thenReturn(new HashMap<>());
+        // when(eventRepositoryService.findByExecutiveUser(dbUser.getId())).thenReturn(new HashMap<>());
     }
 
     @Ozaman("^sistem etkinlik sahibinin geçmiş ve gelecek tüm etkinliklerini listeler$")

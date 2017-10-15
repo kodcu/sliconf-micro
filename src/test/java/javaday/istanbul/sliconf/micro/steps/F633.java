@@ -10,14 +10,13 @@ import javaday.istanbul.sliconf.micro.builder.EventBuilder;
 import javaday.istanbul.sliconf.micro.builder.UserBuilder;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -25,8 +24,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {CucumberConfiguration.class})
 @WebAppConfiguration
@@ -35,7 +32,10 @@ import static org.mockito.Mockito.when;
 @ActiveProfiles("test")
 public class F633 {
 
+    @Autowired
     private EventRepositoryService eventRepositoryService;
+
+    @Autowired
     private UserRepositoryService userRepositoryService;
 
     private Event event;
@@ -43,8 +43,6 @@ public class F633 {
 
     @Before
     public void init() {
-        userRepositoryService = mock(UserRepositoryService.class);
-        eventRepositoryService = mock(EventRepositoryService.class);
     }
 
     @Diyelimki("^potansiyel etkinlik sahibi JugEvents sisteminde yeni bir etkinlik açmak istedi$")
@@ -59,7 +57,7 @@ public class F633 {
     public void potansyelEtkinlikSahibiAdSoyadEpostaVeŞifreBilgisiniEksiksizVermişse() throws Throwable {
         user = new UserBuilder()
                 .setName("Osman Uykulu")
-                .setEmail("osman@osman.com")
+                .setEmail("osman12@osman.com")
                 .setPassword("1234!")
                 .build();
 
@@ -71,9 +69,6 @@ public class F633 {
 
     @Eğerki("^eposta adresi sistemde daha önceden kayıtlı değilse$")
     public void epostaAdresiSistemdeDahaÖncedenKayıtlıDeğilse() throws Throwable {
-        when(userRepositoryService.controlIfEmailIsExists(user.getEmail()))
-                .thenReturn(false);
-
         assertFalse(userRepositoryService.controlIfEmailIsExists(user.getEmail()));
     }
 
@@ -99,16 +94,6 @@ public class F633 {
 
     @Ozaman("^sistem etkinlik sahibini kayıt eder ve etkinlik oluşturulmuş olur$")
     public void sistemEtkinlikSahibiniKayıtEderVeEtkinlikOluşturulmuşOlur() throws Throwable {
-        ResponseMessage userTemp = new ResponseMessage(true, "User saved successfully!", user);
-        ResponseMessage eventTemp = new ResponseMessage(true, "Event saved successfully!", event);
-
-        when(userRepositoryService.save(user))
-                .thenReturn(userTemp);
-
-        when(eventRepositoryService.save(event))
-                .thenReturn(eventTemp);
-
-
         assertTrue(userRepositoryService.save(user).isStatus());
         assertTrue(eventRepositoryService.save(event).isStatus());
     }

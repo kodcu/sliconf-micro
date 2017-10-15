@@ -3,8 +3,6 @@ package javaday.istanbul.sliconf.micro.controller;
 import javaday.istanbul.sliconf.micro.controller.event.EventController;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
-import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,13 +18,9 @@ public class RootController {
 
     private static LoginController loginController;
     private static EventController eventController;
-    private static LoginControllerMessageProvider loginControllerMessageProvider;
 
     @Autowired
-    public RootController(LoginControllerMessageProvider loginControllerMessageProvider,
-                          LoginController loginController,
-                          EventController eventController) {
-        RootController.loginControllerMessageProvider = loginControllerMessageProvider;
+    public RootController(LoginController loginController, EventController eventController) {
         RootController.loginController = loginController;
         RootController.eventController = eventController;
 
@@ -57,7 +51,9 @@ public class RootController {
                 post("login", loginController::loginUser, JsonUtil.json());
                 post("register", loginController::createUser, JsonUtil.json());
                 post("test", loginController::test, JsonUtil.json());
-                post("update",loginController::updateUser,JsonUtil.json());
+                post("update", loginController::updateUser, JsonUtil.json());
+                post("password-reset/send/:email", loginController::sendPasswordReset, JsonUtil.json());
+                post("password-reset/reset/:token", loginController::resetPassword, JsonUtil.json());
             });
 
             path("events/", () -> {
@@ -65,10 +61,9 @@ public class RootController {
                 post("list/:userId", eventController::listEvents, JsonUtil.json());
                 post("search", null, JsonUtil.json());
 
-                path("/get/", () -> {
-                    post("with-key/:key", eventController::getEventWithKey, JsonUtil.json());
-                    // post("user-events", eventController::getUsersEvent, JsonUtil.json());
-                });
+                path("/get/", () ->
+                        post("with-key/:key", eventController::getEventWithKey, JsonUtil.json())
+                );
             });
         });
 

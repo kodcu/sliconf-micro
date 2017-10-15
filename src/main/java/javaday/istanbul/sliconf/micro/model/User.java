@@ -5,8 +5,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
-import javax.validation.constraints.NotNull;
-
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
 /**
@@ -35,6 +33,21 @@ public class User {
 
 
     public User() {
+        // for instantiation
+    }
+
+    /**
+     * Clones user
+     *
+     * @param user
+     */
+    public User(User user) {
+        this.setName(user.getName());
+        this.setPassword(user.getPassword());
+        this.setEmail(user.getEmail());
+        this.setId(user.getId());
+        this.setSalt(user.getSalt());
+        this.setHashedPassword(user.getHashedPassword());
     }
 
     public String getId() {

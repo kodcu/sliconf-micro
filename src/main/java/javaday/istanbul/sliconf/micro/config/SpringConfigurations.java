@@ -24,6 +24,16 @@ public class SpringConfigurations {
     }
 
     @Bean
+    public Properties userRepositoryProperties() throws IOException {
+        return PropertiesLoaderUtils.loadAllProperties("userRepository.properties");
+    }
+
+    @Bean
+    public Properties mailMessageProperties() throws IOException {
+        return PropertiesLoaderUtils.loadAllProperties("mailMessages.properties");
+    }
+
+    @Bean
     public FilterRegistrationBean sparkFilterRegistration() {
 
         FilterRegistrationBean registration = new FilterRegistrationBean();

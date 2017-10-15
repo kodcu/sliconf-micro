@@ -1,7 +1,10 @@
 package javaday.istanbul.sliconf.micro.util;
 
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +12,6 @@ import spark.ResponseTransformer;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -18,6 +20,10 @@ import java.util.Objects;
  * Created by ttayfur on 7/6/17.
  */
 public class JsonUtil {
+
+    private JsonUtil() {
+        // private constructor for static
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
@@ -35,7 +41,7 @@ public class JsonUtil {
         T returnedClass = null;
 
         try {
-            if(Objects.nonNull(string) && Objects.nonNull(clazz)) {
+            if (Objects.nonNull(string) && Objects.nonNull(clazz)) {
                 returnedClass = gson.fromJson(string, clazz);
             }
         } catch (JsonSyntaxException e) {

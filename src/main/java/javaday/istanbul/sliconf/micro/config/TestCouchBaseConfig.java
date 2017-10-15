@@ -3,6 +3,7 @@ package javaday.istanbul.sliconf.micro.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.map.repository.config.EnableMapRepositories;
+import org.springframework.data.map.repository.config.MapRepositoryConfigurationExtension;
 
 
 /**
@@ -11,7 +12,7 @@ import org.springframework.data.map.repository.config.EnableMapRepositories;
 @Configuration
 @EnableMapRepositories(basePackages = {"javaday.istanbul.sliconf.micro.repository"})
 @Profile("test")
-public class TestCouchBaseConfig {
+public class TestCouchBaseConfig extends MapRepositoryConfigurationExtension {
 
 
 }
