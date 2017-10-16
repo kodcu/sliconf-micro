@@ -1,12 +1,17 @@
 package javaday.istanbul.sliconf.micro.controller;
 
-import javaday.istanbul.sliconf.micro.controller.event.EventController;
+import javaday.istanbul.sliconf.micro.controller.event.CreateEventRouter;
+import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRouter;
+import javaday.istanbul.sliconf.micro.controller.event.ListEventsRoute;
+import javaday.istanbul.sliconf.micro.controller.login.*;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
+import javaday.istanbul.sliconf.micro.util.SwaggerParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static javaday.istanbul.sliconf.micro.SliconfMicroApp.APP_PACKAGE;
 import static spark.Spark.*;
 
 
@@ -16,18 +21,49 @@ import static spark.Spark.*;
 @Component
 public class RootController {
 
-    private static LoginController loginController;
-    private static EventController eventController;
+
+    // User related routes
+    private static CreateUserRoute createUserRoute;
+    private static LoginUserRoute loginUserRoute;
+    private static SendPasswordResetRoute sendPasswordResetRoute;
+    private static ResetPasswordRoute resetPasswordRoute;
+    private static UpdateUserRouter updateUserRouter;
+
+    // Event related routes
+    private static CreateEventRouter createEventRouter;
+    private static GetEventWithKeyRouter getEventWithKeyRouter;
+    private static ListEventsRoute listEventsRoute;
 
     @Autowired
-    public RootController(LoginController loginController, EventController eventController) {
-        RootController.loginController = loginController;
-        RootController.eventController = eventController;
-
-
+    public RootController(CreateUserRoute createUserRoute,
+                          LoginUserRoute loginUserRoute,
+                          SendPasswordResetRoute sendPasswordResetRoute,
+                          ResetPasswordRoute resetPasswordRoute,
+                          UpdateUserRouter updateUserRouter,
+                          CreateEventRouter createEventRouter,
+                          GetEventWithKeyRouter getEventWithKeyRouter,
+                          ListEventsRoute listEventsRoute) {
+        RootController.createUserRoute = createUserRoute;
+        RootController.loginUserRoute = loginUserRoute;
+        RootController.sendPasswordResetRoute = sendPasswordResetRoute;
+        RootController.resetPasswordRoute = resetPasswordRoute;
+        RootController.updateUserRouter = updateUserRouter;
+        RootController.createEventRouter = createEventRouter;
+        RootController.getEventWithKeyRouter = getEventWithKeyRouter;
+        RootController.listEventsRoute = listEventsRoute;
     }
 
     public static void setPaths() {
+
+        try {
+            // Build swagger json description
+            final String swaggerJson = SwaggerParser.getSwaggerJson(APP_PACKAGE);
+            get("/swagger", (req, res) -> swaggerJson);
+
+        } catch (Exception e) {
+            // Todo use logger
+            System.out.println(e);
+        }
 
         before((request, response) -> {
 
@@ -48,21 +84,19 @@ public class RootController {
 
         path("/service/", () -> {
             path("users/", () -> {
-                post("login", loginController::loginUser, JsonUtil.json());
-                post("register", loginController::createUser, JsonUtil.json());
-                post("test", loginController::test, JsonUtil.json());
-                post("update", loginController::updateUser, JsonUtil.json());
-                post("password-reset/send/:email", loginController::sendPasswordReset, JsonUtil.json());
-                post("password-reset/reset/:token", loginController::resetPassword, JsonUtil.json());
+                post("login", loginUserRoute, JsonUtil.json());
+                post("register", createUserRoute, JsonUtil.json());
+                post("update", updateUserRouter, JsonUtil.json());
+                post("password-reset/send/:email", sendPasswordResetRoute, JsonUtil.json());
+                post("password-reset/reset/:token", resetPasswordRoute, JsonUtil.json());
             });
 
             path("events/", () -> {
-                post("create/:userId", eventController::createEvent, JsonUtil.json());
-                post("list/:userId", eventController::listEvents, JsonUtil.json());
-                post("search", null, JsonUtil.json());
+                post("create/:userId", createEventRouter, JsonUtil.json());
+                get("list/:userId", listEventsRoute, JsonUtil.json());
 
                 path("/get/", () ->
-                        post("with-key/:key", eventController::getEventWithKey, JsonUtil.json())
+                        get("with-key/:key", getEventWithKeyRouter, JsonUtil.json())
                 );
             });
         });

@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller.event;
 
+import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.EventControllerMessageProvider;
@@ -10,21 +11,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
+import spark.Route;
 
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
+
+@Api
+@Path("/service/events/create/:userId")
+@Produces("application/json")
 @Component
-public class EventController {
+public class CreateEventRouter implements Route {
 
-    @Autowired
+
     private EventControllerMessageProvider messageProvider;
-
-    @Autowired
     private EventRepositoryService repositoryService;
 
-    public ResponseMessage createEvent(Request request, Response response) {
+    @Autowired
+    public CreateEventRouter(EventControllerMessageProvider messageProvider,
+                             EventRepositoryService eventRepositoryService) {
+        this.messageProvider = messageProvider;
+        this.repositoryService = eventRepositoryService;
+    }
+
+    @POST
+    @ApiOperation(value = "Creates an event and bind with given userId", nickname = "CreateEventRoute")
+    @ApiImplicitParams({ //
+            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
+            @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"), //
+            @ApiImplicitParam(required = true, dataTypeClass = Event.class, paramType = "body") //
+    }) //
+    @ApiResponses(value = { //
+            @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
+            @ApiResponse(code = 400, message = "Invalid input data", response = ResponseMessage.class), //
+            @ApiResponse(code = 401, message = "Unauthorized", response = ResponseMessage.class), //
+            @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
+    })
+    @Override
+    public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
         ResponseMessage responseMessage;
 
         String body = request.body();
@@ -37,7 +64,7 @@ public class EventController {
             return responseMessage;
         }
 
-        if(Objects.isNull(body) || body.isEmpty()) {
+        if (Objects.isNull(body) || body.isEmpty()) {
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventBodyCantBeEmpty"), new Object());
             return responseMessage;
@@ -46,14 +73,14 @@ public class EventController {
         Event event = JsonUtil.fromJson(body, Event.class);
 
         //isim uzunluğu minimumdan düşük mü diye kontrol et
-        if(!EventSpecs.checkEventName(event, 4)){
+        if (!EventSpecs.checkEventName(event, 4)) {
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventNameTooShort"), new Object());
             return responseMessage;
         }
 
         //event tarihinin geçip geçmediğin, kontrol et
-        if(!EventSpecs.checkIfEventDateAfterOrInNow(event)){
+        if (!EventSpecs.checkIfEventDateAfterOrInNow(event)) {
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventDataInvalid"), new Object());
             return responseMessage;
@@ -83,45 +110,6 @@ public class EventController {
         responseMessage = new ResponseMessage(true,
                 messageProvider.getMessage("eventCreatedSuccessfully"), event);
 
-        return responseMessage;
-    }
-
-    public ResponseMessage getEventWithKey(Request request, Response response) {
-        ResponseMessage responseMessage;
-
-        String key = request.params("key");
-
-        // event var mı diye kontrol et
-        Event event = repositoryService.findEventByKeyEquals(key);
-
-        if (Objects.isNull(event)) {
-            responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventCanNotFound"), new Object());
-            return responseMessage;
-        }
-
-        responseMessage = new ResponseMessage(true,
-                messageProvider.getMessage("eventCreatedSuccessfully"), event);
-
-        return responseMessage;
-    }
-
-    public ResponseMessage listEvents(Request request, Response response) {
-        ResponseMessage responseMessage;
-
-        String userId = request.params("userId");
-
-        // event var mı diye kontrol et
-        Map<String, List<Event>> events = repositoryService.findByExecutiveUser(userId);
-
-        if (Objects.isNull(events)) {
-            responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventCanNotFound"), new Object());
-            return responseMessage;
-        }
-
-        responseMessage = new ResponseMessage(true,
-                messageProvider.getMessage("eventListedSuccessfully"), events);
         return responseMessage;
     }
 }
