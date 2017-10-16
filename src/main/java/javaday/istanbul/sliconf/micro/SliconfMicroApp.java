@@ -34,8 +34,7 @@ public class SliconfMicroApp implements SparkApplication {
     public static RootController rootController;
 
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(SliconfMicroApp.class);
-        application.run(args);
+        SpringApplication.run(SliconfMicroApp.class, args);
     }
 
     @Override
