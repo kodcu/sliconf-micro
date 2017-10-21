@@ -67,6 +67,10 @@ public class UpdateUserRouter implements Route {
                 } else
                     return new ResponseMessage(false,"New username must be at least 4",new Object());
             }
+            if(Objects.nonNull(updateParams.getString("fullname"))){
+                user.setFullname(updateParams.getString("fullname"));
+                changed=true;
+            }
             if (Objects.nonNull(updateParams.getString("password"))&& Objects.nonNull(updateParams.getString("oldpassword"))) {
                 UserPassService service =new UserPassService();
                 if(service.checkPassword(updateParams.getString("oldpassword"),user.getHashedPassword(),user.getSalt())){
