@@ -53,7 +53,7 @@ public class LoginUserRoute implements Route {
         String body = request.body();
         User requestUser = JsonUtil.fromJson(body, User.class);
 
-        List<User> userList = userRepositoryService.findByName(requestUser.getName());
+        List<User> userList = userRepositoryService.findByUsername(requestUser.getUsername());
 
         if (Objects.nonNull(userList) && !userList.isEmpty()) {
 

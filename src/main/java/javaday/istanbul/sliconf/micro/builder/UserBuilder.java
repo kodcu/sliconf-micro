@@ -14,7 +14,7 @@ public class UserBuilder {
     }
 
     public UserBuilder setName(String name) {
-        this.user.setName(name);
+        this.user.setUsername(name);
         return this;
     }
 

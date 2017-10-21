@@ -17,7 +17,10 @@ public class User {
     private String id;
 
     @Field
-    private String name;
+    private String username;
+
+    @Field
+    private String fullname;
 
     @Field
     private String email;
@@ -42,7 +45,7 @@ public class User {
      * @param user
      */
     public User(User user) {
-        this.setName(user.getName());
+        this.setUsername(user.getUsername());
         this.setPassword(user.getPassword());
         this.setEmail(user.getEmail());
         this.setId(user.getId());
@@ -58,12 +61,20 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getEmail() {

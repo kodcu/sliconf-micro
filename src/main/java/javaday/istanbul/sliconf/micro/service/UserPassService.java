@@ -39,7 +39,7 @@ public class UserPassService {
         return ePass;
     }
 
-    private boolean checkPassword(String password, byte[] hashedPassword, byte[] salt) {
+    public boolean checkPassword(String password, byte[] hashedPassword, byte[] salt) {
         boolean isOk = false;
         try {
             isOk = encryptionService.authenticate(password, hashedPassword, salt);

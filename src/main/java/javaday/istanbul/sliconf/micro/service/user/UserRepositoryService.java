@@ -43,8 +43,8 @@ public class UserRepositoryService implements UserService {
     }
 
     @Override
-    public List<User> findByName(String name) {
-        return repo.findByName(name);
+    public List<User> findByUsername(String username) {
+        return repo.findByUsername(username);
     }
 
     @Override

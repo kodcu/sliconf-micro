@@ -22,6 +22,9 @@ public class Event {
     private String key;
 
     @Field
+    private boolean status;
+
+    @Field
     private String name;
 
     @Field
@@ -51,6 +54,14 @@ public class Event {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public String getName() {

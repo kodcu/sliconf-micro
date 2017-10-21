@@ -66,11 +66,11 @@ public class A265 {
 
     @Ozaman("^sistem isim değişikliğe izin verir$")
     public void sistem_isim_değişikliğe_izin_verir() throws Throwable {
-        user.setName(request.getString("name"));
+        user.setUsername(request.getString("name"));
         ResponseMessage userMsg = new ResponseMessage(true, "User saved successfully!", user);
         when(userRepositoryService.save(user)).thenReturn(userMsg);
         ResponseMessage responseMessage = userRepositoryService.save(user);
-        assertEquals(user.getName(), request.getString("name"));
+        assertEquals(user.getUsername(), request.getString("name"));
     }
 
     @Diyelimki("^etkinlik sahibi şifresini değiştimek istiyor$")

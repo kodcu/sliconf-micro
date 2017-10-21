@@ -57,7 +57,7 @@ public class CreateUserRoute implements Route {
         String body = request.body();
         User user = JsonUtil.fromJson(body, User.class);
 
-        List<User> dbUsers = userRepositoryService.findByName(user.getName());
+        List<User> dbUsers = userRepositoryService.findByUsername(user.getUsername());
 
         // Todo mail validation yapilmali UserSpecs
 

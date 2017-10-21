@@ -42,7 +42,9 @@ public class UpdateUserRouter implements Route {
     @POST
     @ApiOperation(value = "Updates user with given parameters", nickname = "UpdateUserRoute")
     @ApiImplicitParams({
-            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header") //
+            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header") ,//
+            @ApiImplicitParam(required = true, dataTypeClass = User.class, paramType = "body") //
+
     })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -52,37 +54,41 @@ public class UpdateUserRouter implements Route {
     })
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        // Todo @anilcosar burada swagger icin alinan parametreler belirtilmeli
 
-        List<Boolean> validationList = new ArrayList<>();
         String body = request.body();
         JsonObject updateParams = JsonObject.fromJson(body);
-        User user = userRepositoryService.findByEmail(updateParams.getString("email"));
+        User user = userRepositoryService.findOne(updateParams.getString("id"));
         if (Objects.nonNull(user)) {
-            if (Objects.nonNull(updateParams.getString("name"))) {
-                if (UserSpecs.checkUserParams(updateParams.getString("name"), 4)) {
-                    user.setName(updateParams.getString("name"));
-                    validationList.add(true);
+            boolean changed=false;
+            if (Objects.nonNull(updateParams.getString("username"))) {
+                if (UserSpecs.checkUserParams(updateParams.getString("username"), 4)) {
+                    user.setUsername(updateParams.getString("username"));
+                    changed=true;
                 } else
-                    validationList.add(false);
+                    return new ResponseMessage(false,"New username must be at least 4",new Object());
             }
-            if (Objects.nonNull(updateParams.getString("pass"))) {
-                if (UserSpecs.checkUserParams(updateParams.getString("pass"), 4)) {
-                    UserPassService userPassService = new UserPassService();
-                    user.setPassword(updateParams.getString("pass"));
-                    user = userPassService.createNewUserWithHashedPassword(user);
-                } else
-                    validationList.add(false);
-            }
+            if (Objects.nonNull(updateParams.getString("password"))&& Objects.nonNull(updateParams.getString("oldpassword"))) {
+                UserPassService service =new UserPassService();
+                if(service.checkPassword(updateParams.getString("oldpassword"),user.getHashedPassword(),user.getSalt())){
+                    if (UserSpecs.checkUserParams(updateParams.getString("password"), 4)) {
+                        UserPassService userPassService = new UserPassService();
+                        user.setPassword(updateParams.getString("password"));
+                        user = userPassService.createNewUserWithHashedPassword(user);
+                        user.setHashedPassword(null);
+                        user.setSalt(null);
+                        changed=true;
+                    } else
+                        return new ResponseMessage(false,"New password must be at least 4",new Object());
+                }else
+                    return new ResponseMessage(false,"Wrong old Password",new Object());
 
+            }
             // TODO: Update fonksiyonunu arastir.
-            if (!validationList.contains(false)) {
+            if(changed) {
                 userRepositoryService.save(user);
                 return new ResponseMessage(true, "User successfully updated", user);
-            } else
-                return new ResponseMessage(false,
-                        loginControllerMessageProvider.getMessage("wrongUserNameOrPassword"), new Object());
-
+            }else
+                return new ResponseMessage(false,"Please check params",new Object());
         }
 
         return new ResponseMessage(false,
