@@ -74,15 +74,18 @@ public class UpdateUserRoute implements Route {
             if (Objects.nonNull(updateParams.getString("password"))&& Objects.nonNull(updateParams.getString("oldpassword"))) {
                 UserPassService service =new UserPassService();
                 if(service.checkPassword(updateParams.getString("oldpassword"),user.getHashedPassword(),user.getSalt())){
-                    if (UserSpecs.checkUserParams(updateParams.getString("password"), 4)) {
-                        UserPassService userPassService = new UserPassService();
-                        user.setPassword(updateParams.getString("password"));
-                        user = userPassService.createNewUserWithHashedPassword(user);
-                        user.setHashedPassword(null);
-                        user.setSalt(null);
-                        changed=true;
-                    } else
-                        return new ResponseMessage(false,"New password must be at least 4",new Object());
+                    if(!updateParams.getString("oldpassword").equals(updateParams.getString("password"))) {
+                        if (UserSpecs.checkUserParams(updateParams.getString("password"), 4)) {
+                            UserPassService userPassService = new UserPassService();
+                            user.setPassword(updateParams.getString("password"));
+                            user = userPassService.createNewUserWithHashedPassword(user);
+                            user.setHashedPassword(null);
+                            user.setSalt(null);
+                            changed = true;
+                        } else
+                            return new ResponseMessage(false, "New password must be at least 4", new Object());
+                    }else
+                        return new ResponseMessage(false,"New password and old password cannot be same",new Object());
                 }else
                     return new ResponseMessage(false,"Wrong old Password",new Object());
 
