@@ -41,7 +41,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     protected List<String> getBootstrapHosts() {
-        return Arrays.asList("localhost", HOST_NAME);
+        return Arrays.asList("sliconf.com", HOST_NAME);
     }
 
     @Override
