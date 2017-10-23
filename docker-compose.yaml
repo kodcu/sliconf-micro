@@ -1,7 +1,11 @@
-version: '3.2'
+version: '2.0'
 services:
-  slicon-micro:
+  sliconf-micro:
     build:
       context: ./
     ports:
-      - 8080:8080
+      - 8090:8090
+    container_name: sliconf-micro-container
+    volumes:
+      - /container/sliconf-micro:/sliconf-micro/log
+      - /container/sliconf-micro/upload:/sliconf-micro/upload

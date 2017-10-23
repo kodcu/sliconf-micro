@@ -79,7 +79,7 @@ public class EventRepositoryService implements EventService {
 
         if (Objects.nonNull(eventList)) {
             eventList.forEach(event -> {
-                if (Objects.nonNull(event) && Objects.nonNull(event.getDate())) {
+                if (Objects.nonNull(event) && Objects.nonNull(event.getStartDate())) {
                     if (EventSpecs.checkIfEventDateAfterFromGivenDate(event, now)) {
                         activeList.add(event);
                     } else {

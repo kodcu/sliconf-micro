@@ -41,9 +41,6 @@ public class F633 {
     private Event event;
     private User user;
 
-    @Before
-    public void init() {
-    }
 
     @Diyelimki("^potansiyel etkinlik sahibi JugEvents sisteminde yeni bir etkinlik açmak istedi$")
     public void potansiyelEtkinlikSahibiJugEventsSistemindeYeniBirEtkinlikAçmakIstedi() throws Throwable {

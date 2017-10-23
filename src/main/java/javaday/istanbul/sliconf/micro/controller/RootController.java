@@ -1,9 +1,5 @@
 package javaday.istanbul.sliconf.micro.controller;
 
-import javaday.istanbul.sliconf.micro.controller.event.CreateEventRouter;
-import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRouter;
-import javaday.istanbul.sliconf.micro.controller.event.ListEventsRoute;
-import javaday.istanbul.sliconf.micro.controller.login.*;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
@@ -21,36 +17,12 @@ import static spark.Spark.*;
 @Component
 public class RootController {
 
+    private static RouteObjects routeObjects;
 
-    // User related routes
-    private static CreateUserRoute createUserRoute;
-    private static LoginUserRoute loginUserRoute;
-    private static SendPasswordResetRoute sendPasswordResetRoute;
-    private static ResetPasswordRoute resetPasswordRoute;
-    private static UpdateUserRouter updateUserRouter;
-
-    // Event related routes
-    private static CreateEventRouter createEventRouter;
-    private static GetEventWithKeyRouter getEventWithKeyRouter;
-    private static ListEventsRoute listEventsRoute;
 
     @Autowired
-    public RootController(CreateUserRoute createUserRoute,
-                          LoginUserRoute loginUserRoute,
-                          SendPasswordResetRoute sendPasswordResetRoute,
-                          ResetPasswordRoute resetPasswordRoute,
-                          UpdateUserRouter updateUserRouter,
-                          CreateEventRouter createEventRouter,
-                          GetEventWithKeyRouter getEventWithKeyRouter,
-                          ListEventsRoute listEventsRoute) {
-        RootController.createUserRoute = createUserRoute;
-        RootController.loginUserRoute = loginUserRoute;
-        RootController.sendPasswordResetRoute = sendPasswordResetRoute;
-        RootController.resetPasswordRoute = resetPasswordRoute;
-        RootController.updateUserRouter = updateUserRouter;
-        RootController.createEventRouter = createEventRouter;
-        RootController.getEventWithKeyRouter = getEventWithKeyRouter;
-        RootController.listEventsRoute = listEventsRoute;
+    public RootController(RouteObjects routeObjects) {
+        RootController.routeObjects = routeObjects;
     }
 
     public static void setPaths() {
@@ -66,6 +38,9 @@ public class RootController {
         }
 
         before((request, response) -> {
+
+            String token = request.headers("token");
+
 
             // Todo auth sistemini devreye alinca kullan
             /*
@@ -84,21 +59,48 @@ public class RootController {
 
         path("/service/", () -> {
             path("users/", () -> {
-                post("login", loginUserRoute, JsonUtil.json());
-                post("register", createUserRoute, JsonUtil.json());
-                post("update", updateUserRouter, JsonUtil.json());
-                post("password-reset/send/:email", sendPasswordResetRoute, JsonUtil.json());
-                post("password-reset/reset/:token", resetPasswordRoute, JsonUtil.json());
+                post("login", routeObjects.loginUserRoute, JsonUtil.json());
+                post("register", routeObjects.createUserRoute, JsonUtil.json());
+                post("update", routeObjects.updateUserRoute, JsonUtil.json());
+                post("password-reset/send/:email", routeObjects.sendPasswordResetRoute, JsonUtil.json());
+                post("password-reset/reset/:token", routeObjects.resetPasswordRoute, JsonUtil.json());
             });
 
             path("events/", () -> {
-                post("create/:userId", createEventRouter, JsonUtil.json());
-                get("list/:userId", listEventsRoute, JsonUtil.json());
+                post("create/:userId", routeObjects.createEventRoute, JsonUtil.json());
+                get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
 
                 path("/get/", () ->
-                        get("with-key/:key", getEventWithKeyRouter, JsonUtil.json())
+                        get("with-key/:key", routeObjects.getEventWithKeyRoute, JsonUtil.json())
                 );
+
+                path("sponsor-tag", () -> {
+                    post("create/:event-key/:tag", routeObjects.createSponsorTagRoute, JsonUtil.json());
+                    post("delete/:event-key/:tagId", routeObjects.deleteSponsorTagRoute, JsonUtil.json());
+                });
+
+                path("sponsor", () -> {
+                    post("create/:event-key", routeObjects.createSponsorRoute, JsonUtil.json());
+                    post("delete/:event-key/:sponsorId", routeObjects.deleteSponsorRoute, JsonUtil.json());
+                });
+
+                path("floor", () -> {
+                    post("create/:event-key", routeObjects.createFloorRoute, JsonUtil.json());
+                    post("delete/:event-key/:floorId", routeObjects.deleteFloorRoute, JsonUtil.json());
+                });
+
+                path("room", () -> {
+                    post("create/:event-key", routeObjects.createRoomRoute, JsonUtil.json());
+                    post("delete/:event-key/:roomId", routeObjects.deleteRoomRoute, JsonUtil.json());
+                });
+
             });
+
+            path("image/", () -> {
+                post("upload/", routeObjects.imageUploadRoute, JsonUtil.json());
+                get("get/:id", routeObjects.imageGetRoute);
+            });
+
         });
 
         after((req, res) -> res.type("application/json"));
@@ -113,6 +115,8 @@ public class RootController {
         // Using Route
         notFound((req, res) -> {
             res.type("application/json");
+
+            res.status(404);
 
             ResponseMessage responseMessage = new ResponseMessage();
             responseMessage.setMessage("The page you looking for not found!");

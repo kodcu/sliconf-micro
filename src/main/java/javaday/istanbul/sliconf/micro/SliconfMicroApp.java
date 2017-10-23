@@ -5,12 +5,8 @@ import io.swagger.annotations.Contact;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
-import javaday.istanbul.sliconf.micro.config.CorsFilter;
-import javaday.istanbul.sliconf.micro.controller.RootController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import spark.servlet.SparkApplication;
 
 /**
  * Created by ttayfur on 7/4/17.
@@ -26,22 +22,11 @@ import spark.servlet.SparkApplication;
         consumes = {"application/json"}, //
         produces = {"application/json"}, //
         tags = {@Tag(name = "swagger")})
-public class SliconfMicroApp implements SparkApplication {
+public class SliconfMicroApp {
 
     public static final String APP_PACKAGE = "javaday.istanbul.sliconf.micro";
 
-    @Autowired
-    public static RootController rootController;
-
     public static void main(String[] args) {
         SpringApplication.run(SliconfMicroApp.class, args);
-    }
-
-    @Override
-    public void init() {
-
-        //Enable CORS
-        CorsFilter.apply();
-        RootController.setPaths();
     }
 }

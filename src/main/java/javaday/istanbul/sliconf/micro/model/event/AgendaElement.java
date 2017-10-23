@@ -1,6 +1,7 @@
 package javaday.istanbul.sliconf.micro.model.event;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class AgendaElement {
     private String id;
@@ -8,6 +9,7 @@ public class AgendaElement {
     private String topic;
     private String topicDetail;
     private int level;
+    private List<String> tags;
     private String room;
     private String speaker;
     private double star;

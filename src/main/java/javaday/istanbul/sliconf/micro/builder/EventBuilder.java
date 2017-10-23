@@ -31,7 +31,7 @@ public class EventBuilder {
     }
 
     public EventBuilder setDate(LocalDateTime date) {
-        this.event.setDate(date);
+        this.event.setStartDate(date);
         return this;
     }
 

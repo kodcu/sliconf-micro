@@ -70,6 +70,8 @@ public class UserRepositoryService implements UserService {
                 savedUser.setHashedPassword(null);
                 savedUser.setSalt(null);
 
+                // Todo hashed pass donmemeli
+
                 message.setReturnObject(savedUser);
             }
 
@@ -164,6 +166,11 @@ public class UserRepositoryService implements UserService {
         }
 
         return responseMessage;
+    }
+
+    @Override
+    public User findById(String id) {
+        return repo.findOne(id);
     }
 
 }

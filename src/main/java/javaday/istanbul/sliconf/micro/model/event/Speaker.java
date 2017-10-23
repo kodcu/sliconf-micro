@@ -4,8 +4,11 @@ import java.util.List;
 
 public class Speaker {
     private String name;
+    private String profilePicture;
     private String workingAt;
     private String about;
+    private String twitter;
+    private String linkedin;
     private List<String> topics;
 
     public String getName() {
@@ -38,5 +41,29 @@ public class Speaker {
 
     public void setTopics(List<String> topics) {
         this.topics = topics;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public String getTwitter() {
+        return twitter;
+    }
+
+    public void setTwitter(String twitter) {
+        this.twitter = twitter;
+    }
+
+    public String getLinkedin() {
+        return linkedin;
+    }
+
+    public void setLinkedin(String linkedin) {
+        this.linkedin = linkedin;
     }
 }

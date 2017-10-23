@@ -8,6 +8,7 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
@@ -22,16 +23,15 @@ public class Event {
     private String key;
 
     @Field
-    private boolean status;
-
-    @Field
     private String name;
 
     @Field
     private String logoPath;
 
     @Field
-    private LocalDateTime date;
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
 
     @Field
     private String executiveUser;
@@ -39,6 +39,26 @@ public class Event {
     private List<AgendaElement> agenda;
 
     private List<Speaker> speakers;
+
+    private boolean status;
+
+    private Map<String, String> social;
+
+    private String description;
+
+    private String web;
+
+    private List<String> phone;
+
+    private Location location;
+
+    private List<Room> rooms;
+
+    private List<Floor> floorPlan;
+
+    private Map<String, String> sponsorTags;
+
+    private Map<String, Sponsor> sponsors;
 
     public String getId() {
         return id;
@@ -80,12 +100,20 @@ public class Event {
         this.logoPath = logoPath;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
     public String getExecutiveUser() {
@@ -110,5 +138,77 @@ public class Event {
 
     public void setSpeakers(List<Speaker> speakers) {
         this.speakers = speakers;
+    }
+
+    public Map<String, String> getSocial() {
+        return social;
+    }
+
+    public void setSocial(Map<String, String> social) {
+        this.social = social;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getWeb() {
+        return web;
+    }
+
+    public void setWeb(String web) {
+        this.web = web;
+    }
+
+    public List<String> getPhone() {
+        return phone;
+    }
+
+    public void setPhone(List<String> phone) {
+        this.phone = phone;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    public List<Floor> getFloorPlan() {
+        return floorPlan;
+    }
+
+    public void setFloorPlan(List<Floor> floorPlan) {
+        this.floorPlan = floorPlan;
+    }
+
+    public Map<String, String> getSponsorTags() {
+        return sponsorTags;
+    }
+
+    public void setSponsorTags(Map<String, String> sponsorTags) {
+        this.sponsorTags = sponsorTags;
+    }
+
+    public Map<String, Sponsor> getSponsors() {
+        return sponsors;
+    }
+
+    public void setSponsors(Map<String, Sponsor> sponsors) {
+        this.sponsors = sponsors;
     }
 }

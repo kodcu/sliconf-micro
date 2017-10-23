@@ -53,14 +53,3 @@
 
     Diyelim ki etkinlik sahibi eposta epostasını değiştirmek istiyor
     O zaman sistem eposta değişikliğe izin verir vermemeli
-
-
-#  Senaryo: Z9261 - Etkinlik sahibi yeni bir etkinlik daha açmak istiyor.
-#    Diyelim ki etkinlik sahibi daha önceden JugEvents sistemine kayıtlıdır
-#    Eğer ki etkinlik sahibi yeni bir etkinliği <etkinlik kuralları>na uygun bir şekilde girerse
-#    O zaman sistem etkinlik sahibinin yeni etkinliğini <başarılı> bir şekilde oluşturur.
-#
-#    Örnekler:
-#    |etkinlik kuralları| başarılı |
-#    |true              | true     |
-#    |false             | false    |

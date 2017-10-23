@@ -25,7 +25,7 @@ import java.util.Objects;
 @Path("/service/users/update")
 @Produces("application/json")
 @Component
-public class UpdateUserRouter implements Route {
+public class UpdateUserRoute implements Route {
 
     private LoginControllerMessageProvider loginControllerMessageProvider;
 
@@ -33,8 +33,8 @@ public class UpdateUserRouter implements Route {
 
 
     @Autowired
-    public UpdateUserRouter(LoginControllerMessageProvider loginControllerMessageProvider,
-                            UserRepositoryService userRepositoryService) {
+    public UpdateUserRoute(LoginControllerMessageProvider loginControllerMessageProvider,
+                           UserRepositoryService userRepositoryService) {
         this.loginControllerMessageProvider = loginControllerMessageProvider;
         this.userRepositoryService = userRepositoryService;
     }

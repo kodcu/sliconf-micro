@@ -21,4 +21,6 @@ public interface UserService {
     boolean controlIfEmailIsExists(String email);
 
     ResponseMessage changePassword(String email, String newPassword, String newPasswordAgain);
+
+    User findById(String id);
 }

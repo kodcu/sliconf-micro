@@ -34,7 +34,7 @@ public class EventSpecs {
     public static boolean checkIfEventDateAfterOrInNow(Event event) {
         LocalDateTime now = LocalDateTime.now();
 
-        return now.isBefore(event.getDate());
+        return now.isBefore(event.getStartDate());
     }
 
     /**
@@ -43,7 +43,7 @@ public class EventSpecs {
      * @return
      */
     public static boolean checkIfEventDateAfterFromGivenDate(Event event, LocalDateTime dateTime) {
-        return dateTime.isBefore(event.getDate());
+        return dateTime.isBefore(event.getStartDate());
     }
 
     public static String generateKanbanNumber(Event event) {

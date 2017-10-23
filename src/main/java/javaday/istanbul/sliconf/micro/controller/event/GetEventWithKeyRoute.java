@@ -21,20 +21,20 @@ import java.util.Objects;
 @Path("/service/events/get/with-key/:key")
 @Produces("application/json")
 @Component
-public class GetEventWithKeyRouter implements Route {
+public class GetEventWithKeyRoute implements Route {
 
     private EventControllerMessageProvider messageProvider;
     private EventRepositoryService repositoryService;
 
     @Autowired
-    public GetEventWithKeyRouter(EventControllerMessageProvider messageProvider,
-                                 EventRepositoryService eventRepositoryService) {
+    public GetEventWithKeyRoute(EventControllerMessageProvider messageProvider,
+                                EventRepositoryService eventRepositoryService) {
         this.messageProvider = messageProvider;
         this.repositoryService = eventRepositoryService;
     }
 
     @GET
-    @ApiOperation(value = "Return event with given key", nickname = "GetEventWithKeyRoute")
+    @ApiOperation(value = "Returns event with given key", nickname = "GetEventWithKeyRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "key", paramType = "path")

@@ -20,6 +20,7 @@ COPY --from=source /sliconf-micro/target/sliconf-micro-$SLICONF_VERSION.jar /sli
 
 EXPOSE 8090
 
-VOLUME /sliconf-micro
+VOLUME /sliconf-micro/log
+VOLUME /sliconf-micro/upload
 
-ENTRYPOINT [ "sh", "-c", "java -jar /sliconf-micro-${SLICONF_VERSION}.jar"]
+ENTRYPOINT [ "sh", "-c", "java -jar /sliconf-micro/sliconf-micro-${SLICONF_VERSION}.jar"]

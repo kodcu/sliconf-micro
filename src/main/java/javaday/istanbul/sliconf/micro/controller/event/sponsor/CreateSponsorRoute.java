@@ -1,11 +1,10 @@
-package javaday.istanbul.sliconf.micro.controller.event;
+package javaday.istanbul.sliconf.micro.controller.event.sponsor;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.model.event.Sponsor;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.provider.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,33 +15,30 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
 
 
 @Api
-@Path("/service/events/create/:userId")
+@Path("/service/events/sponsor/create/:event-key")
 @Produces("application/json")
 @Component
-public class CreateEventRouter implements Route {
+public class CreateSponsorRoute implements Route {
 
 
-    private EventControllerMessageProvider messageProvider;
     private EventRepositoryService repositoryService;
 
     @Autowired
-    public CreateEventRouter(EventControllerMessageProvider messageProvider,
-                             EventRepositoryService eventRepositoryService) {
-        this.messageProvider = messageProvider;
+    public CreateSponsorRoute(EventRepositoryService eventRepositoryService) {
         this.repositoryService = eventRepositoryService;
     }
 
     @POST
-    @ApiOperation(value = "Creates an event and bind with given userId", nickname = "CreateEventRoute")
+    @ApiOperation(value = "Creates a sponsor", nickname = "CreateSponsorRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
-            @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"), //
-            @ApiImplicitParam(required = true, dataTypeClass = Event.class, paramType = "body") //
+            @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
+            @ApiImplicitParam(required = true, dataTypeClass = Sponsor.class, name = "sponsor", paramType = "body"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -56,49 +52,50 @@ public class CreateEventRouter implements Route {
 
         String body = request.body();
 
-        String userId = request.params("userId");
-
-        if (Objects.isNull(userId)) {
-            responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventUserIdCantBeEmpty"), new Object());
-            return responseMessage;
-        }
-
         if (Objects.isNull(body) || body.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventBodyCantBeEmpty"), new Object());
+                    "Body can not empty!", new Object());
             return responseMessage;
         }
 
-        Event event = JsonUtil.fromJson(body, Event.class);
+        Sponsor sponsor = JsonUtil.fromJson(body, Sponsor.class);
 
-        //isim uzunluğu minimumdan düşük mü diye kontrol et
-        if (!EventSpecs.checkEventName(event, 4)) {
+        if (Objects.isNull(sponsor) ||
+                Objects.isNull(sponsor.getLogo()) || sponsor.getLogo().isEmpty() ||
+                Objects.isNull(sponsor.getName()) || sponsor.getName().isEmpty() ||
+                Objects.isNull(sponsor.getTag()) || sponsor.getTag().isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventNameTooShort"), new Object());
+                    "Sponsor data must be filled, not empty!", new Object());
             return responseMessage;
         }
 
-        //event tarihinin geçip geçmediğin, kontrol et
-        if (!EventSpecs.checkIfEventDateAfterOrInNow(event)) {
+        String eventKey = request.params("event-key");
+
+        if (Objects.isNull(eventKey) || eventKey.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventDataInvalid"), new Object());
+                    "Event key can not empty", new Object());
             return responseMessage;
         }
 
-        // event var mı diye kontrol et
-        List<Event> dbEvents = repositoryService.findByName(event.getName());
+        Event event = repositoryService.findEventByKeyEquals(eventKey);
 
-        if (Objects.nonNull(dbEvents) && !dbEvents.isEmpty()) {
+        if (Objects.isNull(event)) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventAlreadyRegistered"), new Object());
+                    "Event can not found by given key", new Object());
             return responseMessage;
         }
 
-        //Kanban numarası oluştur
-        EventSpecs.generateKanbanNumber(event);
+        if (Objects.isNull(event.getSponsors())) {
+            event.setSponsors(new HashMap<>());
+        }
 
-        event.setExecutiveUser(userId);
+        int tagId = 1;
+
+        while (!event.getSponsors().containsKey("sp" + tagId)) {
+            tagId++;
+        }
+
+        event.getSponsors().put("sp" + tagId, sponsor);
 
         // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
@@ -108,7 +105,7 @@ public class CreateEventRouter implements Route {
         }
 
         responseMessage = new ResponseMessage(true,
-                messageProvider.getMessage("eventCreatedSuccessfully"), event);
+                "Sponsor saved successfully", "sp" + tagId);
 
         return responseMessage;
     }

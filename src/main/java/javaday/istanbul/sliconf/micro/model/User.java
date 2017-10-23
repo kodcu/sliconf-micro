@@ -12,8 +12,10 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
  */
 @Document
 public class User {
+
     @Id
     @GeneratedValue(strategy = UNIQUE)
+    @Field
     private String id;
 
     @Field
