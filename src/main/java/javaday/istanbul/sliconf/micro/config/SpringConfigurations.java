@@ -41,7 +41,7 @@ public class SpringConfigurations {
         registration.addUrlPatterns("/*");
         registration.addInitParameter("applicationClass", "javaday.istanbul.sliconf.micro.SliconfMicroSparkApp");
         registration.setName("SparkFilter");
-        registration.setOrder(FilterRegistrationBean.REQUEST_WRAPPER_FILTER_MAX_ORDER + 100);
+        registration.setOrder(FilterRegistrationBean.REQUEST_WRAPPER_FILTER_MAX_ORDER);
         return registration;
     }
 

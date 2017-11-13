@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.service.token;
 
-import javaday.istanbul.sliconf.micro.model.token.Token;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.model.token.Token;
 import javaday.istanbul.sliconf.micro.model.token.TokenType;
 import javaday.istanbul.sliconf.micro.repository.TokenRepository;
 import javaday.istanbul.sliconf.micro.util.Constants;
@@ -49,6 +49,10 @@ public class TokenRepositoryService implements TokenService {
     @Override
     public boolean save(Token token) {
         return Objects.nonNull(repo.save(token));
+    }
+
+    public void remove(Token token) {
+        repo.delete(token);
     }
 
     /**

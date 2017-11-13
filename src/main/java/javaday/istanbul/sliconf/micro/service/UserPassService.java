@@ -16,6 +16,11 @@ public class UserPassService {
 
     private PasswordEncryptionService encryptionService = new PasswordEncryptionService();
 
+    /**
+     * Password islemlerinde kullanilmak uzere yeni bir Salt olusturur
+     *
+     * @return
+     */
     private byte[] getSalt() {
         byte[] salt = null;
 
@@ -28,6 +33,13 @@ public class UserPassService {
         return salt;
     }
 
+    /**
+     * Salt ve verilen password ile hashedPassword olusturur
+     *
+     * @param password
+     * @param salt
+     * @return
+     */
     private byte[] getHashedPassword(String password, byte[] salt) {
         byte[] ePass = null;
 
@@ -39,6 +51,14 @@ public class UserPassService {
         return ePass;
     }
 
+    /**
+     * Girilen password un hashedPassword ve salt ile uyusup uyusmasdigi kontrolu yapar
+     *
+     * @param password
+     * @param hashedPassword
+     * @param salt
+     * @return
+     */
     public boolean checkPassword(String password, byte[] hashedPassword, byte[] salt) {
         boolean isOk = false;
         try {
@@ -51,7 +71,6 @@ public class UserPassService {
     }
 
     /**
-     *
      * @param sourceUser db den cekilmis salt bulunduran user
      * @param targetUser sifresi bulunan ve db user ile karsilastirilacak user
      * @return
@@ -63,7 +82,13 @@ public class UserPassService {
         return checkPassword(targetUser.getPassword(), hashedPassword, salt);
     }
 
-    // TODO:Yorum satirlari eklenecek
+    /**
+     * Verilen User in passwordu ile hashed password olusturur ve user string passwordunu siler
+     * Daha sonraki auth islemlerinde hashed password ve salt kullanilacaktir
+     *
+     * @param user
+     * @return
+     */
     public User createNewUserWithHashedPassword(User user) {
         byte[] salt = getSalt();
         byte[] hashedPassword = getHashedPassword(user.getPassword(), salt);

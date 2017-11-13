@@ -3,9 +3,10 @@ package javaday.istanbul.sliconf.micro.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import javaday.istanbul.sliconf.micro.util.json.LocalDateTimeDeserializer;
+import javaday.istanbul.sliconf.micro.util.json.LocalDateTimeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.ResponseTransformer;
@@ -28,9 +29,8 @@ public class JsonUtil {
     private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
     private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class,
-                    (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext)
-                            -> LocalDateTime.parse(json.getAsJsonPrimitive().getAsString()))
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer())
             .create();
 
     public static String toJson(Object object) {
@@ -52,8 +52,7 @@ public class JsonUtil {
     }
 
     public static Map<String, Object> mapFromObject(Object object) {
-        Type type = new TypeToken<Map<String, Object>>() {
-        }.getType();
+        Type type = new TypeToken<Map<String, Object>>() {}.getType();
 
         return gson.fromJson(toJson(object), type);
     }

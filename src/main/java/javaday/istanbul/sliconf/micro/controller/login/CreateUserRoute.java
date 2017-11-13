@@ -6,6 +6,7 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.util.EmailUtil;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -57,9 +58,17 @@ public class CreateUserRoute implements Route {
         String body = request.body();
         User user = JsonUtil.fromJson(body, User.class);
 
-        List<User> dbUsers = userRepositoryService.findByUsername(user.getUsername());
+        if (Objects.isNull(user)) {
+            responseMessage = new ResponseMessage(false, "User can not be empty", "");
+            return responseMessage;
+        }
 
-        // Todo mail validation yapilmali UserSpecs
+        if (!EmailUtil.validateEmail(user.getEmail())) {
+            responseMessage = new ResponseMessage(false, "Email is not valid", user.getEmail());
+            return responseMessage;
+        }
+
+        List<User> dbUsers = userRepositoryService.findByUsername(user.getUsername());
 
         // eger user yoksa kayit et
         if (Objects.nonNull(dbUsers) && !dbUsers.isEmpty()) {
@@ -77,14 +86,14 @@ public class CreateUserRoute implements Route {
         UserPassService userPassService = new UserPassService();
         User saltedUser = userPassService.createNewUserWithHashedPassword(user);
 
-        ResponseMessage dbResponse = userRepositoryService.save(saltedUser);
+        ResponseMessage dbResponse = userRepositoryService.saveUser(saltedUser);
 
         if (!dbResponse.isStatus()) {
             return dbResponse;
         }
 
         responseMessage = new ResponseMessage(true,
-                loginControllerMessageProvider.getMessage("userSaveSuccessful"), user);
+                loginControllerMessageProvider.getMessage("userSaveSuccessful"), dbResponse.getReturnObject());
 
         return responseMessage;
     }

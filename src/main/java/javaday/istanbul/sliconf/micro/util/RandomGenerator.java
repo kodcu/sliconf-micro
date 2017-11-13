@@ -8,6 +8,8 @@ public class RandomGenerator {
 
     public static String generateRandom(int length) {
         // Todo make more useful generator
+        // fetch keys from event and check if contains generated key
+        //
         Random random = new SecureRandom();
         if (length <= 0) {
             throw new IllegalArgumentException("String length must be a positive integer");

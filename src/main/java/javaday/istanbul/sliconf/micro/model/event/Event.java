@@ -1,7 +1,6 @@
 package javaday.istanbul.sliconf.micro.model.event;
 
 
-import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
@@ -19,21 +18,16 @@ public class Event {
     @GeneratedValue(strategy = UNIQUE)
     private String id;
 
-    @Field
     private String key;
 
-    @Field
     private String name;
 
-    @Field
     private String logoPath;
 
-    @Field
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
-    @Field
     private String executiveUser;
 
     private List<AgendaElement> agenda;
@@ -42,15 +36,9 @@ public class Event {
 
     private boolean status;
 
-    private Map<String, String> social;
-
     private String description;
 
-    private String web;
-
-    private List<String> phone;
-
-    private Location location;
+    private About about;
 
     private List<Room> rooms;
 
@@ -58,7 +46,7 @@ public class Event {
 
     private Map<String, String> sponsorTags;
 
-    private Map<String, Sponsor> sponsors;
+    private Map<String, List<Sponsor>> sponsors;
 
     public String getId() {
         return id;
@@ -140,44 +128,12 @@ public class Event {
         this.speakers = speakers;
     }
 
-    public Map<String, String> getSocial() {
-        return social;
-    }
-
-    public void setSocial(Map<String, String> social) {
-        this.social = social;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getWeb() {
-        return web;
-    }
-
-    public void setWeb(String web) {
-        this.web = web;
-    }
-
-    public List<String> getPhone() {
-        return phone;
-    }
-
-    public void setPhone(List<String> phone) {
-        this.phone = phone;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     public List<Room> getRooms() {
@@ -204,11 +160,19 @@ public class Event {
         this.sponsorTags = sponsorTags;
     }
 
-    public Map<String, Sponsor> getSponsors() {
+    public Map<String, List<Sponsor>> getSponsors() {
         return sponsors;
     }
 
-    public void setSponsors(Map<String, Sponsor> sponsors) {
+    public void setSponsors(Map<String, List<Sponsor>> sponsors) {
         this.sponsors = sponsors;
+    }
+
+    public About getAbout() {
+        return about;
+    }
+
+    public void setAbout(About about) {
+        this.about = about;
     }
 }

@@ -5,6 +5,7 @@ import javaday.istanbul.sliconf.micro.provider.MailMessageProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -15,14 +16,29 @@ import java.util.Properties;
 @Service("gandiMailSendService")
 public class GandiMailSendService implements IMailSendService {
 
-    private static final String username = "info@sliconf.com";
-    private static final String password = "eddieHendorsoN!91";
-
-    private static final String from = "info@sliconf.com";
-
     private final Logger logger = LoggerFactory.getLogger(GandiMailSendService.class);
 
-    public static boolean isTest = false;
+    @Value("${sliconf.mail.username}")
+    private String username;
+
+    @Value("${sliconf.mail.password}")
+    private String password;
+
+    @Value("${sliconf.mail.from}")
+    private String from;
+
+    @Value("${sliconf.mail.isTest}")
+    private boolean isTest = false;
+
+    @Value("${sliconf.mail.smtp.auth}")
+    private String mailSmtpAuth;
+
+    @Value("${sliconf.mail.smtp.host}")
+    private String mailSmtpHost;
+
+    @Value("${sliconf.mail.smtp.port}")
+    private String mailSmtpPort;
+
 
     @Autowired
     private MailMessageProvider mailMessageProvider;
@@ -34,10 +50,9 @@ public class GandiMailSendService implements IMailSendService {
                 mailMessageProvider.getMessage("mailCanNotSent"), "");
 
         Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "mail.gandi.net");
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", mailSmtpAuth);
+        props.put("mail.smtp.host", mailSmtpHost);
+        props.put("mail.smtp.port", mailSmtpPort);
 
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {

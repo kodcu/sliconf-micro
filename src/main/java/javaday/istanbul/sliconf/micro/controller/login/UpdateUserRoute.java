@@ -17,8 +17,6 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Api
@@ -42,7 +40,7 @@ public class UpdateUserRoute implements Route {
     @POST
     @ApiOperation(value = "Updates user with given parameters", nickname = "UpdateUserRoute")
     @ApiImplicitParams({
-            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header") ,//
+            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"),//
             @ApiImplicitParam(required = true, dataTypeClass = User.class, paramType = "body") //
 
     })
@@ -59,22 +57,22 @@ public class UpdateUserRoute implements Route {
         JsonObject updateParams = JsonObject.fromJson(body);
         User user = userRepositoryService.findOne(updateParams.getString("id"));
         if (Objects.nonNull(user)) {
-            boolean changed=false;
+            boolean changed = false;
             if (Objects.nonNull(updateParams.getString("username"))) {
                 if (UserSpecs.checkUserParams(updateParams.getString("username"), 4)) {
                     user.setUsername(updateParams.getString("username"));
-                    changed=true;
+                    changed = true;
                 } else
-                    return new ResponseMessage(false,"New username must be at least 4",new Object());
+                    return new ResponseMessage(false, "New username must be at least 4", new Object());
             }
-            if(Objects.nonNull(updateParams.getString("fullname"))){
+            if (Objects.nonNull(updateParams.getString("fullname"))) {
                 user.setFullname(updateParams.getString("fullname"));
-                changed=true;
+                changed = true;
             }
-            if (Objects.nonNull(updateParams.getString("password"))&& Objects.nonNull(updateParams.getString("oldpassword"))) {
-                UserPassService service =new UserPassService();
-                if(service.checkPassword(updateParams.getString("oldpassword"),user.getHashedPassword(),user.getSalt())){
-                    if(!updateParams.getString("oldpassword").equals(updateParams.getString("password"))) {
+            if (Objects.nonNull(updateParams.getString("password")) && Objects.nonNull(updateParams.getString("oldpassword"))) {
+                UserPassService service = new UserPassService();
+                if (service.checkPassword(updateParams.getString("oldpassword"), user.getHashedPassword(), user.getSalt())) {
+                    if (!updateParams.getString("oldpassword").equals(updateParams.getString("password"))) {
                         if (UserSpecs.checkUserParams(updateParams.getString("password"), 4)) {
                             UserPassService userPassService = new UserPassService();
                             user.setPassword(updateParams.getString("password"));
@@ -84,18 +82,19 @@ public class UpdateUserRoute implements Route {
                             changed = true;
                         } else
                             return new ResponseMessage(false, "New password must be at least 4", new Object());
-                    }else
-                        return new ResponseMessage(false,"New password and old password cannot be same",new Object());
-                }else
-                    return new ResponseMessage(false,"Wrong old Password",new Object());
+                    } else
+                        return new ResponseMessage(false, "New password and old password cannot be same", new Object());
+                } else
+                    return new ResponseMessage(false, "Wrong old Password", new Object());
 
             }
             // TODO: Update fonksiyonunu arastir.
-            if(changed) {
-                userRepositoryService.save(user);
-                return new ResponseMessage(true, "User successfully updated", user);
-            }else
-                return new ResponseMessage(false,"Please check params",new Object());
+            if (changed) {
+                ResponseMessage responseMessage = userRepositoryService.save(user);
+
+                return new ResponseMessage(true, "User successfully updated", responseMessage.getReturnObject());
+            } else
+                return new ResponseMessage(false, "Please check params", new Object());
         }
 
         return new ResponseMessage(false,

@@ -45,26 +45,23 @@ public class ImageGetRoute implements Route {
         String id = request.params(":id");
 
         if (Objects.isNull(id)) {
-            responseMessage.setStatus(false);
-            responseMessage.setMessage("");
+            responseMessage.setMessage("Image id can not be null");
+            return responseMessage;
         }
 
-        response.type("application/octet-stream");
-
-        response.header("Content-Disposition", "filename=\\\"" + id + ".png\\\"");
-
-        Path tempFile;
-
-
         try {
-            tempFile = new File("upload/" + id).toPath();
+
+            Path tempFile = new File("upload/" + id).toPath();
+
+            if (!tempFile.toFile().exists()) {
+                response.type("application/json");
+                return responseMessage;
+            }
+
+            response.type("image/png");
+            response.header("Content-Disposition", "filename=" + id);
 
             Files.copy(tempFile, response.raw().getOutputStream());
-
-            responseMessage.setStatus(true);
-            responseMessage.setMessage("Image uploaded successfully");
-            responseMessage.setReturnObject(tempFile.getFileName().toString());
-
         } catch (InvalidPathException exception) {
             logger.error(exception.getMessage(), exception);
         }

@@ -23,4 +23,6 @@ public interface UserService {
     ResponseMessage changePassword(String email, String newPassword, String newPasswordAgain);
 
     User findById(String id);
+
+    ResponseMessage saveUser(User saltedUser);
 }

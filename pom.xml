@@ -26,7 +26,7 @@
 
         <cucumber.version>1.2.5</cucumber.version>
         <junit.version>4.12</junit.version>
-        <spark-core.version>2.6.0</spark-core.version>
+        <spark-core.version>2.7.0</spark-core.version>
         <logger.version>2.8</logger.version>
         <google-oauth.version>1.22.0</google-oauth.version>
         <couch-base.version>2.4.6</couch-base.version>

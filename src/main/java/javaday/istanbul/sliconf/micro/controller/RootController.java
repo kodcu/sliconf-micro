@@ -5,6 +5,7 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.JsonUtil;
 import javaday.istanbul.sliconf.micro.util.SwaggerParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import static javaday.istanbul.sliconf.micro.SliconfMicroApp.APP_PACKAGE;
@@ -18,7 +19,6 @@ import static spark.Spark.*;
 public class RootController {
 
     private static RouteObjects routeObjects;
-
 
     @Autowired
     public RootController(RouteObjects routeObjects) {
@@ -37,15 +37,35 @@ public class RootController {
             System.out.println(e);
         }
 
+        // Todo spark-java ile exception handling yapabilir miyiz?
+
+        exception(IllegalArgumentException.class, (e, req, res) -> {
+            res.status(HttpStatus.BAD_REQUEST.value());
+            res.body(JsonUtil.toJson(new ResponseError(e)));
+        });
+
+        // Using Route
+        notFound((req, res) -> {
+            res.type("application/json");
+
+            res.status(HttpStatus.NOT_FOUND.value());
+
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setMessage("The page you looking for not found!");
+            responseMessage.setReturnObject(req.url());
+            responseMessage.setStatus(false);
+
+            return JsonUtil.toJson(responseMessage);
+        });
+
         before((request, response) -> {
 
             String token = request.headers("token");
 
-
             // Todo auth sistemini devreye alinca kullan
+
             /*
             String token = request.queryParams("token");
-
             // ... check if authenticated
             if (!"auth".equals(token)) {
                 ResponseMessage responseMessage = new ResponseMessage();
@@ -70,9 +90,11 @@ public class RootController {
                 post("create/:userId", routeObjects.createEventRoute, JsonUtil.json());
                 get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
 
-                path("/get/", () ->
+                path("get/", () ->
                         get("with-key/:key", routeObjects.getEventWithKeyRoute, JsonUtil.json())
                 );
+
+                before();
 
                 path("sponsor-tag/", () -> {
                     post("create/:event-key/:tag", routeObjects.createSponsorTagRoute, JsonUtil.json());
@@ -98,32 +120,13 @@ public class RootController {
 
             path("image/", () -> {
                 post("upload", routeObjects.imageUploadRoute, JsonUtil.json());
-                get("get/:id", routeObjects.imageGetRoute);
+                get("get/:id", routeObjects.imageGetRoute, JsonUtil.json());
             });
 
         });
 
         after((req, res) -> res.type("application/json"));
 
-        // Todo spark-java ile exception handling yapabilir miyiz?
 
-        exception(IllegalArgumentException.class, (e, req, res) -> {
-            res.status(400);
-            res.body(JsonUtil.toJson(new ResponseError(e)));
-        });
-
-        // Using Route
-        notFound((req, res) -> {
-            res.type("application/json");
-
-            res.status(404);
-
-            ResponseMessage responseMessage = new ResponseMessage();
-            responseMessage.setMessage("The page you looking for not found!");
-            responseMessage.setReturnObject(new Object());
-            responseMessage.setStatus(false);
-
-            return responseMessage;
-        });
     }
 }

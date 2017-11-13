@@ -70,15 +70,12 @@ public class UserRepositoryService implements UserService {
                 savedUser.setHashedPassword(null);
                 savedUser.setSalt(null);
 
-                // Todo hashed pass donmemeli
-
                 message.setReturnObject(savedUser);
             }
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-
 
         return message;
     }
@@ -108,6 +105,7 @@ public class UserRepositoryService implements UserService {
 
     /**
      * gonderilen sifreyi email ile iliskili kullanicinin uzerine yazar
+     *
      * @param email
      * @param newPassword
      * @param newPasswordAgain
@@ -118,7 +116,7 @@ public class UserRepositoryService implements UserService {
         ResponseMessage responseMessage = new ResponseMessage(false,
                 userRepositoryMessageProvider.getMessage("passwordsDoNotMatch"), "");
 
-        ResponseMessage isValidResponse = this.isPasswordValid(newPassword, newPasswordAgain);
+        ResponseMessage isValidResponse = this.isNewPasswordValid(newPassword, newPasswordAgain);
 
         if (isValidResponse.isStatus()) {
             User dbUser = this.findByEmail(email);
@@ -148,18 +146,36 @@ public class UserRepositoryService implements UserService {
 
     /**
      * Gonderilen passwords gerekli kriterleri karsiliyor mu kontrolu
+     *
      * @param password
      * @param passwordAgain
      * @return
      */
-    private ResponseMessage isPasswordValid(String password, String passwordAgain) {
+    private ResponseMessage isNewPasswordValid(String password, String passwordAgain) {
         ResponseMessage responseMessage = new ResponseMessage(true, "", "");
 
         if (!UserSpecs.isPasswordsEquals(password, passwordAgain)) {
             responseMessage.setStatus(false);
             responseMessage.setMessage(userRepositoryMessageProvider.getMessage("passwordsDoNotMatch"));
             return responseMessage;
-        } else if(!UserSpecs.isPassMeetRequiredLengths(password)) {
+        } else if (!UserSpecs.isPassMeetRequiredLengths(password)) {
+            responseMessage.setStatus(false);
+            responseMessage.setMessage(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"));
+            return responseMessage;
+        }
+
+        return responseMessage;
+    }
+
+    /**
+     * Gonderilen password gerekli kriterleri karsiliyor mu kontrolu
+     * @param password
+     * @return
+     */
+    private ResponseMessage isPasswordValid(String password) {
+        ResponseMessage responseMessage = new ResponseMessage(true, "", "");
+
+        if (!UserSpecs.isPassMeetRequiredLengths(password)) {
             responseMessage.setStatus(false);
             responseMessage.setMessage(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"));
             return responseMessage;
@@ -171,6 +187,24 @@ public class UserRepositoryService implements UserService {
     @Override
     public User findById(String id) {
         return repo.findOne(id);
+    }
+
+    @Override
+    public ResponseMessage saveUser(User saltedUser) {
+        ResponseMessage responseMessage = new ResponseMessage(false,
+                userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"), "");
+
+        if (Objects.nonNull(saltedUser)) {
+            responseMessage = isPasswordValid(saltedUser.getPassword());
+
+            if (!responseMessage.isStatus()) {
+                return responseMessage;
+            }
+
+            responseMessage = save(saltedUser);
+        }
+
+        return responseMessage;
     }
 
 }

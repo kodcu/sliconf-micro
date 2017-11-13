@@ -6,12 +6,11 @@ import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
 import javaday.istanbul.sliconf.micro.builder.UserBuilder;
-import javaday.istanbul.sliconf.micro.model.token.Token;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.model.token.Token;
 import javaday.istanbul.sliconf.micro.service.PasswordResetService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.service.mail.GandiMailSendService;
 import javaday.istanbul.sliconf.micro.service.token.TokenRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +70,6 @@ public class K683 {
 
     @Before
     public void init() {
-
-        GandiMailSendService.isTest = true;
 
         token = tokenRepositoryService.generateToken("osman15@osman.com");
 

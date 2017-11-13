@@ -15,8 +15,7 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 
 @Api
@@ -60,16 +59,29 @@ public class CreateSponsorRoute implements Route {
 
         Sponsor sponsor = JsonUtil.fromJson(body, Sponsor.class);
 
+        String eventKey = request.params("event-key");
+
+        return addNewSponsor(sponsor, eventKey);
+    }
+
+    /**
+     * Gelen eventKey ve sponsor ile gerekli evente sponsor eklenir
+     * @param sponsor
+     * @param eventKey
+     * @return
+     */
+    private ResponseMessage addNewSponsor(Sponsor sponsor, String eventKey) {
+
+        ResponseMessage responseMessage;
+
         if (Objects.isNull(sponsor) ||
                 Objects.isNull(sponsor.getLogo()) || sponsor.getLogo().isEmpty() ||
                 Objects.isNull(sponsor.getName()) || sponsor.getName().isEmpty() ||
                 Objects.isNull(sponsor.getTag()) || sponsor.getTag().isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    "Sponsor data must be filled, not empty!", new Object());
+                    "Sponsor data must be filled, can not be empty!", new Object());
             return responseMessage;
         }
-
-        String eventKey = request.params("event-key");
 
         if (Objects.isNull(eventKey) || eventKey.isEmpty()) {
             responseMessage = new ResponseMessage(false,
@@ -89,15 +101,27 @@ public class CreateSponsorRoute implements Route {
             event.setSponsors(new HashMap<>());
         }
 
-        int tagId = 1;
+        String tagId = "sp" + sponsor.getTag();
 
-        while (!event.getSponsors().containsKey("sp" + tagId)) {
-            tagId++;
+        sponsor.setId(UUID.randomUUID().toString());
+
+        List<Sponsor> sponsors = event.getSponsors().get(tagId);
+
+        if (Objects.nonNull(sponsors)) {
+            // add to list
+            if (!sponsors.contains(sponsor)) {
+                sponsors.add(sponsor);
+            }
+
+        } else {
+            // put to map
+            sponsors = new ArrayList<>();
+
+            sponsors.add(sponsor);
         }
 
-        event.getSponsors().put("sp" + tagId, sponsor);
+        event.getSponsors().put(tagId, sponsors);
 
-        // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
 
         if (!dbResponse.isStatus()) {
@@ -105,7 +129,7 @@ public class CreateSponsorRoute implements Route {
         }
 
         responseMessage = new ResponseMessage(true,
-                "Sponsor saved successfully", "sp" + tagId);
+                "Sponsor saved successfully", sponsor);
 
         return responseMessage;
     }

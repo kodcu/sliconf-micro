@@ -3,6 +3,7 @@ package javaday.istanbul.sliconf.micro.controller.login;
 import com.couchbase.client.java.document.json.JsonObject;
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.model.token.Token;
 import javaday.istanbul.sliconf.micro.service.token.TokenRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +54,17 @@ public class ResetPasswordRoute implements Route {
         ResponseMessage isTokenValidMessage = this.tokenRepositoryService.isTokenValid(tokenValue);
 
         if (Objects.nonNull(isTokenValidMessage) && isTokenValidMessage.isStatus()) {
-            return userRepositoryService.changePassword((String) isTokenValidMessage.getReturnObject(),
+
+            ResponseMessage changeResponseMessage = userRepositoryService.changePassword((String) isTokenValidMessage.getReturnObject(),
                     passData.getString("pass"), passData.getString("repass"));
+
+
+            if(Objects.nonNull(changeResponseMessage) && changeResponseMessage.isStatus()) {
+                Token token = tokenRepositoryService.findTokenByTokenValueEquals(tokenValue);
+                tokenRepositoryService.remove(token);
+            }
+
+            return changeResponseMessage;
         } else {
             return isTokenValidMessage;
         }

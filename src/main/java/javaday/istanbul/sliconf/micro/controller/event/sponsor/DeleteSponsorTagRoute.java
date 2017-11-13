@@ -14,9 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 @Api
@@ -83,13 +81,7 @@ public class DeleteSponsorTagRoute implements Route {
 
             if (Objects.nonNull(event.getSponsors())) {
 
-                event.setSponsors(
-                        event.getSponsors()
-                                .entrySet()
-                                .stream()
-                                .filter(entry -> !tag.equalsIgnoreCase(entry.getValue().getTag()))
-                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-                );
+                event.getSponsors().remove("sp" + tag);
             }
         }
 

@@ -57,11 +57,20 @@ Create New Data Bucket butonuna basarak gelen ekran üzerinde:
 
 Bucket Name kısmına "users" (tırnaklar olmadan) yazıyoruz.
 
-Bucketler için 300 mb yeterlidir.
+Bucketler için 100 mb yeterlidir.
 
 Access Control kısmında Standart port seçeneğinde bulunan password kısmına
 "jfFMd8Nd" (users bucket'imiz için erişim parolası olacak)yazıyoruz. Diğer kısımlar varsayılan olarak kalabilir.
-Aynı şeyleri default ve events bucketları için yapıyoruz.Defaultta şifre sormayacak.
+Aynı şeyleri:
+
+default
+events
+tokens
+
+bucketları için yapıyoruz.
+
+
+Defaultta şifre sormayacak.
 
 === Index Ekleme ===
 http://localhost:8091/ui/index.html#/query/workbench
@@ -73,6 +82,8 @@ create primary index on users;
 create primary index on events;
 
 create primary index on default;
+
+create primary index on tokens;
 
 === Intellij IDEA kurulumu
 

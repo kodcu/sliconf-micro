@@ -7,12 +7,14 @@ import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
  * Created by ttayfur on 7/4/17.
  */
 
 @SpringBootApplication
+@EnableConfigurationProperties
 @SwaggerDefinition(host = "localhost:8090", //
         info = @Info(description = "Sliconf Micro API", //
                 version = "V0.0.1", //

@@ -1,11 +1,12 @@
 package javaday.istanbul.sliconf.micro.config;
 
 import com.couchbase.client.java.Bucket;
-import javaday.istanbul.sliconf.micro.model.token.Token;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.model.token.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -26,13 +27,19 @@ import java.util.List;
  * Created by ttayfur on 7/8/17.
  */
 @Configuration
-@Profile("prod")
+@Profile({"prod","dev"})
 public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(CouchBaseConfig.class);
 
-    private static final String HOST_NAME = "127.0.0.1";
-    private static final String BUCKET_PASS = "jfFMd8Nd";
+    @Value("${sliconf.couchbase.default-host-name}")
+    private String defaultHostName;
+
+    @Value("${sliconf.couchbase.host-name}")
+    private String hostName;
+
+    @Value("${sliconf.couchbase.bucket-pass}")
+    private String bucketPass;
 
     private static final String USERS_BUCKET_NAME = "users";
     private static final String EVENTS_BUCKET_NAME = "events";
@@ -41,7 +48,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     protected List<String> getBootstrapHosts() {
-        return Arrays.asList("sliconf.com", HOST_NAME);
+        return Arrays.asList(defaultHostName, hostName);
     }
 
     @Override
@@ -63,7 +70,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     @Bean
     public Bucket usersBucket() throws Exception {
-        return couchbaseCluster().openBucket(USERS_BUCKET_NAME, BUCKET_PASS);
+        return couchbaseCluster().openBucket(USERS_BUCKET_NAME, bucketPass);
     }
 
     @Bean(name = "usersTemplate")
@@ -77,7 +84,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     @Bean
     public Bucket eventsBucket() throws Exception {
-        return couchbaseCluster().openBucket(EVENTS_BUCKET_NAME, BUCKET_PASS);
+        return couchbaseCluster().openBucket(EVENTS_BUCKET_NAME, bucketPass);
     }
 
     @Bean(name = "eventsTemplate")
@@ -91,7 +98,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     @Bean
     public Bucket tokensBucket() throws Exception {
-        return couchbaseCluster().openBucket(TOKENS_BUCKET_NAME, BUCKET_PASS);
+        return couchbaseCluster().openBucket(TOKENS_BUCKET_NAME, bucketPass);
     }
 
     @Bean(name = "tokensTemplate")

@@ -36,6 +36,7 @@ public class DeleteSponsorRoute implements Route {
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "sponsorId", paramType = "path"), //
+            @ApiImplicitParam(required = true, dataType = "string", name = "tag", paramType = "path"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -45,13 +46,26 @@ public class DeleteSponsorRoute implements Route {
     })
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
+        return deleteSponsorFromEvent(request);
+    }
+
+    private ResponseMessage deleteSponsorFromEvent(Request request) {
         ResponseMessage responseMessage;
 
         String sponsorId = request.params("sponsorId");
 
         if (Objects.isNull(sponsorId) || sponsorId.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    "Sponsor Id can not empty", new Object());
+                    "Sponsor Id can not be empty", new Object());
+            return responseMessage;
+        }
+
+
+        String tagId = request.params("tag");
+
+        if (Objects.isNull(tagId) || tagId.isEmpty()) {
+            responseMessage = new ResponseMessage(false,
+                    "Tag can not be empty", new Object());
             return responseMessage;
         }
 
@@ -71,10 +85,8 @@ public class DeleteSponsorRoute implements Route {
             return responseMessage;
         }
 
-
-        if (Objects.nonNull(event.getSponsors()) &&
-                event.getSponsors().containsKey(sponsorId)) {
-            event.getSponsors().remove(sponsorId);
+        if (Objects.nonNull(event.getSponsors())) {
+            event.getSponsors().get(tagId).removeIf(sponsor -> sponsor.getId().equals(sponsorId));
         }
 
         // eger event yoksa kayit et
