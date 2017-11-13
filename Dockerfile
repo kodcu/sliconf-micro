@@ -1,5 +1,5 @@
 # 1 First intermediate image
-FROM maven:3-jdk-8-alpine as pom
+FROM maven:3.5.2-jdk-8-slim as pom
 
 COPY pom.xml /sliconf-micro/
 
