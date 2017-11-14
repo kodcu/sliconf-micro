@@ -23,4 +23,4 @@ EXPOSE 8090
 VOLUME /sliconf-micro/log
 VOLUME /sliconf-micro/upload
 
-ENTRYPOINT [ "sh", "-c", "java -jar /sliconf-micro/sliconf-micro-${SLICONF_VERSION}.jar"]
+ENTRYPOINT [ "sh", "-c", "java -jar /sliconf-micro/sliconf-micro-${SLICONF_VERSION}.jar -Dspring.profiles.active=prod"]
