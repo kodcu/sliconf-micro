@@ -103,7 +103,7 @@ public class RootController {
 
                 path("sponsor/", () -> {
                     post("create/:event-key", routeObjects.createSponsorRoute, JsonUtil.json());
-                    post("delete/:event-key/:sponsorId", routeObjects.deleteSponsorRoute, JsonUtil.json());
+                    post("delete/:event-key/:sponsorId/:tag", routeObjects.deleteSponsorRoute, JsonUtil.json());
                 });
 
                 path("floor/", () -> {

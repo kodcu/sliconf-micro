@@ -82,11 +82,7 @@ public class CreateUserRoute implements Route {
             return responseMessage;
         }
 
-
-        UserPassService userPassService = new UserPassService();
-        User saltedUser = userPassService.createNewUserWithHashedPassword(user);
-
-        ResponseMessage dbResponse = userRepositoryService.saveUser(saltedUser);
+        ResponseMessage dbResponse = userRepositoryService.saveUser(user);
 
         if (!dbResponse.isStatus()) {
             return dbResponse;

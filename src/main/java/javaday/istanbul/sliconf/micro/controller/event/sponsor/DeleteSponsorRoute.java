@@ -17,7 +17,7 @@ import java.util.Objects;
 
 
 @Api
-@Path("/service/events/sponsor/delete/:event-key/:sponsorId")
+@Path("/service/events/sponsor/delete/:event-key/:sponsorId/:tag")
 @Produces("application/json")
 @Component
 public class DeleteSponsorRoute implements Route {

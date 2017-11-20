@@ -6,6 +6,7 @@ import javaday.istanbul.sliconf.micro.provider.UserRepositoryMessageProvider;
 import javaday.istanbul.sliconf.micro.repository.UserRepository;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.specs.UserSpecs;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,7 +161,10 @@ public class UserRepositoryService implements UserService {
             return responseMessage;
         } else if (!UserSpecs.isPassMeetRequiredLengths(password)) {
             responseMessage.setStatus(false);
-            responseMessage.setMessage(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"));
+            responseMessage.setMessage(
+                    String.format(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"),
+                            Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH)
+                    );
             return responseMessage;
         }
 
@@ -177,7 +181,10 @@ public class UserRepositoryService implements UserService {
 
         if (!UserSpecs.isPassMeetRequiredLengths(password)) {
             responseMessage.setStatus(false);
-            responseMessage.setMessage(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"));
+            responseMessage.setMessage(
+                    String.format(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"),
+                            Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH)
+            );
             return responseMessage;
         }
 
@@ -190,16 +197,21 @@ public class UserRepositoryService implements UserService {
     }
 
     @Override
-    public ResponseMessage saveUser(User saltedUser) {
+    public ResponseMessage saveUser(User user) {
         ResponseMessage responseMessage = new ResponseMessage(false,
-                userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"), "");
+                String.format(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"),
+                        Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH)
+        , "");
 
-        if (Objects.nonNull(saltedUser)) {
-            responseMessage = isPasswordValid(saltedUser.getPassword());
+        if (Objects.nonNull(user)) {
+            responseMessage = isPasswordValid(user.getPassword());
 
             if (!responseMessage.isStatus()) {
                 return responseMessage;
             }
+
+            UserPassService userPassService = new UserPassService();
+            User saltedUser = userPassService.createNewUserWithHashedPassword(user);
 
             responseMessage = save(saltedUser);
         }
