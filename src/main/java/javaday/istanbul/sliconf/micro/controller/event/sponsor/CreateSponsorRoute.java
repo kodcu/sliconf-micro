@@ -1,11 +1,13 @@
 package javaday.istanbul.sliconf.micro.controller.event.sponsor;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.model.SponsorsAndSponsorTags;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.event.Sponsor;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.util.JsonUtil;
+import javaday.istanbul.sliconf.micro.specs.SponsorSpecs;
+import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -15,7 +17,10 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 @Api
@@ -57,29 +62,28 @@ public class CreateSponsorRoute implements Route {
             return responseMessage;
         }
 
-        Sponsor sponsor = JsonUtil.fromJson(body, Sponsor.class);
+        SponsorsAndSponsorTags sponsorsAndSponsorTags = JsonUtil.fromJson(body, SponsorsAndSponsorTags.class);
 
         String eventKey = request.params("event-key");
 
-        return addNewSponsor(sponsor, eventKey);
+        return addNewSponsor(sponsorsAndSponsorTags.getSponsors(), sponsorsAndSponsorTags.getSponsorTags(), eventKey);
     }
 
     /**
-     * Gelen eventKey ve sponsor ile gerekli evente sponsor eklenir
-     * @param sponsor
+     * Gelen sponsorMap ve sponsorTag gelen eventKey ile gerekli evente yazilir
+     *
+     * @param sponsorMap
+     * @param sponsorTags
      * @param eventKey
      * @return
      */
-    private ResponseMessage addNewSponsor(Sponsor sponsor, String eventKey) {
+    private ResponseMessage addNewSponsor(Map<String, List<Sponsor>> sponsorMap, Map<String, String> sponsorTags, String eventKey) {
 
         ResponseMessage responseMessage;
 
-        if (Objects.isNull(sponsor) ||
-                Objects.isNull(sponsor.getLogo()) || sponsor.getLogo().isEmpty() ||
-                Objects.isNull(sponsor.getName()) || sponsor.getName().isEmpty() ||
-                Objects.isNull(sponsor.getTag()) || sponsor.getTag().isEmpty()) {
-            responseMessage = new ResponseMessage(false,
-                    "Sponsor data must be filled, can not be empty!", new Object());
+        responseMessage = SponsorSpecs.isSponsorMapValid(sponsorMap, sponsorTags);
+
+        if (!responseMessage.isStatus()) {
             return responseMessage;
         }
 
@@ -97,30 +101,7 @@ public class CreateSponsorRoute implements Route {
             return responseMessage;
         }
 
-        if (Objects.isNull(event.getSponsors())) {
-            event.setSponsors(new HashMap<>());
-        }
-
-        String tagId = "sp" + sponsor.getTag();
-
-        sponsor.setId(UUID.randomUUID().toString());
-
-        List<Sponsor> sponsors = event.getSponsors().get(tagId);
-
-        if (Objects.nonNull(sponsors)) {
-            // add to list
-            if (!sponsors.contains(sponsor)) {
-                sponsors.add(sponsor);
-            }
-
-        } else {
-            // put to map
-            sponsors = new ArrayList<>();
-
-            sponsors.add(sponsor);
-        }
-
-        event.getSponsors().put(tagId, sponsors);
+        event.setSponsors(sponsorMap);
 
         ResponseMessage dbResponse = repositoryService.save(event);
 
@@ -128,9 +109,16 @@ public class CreateSponsorRoute implements Route {
             return dbResponse;
         }
 
+        HashMap<String, Object> returnObject = new HashMap<>();
+
+        returnObject.put("sponsors", sponsorMap);
+        returnObject.put("sponsorTags", sponsorTags);
+
         responseMessage = new ResponseMessage(true,
-                "Sponsor saved successfully", sponsor);
+                "Sponsor saved successfully", returnObject);
 
         return responseMessage;
     }
+
+
 }

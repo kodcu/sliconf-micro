@@ -1,8 +1,8 @@
-package javaday.istanbul.sliconf.micro.controller.event.room;
+package javaday.istanbul.sliconf.micro.controller.event.speaker;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.event.Room;
+import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
@@ -15,31 +15,30 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 
 @Api
-@Path("/service/events/room/create/:event-key")
+@Path("/service/events/speaker/create/:event-key")
 @Produces("application/json")
 @Component
-public class CreateRoomRoute implements Route {
+public class CreateSpeakerRoute implements Route {
 
 
     private EventRepositoryService repositoryService;
 
     @Autowired
-    public CreateRoomRoute(EventRepositoryService eventRepositoryService) {
+    public CreateSpeakerRoute(EventRepositoryService eventRepositoryService) {
         this.repositoryService = eventRepositoryService;
     }
 
     @POST
-    @ApiOperation(value = "Creates a room", nickname = "CreateRoomRoute")
+    @ApiOperation(value = "Creates a spakers", nickname = "CreateSpeakerRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
-            @ApiImplicitParam(required = true, dataTypeClass = Room.class, name = "room", paramType = "body"), //
+            @ApiImplicitParam(required = true, dataTypeClass = Speaker[].class, name = "speakers", paramType = "body"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -55,21 +54,27 @@ public class CreateRoomRoute implements Route {
 
         if (Objects.isNull(body) || body.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    "Body can not empty!", new Object());
+                    "Body can not be empty!", new Object());
             return responseMessage;
         }
 
-        Room room = JsonUtil.fromJson(body, Room.class);
-
-        if (Objects.isNull(room) ||
-                Objects.isNull(room.getFloor()) || room.getFloor().isEmpty() ||
-                Objects.isNull(room.getLabel()) || room.getLabel().isEmpty()) {
-            responseMessage = new ResponseMessage(false,
-                    "Room data must be filled, not empty!", new Object());
-            return responseMessage;
-        }
+        List<Speaker> speakers = JsonUtil.fromJsonForList(body, Speaker.class);
 
         String eventKey = request.params("event-key");
+
+        return saveSpeakers(speakers, eventKey);
+    }
+
+    /**
+     * Gelen Speakerlari eventkey ile gerekli evente  ekler
+     *
+     * @param speakers
+     * @param eventKey
+     * @return
+     */
+    private ResponseMessage saveSpeakers(List<Speaker> speakers, String eventKey) {
+
+        ResponseMessage responseMessage;
 
         if (Objects.isNull(eventKey) || eventKey.isEmpty()) {
             responseMessage = new ResponseMessage(false,
@@ -85,23 +90,10 @@ public class CreateRoomRoute implements Route {
             return responseMessage;
         }
 
-        if (Objects.isNull(event.getRooms())) {
-            event.setRooms(new ArrayList<>());
-        }
+        // todo daha detayli bir kontrol ile ekle
 
-        int tagId = 1;
+        event.setSpeakers(speakers);
 
-        while (event.getRooms()
-                .stream()
-                .anyMatch(isIdInList("ri" + tagId))) {
-            tagId++;
-        }
-
-        room.setId("ri" + tagId);
-
-        event.getRooms().add(room);
-
-        // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
 
         if (!dbResponse.isStatus()) {
@@ -109,12 +101,8 @@ public class CreateRoomRoute implements Route {
         }
 
         responseMessage = new ResponseMessage(true,
-                "Room saved successfully", room.getId());
+                "Speakers saved successfully", speakers);
 
         return responseMessage;
-    }
-
-    private Predicate<Room> isIdInList(String id) {
-        return p -> id.equals(p.getId());
     }
 }

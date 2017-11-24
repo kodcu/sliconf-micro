@@ -7,5 +7,5 @@ services:
       - 8090:8090
     container_name: sliconf-micro-container
     volumes:
-      - /container/sliconf-micro:/sliconf-micro/log
-      - /container/sliconf-micro/upload:/sliconf-micro/upload
+      - /container/sliconf-micro:/log
+      - /container/sliconf-micro/upload:/upload

@@ -1,18 +1,17 @@
-package javaday.istanbul.sliconf.micro.util;
+package javaday.istanbul.sliconf.micro.util.json;
 
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import javaday.istanbul.sliconf.micro.util.json.LocalDateTimeDeserializer;
-import javaday.istanbul.sliconf.micro.util.json.LocalDateTimeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.ResponseTransformer;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -37,12 +36,12 @@ public class JsonUtil {
         return gson.toJson(object);
     }
 
-    public static <T> T fromJson(String string, Class<T> clazz) {
+    public static <T> T fromJson(String json, Class<T> clazz) {
         T returnedClass = null;
 
         try {
-            if (Objects.nonNull(string) && Objects.nonNull(clazz)) {
-                returnedClass = gson.fromJson(string, clazz);
+            if (Objects.nonNull(json) && Objects.nonNull(clazz)) {
+                returnedClass = gson.fromJson(json, clazz);
             }
         } catch (JsonSyntaxException e) {
             logger.error(e.getMessage(), e);
@@ -51,8 +50,25 @@ public class JsonUtil {
         return returnedClass;
     }
 
+    public static <T> List<T> fromJsonForList(String json, Class<T> clazz) {
+        List<T> returnList = null;
+
+        Type type = new ListParameterizedType(clazz);
+
+        try {
+            if (Objects.nonNull(json) && Objects.nonNull(clazz)) {
+                returnList = gson.fromJson(json, type);
+            }
+        } catch (JsonSyntaxException e) {
+            logger.error(e.getMessage(), e);
+        }
+
+        return returnList;
+    }
+
     public static Map<String, Object> mapFromObject(Object object) {
-        Type type = new TypeToken<Map<String, Object>>() {}.getType();
+        Type type = new TypeToken<Map<String, Object>>() {
+        }.getType();
 
         return gson.fromJson(toJson(object), type);
     }

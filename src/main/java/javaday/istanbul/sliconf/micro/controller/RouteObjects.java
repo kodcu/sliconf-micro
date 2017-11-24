@@ -7,6 +7,8 @@ import javaday.istanbul.sliconf.micro.controller.event.floor.CreateFloorRoute;
 import javaday.istanbul.sliconf.micro.controller.event.floor.DeleteFloorRoute;
 import javaday.istanbul.sliconf.micro.controller.event.room.CreateRoomRoute;
 import javaday.istanbul.sliconf.micro.controller.event.room.DeleteRoomRoute;
+import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRoute;
+import javaday.istanbul.sliconf.micro.controller.event.speaker.DeleteSpeakerRoute;
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorRoute;
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorTagRoute;
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.DeleteSponsorRoute;
@@ -48,6 +50,9 @@ public class RouteObjects {
     public final ImageUploadRoute imageUploadRoute;
     public final ImageGetRoute imageGetRoute;
 
+    public final CreateSpeakerRoute createSpeakerRoute;
+    public final DeleteSpeakerRoute deleteSpeakerRoute;
+
     @Autowired
     public RouteObjects(BeanFactory beanFactory) {
         createUserRoute = beanFactory.getBean(CreateUserRoute.class);
@@ -76,5 +81,7 @@ public class RouteObjects {
         createSponsorTagRoute = beanFactory.getBean(CreateSponsorTagRoute.class);
         deleteSponsorTagRoute = beanFactory.getBean(DeleteSponsorTagRoute.class);
 
+        createSpeakerRoute = beanFactory.getBean(CreateSpeakerRoute.class);
+        deleteSpeakerRoute = beanFactory.getBean(DeleteSpeakerRoute.class);
     }
 }

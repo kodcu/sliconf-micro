@@ -7,7 +7,6 @@ public class Sponsor {
     private String id;
     private String logo;
     private String name;
-    private String tag;
 
     public String getId() {
         return id;
@@ -33,14 +32,6 @@ public class Sponsor {
         this.name = name;
     }
 
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
     @Override
     public int hashCode() {
         return super.hashCode();
@@ -52,8 +43,7 @@ public class Sponsor {
         if (obj instanceof Sponsor) {
             Sponsor sponsor = (Sponsor) obj;
 
-            if ( Objects.nonNull(this.getName()) && this.getName().equals(sponsor.getName()) &&
-                    Objects.nonNull(this.getTag()) && this.getTag().equals(sponsor.getTag()) &&
+            if (Objects.nonNull(this.getName()) && this.getName().equals(sponsor.getName()) &&
                     Objects.nonNull(this.getLogo()) && this.getLogo().equals(sponsor.getLogo())) {
                 return true;
             }

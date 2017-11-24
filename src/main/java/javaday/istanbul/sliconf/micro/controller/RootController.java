@@ -2,7 +2,7 @@ package javaday.istanbul.sliconf.micro.controller;
 
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.util.JsonUtil;
+import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import javaday.istanbul.sliconf.micro.util.SwaggerParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,7 +48,9 @@ public class RootController {
         notFound((req, res) -> {
             res.type("application/json");
 
-            res.status(HttpStatus.NOT_FOUND.value());
+            // res.status(HttpStatus.NOT_FOUND.value());
+
+            res.status(200);
 
             ResponseMessage responseMessage = new ResponseMessage();
             responseMessage.setMessage("The page you looking for not found!");
@@ -57,6 +59,26 @@ public class RootController {
 
             return JsonUtil.toJson(responseMessage);
         });
+
+        options("/*",
+                (request, response) -> {
+
+                    String accessControlRequestHeaders = request
+                            .headers("Access-Control-Request-Headers");
+                    if (accessControlRequestHeaders != null) {
+                        response.header("Access-Control-Allow-Headers",
+                                accessControlRequestHeaders);
+                    }
+
+                    String accessControlRequestMethod = request
+                            .headers("Access-Control-Request-Method");
+                    if (accessControlRequestMethod != null) {
+                        response.header("Access-Control-Allow-Methods",
+                                accessControlRequestMethod);
+                    }
+
+                    return "OK";
+                });
 
         before((request, response) -> {
 
@@ -87,6 +109,7 @@ public class RootController {
             });
 
             path("events/", () -> {
+
                 post("create/:userId", routeObjects.createEventRoute, JsonUtil.json());
                 get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
 
@@ -114,6 +137,11 @@ public class RootController {
                 path("room/", () -> {
                     post("create/:event-key", routeObjects.createRoomRoute, JsonUtil.json());
                     post("delete/:event-key/:roomId", routeObjects.deleteRoomRoute, JsonUtil.json());
+                });
+
+                path("speaker/", () -> {
+                    post("create/:event-key", routeObjects.createSpeakerRoute, JsonUtil.json());
+                    post("delete/:event-key/:speakerId", routeObjects.deleteSpeakerRoute, JsonUtil.json());
                 });
 
             });

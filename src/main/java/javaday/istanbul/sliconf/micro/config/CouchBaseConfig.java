@@ -2,6 +2,7 @@ package javaday.istanbul.sliconf.micro.config;
 
 import com.couchbase.client.java.Bucket;
 import javaday.istanbul.sliconf.micro.model.User;
+import javaday.istanbul.sliconf.micro.model.event.Comment;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.token.Token;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ import java.util.List;
  * Created by ttayfur on 7/8/17.
  */
 @Configuration
-@Profile({"prod","dev"})
+@Profile({"prod", "dev"})
 public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(CouchBaseConfig.class);
@@ -45,6 +46,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
     private static final String EVENTS_BUCKET_NAME = "events";
     private static final String DEFAULT_BUCKET_NAME = "default";
     private static final String TOKENS_BUCKET_NAME = "tokens";
+    private static final String COMMENTS_BUCKET_NAME = "comments";
 
     @Override
     protected List<String> getBootstrapHosts() {
@@ -110,12 +112,27 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
         return template;
     }
 
+    @Bean
+    public Bucket commentsBucket() throws Exception {
+        return couchbaseCluster().openBucket(COMMENTS_BUCKET_NAME, bucketPass);
+    }
+
+    @Bean(name = "commentsTemplate")
+    public CouchbaseTemplate commentsTemplate() throws Exception {
+        CouchbaseTemplate template = new CouchbaseTemplate(
+                couchbaseClusterInfo(), commentsBucket(),
+                mappingCouchbaseConverter(), translationService());
+        template.setDefaultConsistency(getDefaultConsistency());
+        return template;
+    }
+
     @Override
     public void configureRepositoryOperationsMapping(RepositoryOperationsMapping baseMapping) {
         try {
             baseMapping.mapEntity(Event.class, eventsTemplate());
             baseMapping.mapEntity(User.class, usersTemplate());
             baseMapping.mapEntity(Token.class, tokensTemplate());
+            baseMapping.mapEntity(Comment.class, commentsTemplate());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

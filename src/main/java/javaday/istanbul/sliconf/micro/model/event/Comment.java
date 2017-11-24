@@ -1,13 +1,32 @@
 package javaday.istanbul.sliconf.micro.model.event;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+
 import java.time.LocalDateTime;
 
+import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
+
+@Document
 public class Comment {
+
+    @Id
+    @GeneratedValue(strategy = UNIQUE)
+    private String id;
     private String user;
     private LocalDateTime time;
     private int like;
     private int dislike;
     private String commentValue;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUser() {
         return user;

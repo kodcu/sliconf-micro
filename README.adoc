@@ -66,6 +66,7 @@ Aynı şeyleri:
 default
 events
 tokens
+comments
 
 bucketları için yapıyoruz.
 
@@ -84,6 +85,8 @@ create primary index on events;
 create primary index on default;
 
 create primary index on tokens;
+
+create primary index on comments;
 
 === Intellij IDEA kurulumu
 
