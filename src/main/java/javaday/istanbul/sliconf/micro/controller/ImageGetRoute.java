@@ -38,7 +38,7 @@ public class ImageGetRoute implements Route {
             @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
     })
     @Override
-    public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
+    public Object handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
 
         ResponseMessage responseMessage = new ResponseMessage(false, "Image can not found", "");
 
@@ -62,6 +62,8 @@ public class ImageGetRoute implements Route {
             response.header("Content-Disposition", "filename=" + id);
 
             Files.copy(tempFile, response.raw().getOutputStream());
+
+            return response.raw();
         } catch (InvalidPathException exception) {
             logger.error(exception.getMessage(), exception);
         }

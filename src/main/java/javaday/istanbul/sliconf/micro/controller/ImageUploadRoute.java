@@ -47,7 +47,7 @@ public class ImageUploadRoute implements Route {
 
         LocalDate now = LocalDate.now();
 
-        String fileName = now.format(DateTimeFormatter.ofPattern("YYYY_MM_dd")).concat(UUID.randomUUID().toString()).concat(".png");
+        String fileName = now.format(DateTimeFormatter.ofPattern("YYYY_MM_dd")).concat(UUID.randomUUID().toString());
 
         File uploadDir = new File("upload/" + fileName);
 

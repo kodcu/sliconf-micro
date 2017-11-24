@@ -42,7 +42,7 @@ public class CreateSponsorRoute implements Route {
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
-            @ApiImplicitParam(required = true, dataTypeClass = Sponsor.class, name = "sponsor", paramType = "body"), //
+            @ApiImplicitParam(required = true, dataTypeClass = SponsorsAndSponsorTags.class, name = "sponsor", paramType = "body"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
