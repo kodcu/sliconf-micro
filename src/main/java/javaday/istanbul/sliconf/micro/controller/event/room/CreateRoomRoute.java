@@ -15,9 +15,9 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.UUID;
 
 
 @Api
@@ -39,7 +39,7 @@ public class CreateRoomRoute implements Route {
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
-            @ApiImplicitParam(required = true, dataTypeClass = Room.class, name = "room", paramType = "body"), //
+            @ApiImplicitParam(required = true, dataTypeClass = Room[].class, name = "room", paramType = "body"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -59,17 +59,15 @@ public class CreateRoomRoute implements Route {
             return responseMessage;
         }
 
-        Room room = JsonUtil.fromJson(body, Room.class);
-
-        if (Objects.isNull(room) ||
-                Objects.isNull(room.getFloor()) || room.getFloor().isEmpty() ||
-                Objects.isNull(room.getLabel()) || room.getLabel().isEmpty()) {
-            responseMessage = new ResponseMessage(false,
-                    "Room data must be filled, not empty!", new Object());
-            return responseMessage;
-        }
+        List<Room> roomList = JsonUtil.fromJsonForList(body, Room.class);
 
         String eventKey = request.params("event-key");
+
+        return saveRooms(roomList, eventKey);
+    }
+
+    public ResponseMessage saveRooms(List<Room> roomList, String eventKey) {
+        ResponseMessage responseMessage;
 
         if (Objects.isNull(eventKey) || eventKey.isEmpty()) {
             responseMessage = new ResponseMessage(false,
@@ -85,21 +83,9 @@ public class CreateRoomRoute implements Route {
             return responseMessage;
         }
 
-        if (Objects.isNull(event.getRooms())) {
-            event.setRooms(new ArrayList<>());
-        }
+        generateRoomId(roomList);
 
-        int tagId = 1;
-
-        while (event.getRooms()
-                .stream()
-                .anyMatch(isIdInList("ri" + tagId))) {
-            tagId++;
-        }
-
-        room.setId("ri" + tagId);
-
-        event.getRooms().add(room);
+        event.setRooms(roomList);
 
         // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
@@ -109,12 +95,19 @@ public class CreateRoomRoute implements Route {
         }
 
         responseMessage = new ResponseMessage(true,
-                "Room saved successfully", room.getId());
+                "Rooms saved successfully", roomList);
 
         return responseMessage;
     }
 
-    private Predicate<Room> isIdInList(String id) {
-        return p -> id.equals(p.getId());
+    private void generateRoomId(List<Room> roomList) {
+        if (Objects.nonNull(roomList)) {
+            roomList.forEach(room -> {
+                if (Objects.nonNull(room) &&
+                        (Objects.isNull(room.getId()) || room.getId().contains("newid"))) {
+                    room.setId(UUID.randomUUID().toString());
+                }
+            });
+        }
     }
 }

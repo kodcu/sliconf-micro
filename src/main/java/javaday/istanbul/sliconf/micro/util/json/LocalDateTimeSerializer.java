@@ -12,6 +12,6 @@ import java.time.ZoneId;
 public class LocalDateTimeSerializer implements JsonSerializer<LocalDateTime> {
     @Override
     public JsonElement serialize(LocalDateTime dateTime, Type type, JsonSerializationContext jsonSerializationContext) {
-        return new JsonPrimitive(dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        return new JsonPrimitive(dateTime.atZone(ZoneId.of("Asia/Istanbul")).toInstant().getEpochSecond());
     }
 }

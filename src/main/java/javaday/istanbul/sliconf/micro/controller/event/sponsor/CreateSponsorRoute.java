@@ -17,10 +17,7 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 @Api
@@ -66,7 +63,7 @@ public class CreateSponsorRoute implements Route {
 
         String eventKey = request.params("event-key");
 
-        return addNewSponsor(sponsorsAndSponsorTags.getSponsors(), sponsorsAndSponsorTags.getSponsorTags(), eventKey);
+        return saveSponsorsAndSponsorTags(sponsorsAndSponsorTags.getSponsors(), sponsorsAndSponsorTags.getSponsorTags(), eventKey);
     }
 
     /**
@@ -77,11 +74,13 @@ public class CreateSponsorRoute implements Route {
      * @param eventKey
      * @return
      */
-    private ResponseMessage addNewSponsor(Map<String, List<Sponsor>> sponsorMap, Map<String, String> sponsorTags, String eventKey) {
+    private ResponseMessage saveSponsorsAndSponsorTags(Map<String, List<Sponsor>> sponsorMap, Map<String, String> sponsorTags, String eventKey) {
 
         ResponseMessage responseMessage;
 
         responseMessage = SponsorSpecs.isSponsorMapValid(sponsorMap, sponsorTags);
+
+        generateIds(sponsorMap, sponsorTags);
 
         if (!responseMessage.isStatus()) {
             return responseMessage;
@@ -102,6 +101,7 @@ public class CreateSponsorRoute implements Route {
         }
 
         event.setSponsors(sponsorMap);
+        event.setSponsorTags(sponsorTags);
 
         ResponseMessage dbResponse = repositoryService.save(event);
 
@@ -120,5 +120,25 @@ public class CreateSponsorRoute implements Route {
         return responseMessage;
     }
 
+    private void generateIds(Map<String, List<Sponsor>> sponsorMap, Map<String, String> sponsorTags) {
+        Map<String, String> newSponsorTags = new HashMap<>();
+
+        for (Map.Entry<String, String> tag : sponsorTags.entrySet()) {
+            if (Objects.isNull(tag.getKey()) || tag.getKey().contains("newid")) {
+                String newKey = UUID.randomUUID().toString();
+
+                newSponsorTags.put(newKey, tag.getValue());
+                List<Sponsor> tempSponsors = sponsorMap.get(tag.getKey());
+
+                sponsorMap.remove(tag.getKey());
+                sponsorMap.put(newKey, tempSponsors);
+                continue;
+            }
+            newSponsorTags.put(tag.getKey(), tag.getValue());
+        }
+
+        sponsorTags.clear();
+        sponsorTags.putAll(newSponsorTags);
+    }
 
 }

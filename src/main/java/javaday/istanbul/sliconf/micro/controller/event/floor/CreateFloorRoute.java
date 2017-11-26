@@ -15,9 +15,9 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.UUID;
 
 
 @Api
@@ -39,7 +39,7 @@ public class CreateFloorRoute implements Route {
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
-            @ApiImplicitParam(required = true, dataTypeClass = Floor.class, name = "floor", paramType = "body"), //
+            @ApiImplicitParam(required = true, dataTypeClass = Floor[].class, name = "floor", paramType = "body"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -59,17 +59,15 @@ public class CreateFloorRoute implements Route {
             return responseMessage;
         }
 
-        Floor floor = JsonUtil.fromJson(body, Floor.class);
-
-        if (Objects.isNull(floor) ||
-                Objects.isNull(floor.getImage()) || floor.getImage().isEmpty() ||
-                Objects.isNull(floor.getName()) || floor.getName().isEmpty()) {
-            responseMessage = new ResponseMessage(false,
-                    "Floor data must be filled, not empty!", new Object());
-            return responseMessage;
-        }
+        List<Floor> floorList = JsonUtil.fromJsonForList(body, Floor.class);
 
         String eventKey = request.params("event-key");
+
+        return saveFloors(floorList, eventKey);
+    }
+
+    public ResponseMessage saveFloors(List<Floor> floorList, String eventKey) {
+        ResponseMessage responseMessage;
 
         if (Objects.isNull(eventKey) || eventKey.isEmpty()) {
             responseMessage = new ResponseMessage(false,
@@ -85,21 +83,9 @@ public class CreateFloorRoute implements Route {
             return responseMessage;
         }
 
-        if (Objects.isNull(event.getRooms())) {
-            event.setFloorPlan(new ArrayList<>());
-        }
+        generateFloorId(floorList);
 
-        int tagId = 1;
-
-        while (event.getFloorPlan()
-                .stream()
-                .anyMatch(isIdInList("fi" + tagId))) {
-            tagId++;
-        }
-
-        floor.setId("fi" + tagId);
-
-        event.getFloorPlan().add(floor);
+        event.setFloorPlan(floorList);
 
         // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
@@ -109,12 +95,19 @@ public class CreateFloorRoute implements Route {
         }
 
         responseMessage = new ResponseMessage(true,
-                "Floor saved successfully", floor.getId());
+                "Floor saved successfully", floorList);
 
         return responseMessage;
     }
 
-    private Predicate<Floor> isIdInList(String id) {
-        return p -> id.equals(p.getId());
+    private void generateFloorId(List<Floor> floorList) {
+        if (Objects.nonNull(floorList)) {
+            floorList.forEach(floor -> {
+                if (Objects.nonNull(floor) &&
+                        (Objects.isNull(floor.getId()) || floor.getId().contains("newid"))) {
+                    floor.setId(UUID.randomUUID().toString());
+                }
+            });
+        }
     }
 }

@@ -78,6 +78,18 @@ public class CreateEventRoute implements Route {
 
         Event event = JsonUtil.fromJson(body, Event.class);
 
+        if (Objects.isNull(event.getKey()) || event.getKey().isEmpty()) {
+            responseMessage = saveNewEvent(event, userId);
+        } else {
+            responseMessage = updateEvent(event, userId);
+        }
+
+        return responseMessage;
+    }
+
+    private ResponseMessage saveNewEvent(Event event, String userId) {
+        ResponseMessage responseMessage;
+
         //isim uzunluğu minimumdan düşük mü diye kontrol et
         if (!EventSpecs.checkEventName(event, 4)) {
             responseMessage = new ResponseMessage(false,
@@ -114,6 +126,42 @@ public class CreateEventRoute implements Route {
 
         event.setExecutiveUser(userId);
 
+
+        return saveEvent(event);
+    }
+
+    private ResponseMessage updateEvent(Event event, String userId) {
+        ResponseMessage responseMessage;
+
+        //isim uzunluğu minimumdan düşük mü diye kontrol et
+        if (!EventSpecs.checkEventName(event, 4)) {
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventNameTooShort"), new Object());
+            return responseMessage;
+        }
+
+        //event tarihinin geçip geçmediğin, kontrol et
+        if (!EventSpecs.checkIfEventDateAfterOrInNow(event)) {
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventDataInvalid"), new Object());
+            return responseMessage;
+        }
+
+        // event var mı diye kontrol et
+        Event dbEvent = repositoryService.findEventByKeyEquals(event.getKey());
+
+        if (Objects.isNull(dbEvent)) {
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventCanNotFound"), new Object());
+            return responseMessage;
+        }
+
+        copyUpdatedFields(dbEvent, event);
+
+        return saveEvent(dbEvent);
+    }
+
+    private ResponseMessage saveEvent(Event event) {
         // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
 
@@ -121,9 +169,16 @@ public class CreateEventRoute implements Route {
             return dbResponse;
         }
 
-        responseMessage = new ResponseMessage(true,
+        return new ResponseMessage(true,
                 messageProvider.getMessage("eventCreatedSuccessfully"), event);
+    }
 
-        return responseMessage;
+    private void copyUpdatedFields(Event dbEvent, Event updatedEvent) {
+        dbEvent.setName(updatedEvent.getName());
+        dbEvent.setStartDate(updatedEvent.getStartDate());
+        dbEvent.setEndDate(updatedEvent.getEndDate());
+        dbEvent.setLogoPath(updatedEvent.getLogoPath());
+        dbEvent.setDescription(updatedEvent.getDescription());
+        dbEvent.setAbout(updatedEvent.getAbout());
     }
 }

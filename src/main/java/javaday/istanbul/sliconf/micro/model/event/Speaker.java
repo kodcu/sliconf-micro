@@ -3,6 +3,7 @@ package javaday.istanbul.sliconf.micro.model.event;
 import java.util.List;
 
 public class Speaker {
+    private String id;
     private String name;
     private String profilePicture;
     private String workingAt;

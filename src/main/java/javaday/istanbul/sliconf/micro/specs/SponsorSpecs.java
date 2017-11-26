@@ -78,7 +78,7 @@ public class SponsorSpecs {
                     break;
                 }
 
-                generateIdIfNeeded(sponsor);
+                // generateIdIfNeeded(sponsor);
             }
         }
 

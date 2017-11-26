@@ -5,6 +5,7 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.specs.SpeakerSpecs;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -91,6 +92,12 @@ public class CreateSpeakerRoute implements Route {
         }
 
         // todo daha detayli bir kontrol ile ekle
+
+        ResponseMessage responseMessageValid = SpeakerSpecs.isSpekarsValid(speakers);
+
+        if (!responseMessageValid.isStatus()) {
+            return responseMessageValid;
+        }
 
         event.setSpeakers(speakers);
 

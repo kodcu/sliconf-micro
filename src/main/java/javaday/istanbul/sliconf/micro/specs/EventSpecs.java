@@ -1,9 +1,12 @@
 package javaday.istanbul.sliconf.micro.specs;
 
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.RandomGenerator;
+import sun.misc.ObjectInputFilter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 /**
@@ -34,7 +37,11 @@ public class EventSpecs {
     public static boolean checkIfEventDateAfterOrInNow(Event event) {
         LocalDateTime now = LocalDateTime.now();
 
-        return now.isBefore(event.getStartDate());
+        if (Objects.nonNull(event) && Objects.nonNull(event.getStartDate())) {
+            return now.isBefore(event.getStartDate());
+        }
+
+        return false;
     }
 
     /**
@@ -47,7 +54,7 @@ public class EventSpecs {
     }
 
     public static String generateKanbanNumber(Event event) {
-        String key = RandomGenerator.generateRandom(4);
+        String key = RandomGenerator.generateRandom(Constants.EVENT_KEY_LENGTH);
         event.setKey(key);
         return event.getKey();
     }

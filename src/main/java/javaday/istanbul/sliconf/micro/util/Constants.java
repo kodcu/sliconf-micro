@@ -12,6 +12,10 @@ public class Constants {
 
     public static final int MAX_UPLOADED_FILE_SIZE = 3145728; // 1024 * 1204 = 3MB
 
+    public static final int EVENT_KEY_LENGTH = 4;
+
+    public static final int SPEKAER_TOPIC_MAX_COUNT = 10;
+
     private Constants() {
     }
 }
