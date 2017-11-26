@@ -2,8 +2,10 @@ package javaday.istanbul.sliconf.micro.controller;
 
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import javaday.istanbul.sliconf.micro.util.SwaggerParser;
+import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,8 @@ public class RootController {
 
     private static RouteObjects routeObjects;
 
+    private static Logger logger = LoggerFactory.getLogger(RootController.class);
+
     @Autowired
     public RootController(RouteObjects routeObjects) {
         RootController.routeObjects = routeObjects;
@@ -33,8 +37,7 @@ public class RootController {
             get("/swagger", (req, res) -> swaggerJson);
 
         } catch (Exception e) {
-            // Todo use logger
-            System.out.println(e);
+            logger.error(e.getMessage(), e);
         }
 
         // Todo spark-java ile exception handling yapabilir miyiz?
@@ -47,8 +50,6 @@ public class RootController {
         // Using Route
         notFound((req, res) -> {
             res.type("application/json");
-
-            // res.status(HttpStatus.NOT_FOUND.value());
 
             res.status(200);
 
@@ -81,8 +82,6 @@ public class RootController {
                 });
 
         before((request, response) -> {
-
-            String token = request.headers("token");
 
             // Todo auth sistemini devreye alinca kullan
 
@@ -153,7 +152,12 @@ public class RootController {
 
         });
 
-        after((req, res) -> res.type("application/json"));
+        after((req, res) -> {
+
+            if (!"image/png".equals(res.type())) {
+                res.type("application/json");
+            }
+        });
 
 
     }

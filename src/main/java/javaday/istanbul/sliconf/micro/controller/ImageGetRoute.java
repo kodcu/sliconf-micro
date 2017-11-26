@@ -63,7 +63,7 @@ public class ImageGetRoute implements Route {
 
             Files.copy(tempFile, response.raw().getOutputStream());
 
-            return response.raw();
+            return "";
         } catch (InvalidPathException exception) {
             logger.error(exception.getMessage(), exception);
         }
