@@ -3,7 +3,7 @@ package javaday.istanbul.sliconf.micro.specs;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.RandomGenerator;
-import sun.misc.ObjectInputFilter;
+
 
 import java.time.LocalDateTime;
 import java.util.Objects;
