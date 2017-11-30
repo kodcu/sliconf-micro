@@ -67,7 +67,6 @@ public class ImageUploadRoute implements Route {
             }
 
             Files.copy(input, uploadDir.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            input.close();
         }
 
         responseMessage.setStatus(true);
