@@ -203,6 +203,13 @@
         </dependency>
         <!-- Test related ends-->
 
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>2.7.1</version>
+            <type>maven-plugin</type>
+        </dependency>
+
     </dependencies>
 
     <build>

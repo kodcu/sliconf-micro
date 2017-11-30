@@ -39,11 +39,6 @@ node {
             pushToImage(CONTAINER_NAME, USERNAME, PASSWORD)
         }
     }
-
-    stage('Run App'){
-        runApp(CONTAINER_NAME, DOCKER_HUB_USER, HTTP_PORT)
-    }
-
 }
 
 def imagePrune(containerName){
@@ -63,10 +58,4 @@ def pushToImage(containerName, dockerUser, dockerPassword){
     sh "docker tag $containerName:latest $dockerUser/$containerName:latest"
     sh "docker push $dockerUser/$containerName:latest"
     echo "Image push complete"
-}
-
-def runApp(containerName, dockerHubUser, httpPort){
-    sh "docker pull $dockerHubUser/$containerName"
-    sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:latest"
-    echo "Application started on port: $httpPort (http)"
 }
