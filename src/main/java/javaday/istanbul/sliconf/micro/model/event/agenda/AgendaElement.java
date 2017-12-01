@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.model.event;
+package javaday.istanbul.sliconf.micro.model.event.agenda;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,20 +8,21 @@ import java.util.List;
  */
 public class AgendaElement {
     private String id;
-    private String time;
-    private String topic;
 
+    private String time;
+
+    private String topic;
     private String detail;
 
-    private int level; // {0,1,2}
+    private int level; // 0,1,2
 
     private List<String> tags;
     private String room;
     private String speaker;
-    // Todo star ayrı bir bucket olup agendaId, eventId bagimli olmali
+
     private double star;
     private LocalDateTime date;
-    // suresi
+
     private int duration;
 
     public String getId() {
@@ -64,6 +65,14 @@ public class AgendaElement {
         this.level = level;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
     public String getRoom() {
         return room;
     }
@@ -96,11 +105,11 @@ public class AgendaElement {
         this.date = date;
     }
 
-    public List<String> getTags() {
-        return tags;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setTags(List<String> tags) {
-        this.tags = tags;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

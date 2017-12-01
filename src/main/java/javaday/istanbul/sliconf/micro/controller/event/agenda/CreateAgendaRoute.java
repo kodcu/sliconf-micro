@@ -1,11 +1,11 @@
-package javaday.istanbul.sliconf.micro.controller.event.speaker;
+package javaday.istanbul.sliconf.micro.controller.event.agenda;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.specs.SpeakerSpecs;
+import javaday.istanbul.sliconf.micro.specs.AgendaSpecs;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,25 +21,25 @@ import java.util.Objects;
 
 
 @Api
-@Path("/service/events/speaker/create/:event-key")
+@Path("/service/events/agenda/create/:event-key")
 @Produces("application/json")
 @Component
-public class CreateSpeakerRoute implements Route {
+public class CreateAgendaRoute implements Route {
 
 
     private EventRepositoryService repositoryService;
 
     @Autowired
-    public CreateSpeakerRoute(EventRepositoryService eventRepositoryService) {
+    public CreateAgendaRoute(EventRepositoryService eventRepositoryService) {
         this.repositoryService = eventRepositoryService;
     }
 
     @POST
-    @ApiOperation(value = "Creates a spakers", nickname = "CreateSpeakerRoute")
+    @ApiOperation(value = "Creates a agenda", nickname = "CreateAgendaRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
-            @ApiImplicitParam(required = true, dataTypeClass = Speaker[].class, name = "speakers", paramType = "body"), //
+            @ApiImplicitParam(required = true, dataTypeClass = AgendaElement[].class, name = "speakers", paramType = "body"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -59,27 +59,27 @@ public class CreateSpeakerRoute implements Route {
             return responseMessage;
         }
 
-        List<Speaker> speakers = JsonUtil.fromJsonForList(body, Speaker.class);
+        List<AgendaElement> agenda = JsonUtil.fromJsonForList(body, AgendaElement.class);
 
         String eventKey = request.params("event-key");
 
-        return saveSpeakers(speakers, eventKey);
+        return saveAgenda(agenda, eventKey);
     }
 
     /**
-     * Gelen Speakerlari eventkey ile gerekli evente  ekler
+     * Gelen agenda yi eventkey ile gerekli evente  ekler
      *
-     * @param speakers
+     * @param agenda
      * @param eventKey
      * @return
      */
-    private ResponseMessage saveSpeakers(List<Speaker> speakers, String eventKey) {
+    private ResponseMessage saveAgenda(List<AgendaElement> agenda, String eventKey) {
 
         ResponseMessage responseMessage;
 
         if (Objects.isNull(eventKey) || eventKey.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    "Event key can not empty", speakers);
+                    "Event key can not empty", new Object());
             return responseMessage;
         }
 
@@ -87,28 +87,35 @@ public class CreateSpeakerRoute implements Route {
 
         if (Objects.isNull(event)) {
             responseMessage = new ResponseMessage(false,
-                    "Event can not found by given key", speakers);
+                    "Event can not found by given key", new Object());
             return responseMessage;
         }
 
-        ResponseMessage responseMessageValid = SpeakerSpecs.isSpekarsValid(speakers);
+        // todo daha detayli bir kontrol ile ekle
+
+        ResponseMessage responseMessageValid = AgendaSpecs.isAgendaValid(agenda);
 
         if (!responseMessageValid.isStatus()) {
-            responseMessageValid.setReturnObject(speakers);
             return responseMessageValid;
         }
 
-        event.setSpeakers(speakers);
+        event.setAgenda(agenda);
+
+        // Eger agenda elemani yok ise event status u false olur ve mobilde goruntulenmez
+        if(Objects.nonNull(agenda) && !agenda.isEmpty()) {
+            event.setStatus(true);
+        } else {
+            event.setStatus(false);
+        }
 
         ResponseMessage dbResponse = repositoryService.save(event);
 
         if (!dbResponse.isStatus()) {
-            dbResponse.setReturnObject(speakers);
             return dbResponse;
         }
 
         responseMessage = new ResponseMessage(true,
-                "Speakers saved successfully", speakers);
+                "Agenda saved successfully", agenda);
 
         return responseMessage;
     }

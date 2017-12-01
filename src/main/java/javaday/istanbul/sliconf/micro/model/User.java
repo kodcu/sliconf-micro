@@ -1,6 +1,7 @@
 package javaday.istanbul.sliconf.micro.model;
 
 import com.couchbase.client.java.repository.annotation.Field;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
@@ -22,6 +23,7 @@ public class User {
     private String username;
 
     @Field
+    @Value("${sliconf.user.fullname}")
     private String fullname;
 
     @Field
@@ -53,7 +55,6 @@ public class User {
         this.setId(user.getId());
         this.setSalt(user.getSalt());
         this.setHashedPassword(user.getHashedPassword());
-        this.setFullname("Misafir");
     }
 
     public String getId() {

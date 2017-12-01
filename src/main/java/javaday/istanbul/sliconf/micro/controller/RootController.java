@@ -143,6 +143,9 @@ public class RootController {
                     post("delete/:event-key/:speakerId", routeObjects.deleteSpeakerRoute, JsonUtil.json());
                 });
 
+                path("agenda/", () -> {
+                    post("create/:event-key", routeObjects.createAgendaRoute, JsonUtil.json());
+                });
             });
 
             path("image/", () -> {

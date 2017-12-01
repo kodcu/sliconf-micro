@@ -65,7 +65,7 @@ public class SponsorSpecs {
      * @return
      */
     private static ResponseMessage isSponsorListValid(List<Sponsor> sponsors) {
-        ResponseMessage responseMessage = new ResponseMessage(true, "", "");
+        ResponseMessage responseMessage = new ResponseMessage(false, "Sponsor List can not be null", "");
 
         if (Objects.nonNull(sponsors)) {
             for (Sponsor sponsor : sponsors) {
@@ -81,6 +81,8 @@ public class SponsorSpecs {
                 // generateIdIfNeeded(sponsor);
             }
         }
+
+        responseMessage.setStatus(true);
 
         return responseMessage;
     }

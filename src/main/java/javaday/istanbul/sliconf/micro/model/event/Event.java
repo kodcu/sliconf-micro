@@ -1,6 +1,7 @@
 package javaday.istanbul.sliconf.micro.model.event;
 
 
+import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;

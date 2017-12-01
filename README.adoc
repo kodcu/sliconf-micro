@@ -67,6 +67,7 @@ default
 events
 tokens
 comments
+stars
 
 bucketları için yapıyoruz.
 
@@ -87,6 +88,8 @@ create primary index on default;
 create primary index on tokens;
 
 create primary index on comments;
+
+create primary index on stars;
 
 === Intellij IDEA kurulumu
 

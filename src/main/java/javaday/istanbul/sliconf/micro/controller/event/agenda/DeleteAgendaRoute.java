@@ -1,12 +1,9 @@
-package javaday.istanbul.sliconf.micro.controller.event.speaker;
+package javaday.istanbul.sliconf.micro.controller.event.agenda;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.specs.SpeakerSpecs;
-import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -16,30 +13,29 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.List;
 import java.util.Objects;
 
 
 @Api
-@Path("/service/events/speaker/create/:event-key")
+@Path("/service/events/agenda/delete/:event-key/:agendaId")
 @Produces("application/json")
 @Component
-public class CreateSpeakerRoute implements Route {
+public class DeleteAgendaRoute implements Route {
 
 
     private EventRepositoryService repositoryService;
 
     @Autowired
-    public CreateSpeakerRoute(EventRepositoryService eventRepositoryService) {
+    public DeleteAgendaRoute(EventRepositoryService eventRepositoryService) {
         this.repositoryService = eventRepositoryService;
     }
 
     @POST
-    @ApiOperation(value = "Creates a spakers", nickname = "CreateSpeakerRoute")
+    @ApiOperation(value = "Deletes a agenda", nickname = "DeleteAgendaRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
-            @ApiImplicitParam(required = true, dataTypeClass = Speaker[].class, name = "speakers", paramType = "body"), //
+            @ApiImplicitParam(required = true, dataType = "string", name = "agendaId", paramType = "path"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -49,37 +45,26 @@ public class CreateSpeakerRoute implements Route {
     })
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
+        return deleteSpeakerRoute(request);
+    }
+
+    private ResponseMessage deleteSpeakerRoute(Request request) {
         ResponseMessage responseMessage;
 
-        String body = request.body();
 
-        if (Objects.isNull(body) || body.isEmpty()) {
+        String sponsorId = request.params("speakerId");
+
+        if (Objects.isNull(sponsorId) || sponsorId.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    "Body can not be empty!", new Object());
+                    "Sponsor Id can not be empty", new Object());
             return responseMessage;
         }
 
-        List<Speaker> speakers = JsonUtil.fromJsonForList(body, Speaker.class);
-
         String eventKey = request.params("event-key");
-
-        return saveSpeakers(speakers, eventKey);
-    }
-
-    /**
-     * Gelen Speakerlari eventkey ile gerekli evente  ekler
-     *
-     * @param speakers
-     * @param eventKey
-     * @return
-     */
-    private ResponseMessage saveSpeakers(List<Speaker> speakers, String eventKey) {
-
-        ResponseMessage responseMessage;
 
         if (Objects.isNull(eventKey) || eventKey.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    "Event key can not empty", speakers);
+                    "Event key can not empty", new Object());
             return responseMessage;
         }
 
@@ -87,28 +72,20 @@ public class CreateSpeakerRoute implements Route {
 
         if (Objects.isNull(event)) {
             responseMessage = new ResponseMessage(false,
-                    "Event can not found by given key", speakers);
+                    "Event can not found by given key", new Object());
             return responseMessage;
         }
 
-        ResponseMessage responseMessageValid = SpeakerSpecs.isSpekarsValid(speakers);
 
-        if (!responseMessageValid.isStatus()) {
-            responseMessageValid.setReturnObject(speakers);
-            return responseMessageValid;
-        }
-
-        event.setSpeakers(speakers);
-
+        // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
 
         if (!dbResponse.isStatus()) {
-            dbResponse.setReturnObject(speakers);
             return dbResponse;
         }
 
         responseMessage = new ResponseMessage(true,
-                "Speakers saved successfully", speakers);
+                "Speaker deleted successfully", "");
 
         return responseMessage;
     }

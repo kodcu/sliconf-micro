@@ -4,6 +4,7 @@ import com.couchbase.client.java.Bucket;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Comment;
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.model.event.agenda.Star;
 import javaday.istanbul.sliconf.micro.model.token.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
     private static final String DEFAULT_BUCKET_NAME = "default";
     private static final String TOKENS_BUCKET_NAME = "tokens";
     private static final String COMMENTS_BUCKET_NAME = "comments";
+    private static final String STARS_BUCKET_NAME = "stars";
 
     @Override
     protected List<String> getBootstrapHosts() {
@@ -126,6 +128,20 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
         return template;
     }
 
+    @Bean
+    public Bucket starsBucket() throws Exception {
+        return couchbaseCluster().openBucket(STARS_BUCKET_NAME, bucketPass);
+    }
+
+    @Bean(name = "starsTemplate")
+    public CouchbaseTemplate starsTemplate() throws Exception {
+        CouchbaseTemplate template = new CouchbaseTemplate(
+                couchbaseClusterInfo(), starsBucket(),
+                mappingCouchbaseConverter(), translationService());
+        template.setDefaultConsistency(getDefaultConsistency());
+        return template;
+    }
+
     @Override
     public void configureRepositoryOperationsMapping(RepositoryOperationsMapping baseMapping) {
         try {
@@ -133,6 +149,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
             baseMapping.mapEntity(User.class, usersTemplate());
             baseMapping.mapEntity(Token.class, tokensTemplate());
             baseMapping.mapEntity(Comment.class, commentsTemplate());
+            baseMapping.mapEntity(Star.class, starsTemplate());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

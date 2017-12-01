@@ -3,6 +3,7 @@ package javaday.istanbul.sliconf.micro.controller;
 import javaday.istanbul.sliconf.micro.controller.event.CreateEventRoute;
 import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
 import javaday.istanbul.sliconf.micro.controller.event.ListEventsRoute;
+import javaday.istanbul.sliconf.micro.controller.event.agenda.CreateAgendaRoute;
 import javaday.istanbul.sliconf.micro.controller.event.floor.CreateFloorRoute;
 import javaday.istanbul.sliconf.micro.controller.event.floor.DeleteFloorRoute;
 import javaday.istanbul.sliconf.micro.controller.event.room.CreateRoomRoute;
@@ -53,6 +54,9 @@ public class RouteObjects {
     public final CreateSpeakerRoute createSpeakerRoute;
     public final DeleteSpeakerRoute deleteSpeakerRoute;
 
+    public final CreateAgendaRoute createAgendaRoute;
+
+
     @Autowired
     public RouteObjects(BeanFactory beanFactory) {
         createUserRoute = beanFactory.getBean(CreateUserRoute.class);
@@ -83,5 +87,7 @@ public class RouteObjects {
 
         createSpeakerRoute = beanFactory.getBean(CreateSpeakerRoute.class);
         deleteSpeakerRoute = beanFactory.getBean(DeleteSpeakerRoute.class);
+
+        createAgendaRoute = beanFactory.getBean(CreateAgendaRoute.class);
     }
 }
