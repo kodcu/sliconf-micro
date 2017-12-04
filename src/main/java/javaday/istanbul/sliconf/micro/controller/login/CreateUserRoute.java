@@ -71,13 +71,14 @@ public class CreateUserRoute implements Route {
 
         // eger user yoksa kayit et
         if (Objects.nonNull(dbUsers) && !dbUsers.isEmpty()) {
-            if (userRepositoryService.controlIfEmailIsExists(user.getEmail())) {
-                responseMessage = new ResponseMessage(false,
-                        loginControllerMessageProvider.getMessage("emailAlreadyUsed"), new Object());
-                return responseMessage;
-            }
             responseMessage = new ResponseMessage(false,
                     loginControllerMessageProvider.getMessage("userNameAlreadyUsed"), new Object());
+            return responseMessage;
+        }
+
+        if (userRepositoryService.controlIfEmailIsExists(user.getEmail())) {
+            responseMessage = new ResponseMessage(false,
+                    loginControllerMessageProvider.getMessage("emailAlreadyUsed"), new Object());
             return responseMessage;
         }
 
