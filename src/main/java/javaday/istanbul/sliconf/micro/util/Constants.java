@@ -14,7 +14,7 @@ public class Constants {
 
     public static final int EVENT_KEY_LENGTH = 4;
 
-    public static final int SPEKAER_TOPIC_MAX_COUNT = 10;
+    public static final String DEFAULT_USER_FULLNAME = "Guest";
 
     private Constants() {
     }

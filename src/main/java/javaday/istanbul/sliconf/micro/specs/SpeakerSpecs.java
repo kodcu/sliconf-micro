@@ -28,13 +28,6 @@ public class SpeakerSpecs {
             if (!responseMessage.isStatus()) {
                 return responseMessage;
             }
-
-            if (Objects.nonNull(speaker) && !isTopicCountValid(speaker.getTopics())) {
-                responseMessage.setStatus(false);
-                responseMessage.setMessage("Topic count is not valid!");
-
-                return responseMessage;
-            }
         }
 
         responseMessage.setStatus(true);
@@ -55,14 +48,5 @@ public class SpeakerSpecs {
         }
 
         return responseMessage;
-    }
-
-    /**
-     * Topic sayisi belirli bir sayiyi gecmemeli
-     * @param topics
-     * @return
-     */
-    private static boolean isTopicCountValid(List<String> topics) {
-        return Objects.nonNull(topics) && topics.size() <= Constants.SPEKAER_TOPIC_MAX_COUNT;
     }
 }

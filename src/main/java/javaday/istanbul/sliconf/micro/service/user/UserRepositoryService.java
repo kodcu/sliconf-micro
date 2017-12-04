@@ -52,6 +52,10 @@ public class UserRepositoryService implements UserService {
         return repo.findByUsernameAndIdNot(username, id);
     }
 
+    public List<User> findUsersByEmail(String email) {
+        return repo.findUsersByEmail(email);
+    }
+
     @Override
     public void delete(User user) {
         repo.delete(user);

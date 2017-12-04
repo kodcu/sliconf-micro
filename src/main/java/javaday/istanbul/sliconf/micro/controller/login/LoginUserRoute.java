@@ -6,6 +6,7 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.util.EmailUtil;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -57,7 +58,14 @@ public class LoginUserRoute implements Route {
     }
 
     public ResponseMessage loginUser(User requestUser) {
-        List<User> userList = userRepositoryService.findByUsername(requestUser.getUsername());
+
+        List<User> userList;
+
+        if (EmailUtil.validateEmail(requestUser.getUsername())) {
+            userList = userRepositoryService.findUsersByEmail(requestUser.getUsername());
+        } else {
+            userList = userRepositoryService.findByUsername(requestUser.getUsername());
+        }
 
         if (Objects.nonNull(userList) && !userList.isEmpty()) {
 

@@ -1,10 +1,12 @@
 package javaday.istanbul.sliconf.micro.model;
 
 import com.couchbase.client.java.repository.annotation.Field;
-import org.springframework.beans.factory.annotation.Value;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+
+import java.util.Objects;
 
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
@@ -23,7 +25,6 @@ public class User {
     private String username;
 
     @Field
-    @Value("${sliconf.user.fullname}")
     private String fullname;
 
     @Field
@@ -41,12 +42,15 @@ public class User {
 
     public User() {
         // for instantiation
+        if (Objects.isNull(fullname) || fullname.isEmpty()) {
+            this.fullname = Constants.DEFAULT_USER_FULLNAME;
+        }
     }
 
     /**
      * Clones user
      *
-     * @param user
+     * @param user kopyalanacak olan user
      */
     public User(User user) {
         this.setUsername(user.getUsername());
@@ -55,7 +59,7 @@ public class User {
         this.setId(user.getId());
         this.setSalt(user.getSalt());
         this.setHashedPassword(user.getHashedPassword());
-        this.setFullname(user.getFullname());
+        this.setfullname(user.getfullname());
     }
 
     public String getId() {
@@ -74,11 +78,11 @@ public class User {
         this.username = username;
     }
 
-    public String getFullname() {
+    public String getfullname() {
         return fullname;
     }
 
-    public void setFullname(String fullname) {
+    public void setfullname(String fullname) {
         this.fullname = fullname;
     }
 
