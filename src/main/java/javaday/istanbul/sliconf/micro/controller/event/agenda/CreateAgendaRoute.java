@@ -1,6 +1,7 @@
 package javaday.istanbul.sliconf.micro.controller.event.agenda;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
@@ -16,6 +17,7 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,6 +105,8 @@ public class CreateAgendaRoute implements Route {
 
         event.setAgenda(agenda);
 
+        generateSpeakerTopics(event);
+
         // Eger agenda elemani yok ise event status u false olur ve mobilde goruntulenmez
         if(Objects.nonNull(agenda) && !agenda.isEmpty()) {
             event.setStatus(true);
@@ -120,5 +124,28 @@ public class CreateAgendaRoute implements Route {
                 "Agenda saved successfully", agenda);
 
         return responseMessage;
+    }
+
+    private void generateSpeakerTopics(Event event) {
+        if (Objects.nonNull(event) && Objects.nonNull(event.getAgenda())) {
+
+            List<Speaker> speakers = event.getSpeakers();
+
+            for (AgendaElement agendaElement : event.getAgenda()) {
+                for (Speaker speaker : speakers) {
+                    // Todo agenda speaker ile speaker i id ile esle name ile degil
+                    if (Objects.nonNull(speaker) && Objects.nonNull(agendaElement) &&
+                            Objects.nonNull(speaker.getName()) &&
+                            speaker.getName().equals(agendaElement.getSpeaker())) {
+                        if (Objects.isNull(speaker.getTopics())) {
+                            speaker.setTopics(new ArrayList<>());
+                        }
+                        speaker.getTopics().add(agendaElement.getTopic());
+                    }
+                }
+            }
+
+            event.setSpeakers(speakers);
+        }
     }
 }

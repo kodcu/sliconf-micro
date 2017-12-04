@@ -6,6 +6,7 @@ import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class AgendaSpecs {
     @Autowired
     private static EventRepositoryService eventRepositoryService;
 
+    private static List<Integer> levelList = Arrays.asList(0, 1, 2);
 
     public static ResponseMessage isAgendaValid(List<AgendaElement> agenda) {
         ResponseMessage responseMessage = new ResponseMessage();
@@ -50,22 +52,21 @@ public class AgendaSpecs {
     private static boolean isAgendaElementValid(AgendaElement agendaElement) {
 
         // Todo make this control more specific
-        if (Objects.isNull(agendaElement)) {
+        if (Objects.isNull(agendaElement) ||
+                !checkIfLevelValid(agendaElement)) {
             return false;
         }
-
-        //eventRepositoryService.findAll();
-        agendaElement.getRoom();
-        agendaElement.getSpeaker();
 
         return true;
     }
 
-    private static void checkIfRoomValid(String roomId) {
+    private static boolean checkIfLevelValid(AgendaElement agendaElement) {
+        if (Objects.isNull(agendaElement.getLevel()) ||
+                !levelList.contains(agendaElement.getLevel())) {
+            return false;
+        }
 
-
-
-
+        return true;
     }
 
     private static void generateIds(List<AgendaElement> agenda) {
