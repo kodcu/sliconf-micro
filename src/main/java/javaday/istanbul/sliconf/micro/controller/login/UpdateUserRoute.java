@@ -17,6 +17,7 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.util.List;
 import java.util.Objects;
 
 @Api
@@ -73,13 +74,21 @@ public class UpdateUserRoute implements Route {
             boolean changed = false;
             if (Objects.nonNull(updateParams.getString("username"))) {
                 if (UserSpecs.checkUserParams(updateParams.getString("username"), 4)) {
+
+                    List<User> users = userRepositoryService.findByUsernameDiffrentThenId(updateParams.getString("username"), id);
+
+                    if (Objects.isNull(users) || !users.isEmpty()) {
+
+                        return new ResponseMessage(false, "Username already used by another user", updateParams);
+                    }
+
                     user.setUsername(updateParams.getString("username"));
                     changed = true;
                 } else
                     return new ResponseMessage(false, "New username must be at least 4", new Object());
             }
             if (Objects.nonNull(updateParams.getString("fullname"))) {
-                user.setFullname(updateParams.getString("fullname"));
+                user.setfullname(updateParams.getString("fullname"));
                 changed = true;
             }
             if (Objects.nonNull(updateParams.getString("password")) && Objects.nonNull(updateParams.getString("oldpassword"))) {
@@ -101,6 +110,10 @@ public class UpdateUserRoute implements Route {
             // TODO: Update fonksiyonunu arastir.
             if (changed) {
                 ResponseMessage responseMessage = userRepositoryService.save(user);
+
+                if (!responseMessage.isStatus()) {
+                    return responseMessage;
+                }
 
                 return new ResponseMessage(true, "User successfully updated", responseMessage.getReturnObject());
             } else

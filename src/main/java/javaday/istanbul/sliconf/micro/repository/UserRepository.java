@@ -1,7 +1,9 @@
 package javaday.istanbul.sliconf.micro.repository;
 
 import javaday.istanbul.sliconf.micro.model.User;
+import org.springframework.data.couchbase.core.query.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +18,12 @@ public interface UserRepository extends CrudRepository<User, String> {
     User findFirstByEmail(String email);
 
     User findUserByEmailEquals(String email);
+
+    // @Query("SELECT * FROM users WHERE META(users).id != $2 AND username = $1 ")
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND username = $1 AND META().id != $2")
+    List<User> findByUsernameAndIdNot(String username, String id);
+
+    List<User> findById(String id);
+
+    List<User> findByIdNot(String id);
 }

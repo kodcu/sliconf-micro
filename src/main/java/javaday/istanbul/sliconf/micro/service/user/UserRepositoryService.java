@@ -48,6 +48,10 @@ public class UserRepositoryService implements UserService {
         return repo.findByUsername(username);
     }
 
+    public List<User> findByUsernameDiffrentThenId(String username, String id) {
+        return repo.findByUsernameAndIdNot(username, id);
+    }
+
     @Override
     public void delete(User user) {
         repo.delete(user);
