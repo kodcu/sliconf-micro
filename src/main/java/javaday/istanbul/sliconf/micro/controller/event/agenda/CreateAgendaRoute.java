@@ -99,6 +99,8 @@ public class CreateAgendaRoute implements Route {
             return responseMessageValid;
         }
 
+        agenda = AgendaSpecs.sortAgenda(agenda);
+
         event.setAgenda(agenda);
 
         // Eger agenda elemani yok ise event status u false olur ve mobilde goruntulenmez

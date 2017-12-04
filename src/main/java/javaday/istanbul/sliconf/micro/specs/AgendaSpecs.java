@@ -82,4 +82,25 @@ public class AgendaSpecs {
         }
     }
 
+    public static List<AgendaElement> sortAgenda(List<AgendaElement> agenda) {
+
+        //asdasfsdg
+
+        // Agendayi tarihe gore sirala
+        agenda.sort((agendaElement1, agendaElement2) -> {
+            if (Objects.isNull(agendaElement1) || Objects.isNull(agendaElement2) ||
+                    Objects.isNull(agendaElement1.getDate()) || Objects.isNull(agendaElement2.getDate())) {
+                return 0;
+            }
+
+            if (agendaElement1.getDate().isBefore(agendaElement2.getDate())) {
+                return -1;
+            } else if (agendaElement1.getDate().isEqual(agendaElement2.getDate())) {
+                return 0;
+            }
+            return 1;
+        });
+
+        return agenda;
+    }
 }

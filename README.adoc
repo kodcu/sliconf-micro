@@ -120,3 +120,7 @@ https://www.getpostman.com/collections/dae7508c1fe7667f32bd
 cd /opt/couchbase/bin
 
 ./cbbackup http://localhost:8091 /home/ttayfur/couchbase-backup/back-15-08-17 -u admin -p jfFMd8Nd
+
+== Couchbase Docker ile Calistirma ==
+
+sudo docker run -d --name couchbase -p 8091-8094:8091-8094 -p 11210:11210 -v /opt/couchbase/var:/opt/couchbase/var couchbase:4.6.4

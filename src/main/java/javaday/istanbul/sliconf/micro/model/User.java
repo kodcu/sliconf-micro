@@ -55,6 +55,7 @@ public class User {
         this.setId(user.getId());
         this.setSalt(user.getSalt());
         this.setHashedPassword(user.getHashedPassword());
+        this.setFullname(user.getFullname());
     }
 
     public String getId() {

@@ -9,8 +9,6 @@ import java.util.List;
 public class AgendaElement {
     private String id;
 
-    private String time;
-
     private String topic;
     private String detail;
 
@@ -33,13 +31,6 @@ public class AgendaElement {
         this.id = id;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
 
     public String getTopic() {
         return topic;

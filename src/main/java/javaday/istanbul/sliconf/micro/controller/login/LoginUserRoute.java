@@ -53,6 +53,10 @@ public class LoginUserRoute implements Route {
         String body = request.body();
         User requestUser = JsonUtil.fromJson(body, User.class);
 
+        return loginUser(requestUser);
+    }
+
+    public ResponseMessage loginUser(User requestUser) {
         List<User> userList = userRepositoryService.findByUsername(requestUser.getUsername());
 
         if (Objects.nonNull(userList) && !userList.isEmpty()) {
@@ -73,6 +77,5 @@ public class LoginUserRoute implements Route {
 
         return new ResponseMessage(false,
                 loginControllerMessageProvider.getMessage("wrongUserNameOrPassword"), new Object());
-
     }
 }

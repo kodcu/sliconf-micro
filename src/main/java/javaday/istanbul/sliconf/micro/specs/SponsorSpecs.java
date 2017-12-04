@@ -78,7 +78,7 @@ public class SponsorSpecs {
                     break;
                 }
 
-                // generateIdIfNeeded(sponsor);
+                generateIdIfNeeded(sponsor);
             }
         }
 
@@ -88,13 +88,13 @@ public class SponsorSpecs {
     }
 
     /**
-     * Gelen sponsor nesnesi null degilse ve id'si null ya da bos ise yeni bir id uretir
+     * Gelen sponsor nesnesi null degilse ve id'si null ya da newid iceriyor ise yeni bir id uretir
      *
      * @param sponsor
      */
     private static void generateIdIfNeeded(Sponsor sponsor) {
         if (Objects.nonNull(sponsor) &&
-                (Objects.isNull(sponsor.getId()) || "".equals(sponsor.getId()))) {
+                (Objects.isNull(sponsor.getId()) || sponsor.getId().contains("newid"))) {
             sponsor.setId(UUID.randomUUID().toString());
         }
     }

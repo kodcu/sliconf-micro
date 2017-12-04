@@ -132,13 +132,25 @@ public class CreateSponsorRoute implements Route {
 
                 sponsorMap.remove(tag.getKey());
                 sponsorMap.put(newKey, tempSponsors);
-                continue;
+            } else {
+                newSponsorTags.put(tag.getKey(), tag.getValue());
             }
-            newSponsorTags.put(tag.getKey(), tag.getValue());
         }
 
         sponsorTags.clear();
         sponsorTags.putAll(newSponsorTags);
+    }
+
+
+    private void generateSponsorIds(List<Sponsor> sponsors) {
+        if (Objects.nonNull(sponsors)) {
+            for (Sponsor sponsor : sponsors) {
+                if (Objects.nonNull(sponsor) &&
+                        (Objects.isNull(sponsor.getId()) || sponsor.getId().contains("newid"))) {
+                    sponsor.setId(UUID.randomUUID().toString());
+                }
+            }
+        }
     }
 
 }

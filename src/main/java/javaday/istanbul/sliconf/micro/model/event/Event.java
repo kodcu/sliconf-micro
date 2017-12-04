@@ -49,6 +49,8 @@ public class Event {
 
     private Map<String, List<Sponsor>> sponsors;
 
+    private String email;
+
     public String getId() {
         return id;
     }
@@ -175,5 +177,13 @@ public class Event {
 
     public void setAbout(About about) {
         this.about = about;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

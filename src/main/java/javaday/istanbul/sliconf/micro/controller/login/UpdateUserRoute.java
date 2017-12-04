@@ -55,7 +55,20 @@ public class UpdateUserRoute implements Route {
 
         String body = request.body();
         JsonObject updateParams = JsonObject.fromJson(body);
-        User user = userRepositoryService.findOne(updateParams.getString("id"));
+
+        return updateUser(updateParams);
+    }
+
+    public ResponseMessage updateUser(JsonObject updateParams) {
+
+        String id = updateParams.getString("id");
+
+        if (Objects.isNull(id)) {
+            return new ResponseMessage(false, "User id can not be null!", new Object());
+        }
+
+        User user = userRepositoryService.findOne(id);
+
         if (Objects.nonNull(user)) {
             boolean changed = false;
             if (Objects.nonNull(updateParams.getString("username"))) {
@@ -77,8 +90,7 @@ public class UpdateUserRoute implements Route {
                             UserPassService userPassService = new UserPassService();
                             user.setPassword(updateParams.getString("password"));
                             user = userPassService.createNewUserWithHashedPassword(user);
-                            user.setHashedPassword(null);
-                            user.setSalt(null);
+
                             changed = true;
                         } else
                             return new ResponseMessage(false, "New password must be at least 4", new Object());
