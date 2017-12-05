@@ -61,6 +61,10 @@ public class UserRepositoryService implements UserService {
         repo.delete(user);
     }
 
+    public void removeAllByEmailAndUsername(String email, String username) {
+        repo.removeAllByEmailAndUsername(email, username);
+    }
+
     @Override
     public ResponseMessage save(User user) {
         ResponseMessage message = new ResponseMessage(false, "An error occured while saving user", null);

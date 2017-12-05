@@ -36,25 +36,18 @@ public class UpdateUser {
     @Autowired
     LoginUserRoute loginUserRoute;
 
-    private User user;
+    @Diyelimki("^Kullanici sifresini degistirmek istedi$")
+    public void kullaniciSifresiniDegistirmekIstedi() throws Throwable {
 
-    private String id;
-
-    @Before
-    public void init() {
-        user = new User();
         // Given
+        User user = new User();
         user.setEmail("osmanUpdate@baykal.com");
         user.setUsername("osmanbaykalUpdate");
         user.setPassword("123123123");
 
         ResponseMessage responseMessageUser = userRepositoryService.saveUser(user);
 
-        id = ((User) responseMessageUser.getReturnObject()).getId();
-    }
-
-    @Diyelimki("^Kullanici sifresini degistirmek istedi$")
-    public void kullaniciSifresiniDegistirmekIstedi() throws Throwable {
+        String id = ((User) responseMessageUser.getReturnObject()).getId();
 
         // When
 
