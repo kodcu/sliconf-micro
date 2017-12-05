@@ -42,6 +42,7 @@ public class UpdateUser {
 
     @Before
     public void init() {
+        user = new User();
         // Given
         user.setEmail("osmanUpdate@baykal.com");
         user.setUsername("osmanbaykalUpdate");
