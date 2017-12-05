@@ -1,9 +1,9 @@
 package javaday.istanbul.sliconf.micro.controller.event.agenda;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
-import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.AgendaSpecs;
@@ -93,8 +93,6 @@ public class CreateAgendaRoute implements Route {
             return responseMessage;
         }
 
-        // todo daha detayli bir kontrol ile ekle
-
         ResponseMessage responseMessageValid = AgendaSpecs.isAgendaValid(agenda);
 
         if (!responseMessageValid.isStatus()) {
@@ -108,7 +106,7 @@ public class CreateAgendaRoute implements Route {
         generateSpeakerTopics(event);
 
         // Eger agenda elemani yok ise event status u false olur ve mobilde goruntulenmez
-        if(Objects.nonNull(agenda) && !agenda.isEmpty()) {
+        if (Objects.nonNull(agenda) && !agenda.isEmpty()) {
             event.setStatus(true);
         } else {
             event.setStatus(false);
@@ -132,20 +130,24 @@ public class CreateAgendaRoute implements Route {
             List<Speaker> speakers = event.getSpeakers();
 
             for (AgendaElement agendaElement : event.getAgenda()) {
-                for (Speaker speaker : speakers) {
-                    // Todo agenda speaker ile speaker i id ile esle name ile degil
-                    if (Objects.nonNull(speaker) && Objects.nonNull(agendaElement) &&
-                            Objects.nonNull(speaker.getName()) &&
-                            speaker.getName().equals(agendaElement.getSpeaker())) {
-                        if (Objects.isNull(speaker.getTopics())) {
-                            speaker.setTopics(new ArrayList<>());
-                        }
-                        speaker.getTopics().add(agendaElement.getTopic());
-                    }
-                }
+                findSpeakerAndSetTopics(agendaElement, speakers);
             }
 
             event.setSpeakers(speakers);
+        }
+    }
+
+    private void findSpeakerAndSetTopics(AgendaElement agendaElement, List<Speaker> speakers) {
+        for (Speaker speaker : speakers) {
+            if (Objects.nonNull(speaker) && Objects.nonNull(agendaElement) &&
+                    agendaElement.getLevel() != -1 &&
+                    Objects.nonNull(speaker.getName()) &&
+                    speaker.getId().equals(agendaElement.getSpeaker())) {
+                if (Objects.isNull(speaker.getTopics())) {
+                    speaker.setTopics(new ArrayList<>());
+                }
+                speaker.getTopics().add(agendaElement.getTopic());
+            }
         }
     }
 }

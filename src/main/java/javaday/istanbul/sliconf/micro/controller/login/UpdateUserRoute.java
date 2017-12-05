@@ -79,7 +79,7 @@ public class UpdateUserRoute implements Route {
 
                     if (Objects.isNull(users) || !users.isEmpty()) {
 
-                        return new ResponseMessage(false, "Username already used by another user", updateParams);
+                        return new ResponseMessage(false, "Username already used by another user", updateParams.get("content"));
                     }
 
                     user.setUsername(updateParams.getString("username"));

@@ -118,29 +118,20 @@ public class RootController {
 
                 before();
 
-                path("sponsor-tag/", () -> {
-                    post("create/:event-key/:tag", routeObjects.createSponsorTagRoute, JsonUtil.json());
-                    post("delete/:event-key/:tagId", routeObjects.deleteSponsorTagRoute, JsonUtil.json());
-                });
-
                 path("sponsor/", () -> {
                     post("create/:event-key", routeObjects.createSponsorRoute, JsonUtil.json());
-                    post("delete/:event-key/:sponsorId/:tag", routeObjects.deleteSponsorRoute, JsonUtil.json());
                 });
 
                 path("floor/", () -> {
                     post("create/:event-key", routeObjects.createFloorRoute, JsonUtil.json());
-                    post("delete/:event-key/:floorId", routeObjects.deleteFloorRoute, JsonUtil.json());
                 });
 
                 path("room/", () -> {
                     post("create/:event-key", routeObjects.createRoomRoute, JsonUtil.json());
-                    post("delete/:event-key/:roomId", routeObjects.deleteRoomRoute, JsonUtil.json());
                 });
 
                 path("speaker/", () -> {
                     post("create/:event-key", routeObjects.createSpeakerRoute, JsonUtil.json());
-                    post("delete/:event-key/:speakerId", routeObjects.deleteSpeakerRoute, JsonUtil.json());
                 });
 
                 path("agenda/", () -> {

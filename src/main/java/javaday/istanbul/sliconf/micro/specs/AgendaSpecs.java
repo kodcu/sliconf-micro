@@ -17,7 +17,10 @@ public class AgendaSpecs {
     @Autowired
     private static EventRepositoryService eventRepositoryService;
 
-    private static List<Integer> levelList = Arrays.asList(0, 1, 2);
+    /**
+     * -1 -> Coffee Break
+     */
+    private static List<Integer> levelList = Arrays.asList(-1, 0, 1, 2);
 
     public static ResponseMessage isAgendaValid(List<AgendaElement> agenda) {
         ResponseMessage responseMessage = new ResponseMessage();

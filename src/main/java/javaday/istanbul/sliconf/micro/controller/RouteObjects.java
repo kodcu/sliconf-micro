@@ -5,15 +5,9 @@ import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
 import javaday.istanbul.sliconf.micro.controller.event.ListEventsRoute;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.CreateAgendaRoute;
 import javaday.istanbul.sliconf.micro.controller.event.floor.CreateFloorRoute;
-import javaday.istanbul.sliconf.micro.controller.event.floor.DeleteFloorRoute;
 import javaday.istanbul.sliconf.micro.controller.event.room.CreateRoomRoute;
-import javaday.istanbul.sliconf.micro.controller.event.room.DeleteRoomRoute;
 import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRoute;
-import javaday.istanbul.sliconf.micro.controller.event.speaker.DeleteSpeakerRoute;
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorRoute;
-import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorTagRoute;
-import javaday.istanbul.sliconf.micro.controller.event.sponsor.DeleteSponsorRoute;
-import javaday.istanbul.sliconf.micro.controller.event.sponsor.DeleteSponsorTagRoute;
 import javaday.istanbul.sliconf.micro.controller.login.*;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,22 +31,15 @@ public class RouteObjects {
     public final ListEventsRoute listEventsRoute;
 
     public final CreateFloorRoute createFloorRoute;
-    public final DeleteFloorRoute deleteFloorRoute;
 
     public final CreateRoomRoute createRoomRoute;
-    public final DeleteRoomRoute deleteRoomRoute;
 
     public final CreateSponsorRoute createSponsorRoute;
-    public final DeleteSponsorRoute deleteSponsorRoute;
-
-    public final CreateSponsorTagRoute createSponsorTagRoute;
-    public final DeleteSponsorTagRoute deleteSponsorTagRoute;
 
     public final ImageUploadRoute imageUploadRoute;
     public final ImageGetRoute imageGetRoute;
 
     public final CreateSpeakerRoute createSpeakerRoute;
-    public final DeleteSpeakerRoute deleteSpeakerRoute;
 
     public final CreateAgendaRoute createAgendaRoute;
 
@@ -74,19 +61,12 @@ public class RouteObjects {
         imageGetRoute = beanFactory.getBean(ImageGetRoute.class);
 
         createFloorRoute = beanFactory.getBean(CreateFloorRoute.class);
-        deleteFloorRoute = beanFactory.getBean(DeleteFloorRoute.class);
 
         createRoomRoute = beanFactory.getBean(CreateRoomRoute.class);
-        deleteRoomRoute = beanFactory.getBean(DeleteRoomRoute.class);
 
         createSponsorRoute = beanFactory.getBean(CreateSponsorRoute.class);
-        deleteSponsorRoute = beanFactory.getBean(DeleteSponsorRoute.class);
-
-        createSponsorTagRoute = beanFactory.getBean(CreateSponsorTagRoute.class);
-        deleteSponsorTagRoute = beanFactory.getBean(DeleteSponsorTagRoute.class);
 
         createSpeakerRoute = beanFactory.getBean(CreateSpeakerRoute.class);
-        deleteSpeakerRoute = beanFactory.getBean(DeleteSpeakerRoute.class);
 
         createAgendaRoute = beanFactory.getBean(CreateAgendaRoute.class);
     }

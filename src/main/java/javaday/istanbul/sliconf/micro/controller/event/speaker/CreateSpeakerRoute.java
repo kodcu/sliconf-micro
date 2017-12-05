@@ -98,6 +98,10 @@ public class CreateSpeakerRoute implements Route {
             return responseMessageValid;
         }
 
+        SpeakerSpecs.generateSpeakerIds(speakers);
+
+        SpeakerSpecs.sortSpeakersByName(speakers);
+
         event.setSpeakers(speakers);
 
         ResponseMessage dbResponse = repositoryService.save(event);

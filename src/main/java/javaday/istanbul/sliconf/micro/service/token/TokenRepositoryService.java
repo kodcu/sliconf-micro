@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -75,7 +76,7 @@ public class TokenRepositoryService implements TokenService {
 
         token.setTokenValue(uuid.toString());
 
-        token.setValidUntilDate(LocalDateTime.now().plusMinutes(Constants.PASS_RESET_TIME_TO_LIVE_MINUTE));
+        token.setValidUntilDate(LocalDateTime.now(ZoneId.of("Asia/Istanbul")).plusMinutes(Constants.PASS_RESET_TIME_TO_LIVE_MINUTE));
 
         token.setType(TokenType.PASSWORD_RESET.toString());
 

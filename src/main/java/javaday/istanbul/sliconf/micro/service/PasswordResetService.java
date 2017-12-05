@@ -59,7 +59,7 @@ public class PasswordResetService {
                     responseMessage = mailSendService.sendMail(email, "Password Reset",
                             String.format(
                                     mailMessageProvider.getMessage("mailPassResetMessage"),
-                                    "http://sliconf.com/resetPass/" + tokenValue,
+                                    "http://app.sliconf.com/resetPass/" + tokenValue,
                                     Constants.PASS_RESET_TIME_TO_LIVE_MINUTE),
                             new String[]{}, new String[]{});
                 } else {
