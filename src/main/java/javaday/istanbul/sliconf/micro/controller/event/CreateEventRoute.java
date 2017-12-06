@@ -180,6 +180,5 @@ public class CreateEventRoute implements Route {
         dbEvent.setLogoPath(updatedEvent.getLogoPath());
         dbEvent.setDescription(updatedEvent.getDescription());
         dbEvent.setAbout(updatedEvent.getAbout());
-        dbEvent.setEmail(updatedEvent.getEmail());
     }
 }
