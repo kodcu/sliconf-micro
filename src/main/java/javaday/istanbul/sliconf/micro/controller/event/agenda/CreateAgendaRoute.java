@@ -129,6 +129,8 @@ public class CreateAgendaRoute implements Route {
 
             List<Speaker> speakers = event.getSpeakers();
 
+            removeOldTopics(speakers);
+
             for (AgendaElement agendaElement : event.getAgenda()) {
                 findSpeakerAndSetTopics(agendaElement, speakers);
             }
@@ -137,11 +139,21 @@ public class CreateAgendaRoute implements Route {
         }
     }
 
+    private void removeOldTopics(List<Speaker> speakers) {
+        if (Objects.nonNull(speakers)) {
+            speakers.forEach(speaker -> {
+                if (Objects.nonNull(speaker)) {
+                    speaker.setTopics(new ArrayList<>());
+                }
+            });
+        }
+    }
+
     private void findSpeakerAndSetTopics(AgendaElement agendaElement, List<Speaker> speakers) {
         for (Speaker speaker : speakers) {
             if (Objects.nonNull(speaker) && Objects.nonNull(agendaElement) &&
                     agendaElement.getLevel() != -1 &&
-                    Objects.nonNull(speaker.getName()) &&
+                    Objects.nonNull(speaker.getId()) &&
                     speaker.getId().equals(agendaElement.getSpeaker())) {
                 if (Objects.isNull(speaker.getTopics())) {
                     speaker.setTopics(new ArrayList<>());

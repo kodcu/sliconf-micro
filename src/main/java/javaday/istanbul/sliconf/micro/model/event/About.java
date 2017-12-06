@@ -12,6 +12,8 @@ public class About {
 
     private Location location;
 
+    private String email;
+
     public Map<String, String> getSocial() {
         return social;
     }
@@ -42,5 +44,13 @@ public class About {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
