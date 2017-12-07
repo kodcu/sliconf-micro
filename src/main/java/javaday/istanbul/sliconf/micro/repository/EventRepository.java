@@ -14,4 +14,6 @@ public interface EventRepository extends CrudRepository<Event, String> {
     Event findEventByKeyEquals(String key);
 
     List<Event> findAllByExecutiveUserEquals(String executiveUser);
+
+    Event findByKeyAndExecutiveUser(String key, String executiveUser);
 }

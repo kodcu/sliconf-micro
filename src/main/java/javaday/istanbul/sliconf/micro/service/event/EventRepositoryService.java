@@ -7,7 +7,6 @@ import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,7 +31,6 @@ public class EventRepositoryService implements EventService {
             events.add(event);
         }
 
-
         return events;
     }
 
@@ -42,6 +40,10 @@ public class EventRepositoryService implements EventService {
 
     public void delete(Event event) {
         repo.delete(event);
+    }
+
+    public Event findByKeyAndExecutiveUser(String key, String userId) {
+        return repo.findByKeyAndExecutiveUser(key, userId);
     }
 
     public ResponseMessage save(Event event) {

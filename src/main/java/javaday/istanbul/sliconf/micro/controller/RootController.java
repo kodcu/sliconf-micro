@@ -40,8 +40,6 @@ public class RootController {
             logger.error(e.getMessage(), e);
         }
 
-        // Todo spark-java ile exception handling yapabilir miyiz?
-
         exception(IllegalArgumentException.class, (e, req, res) -> {
             res.status(HttpStatus.BAD_REQUEST.value());
             res.body(JsonUtil.toJson(new ResponseError(e)));
@@ -110,6 +108,8 @@ public class RootController {
             path("events/", () -> {
 
                 post("create/:userId", routeObjects.createEventRoute, JsonUtil.json());
+                post("delete/:eventKey/:userId", routeObjects.deleteEventRoute, JsonUtil.json());
+
                 get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
 
                 path("get/", () ->
@@ -118,25 +118,25 @@ public class RootController {
 
                 before();
 
-                path("sponsor/", () -> {
-                    post("create/:event-key", routeObjects.createSponsorRoute, JsonUtil.json());
-                });
+                path("sponsor/", () ->
+                        post("create/:event-key", routeObjects.createSponsorRoute, JsonUtil.json())
+                );
 
-                path("floor/", () -> {
-                    post("create/:event-key", routeObjects.createFloorRoute, JsonUtil.json());
-                });
+                path("floor/", () ->
+                        post("create/:event-key", routeObjects.createFloorRoute, JsonUtil.json())
+                );
 
-                path("room/", () -> {
-                    post("create/:event-key", routeObjects.createRoomRoute, JsonUtil.json());
-                });
+                path("room/", () ->
+                        post("create/:event-key", routeObjects.createRoomRoute, JsonUtil.json())
+                );
 
-                path("speaker/", () -> {
-                    post("create/:event-key", routeObjects.createSpeakerRoute, JsonUtil.json());
-                });
+                path("speaker/", () ->
+                        post("create/:event-key", routeObjects.createSpeakerRoute, JsonUtil.json())
+                );
 
-                path("agenda/", () -> {
-                    post("create/:event-key", routeObjects.createAgendaRoute, JsonUtil.json());
-                });
+                path("agenda/", () ->
+                        post("create/:event-key", routeObjects.createAgendaRoute, JsonUtil.json())
+                );
             });
 
             path("image/", () -> {
