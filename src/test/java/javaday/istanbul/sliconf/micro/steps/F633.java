@@ -14,6 +14,7 @@ import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -82,11 +83,11 @@ public class F633 {
     @Ozaman("^sistem etkinliğe özel ve eşşiz bir etkinlik kodu üretir\\.$")
     public void sistemEtkinliğeÖzelVeEşşizBirEtkinlikKoduÜretir() throws Throwable {
 
-        String kanbanNumber = EventSpecs.generateKanbanNumber(event);
+        String kanbanNumber = EventSpecs.generateKanbanNumber(event, eventRepositoryService);
 
         event.setExecutiveUser(user.getId());
 
-        assertEquals(kanbanNumber.length(), 4);
+        assertEquals(kanbanNumber.length(), Constants.EVENT_KEY_LENGTH);
     }
 
     @Ozaman("^sistem etkinlik sahibini kayıt eder ve etkinlik oluşturulmuş olur$")

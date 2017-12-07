@@ -95,5 +95,15 @@ public class EventRepositoryService implements EventService {
         return events;
     }
 
+    /**
+     * Gelen keyle eslesen event var mi yok mu diye kontrol eder
+     *
+     * @param key event keyi
+     * @return eger key ile event varsa true yoksa false doner
+     */
+    public boolean isKeyExists(String key) {
+        Event event = repo.findEventByKeyEquals(key);
+        return Objects.nonNull(event);
+    }
 
 }

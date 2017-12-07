@@ -1,9 +1,9 @@
 package javaday.istanbul.sliconf.micro.specs;
 
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.RandomGenerator;
-
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -31,6 +31,7 @@ public class EventSpecs {
 
     /**
      * Olusturulan eventin tarihi geri donuk olmamali
+     *
      * @param event
      * @return
      */
@@ -46,6 +47,7 @@ public class EventSpecs {
 
     /**
      * Event'in tarihi verilen tarihten sonra mi kontrolu
+     *
      * @param event
      * @return
      */
@@ -53,9 +55,19 @@ public class EventSpecs {
         return dateTime.isBefore(event.getStartDate());
     }
 
-    public static String generateKanbanNumber(Event event) {
-        String key = RandomGenerator.generateRandom(Constants.EVENT_KEY_LENGTH);
-        event.setKey(key);
+    public static String generateKanbanNumber(Event event, EventRepositoryService eventRepositoryService) {
+        boolean isKeyUnique = false;
+        String key;
+
+        while (!isKeyUnique) {
+            key = RandomGenerator.generateRandom(Constants.EVENT_KEY_LENGTH);
+
+            if (!eventRepositoryService.isKeyExists(key)) {
+                event.setKey(key);
+                isKeyUnique = true;
+            }
+        }
+
         return event.getKey();
     }
 }
