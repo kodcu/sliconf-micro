@@ -71,7 +71,7 @@ public class CreateFloorRoute implements Route {
 
         if (Objects.isNull(eventKey) || eventKey.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    "Event key can not empty", new Object());
+                    "Event key can not empty", floorList);
             return responseMessage;
         }
 
@@ -79,7 +79,7 @@ public class CreateFloorRoute implements Route {
 
         if (Objects.isNull(event)) {
             responseMessage = new ResponseMessage(false,
-                    "Event can not found by given key", new Object());
+                    "Event can not found by given key", floorList);
             return responseMessage;
         }
 
@@ -91,6 +91,7 @@ public class CreateFloorRoute implements Route {
         ResponseMessage dbResponse = repositoryService.save(event);
 
         if (!dbResponse.isStatus()) {
+            dbResponse.setReturnObject(floorList);
             return dbResponse;
         }
 
