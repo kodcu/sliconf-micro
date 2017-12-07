@@ -141,16 +141,4 @@ public class CreateSponsorRoute implements Route {
         sponsorTags.putAll(newSponsorTags);
     }
 
-
-    private void generateSponsorIds(List<Sponsor> sponsors) {
-        if (Objects.nonNull(sponsors)) {
-            for (Sponsor sponsor : sponsors) {
-                if (Objects.nonNull(sponsor) &&
-                        (Objects.isNull(sponsor.getId()) || sponsor.getId().contains("newid"))) {
-                    sponsor.setId(UUID.randomUUID().toString());
-                }
-            }
-        }
-    }
-
 }
