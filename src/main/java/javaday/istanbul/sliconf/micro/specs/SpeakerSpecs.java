@@ -1,12 +1,15 @@
 package javaday.istanbul.sliconf.micro.specs;
 
+import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.event.Speaker;
+import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.SpeakerComparator;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class SpeakerSpecs {
@@ -67,6 +70,34 @@ public class SpeakerSpecs {
     public static void sortSpeakersByName(List<Speaker> speakers) {
         if (Objects.nonNull(speakers)) {
             speakers.sort(new SpeakerComparator());
+        }
+    }
+
+    /**
+     * Silinen speakerlara bagli agenda elementleri sil
+     *
+     * @param event
+     */
+    public static void removeAgendaElementsWithNoSpeaker(Event event) {
+
+        if (Objects.nonNull(event) &&
+                Objects.nonNull(event.getSpeakers()) &&
+                Objects.nonNull(event.getAgenda())) {
+            List<AgendaElement> agenda = event.getAgenda();
+            List<Speaker> speakers = event.getSpeakers();
+
+            List<AgendaElement> agendaElements = agenda.stream()
+                    .filter(agendaElement ->
+                            speakers.stream().anyMatch(speaker ->
+                                    Objects.nonNull(speaker) &&
+                                            Objects.nonNull(speaker.getId()) &&
+                                            Objects.nonNull(agendaElement) &&
+                                            Objects.nonNull(agendaElement.getId()) &&
+                                            speaker.getId().equals(agendaElement.getSpeaker())
+                            )
+                    ).collect(Collectors.toList());
+
+            event.setAgenda(agendaElements);
         }
     }
 }

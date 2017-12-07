@@ -104,6 +104,8 @@ public class CreateSpeakerRoute implements Route {
 
         event.setSpeakers(speakers);
 
+        SpeakerSpecs.removeAgendaElementsWithNoSpeaker(event);
+
         ResponseMessage dbResponse = repositoryService.save(event);
 
         if (!dbResponse.isStatus()) {
