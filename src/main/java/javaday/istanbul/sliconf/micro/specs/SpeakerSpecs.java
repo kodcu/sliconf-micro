@@ -4,7 +4,6 @@ import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.SpeakerComparator;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -56,7 +55,9 @@ public class SpeakerSpecs {
         if (Objects.nonNull(speakers)) {
             for (Speaker speaker : speakers) {
                 if (Objects.nonNull(speaker) &&
-                        (Objects.isNull(speaker.getId()) || speaker.getId().contains("newid"))) {
+                        (Objects.isNull(speaker.getId()) ||
+                                speaker.getId().contains("newid") ||
+                                "".equals(speaker.getId()))) {
                     speaker.setId(UUID.randomUUID().toString());
                 }
             }

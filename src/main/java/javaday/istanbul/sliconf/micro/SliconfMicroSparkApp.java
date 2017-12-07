@@ -9,6 +9,9 @@ import spark.servlet.SparkApplication;
 
 /**
  * Created by ttayfur on 10/20/17.
+ *
+ * Bu sinif SparkFiltresinde kullanilmaktadir
+ *
  */
 public class SliconfMicroSparkApp implements SparkApplication {
 
