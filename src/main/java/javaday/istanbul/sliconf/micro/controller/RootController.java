@@ -108,7 +108,7 @@ public class RootController {
             path("events/", () -> {
 
                 post("create/:userId", routeObjects.createEventRoute, JsonUtil.json());
-                post("delete/:eventKey/:userId", routeObjects.deleteEventRoute, JsonUtil.json());
+                delete("delete/:eventKey/:userId", routeObjects.deleteEventRoute, JsonUtil.json());
 
                 get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
 

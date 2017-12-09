@@ -13,6 +13,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -20,7 +21,7 @@ import java.util.Objects;
 
 
 @Api
-@Path("/service/events/delete/:eventId/:userId")
+@Path("/service/events/delete/:eventKey/:userId")
 @Produces("application/json")
 @Component
 public class DeleteEventRoute implements Route {
@@ -40,12 +41,12 @@ public class DeleteEventRoute implements Route {
         this.userRepositoryService = userRepositoryService;
     }
 
-    @POST
+    @DELETE
     @ApiOperation(value = "Deletes an event", nickname = "DeleteEventRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"),
-            @ApiImplicitParam(required = true, dataType = "string", name = "eventId", paramType = "path")
+            @ApiImplicitParam(required = true, dataType = "string", name = "eventKey", paramType = "path")
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -56,9 +57,9 @@ public class DeleteEventRoute implements Route {
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
         String userId = request.params("userId");
-        String eventId = request.params("eventId");
+        String eventKey = request.params("eventKey");
 
-        return deleteEvent(eventId, userId);
+        return deleteEvent(eventKey, userId);
     }
 
     public ResponseMessage deleteEvent(String eventKey, String userId) {
