@@ -77,6 +77,12 @@ public class DeleteEventRoute implements Route {
             return responseMessage;
         }
 
+        if (eventKey.toLowerCase().contains("deleted")) {
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventAlreadyDeletedOrDoNotExists"), new Object());
+            return responseMessage;
+        }
+
         User user = userRepositoryService.findById(userId);
 
         if (Objects.isNull(user)) {

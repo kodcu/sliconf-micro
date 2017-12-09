@@ -74,7 +74,7 @@ public class EventRepositoryService implements EventService {
     public Map<String, List<Event>> findByExecutiveUser(String executiveUser) {
         Map<String, List<Event>> events = new HashMap<>();
 
-        final List<Event> eventList = repo.findAllByExecutiveUserEquals(executiveUser);
+        final List<Event> eventList = repo.findAllByExecutiveUserAndKeyNotContains(executiveUser, "DELETED");
         List<Event> activeList = new ArrayList<>();
         List<Event> passiveList = new ArrayList<>();
         final LocalDateTime now = LocalDateTime.now();
