@@ -99,7 +99,7 @@ public class DeleteEventRoute implements Route {
             return responseMessage;
         }
 
-        event.setKey(event.getKey().concat("-DELETED"));
+        event.setDeleted(true);
 
         responseMessage = eventRepositoryService.save(event);
 

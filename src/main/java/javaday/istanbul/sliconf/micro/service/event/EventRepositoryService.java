@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EventRepositoryService implements EventService {
@@ -70,11 +71,23 @@ public class EventRepositoryService implements EventService {
         return repo.findEventByKeyEquals(key);
     }
 
+    // Todo couchbase kullanrak yapilmali
+    private List<Event> getNotDeletedEvents(List<Event> events) {
+        if (Objects.nonNull(events)) {
+             return events.stream()
+                    .filter(event -> Objects.nonNull(event) && !event.isDeleted()).collect(Collectors.toList());
+        }
+        return null;
+    }
+
     @Override
     public Map<String, List<Event>> findByExecutiveUser(String executiveUser) {
         Map<String, List<Event>> events = new HashMap<>();
 
-        final List<Event> eventList = repo.findAllByExecutiveUserAndKeyNotContains(executiveUser, "DELETED");
+        List<Event> eventList = repo.findAllByExecutiveUserEquals(executiveUser);
+
+        eventList = getNotDeletedEvents(eventList);
+
         List<Event> activeList = new ArrayList<>();
         List<Event> passiveList = new ArrayList<>();
         final LocalDateTime now = LocalDateTime.now();

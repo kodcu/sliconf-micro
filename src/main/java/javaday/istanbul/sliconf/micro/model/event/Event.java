@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
+import javax.ws.rs.DefaultValue;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,8 @@ public class Event {
     private Map<String, String> sponsorTags;
 
     private Map<String, List<Sponsor>> sponsors;
+
+    private Boolean deleted = false;
 
     public String getId() {
         return id;
@@ -175,5 +178,13 @@ public class Event {
 
     public void setAbout(About about) {
         this.about = about;
+    }
+
+    public Boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

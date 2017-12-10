@@ -16,10 +16,7 @@ public interface EventRepository extends CrudRepository<Event, String> {
 
     List<Event> findAllByExecutiveUserEquals(String executiveUser);
 
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND executiveUser = $1 AND key NOT LIKE 'DELETED'")
-    List<Event> findAllNotDeletedEventsOnExecutiveUser(String executiveUser);
-
-    List<Event> findAllByExecutiveUserAndKeyNotContains(String executiveUser, String key);
+    List<Event> findAllByExecutiveUserAndDeleted(String executiveUser, Boolean deleted);
 
     Event findByKeyAndExecutiveUser(String key, String executiveUser);
 }
