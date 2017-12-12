@@ -88,7 +88,6 @@ public class ListCommentsTest {
 
         Comment comment1 = new Comment();
         comment1.setUserId(userId);
-        comment1.setApproved(Comment.APPROVED.PENDING);
         comment1.setCommentValue("This talk is awesome");
         comment1.setEventId(eventId);
         comment1.setId("comment-1");
@@ -97,7 +96,6 @@ public class ListCommentsTest {
 
         Comment comment2 = new Comment();
         comment2.setUserId(userId);
-        comment2.setApproved(Comment.APPROVED.PENDING);
         comment2.setCommentValue("This talk is awesome");
         comment2.setEventId(eventId);
         comment2.setId("comment-2");
@@ -106,7 +104,6 @@ public class ListCommentsTest {
 
         Comment comment3 = new Comment();
         comment3.setUserId(userId);
-        comment3.setApproved(Comment.APPROVED.PENDING);
         comment3.setCommentValue("This talk is awesome");
         comment3.setEventId(eventId);
         comment3.setId("comment-3");
@@ -115,7 +112,6 @@ public class ListCommentsTest {
 
         Comment comment4 = new Comment();
         comment4.setUserId(userId);
-        comment4.setApproved(Comment.APPROVED.PENDING);
         comment4.setCommentValue("This talk is awesome");
         comment4.setEventId(eventId);
         comment4.setId("comment-4");
@@ -124,7 +120,6 @@ public class ListCommentsTest {
 
         Comment comment5 = new Comment();
         comment5.setUserId(userId);
-        comment5.setApproved(Comment.APPROVED.PENDING);
         comment5.setCommentValue("This talk is awesome");
         comment5.setEventId(eventId);
         comment5.setId("comment-5");

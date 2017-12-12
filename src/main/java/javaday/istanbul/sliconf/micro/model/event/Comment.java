@@ -13,12 +13,6 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @Document
 public class Comment {
 
-    public enum APPROVED {
-        APPROVED,
-        PENDING,
-        DENIED
-    }
-
     @Id
     @GeneratedValue(strategy = UNIQUE)
     private String id;
@@ -32,7 +26,7 @@ public class Comment {
     private List<String> dislikes;
     private String commentValue;
 
-    private Enum<APPROVED> approved;
+    private String approved;
     private String commentType;
 
     public String getId() {
@@ -115,11 +109,11 @@ public class Comment {
         this.commentValue = commentValue;
     }
 
-    public Enum<APPROVED> getApproved() {
+    public String getApproved() {
         return approved;
     }
 
-    public void setApproved(Enum<APPROVED> approved) {
+    public void setApproved(String approved) {
         this.approved = approved;
     }
 

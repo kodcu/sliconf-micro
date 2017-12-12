@@ -118,7 +118,7 @@ public class AddNewCommentRoute implements Route {
             return validMessage;
         }
 
-        comment.setApproved(Comment.APPROVED.PENDING);
+        comment.setApproved("pending");
 
         Comment savedComment = commentRepositoryService.save(comment);
 

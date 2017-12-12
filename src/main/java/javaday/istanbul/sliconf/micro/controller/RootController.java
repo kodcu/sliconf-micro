@@ -140,6 +140,8 @@ public class RootController {
 
                 path("comment/", () -> {
                     post("add-new", routeObjects.addNewCommentRoute, JsonUtil.json());
+                    get("list/:eventId", routeObjects.listCommentsRoute, JsonUtil.json());
+                    get("list/:eventId/:sessionId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:eventId/:sessionId/:userId", routeObjects.listCommentsRoute, JsonUtil.json());
                 });
             });
