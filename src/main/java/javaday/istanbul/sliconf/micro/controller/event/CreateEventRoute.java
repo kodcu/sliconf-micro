@@ -156,6 +156,10 @@ public class CreateEventRoute implements Route {
             return responseMessage;
         }
 
+        if (Objects.nonNull(dbEvent.isDeleted()) && dbEvent.isDeleted()) {
+            return new ResponseMessage(false, messageProvider.getMessage("canNotUpdateDeletedEvent"), event);
+        }
+
         copyUpdatedFields(dbEvent, event);
 
         return saveEvent(dbEvent);
