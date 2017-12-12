@@ -137,6 +137,11 @@ public class RootController {
                 path("agenda/", () ->
                         post("create/:event-key", routeObjects.createAgendaRoute, JsonUtil.json())
                 );
+
+                path("comment/", () -> {
+                    post("add-new", routeObjects.addNewCommentRoute, JsonUtil.json());
+                    get("list/:eventId/:sessionId/:userId", routeObjects.listCommentsRoute, JsonUtil.json());
+                });
             });
 
             path("image/", () -> {
