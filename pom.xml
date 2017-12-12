@@ -211,7 +211,6 @@
             <version>2.7.1</version>
             <type>maven-plugin</type>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -304,7 +303,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>
