@@ -37,8 +37,6 @@ public class TokenRepositoryService implements TokenService {
             responseMessage.setStatus(true);
             responseMessage.setMessage("Token is Valid");
             responseMessage.setReturnObject(token.getValidMail());
-        } else {
-            responseMessage.setMessage("");
         }
 
         return responseMessage;
