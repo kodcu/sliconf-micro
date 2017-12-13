@@ -1,7 +1,6 @@
 package javaday.istanbul.sliconf.micro.steps;
 
 
-import cucumber.api.java.Before;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
