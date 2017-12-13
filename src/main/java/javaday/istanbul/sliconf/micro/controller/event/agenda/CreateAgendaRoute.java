@@ -7,6 +7,7 @@ import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.AgendaSpecs;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -152,7 +153,7 @@ public class CreateAgendaRoute implements Route {
     private void findSpeakerAndSetTopics(AgendaElement agendaElement, List<Speaker> speakers) {
         for (Speaker speaker : speakers) {
             if (Objects.nonNull(speaker) && Objects.nonNull(agendaElement) &&
-                    agendaElement.getLevel() != -1 &&
+                    agendaElement.getLevel() != Constants.Agenda.BREAK &&
                     Objects.nonNull(speaker.getId()) &&
                     speaker.getId().equals(agendaElement.getSpeaker())) {
                 if (Objects.isNull(speaker.getTopics())) {

@@ -4,11 +4,13 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.SpeakerComparator;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -79,25 +81,39 @@ public class SpeakerSpecs {
      * @param event
      */
     public static void removeAgendaElementsWithNoSpeaker(Event event) {
-
         if (Objects.nonNull(event) &&
                 Objects.nonNull(event.getSpeakers()) &&
                 Objects.nonNull(event.getAgenda())) {
+
             List<AgendaElement> agenda = event.getAgenda();
             List<Speaker> speakers = event.getSpeakers();
 
             List<AgendaElement> agendaElements = agenda.stream()
-                    .filter(agendaElement ->
-                            speakers.stream().anyMatch(speaker ->
-                                    Objects.nonNull(speaker) &&
-                                            Objects.nonNull(speaker.getId()) &&
-                                            Objects.nonNull(agendaElement) &&
-                                            Objects.nonNull(agendaElement.getId()) &&
-                                            speaker.getId().equals(agendaElement.getSpeaker())
-                            )
-                    ).collect(Collectors.toList());
+                    .filter(agendaElement -> {
+                        if (isBreakElement(agendaElement)) {
+                            return true;
+                        } else {
+                            return speakers.stream().anyMatch(isSpeakerExistsWithAgenda(agendaElement));
+                        }
+                    }).collect(Collectors.toList());
 
             event.setAgenda(agendaElements);
         }
+    }
+
+    /**
+     * Agenda elemaninin coffee break gibi bir eleman olup olmadiginin kontrolu
+     *
+     * @param agendaElement
+     * @return
+     */
+    private static boolean isBreakElement(AgendaElement agendaElement) {
+        return Objects.nonNull(agendaElement) && agendaElement.getLevel() == Constants.Agenda.BREAK;
+    }
+
+    private static Predicate<Speaker> isSpeakerExistsWithAgenda(AgendaElement agendaElement) {
+        return speaker -> Objects.nonNull(speaker) && Objects.nonNull(speaker.getId()) &&
+                Objects.nonNull(agendaElement) && Objects.nonNull(agendaElement.getId()) &&
+                speaker.getId().equals(agendaElement.getSpeaker());
     }
 }

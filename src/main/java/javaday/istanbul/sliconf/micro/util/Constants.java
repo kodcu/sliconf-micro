@@ -18,4 +18,15 @@ public class Constants {
 
     private Constants() {
     }
+
+    public static class Agenda {
+        private Agenda() {
+            // private constructor for static access
+        }
+
+        public static final int BREAK = -1;
+        public static final int BEGINNER = 0;
+        public static final int INTERMEDIATE = 1;
+        public static final int ADVANCED = 2;
+    }
 }
