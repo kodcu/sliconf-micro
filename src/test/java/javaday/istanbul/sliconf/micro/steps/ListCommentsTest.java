@@ -13,6 +13,7 @@ import javaday.istanbul.sliconf.micro.service.comment.CommentRepositoryService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
+import javaday.istanbul.sliconf.micro.util.TestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,10 +52,10 @@ public class ListCommentsTest {
     ListCommentsRoute listCommentsRoute;
 
 
-    private List<Speaker> speakers;
-    private List<AgendaElement> agendaElements;
-    private List<Room> rooms;
-    private List<Floor> floors;
+    private List<Speaker> speakers = new ArrayList<>();
+    private List<AgendaElement> agendaElements = new ArrayList<>();
+    private List<Room> rooms = new ArrayList<>();
+    private List<Floor> floors = new ArrayList<>();
 
     @Diyelimki("^Kullanici yorumlari listelemek istedi$")
     public void kullaniciYorumlariListelemekIstedi() throws Throwable {
@@ -75,7 +76,7 @@ public class ListCommentsTest {
 
         EventSpecs.generateKanbanNumber(event, eventRepositoryService);
 
-        generateFields();
+        TestUtil.generateFields(floors, rooms, speakers, agendaElements);
 
         event.setStatus(true);
         event.setFloorPlan(floors);
@@ -162,72 +163,5 @@ public class ListCommentsTest {
         assertFalse(listMessage7.isStatus());
         assertFalse(listMessage8.isStatus());
 
-    }
-
-    private void generateFields() {
-        generateFloors();
-        generateRooms();
-        generateSpeakers();
-        generateAgenda();
-    }
-
-    private void generateFloors() {
-        floors = new ArrayList<>();
-
-        Floor floor = new Floor();
-        floor.setId("floor123");
-        floor.setName("Floor 1");
-
-        floors.add(floor);
-    }
-
-    private void generateRooms() {
-        rooms = new ArrayList<>();
-
-        Room room = new Room();
-        room.setId("room123");
-        room.setFloor("floor123");
-        room.setLabel("Room 1");
-
-        rooms.add(room);
-    }
-
-    private void generateSpeakers() {
-        speakers = new ArrayList<>();
-
-        Speaker speaker = new Speaker();
-        speaker.setId("speaker123");
-        speaker.setName("Test Speaker");
-        speaker.setTopics(new ArrayList<>());
-
-        speakers.add(speaker);
-    }
-
-    private void generateAgenda() {
-        agendaElements = new ArrayList<>();
-
-        AgendaElement agendaElement = new AgendaElement();
-        agendaElement.setId("agenda-element-1");
-        agendaElement.setDate(LocalDateTime.now().minusSeconds(10));
-        agendaElement.setDetail("Talk 123");
-        agendaElement.setDuration(10);
-        agendaElement.setLevel(0);
-        agendaElement.setRoom("room123");
-        agendaElement.setSpeaker("speaker123");
-        agendaElement.setTopic("Topic 123");
-
-        agendaElements.add(agendaElement);
-
-        AgendaElement agendaElement1 = new AgendaElement();
-        agendaElement1.setId("agenda-element-2");
-        agendaElement1.setDate(LocalDateTime.now().minusMinutes(20));
-        agendaElement1.setDetail("Talk 456");
-        agendaElement1.setDuration(10);
-        agendaElement1.setLevel(0);
-        agendaElement1.setRoom("room123");
-        agendaElement1.setSpeaker("speaker123");
-        agendaElement1.setTopic("Topic 456");
-
-        agendaElements.add(agendaElement1);
     }
 }
