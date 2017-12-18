@@ -16,6 +16,22 @@ public class Constants {
 
     public static final String DEFAULT_USER_FULLNAME = "Guest";
 
+
+    public enum COMMENT_VOTES {
+        DISLIKE(-1), NOTR(0), LIKE(1);
+
+        private final int vote;
+
+        COMMENT_VOTES(int vote) {
+            this.vote = vote;
+        }
+
+        public int getValue() {
+            return vote;
+        }
+    }
+
+
     private Constants() {
     }
 
@@ -29,4 +45,5 @@ public class Constants {
         public static final int INTERMEDIATE = 1;
         public static final int ADVANCED = 2;
     }
+
 }

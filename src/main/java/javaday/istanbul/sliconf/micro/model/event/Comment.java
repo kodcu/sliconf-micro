@@ -22,12 +22,17 @@ public class Comment {
     private LocalDateTime time;
     private int like;
     private int dislike;
-    private List<String> likes;
-    private List<String> dislikes;
+    private List<VoteUser> likes;
+    private List<VoteUser> dislikes;
     private String commentValue;
 
     private String approved;
     private String commentType;
+
+    private String username;
+    private String fullname;
+    private String roomName;
+    private String topic;
 
     public String getId() {
         return id;
@@ -85,19 +90,19 @@ public class Comment {
         this.dislike = dislike;
     }
 
-    public List<String> getLikes() {
+    public List<VoteUser> getLikes() {
         return likes;
     }
 
-    public void setLikes(List<String> likes) {
+    public void setLikes(List<VoteUser> likes) {
         this.likes = likes;
     }
 
-    public List<String> getDislikes() {
+    public List<VoteUser> getDislikes() {
         return dislikes;
     }
 
-    public void setDislikes(List<String> dislikes) {
+    public void setDislikes(List<VoteUser> dislikes) {
         this.dislikes = dislikes;
     }
 
@@ -123,5 +128,37 @@ public class Comment {
 
     public void setCommentType(String commentType) {
         this.commentType = commentType;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 }

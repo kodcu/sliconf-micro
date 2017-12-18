@@ -4,6 +4,7 @@ import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Comment;
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.model.event.Room;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.CommentMessageProvider;
@@ -22,8 +23,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Api
@@ -94,6 +97,8 @@ public class AddNewCommentRoute implements Route {
             return userCheckMessage;
         }
 
+        User user = (User) userCheckMessage.getReturnObject();
+
         ResponseMessage eventCheckMessage = checkIfEventExists(comment.getEventId());
 
         if (!eventCheckMessage.isStatus()) {
@@ -118,7 +123,41 @@ public class AddNewCommentRoute implements Route {
             return validMessage;
         }
 
+        if (Objects.nonNull(user)) {
+            comment.setUsername(user.getUsername());
+            comment.setFullname(user.getfullname());
+
+
+            String roomName = "";
+            String topic = "";
+
+            if (Objects.nonNull(agendaElement)) {
+                List<Room> roomList = event.getRooms().stream()
+                        .filter(room -> {
+                            if (Objects.nonNull(room) && Objects.nonNull(room.getId()) &&
+                                    room.getId().equals(agendaElement.getRoom())) {
+                                return true;
+                            }
+                            return false;
+                        })
+                        .collect(Collectors.toList());
+
+                if (Objects.nonNull(roomList) && !roomList.isEmpty() &&
+                        Objects.nonNull(roomList.get(0)) && Objects.nonNull(roomList.get(0).getLabel())) {
+                    roomName = roomList.get(0).getLabel();
+                }
+
+                topic = agendaElement.getTopic();
+            }
+
+
+            comment.setRoomName(roomName);
+            comment.setTopic(topic);
+        }
+
         comment.setApproved("pending");
+        comment.setLikes(new ArrayList<>());
+        comment.setDislikes(new ArrayList<>());
 
         Comment savedComment = commentRepositoryService.save(comment);
 
@@ -150,10 +189,7 @@ public class AddNewCommentRoute implements Route {
     }
 
     private ResponseMessage checkIfCommentValid(AgendaElement agendaElement, Comment comment) {
-        ResponseMessage responseMessage = isDateValid(agendaElement, comment.getTime());
-
-
-        return responseMessage;
+        return isDateValid(agendaElement, comment.getTime());
     }
 
     private ResponseMessage isDateValid(AgendaElement agendaElement, LocalDateTime commentTime) {

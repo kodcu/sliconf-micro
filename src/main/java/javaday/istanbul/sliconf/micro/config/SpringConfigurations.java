@@ -24,6 +24,11 @@ public class SpringConfigurations {
     }
 
     @Bean
+    public Properties voteProperties() throws IOException {
+        return PropertiesLoaderUtils.loadAllProperties("vote.properties");
+    }
+
+    @Bean
     public Properties loginProperties() throws IOException {
         return PropertiesLoaderUtils.loadAllProperties("loginController.properties");
     }
