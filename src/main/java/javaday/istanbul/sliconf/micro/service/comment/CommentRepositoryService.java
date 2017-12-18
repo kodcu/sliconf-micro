@@ -26,6 +26,13 @@ public class CommentRepositoryService implements CommentService {
         return Objects.nonNull(comments) ? comments : new ArrayList<>();
     }
 
+
+    public List<Comment> findAllByEventIdAndSessionIdAndUserIdAndStatus(String eventId, String sessionId, String userId, String status) {
+        List<Comment> comments = repo.findAllByEventIdAndSessionIdAndUserIdAndApproved(eventId, sessionId, userId, status);
+
+        return Objects.nonNull(comments) ? comments : new ArrayList<>();
+    }
+
     public List<Comment> findAllByEventIdAndSessionId(String eventId, String sessionId) {
         List<Comment> comments = repo.findAllByEventIdAndSessionId(eventId, sessionId);
 

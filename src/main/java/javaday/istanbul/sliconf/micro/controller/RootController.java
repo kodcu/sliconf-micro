@@ -143,6 +143,7 @@ public class RootController {
                     get("list/:eventId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:eventId/:sessionId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:eventId/:sessionId/:userId", routeObjects.listCommentsRoute, JsonUtil.json());
+                    get("list/:eventId/:sessionId/:userId/:status", routeObjects.listCommentsRoute, JsonUtil.json());
                 });
             });
 

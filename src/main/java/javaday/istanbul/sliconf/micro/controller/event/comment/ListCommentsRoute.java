@@ -19,7 +19,7 @@ import java.util.Objects;
 
 
 @Api
-@Path("/service/events/comment/list/:eventId/:sessionId/:userId")
+@Path("/service/events/comment/list/:eventId/:sessionId/:userId/:status")
 @Produces("application/json")
 @Component
 public class ListCommentsRoute implements Route {
@@ -40,6 +40,7 @@ public class ListCommentsRoute implements Route {
             @ApiImplicitParam(required = true, dataType = "string", name = "eventId", paramType = "path"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "sessionId", paramType = "path"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"), //
+            @ApiImplicitParam(required = true, dataType = "string", name = "status", paramType = "path", example = "denied, pending, approved"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -53,18 +54,25 @@ public class ListCommentsRoute implements Route {
         String sessionId = request.params("sessionId");
         String userId = request.params("userId");
 
-        return listComments(eventId, sessionId, userId);
+        String status = request.params("status");
+
+        return listComments(eventId, sessionId, userId, status);
     }
 
 
-    public ResponseMessage listComments(String eventId, String sessionId, String userId) {
+    public ResponseMessage listComments(String eventId, String sessionId, String userId, String status) {
 
         List<Comment> comments = null;
 
         if (Objects.nonNull(eventId) && !eventId.isEmpty()) {
             if (Objects.nonNull(sessionId) && !sessionId.isEmpty()) {
                 if (Objects.nonNull(userId) && !userId.isEmpty()) {
-                    comments = commentRepositoryService.findAllByEventIdAndSessionIdAndUserId(eventId, sessionId, userId);
+
+                    if (Objects.nonNull(status) && !status.isEmpty()) {
+                        comments = commentRepositoryService.findAllByEventIdAndSessionIdAndUserIdAndStatus(eventId, sessionId, userId, status);
+                    } else {
+                        comments = commentRepositoryService.findAllByEventIdAndSessionIdAndUserId(eventId, sessionId, userId);
+                    }
                 } else {
                     comments = commentRepositoryService.findAllByEventIdAndSessionId(eventId, sessionId);
                 }

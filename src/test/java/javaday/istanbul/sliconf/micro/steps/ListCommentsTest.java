@@ -143,15 +143,15 @@ public class ListCommentsTest {
         assertTrue(commentAddMessage4.isStatus());
         assertTrue(commentAddMessage5.isStatus());
 
-        ResponseMessage listMessage1 = listCommentsRoute.listComments(eventId, "agenda-element-1", userId); // true
-        ResponseMessage listMessage2 = listCommentsRoute.listComments(eventId, "agenda-element-1", ""); // true
-        ResponseMessage listMessage3 = listCommentsRoute.listComments(eventId, "", userId); // true
-        ResponseMessage listMessage4 = listCommentsRoute.listComments(eventId, "", ""); // true
+        ResponseMessage listMessage1 = listCommentsRoute.listComments(eventId, "agenda-element-1", userId, "pending"); // true
+        ResponseMessage listMessage2 = listCommentsRoute.listComments(eventId, "agenda-element-1", "", "pending"); // true
+        ResponseMessage listMessage3 = listCommentsRoute.listComments(eventId, "", userId, ""); // true
+        ResponseMessage listMessage4 = listCommentsRoute.listComments(eventId, "", "",""); // true
 
-        ResponseMessage listMessage5 = listCommentsRoute.listComments("", "agenda-element-1", userId); // false
-        ResponseMessage listMessage6 = listCommentsRoute.listComments("", "agenda-element-1", ""); // false
-        ResponseMessage listMessage7 = listCommentsRoute.listComments("", "", userId); // false
-        ResponseMessage listMessage8 = listCommentsRoute.listComments("", "", ""); // false
+        ResponseMessage listMessage5 = listCommentsRoute.listComments("", "agenda-element-1", userId, ""); // false
+        ResponseMessage listMessage6 = listCommentsRoute.listComments("", "agenda-element-1", "", ""); // false
+        ResponseMessage listMessage7 = listCommentsRoute.listComments("", "", userId, ""); // false
+        ResponseMessage listMessage8 = listCommentsRoute.listComments("", "", "", ""); // false
 
         assertTrue(listMessage1.isStatus());
         assertTrue(listMessage2.isStatus());
