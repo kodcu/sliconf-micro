@@ -2,12 +2,16 @@ package javaday.istanbul.sliconf.micro.controller.login;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.User;
+import javaday.istanbul.sliconf.micro.model.UserCaptcha;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.EmailUtil;
+import javaday.istanbul.sliconf.micro.util.VerifyCaptcha;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -17,6 +21,7 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,6 +34,7 @@ public class LoginUserRoute implements Route {
     private LoginControllerMessageProvider loginControllerMessageProvider;
     private UserRepositoryService userRepositoryService;
 
+    private Logger logger = LoggerFactory.getLogger(LoginUserRoute.class);
 
     @Autowired
     public LoginUserRoute(LoginControllerMessageProvider loginControllerMessageProvider,
@@ -52,9 +58,30 @@ public class LoginUserRoute implements Route {
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
         String body = request.body();
-        User requestUser = JsonUtil.fromJson(body, User.class);
+        UserCaptcha userCaptcha = JsonUtil.fromJson(body, UserCaptcha.class);
+
+        if (!isCaptchaValid(userCaptcha)) {
+            return new ResponseMessage(false, "Captcha is not valid", userCaptcha);
+        }
+
+        User requestUser = new User();
+
+        requestUser.setPassword(userCaptcha.getPassword());
+        requestUser.setUsername(userCaptcha.getUsername());
 
         return loginUser(requestUser);
+    }
+
+    private boolean isCaptchaValid(UserCaptcha userCaptcha) {
+        boolean result = false;
+
+        try {
+            result = VerifyCaptcha.verify(userCaptcha.getCaptcha());
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+
+        return result;
     }
 
     public ResponseMessage loginUser(User requestUser) {

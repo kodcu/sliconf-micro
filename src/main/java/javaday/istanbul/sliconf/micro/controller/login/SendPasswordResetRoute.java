@@ -1,8 +1,11 @@
 package javaday.istanbul.sliconf.micro.controller.login;
 
+import com.google.gson.JsonObject;
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.PasswordResetService;
+import javaday.istanbul.sliconf.micro.util.VerifyCaptcha;
+import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -41,6 +44,12 @@ public class SendPasswordResetRoute implements Route {
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
         String email = request.params("email");
+
+        JsonObject captcha = JsonUtil.fromJson(request.body(), JsonObject.class);
+
+        if (!VerifyCaptcha.verify(captcha.getAsJsonPrimitive("captcha").getAsString())) {
+            return new ResponseMessage(false, "Captcha is not valid", captcha);
+        }
 
         return this.passwordResetService.sendPasswordResetMail(email);
     }
