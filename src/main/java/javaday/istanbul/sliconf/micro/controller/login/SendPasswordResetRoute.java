@@ -6,6 +6,8 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.PasswordResetService;
 import javaday.istanbul.sliconf.micro.util.VerifyCaptcha;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -15,6 +17,8 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.io.IOException;
+import java.util.Objects;
 
 @Api
 @Path("/service/users/password-reset/send/:email")
@@ -23,6 +27,8 @@ import javax.ws.rs.Produces;
 public class SendPasswordResetRoute implements Route {
 
     private PasswordResetService passwordResetService;
+
+    private Logger logger = LoggerFactory.getLogger(SendPasswordResetRoute.class);
 
     @Autowired
     public SendPasswordResetRoute(PasswordResetService passwordResetService) {
@@ -47,10 +53,33 @@ public class SendPasswordResetRoute implements Route {
 
         JsonObject captcha = JsonUtil.fromJson(request.body(), JsonObject.class);
 
-        if (!VerifyCaptcha.verify(captcha.getAsJsonPrimitive("captcha").getAsString())) {
-            return new ResponseMessage(false, "Captcha is not valid", captcha);
+        String userCaptchaString = "";
+        String captchaString = "captcha";
+
+        if (Objects.nonNull(captcha) &&
+                Objects.nonNull(captcha.getAsJsonPrimitive(captchaString)) &&
+                Objects.nonNull(captcha.getAsJsonPrimitive(captchaString).getAsString())) {
+            userCaptchaString = captcha.getAsJsonPrimitive(captchaString).getAsString();
+        }
+
+
+        if (Objects.nonNull(userCaptchaString) && !userCaptchaString.isEmpty() &&
+                !isCaptchaValid(userCaptchaString)) {
+            return new ResponseMessage(false, "Captcha is not valid", userCaptchaString);
         }
 
         return this.passwordResetService.sendPasswordResetMail(email);
+    }
+
+    private boolean isCaptchaValid(String userCaptcha) {
+        boolean result = false;
+
+        try {
+            result = VerifyCaptcha.verify(userCaptcha);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+
+        return result;
     }
 }

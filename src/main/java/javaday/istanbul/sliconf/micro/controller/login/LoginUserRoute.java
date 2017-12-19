@@ -60,7 +60,8 @@ public class LoginUserRoute implements Route {
         String body = request.body();
         UserCaptcha userCaptcha = JsonUtil.fromJson(body, UserCaptcha.class);
 
-        if (!isCaptchaValid(userCaptcha)) {
+        if (Objects.nonNull(userCaptcha.getCaptcha()) && !userCaptcha.getCaptcha().isEmpty() &&
+                !isCaptchaValid(userCaptcha)) {
             return new ResponseMessage(false, "Captcha is not valid", userCaptcha);
         }
 

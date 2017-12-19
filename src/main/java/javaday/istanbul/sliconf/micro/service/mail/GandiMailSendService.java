@@ -39,6 +39,9 @@ public class GandiMailSendService implements IMailSendService {
     @Value("${sliconf.mail.smtp.port}")
     private String mailSmtpPort;
 
+    @Value("${sliconf.mail.smtp.starttls}")
+    private String startTls;
+
 
     @Autowired
     private MailMessageProvider mailMessageProvider;
@@ -53,6 +56,7 @@ public class GandiMailSendService implements IMailSendService {
         props.put("mail.smtp.auth", mailSmtpAuth);
         props.put("mail.smtp.host", mailSmtpHost);
         props.put("mail.smtp.port", mailSmtpPort);
+        props.put("mail.smtp.starttls.enable", startTls);
 
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
