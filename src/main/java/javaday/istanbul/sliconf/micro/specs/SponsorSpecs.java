@@ -95,7 +95,16 @@ public class SponsorSpecs {
     private static void generateIdIfNeeded(Sponsor sponsor) {
         if (Objects.nonNull(sponsor) &&
                 (Objects.isNull(sponsor.getId()) || sponsor.getId().contains("newid"))) {
-            sponsor.setId(UUID.randomUUID().toString());
+
+            String newKey = UUID.randomUUID().toString();
+            String indexKey = "0";
+
+            if (Objects.nonNull(sponsor.getId()) && sponsor.getId().contains("|")) {
+                int parserIndex = sponsor.getId().indexOf('|');
+                indexKey = sponsor.getId().substring(0, parserIndex);
+            }
+
+            sponsor.setId(indexKey + "|" + newKey);
         }
     }
 

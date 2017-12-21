@@ -1,0 +1,3 @@
+Version 0.0.2
+- Sponsor ve sponsor tag eklerken eskiden newid şeklinde ekleniyordu. Artık index|newid şeklinde eklenmeli
+  eklendikten sonra index|UUID olarak kayıt edilir.

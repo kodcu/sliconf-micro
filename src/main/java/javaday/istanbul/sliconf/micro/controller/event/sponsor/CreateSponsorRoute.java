@@ -126,12 +126,22 @@ public class CreateSponsorRoute implements Route {
         for (Map.Entry<String, String> tag : sponsorTags.entrySet()) {
             if (Objects.isNull(tag.getKey()) || tag.getKey().contains("newid")) {
                 String newKey = UUID.randomUUID().toString();
+                String indexKey = "0";
 
-                newSponsorTags.put(newKey, tag.getValue());
+                if (Objects.nonNull(tag.getKey()) && tag.getKey().contains("|")) {
+                    int parserIndex = tag.getKey().indexOf('|');
+                    indexKey = tag.getKey().substring(0,parserIndex);
+
+                }
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(indexKey).append("|").append(newKey);
+
+                newSponsorTags.put(stringBuilder.toString(), tag.getValue());
                 List<Sponsor> tempSponsors = sponsorMap.get(tag.getKey());
 
                 sponsorMap.remove(tag.getKey());
-                sponsorMap.put(newKey, tempSponsors);
+                sponsorMap.put(stringBuilder.toString(), tempSponsors);
             } else {
                 newSponsorTags.put(tag.getKey(), tag.getValue());
             }
