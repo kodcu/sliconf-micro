@@ -73,7 +73,7 @@ public class CreateSpeakerRoute implements Route {
      * @param eventKey
      * @return
      */
-    private ResponseMessage saveSpeakers(List<Speaker> speakers, String eventKey) {
+    public ResponseMessage saveSpeakers(List<Speaker> speakers, String eventKey) {
 
         ResponseMessage responseMessage;
 
