@@ -2,7 +2,6 @@ package javaday.istanbul.sliconf.micro.util.json;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MapParameterizedType implements ParameterizedType {

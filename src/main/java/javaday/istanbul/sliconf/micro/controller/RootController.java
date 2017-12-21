@@ -118,24 +118,26 @@ public class RootController {
 
                 before();
 
+                final String createEventKey = "create/:event-key";
+
                 path("sponsor/", () ->
-                        post("create/:event-key", routeObjects.createSponsorRoute, JsonUtil.json())
+                        post(createEventKey, routeObjects.createSponsorRoute, JsonUtil.json())
                 );
 
                 path("floor/", () ->
-                        post("create/:event-key", routeObjects.createFloorRoute, JsonUtil.json())
+                        post(createEventKey, routeObjects.createFloorRoute, JsonUtil.json())
                 );
 
                 path("room/", () ->
-                        post("create/:event-key", routeObjects.createRoomRoute, JsonUtil.json())
+                        post(createEventKey, routeObjects.createRoomRoute, JsonUtil.json())
                 );
 
                 path("speaker/", () ->
-                        post("create/:event-key", routeObjects.createSpeakerRoute, JsonUtil.json())
+                        post(createEventKey, routeObjects.createSpeakerRoute, JsonUtil.json())
                 );
 
                 path("agenda/", () ->
-                        post("create/:event-key", routeObjects.createAgendaRoute, JsonUtil.json())
+                        post(createEventKey, routeObjects.createAgendaRoute, JsonUtil.json())
                 );
 
                 path("comment/", () -> {

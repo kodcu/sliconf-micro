@@ -14,10 +14,10 @@ import java.net.URL;
 
 public class VerifyCaptcha {
 
-    public static final String url = "https://www.google.com/recaptcha/api/siteverify";
-    public static final String secretKey = "6Le6PD0UAAAAAOADznI_FYrNWxzdb3LnDPOMq62H";
-    private final static String USER_AGENT = "Mozilla/5.0";
-    private static final String siteKey = "6Le6PD0UAAAAAP3JH2yxy18pEbGU8h5KwdY7yjXp";
+    public static final String URL = "https://www.google.com/recaptcha/api/siteverify";
+    public static final String SECRET_KEY = "6Le6PD0UAAAAAOADznI_FYrNWxzdb3LnDPOMq62H";
+    private static final String USER_AGENT = "Mozilla/5.0";
+    private static final String SITE_KEY = "6Le6PD0UAAAAAP3JH2yxy18pEbGU8h5KwdY7yjXp"; // NOSONAR
 
     private static Logger logger = LoggerFactory.getLogger(VerifyCaptcha.class);
 
@@ -31,7 +31,7 @@ public class VerifyCaptcha {
         }
 
         try {
-            URL obj = new URL(url);
+            URL obj = new URL(URL);
             HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
             // add reuqest header
@@ -39,7 +39,7 @@ public class VerifyCaptcha {
             con.setRequestProperty("User-Agent", USER_AGENT);
             con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-            String postParams = "secret=" + secretKey + "&response="
+            String postParams = "secret=" + SECRET_KEY + "&response="
                     + gRecaptchaResponse;
 
             // Send post request
@@ -50,24 +50,27 @@ public class VerifyCaptcha {
             wr.close();
 
             int responseCode = con.getResponseCode();
-            logger.info("Sending 'POST' request to URL : " + url);
-            logger.info("Post parameters : " + postParams);
-            logger.info("Response Code : " + responseCode);
+            logger.info("Sending 'POST' request to URL : %s", URL);
+            logger.info("Post parameters : %s", postParams);
+            logger.info("Response Code : %d", responseCode);
+
 
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
 
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
 
+            String responseString = response.toString();
+
             // print result
-            logger.info(response.toString());
+            logger.info(responseString);
 
             //parse JSON response and return 'success' value
-            JsonObject jsonObject = JsonUtil.fromJson(response.toString(), JsonObject.class);
+            JsonObject jsonObject = JsonUtil.fromJson(responseString, JsonObject.class);
 
             return jsonObject.getAsJsonPrimitive("success").getAsBoolean();
         } catch (Exception e) {

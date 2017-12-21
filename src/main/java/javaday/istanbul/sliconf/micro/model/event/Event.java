@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
-import javax.ws.rs.DefaultValue;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

@@ -104,7 +104,7 @@ public class A265 {
         ResponseMessage userMsg = new ResponseMessage(true, "You cannot change email!", user);
         when(userRepositoryService.save(user)).thenReturn(userMsg);
         ResponseMessage responseMessage = userRepositoryService.save(user);
-        assertEquals(responseMessage.getMessage(), "You cannot change email!");
+        assertEquals("You cannot change email!", responseMessage.getMessage());
     }
 
 }

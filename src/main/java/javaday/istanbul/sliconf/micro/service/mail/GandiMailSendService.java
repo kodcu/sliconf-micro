@@ -86,10 +86,9 @@ public class GandiMailSendService implements IMailSendService {
             responseMessage.setStatus(true);
             responseMessage.setMessage(mailMessageProvider.getMessage("mailSent"));
 
-            logger.info(
-                    String.format(
-                            mailMessageProvider.getMessage("mailSentFromTo"), from, email)
-            );
+            String logMessage = String.format(mailMessageProvider.getMessage("mailSentFromTo"), from, email);
+
+            logger.info(logMessage);
 
         } catch (MessagingException e) {
             logger.error(e.getMessage(), e);

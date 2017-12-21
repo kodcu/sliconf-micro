@@ -14,7 +14,6 @@ import spark.Response;
 import spark.Route;
 
 import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.Objects;

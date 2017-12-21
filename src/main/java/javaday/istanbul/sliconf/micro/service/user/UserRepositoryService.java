@@ -27,6 +27,8 @@ public class UserRepositoryService implements UserService {
     @Autowired
     private UserRepositoryMessageProvider userRepositoryMessageProvider;
 
+    private String passDoNotMeetRequiredLength = "passwordDoNotMeetRequiredLength";
+
     @Override
     public User findOne(String id) {
         return repo.findOne(id);
@@ -174,7 +176,7 @@ public class UserRepositoryService implements UserService {
         } else if (!UserSpecs.isPassMeetRequiredLengths(password)) {
             responseMessage.setStatus(false);
             responseMessage.setMessage(
-                    String.format(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"),
+                    String.format(userRepositoryMessageProvider.getMessage(passDoNotMeetRequiredLength),
                             Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH)
                     );
             return responseMessage;
@@ -194,7 +196,7 @@ public class UserRepositoryService implements UserService {
         if (!UserSpecs.isPassMeetRequiredLengths(password)) {
             responseMessage.setStatus(false);
             responseMessage.setMessage(
-                    String.format(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"),
+                    String.format(userRepositoryMessageProvider.getMessage(passDoNotMeetRequiredLength),
                             Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH)
             );
             return responseMessage;
@@ -211,7 +213,7 @@ public class UserRepositoryService implements UserService {
     @Override
     public ResponseMessage saveUser(User user) {
         ResponseMessage responseMessage = new ResponseMessage(false,
-                String.format(userRepositoryMessageProvider.getMessage("passwordDoNotMeetRequiredLength"),
+                String.format(userRepositoryMessageProvider.getMessage(passDoNotMeetRequiredLength),
                         Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH)
         , "");
 

@@ -86,7 +86,7 @@ public class F633 {
 
         event.setExecutiveUser(user.getId());
 
-        assertEquals(kanbanNumber.length(), Constants.EVENT_KEY_LENGTH);
+        assertEquals(Constants.EVENT_KEY_LENGTH, kanbanNumber.length());
     }
 
     @Ozaman("^sistem etkinlik sahibini kayıt eder ve etkinlik oluşturulmuş olur$")

@@ -70,33 +70,38 @@ public class UpdateUserRoute implements Route {
 
         User user = userRepositoryService.findOne(id);
 
+        String stringUsername = "username";
+        String stringFullname = "fullname";
+        String stringPass = "password";
+        String stringOldPass = "oldpassword";
+
         if (Objects.nonNull(user)) {
             boolean changed = false;
-            if (Objects.nonNull(updateParams.getString("username"))) {
-                if (UserSpecs.checkUserParams(updateParams.getString("username"), 4)) {
+            if (Objects.nonNull(updateParams.getString(stringUsername))) {
+                if (UserSpecs.checkUserParams(updateParams.getString(stringUsername), 4)) {
 
-                    List<User> users = userRepositoryService.findByUsernameDiffrentThenId(updateParams.getString("username"), id);
+                    List<User> users = userRepositoryService.findByUsernameDiffrentThenId(updateParams.getString(stringUsername), id);
 
                     if (Objects.isNull(users) || !users.isEmpty()) {
 
                         return new ResponseMessage(false, "Username already used by another user", updateParams.get("content"));
                     }
 
-                    user.setUsername(updateParams.getString("username"));
+                    user.setUsername(updateParams.getString(stringUsername));
                     changed = true;
                 } else
                     return new ResponseMessage(false, "New username must be at least 4", new Object());
             }
-            if (Objects.nonNull(updateParams.getString("fullname"))) {
-                user.setfullname(updateParams.getString("fullname"));
+            if (Objects.nonNull(updateParams.getString(stringFullname))) {
+                user.setfullname(updateParams.getString(stringFullname));
                 changed = true;
             }
-            if (Objects.nonNull(updateParams.getString("password")) && Objects.nonNull(updateParams.getString("oldpassword"))) {
+            if (Objects.nonNull(updateParams.getString(stringPass)) && Objects.nonNull(updateParams.getString(stringOldPass))) {
                 UserPassService service = new UserPassService();
-                if (service.checkPassword(updateParams.getString("oldpassword"), user.getHashedPassword(), user.getSalt())) {
-                    if (!updateParams.getString("oldpassword").equals(updateParams.getString("password"))) {
-                        if (UserSpecs.checkUserParams(updateParams.getString("password"), 8)) {
-                            user.setPassword(updateParams.getString("password"));
+                if (service.checkPassword(updateParams.getString(stringOldPass), user.getHashedPassword(), user.getSalt())) {
+                    if (!updateParams.getString(stringOldPass).equals(updateParams.getString(stringPass))) {
+                        if (UserSpecs.checkUserParams(updateParams.getString(stringPass), 8)) {
+                            user.setPassword(updateParams.getString(stringPass));
                             user = service.createNewUserWithHashedPassword(user);
                             changed = true;
                         } else
@@ -107,7 +112,7 @@ public class UpdateUserRoute implements Route {
                     return new ResponseMessage(false, "Wrong old Password", new Object());
 
             }
-            // TODO: Update fonksiyonunu arastir.
+
             if (changed) {
                 ResponseMessage responseMessage = userRepositoryService.save(user);
 

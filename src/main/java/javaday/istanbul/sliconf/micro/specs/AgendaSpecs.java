@@ -22,6 +22,10 @@ public class AgendaSpecs {
      */
     private static List<Integer> levelList = Arrays.asList(-1, 0, 1, 2);
 
+    private AgendaSpecs() {
+        // private constructor for static access
+    }
+
     public static ResponseMessage isAgendaValid(List<AgendaElement> agenda) {
         ResponseMessage responseMessage = new ResponseMessage();
 
@@ -53,23 +57,11 @@ public class AgendaSpecs {
     }
 
     private static boolean isAgendaElementValid(AgendaElement agendaElement) {
-
-        // Todo make this control more specific
-        if (Objects.isNull(agendaElement) ||
-                !checkIfLevelValid(agendaElement)) {
-            return false;
-        }
-
-        return true;
+        return Objects.nonNull(agendaElement) && checkIfLevelValid(agendaElement);
     }
 
     private static boolean checkIfLevelValid(AgendaElement agendaElement) {
-        if (Objects.isNull(agendaElement.getLevel()) ||
-                !levelList.contains(agendaElement.getLevel())) {
-            return false;
-        }
-
-        return true;
+        return Objects.nonNull(agendaElement.getLevel()) && levelList.contains(agendaElement.getLevel());
     }
 
     private static void generateIds(List<AgendaElement> agenda) {
@@ -87,9 +79,6 @@ public class AgendaSpecs {
     }
 
     public static List<AgendaElement> sortAgenda(List<AgendaElement> agenda) {
-
-        //asdasfsdg
-
         // Agendayi tarihe gore sirala
         agenda.sort((agendaElement1, agendaElement2) -> {
             if (Objects.isNull(agendaElement1) || Objects.isNull(agendaElement2) ||
