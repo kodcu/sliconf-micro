@@ -51,6 +51,8 @@ public class Event {
 
     private Boolean deleted = false;
 
+    private StatusDetails statusDetails;
+
     public String getId() {
         return id;
     }
@@ -185,5 +187,13 @@ public class Event {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public StatusDetails getStatusDetails() {
+        return statusDetails;
+    }
+
+    public void setStatusDetails(StatusDetails statusDetails) {
+        this.statusDetails = statusDetails;
     }
 }

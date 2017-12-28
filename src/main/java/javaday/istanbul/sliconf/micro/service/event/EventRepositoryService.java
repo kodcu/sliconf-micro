@@ -39,6 +39,23 @@ public class EventRepositoryService implements EventService {
         return repo.findByName(name);
     }
 
+    public List<Event> findByNameAndDeleted(String name, Boolean deleted) {
+        return repo.findByNameAndDeleted(name, deleted);
+    }
+
+    /**
+     * Eventleri isim eslesiyorsa, key eslesmiyorsa ve deleted eslesiyorsa seklinde arar
+     *
+     * @param name
+     * @param key
+     * @param deleted
+     *
+     * @return
+     */
+    public List<Event> findByNameAndNotKeyAndDeleted(String name, String key, Boolean deleted) {
+        return repo.findByNameAndKeyNotAndDeleted(name, key, deleted);
+    }
+
     public void delete(Event event) {
         repo.delete(event);
     }
@@ -49,6 +66,8 @@ public class EventRepositoryService implements EventService {
 
     public ResponseMessage save(Event event) {
         ResponseMessage message = new ResponseMessage(false, "An error occured while saving event", null);
+
+        EventSpecs.generateStatusDetails(event);
 
         try {
             Event savedEvent = repo.save(event);

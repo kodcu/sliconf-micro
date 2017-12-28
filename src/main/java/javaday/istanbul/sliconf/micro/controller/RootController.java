@@ -35,7 +35,6 @@ public class RootController {
             // Build swagger json description
             final String swaggerJson = SwaggerParser.getSwaggerJson(APP_PACKAGE);
             get("/swagger", (req, res) -> swaggerJson);
-
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -59,25 +58,24 @@ public class RootController {
             return JsonUtil.toJson(responseMessage);
         });
 
-        options("/*",
-                (request, response) -> {
+        options("/*", (request, response) -> {
 
-                    String accessControlRequestHeaders = request
-                            .headers("Access-Control-Request-Headers");
-                    if (accessControlRequestHeaders != null) {
-                        response.header("Access-Control-Allow-Headers",
-                                accessControlRequestHeaders);
-                    }
+            String accessControlRequestHeaders = request
+                    .headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                response.header("Access-Control-Allow-Headers",
+                        accessControlRequestHeaders);
+            }
 
-                    String accessControlRequestMethod = request
-                            .headers("Access-Control-Request-Method");
-                    if (accessControlRequestMethod != null) {
-                        response.header("Access-Control-Allow-Methods",
-                                accessControlRequestMethod);
-                    }
+            String accessControlRequestMethod = request
+                    .headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                response.header("Access-Control-Allow-Methods",
+                        accessControlRequestMethod);
+            }
 
-                    return "OK";
-                });
+            return "OK";
+        });
 
         before((request, response) -> {
 
@@ -142,10 +140,18 @@ public class RootController {
 
                 path("comment/", () -> {
                     post("add-new", routeObjects.addNewCommentRoute, JsonUtil.json());
+                    
                     get("list/:eventId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:eventId/:sessionId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:eventId/:sessionId/:userId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:eventId/:sessionId/:userId/:status", routeObjects.listCommentsRoute, JsonUtil.json());
+
+                    /*
+                    get("list/:status/:eventId", routeObjects.listCommentsRoute, JsonUtil.json());
+                    get("list/:status/:eventId/:sessionId", routeObjects.listCommentsRoute, JsonUtil.json());
+                    get("list/:status/:eventId/:sessionId/:userId", routeObjects.listCommentsRoute, JsonUtil.json());
+                    */
+
                 });
             });
 

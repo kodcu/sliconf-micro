@@ -93,23 +93,23 @@ public class CreateEventRoute implements Route {
         //isim uzunluğu minimumdan düşük mü diye kontrol et
         if (!EventSpecs.checkEventName(event, 4)) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventNameTooShort"), new Object());
+                    messageProvider.getMessage("eventNameTooShort"), event);
             return responseMessage;
         }
 
         //event tarihinin geçip geçmediğin, kontrol et
         if (!EventSpecs.checkIfEventDateAfterOrInNow(event)) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventDataInvalid"), new Object());
+                    messageProvider.getMessage("eventDataInvalid"), event);
             return responseMessage;
         }
 
         // event var mı diye kontrol et
-        List<Event> dbEvents = repositoryService.findByName(event.getName());
+        List<Event> dbEvents = repositoryService.findByNameAndDeleted(event.getName(), false);
 
         if (Objects.nonNull(dbEvents) && !dbEvents.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventAlreadyRegistered"), new Object());
+                    messageProvider.getMessage("eventAlreadyRegistered"), event);
             return responseMessage;
         }
 
@@ -120,7 +120,7 @@ public class CreateEventRoute implements Route {
 
         if (Objects.isNull(user)) {
             responseMessage = new ResponseMessage(false,
-                    "User can not found with given id", new Object());
+                    "User can not found with given id", event);
             return responseMessage;
         }
 
@@ -136,14 +136,23 @@ public class CreateEventRoute implements Route {
         //isim uzunluğu minimumdan düşük mü diye kontrol et
         if (!EventSpecs.checkEventName(event, 4)) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventNameTooShort"), new Object());
+                    messageProvider.getMessage("eventNameTooShort"), event);
             return responseMessage;
         }
 
         //event tarihinin geçip geçmediğin, kontrol et
         if (!EventSpecs.checkIfEventDateAfterOrInNow(event)) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventDataInvalid"), new Object());
+                    messageProvider.getMessage("eventDataInvalid"), event);
+            return responseMessage;
+        }
+
+        List<Event> dbEvents = repositoryService.findByNameAndNotKeyAndDeleted(event.getName(), event.getKey(), false);
+
+        if (Objects.nonNull(dbEvents) && !dbEvents.isEmpty()) {
+
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventNameAlreadyRegistered"), event);
             return responseMessage;
         }
 
@@ -152,7 +161,7 @@ public class CreateEventRoute implements Route {
 
         if (Objects.isNull(dbEvent)) {
             responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventCanNotFound"), new Object());
+                    messageProvider.getMessage("eventCanNotFound"), event);
             return responseMessage;
         }
 
@@ -166,7 +175,15 @@ public class CreateEventRoute implements Route {
 
         copyUpdatedFields(dbEvent, event);
 
-        return saveEvent(dbEvent);
+        ResponseMessage saveResponse = saveEvent(dbEvent);
+
+        if (!saveResponse.isStatus()) {
+            return saveResponse;
+        }
+
+        saveResponse.setMessage(messageProvider.getMessage("eventSuccessfullyUpdated"));
+
+        return saveResponse;
     }
 
     private ResponseMessage saveEvent(Event event) {
