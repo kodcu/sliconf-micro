@@ -27,20 +27,20 @@ public class CommentRepositoryService implements CommentService {
     }
 
 
-    public List<Comment> findAllByEventIdAndSessionIdAndUserIdAndStatus(String eventId, String sessionId, String userId, String status) {
-        List<Comment> comments = repo.findAllByEventIdAndSessionIdAndUserIdAndApproved(eventId, sessionId, userId, status);
+    public List<Comment> findAllByStatusAndEventIdAndSessionIdAndUserId(String status, String eventId, String sessionId, String userId) {
+        List<Comment> comments = repo.findAllByApprovedAndEventIdAndSessionIdAndUserId(status,eventId, sessionId, userId);
 
         return Objects.nonNull(comments) ? comments : new ArrayList<>();
     }
 
-    public List<Comment> findAllByEventIdAndSessionId(String eventId, String sessionId) {
-        List<Comment> comments = repo.findAllByEventIdAndSessionId(eventId, sessionId);
+    public List<Comment> findAllByStatusAndEventIdAndSessionId(String status, String eventId, String sessionId) {
+        List<Comment> comments = repo.findAllByApprovedAndEventIdAndSessionId(status, eventId, sessionId);
 
         return Objects.nonNull(comments) ? comments : new ArrayList<>();
     }
 
-    public List<Comment> findAllByEventId(String eventId) {
-        List<Comment> comments = repo.findAllByEventId(eventId);
+    public List<Comment> findAllByStatusAndEventId(String status, String eventId) {
+        List<Comment> comments = repo.findAllByApprovedAndEventId(status, eventId);
 
         return Objects.nonNull(comments) ? comments : new ArrayList<>();
     }

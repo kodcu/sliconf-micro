@@ -17,4 +17,9 @@ public interface CommentRepository extends CrudRepository<Comment, String> {
     List<Comment> findAllByEventIdAndSessionId(String eventId, String sessionId);
 
     List<Comment> findAllByEventId(String eventId);
+
+
+    List<Comment> findAllByApprovedAndEventId(String approved, String eventId);
+    List<Comment> findAllByApprovedAndEventIdAndSessionId(String approved, String eventId, String sessionId);
+    List<Comment> findAllByApprovedAndEventIdAndSessionIdAndUserId(String approved, String eventId, String sessionId, String userId);
 }

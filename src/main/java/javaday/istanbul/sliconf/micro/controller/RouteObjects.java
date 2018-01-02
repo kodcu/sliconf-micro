@@ -7,6 +7,8 @@ import javaday.istanbul.sliconf.micro.controller.event.ListEventsRoute;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.CreateAgendaRoute;
 import javaday.istanbul.sliconf.micro.controller.event.comment.AddNewCommentRoute;
 import javaday.istanbul.sliconf.micro.controller.event.comment.ListCommentsRoute;
+import javaday.istanbul.sliconf.micro.controller.event.comment.ModerateCommentRoute;
+import javaday.istanbul.sliconf.micro.controller.event.comment.VoteCommentRoute;
 import javaday.istanbul.sliconf.micro.controller.event.floor.CreateFloorRoute;
 import javaday.istanbul.sliconf.micro.controller.event.room.CreateRoomRoute;
 import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRoute;
@@ -46,6 +48,8 @@ public class RouteObjects {
 
     public final AddNewCommentRoute addNewCommentRoute;
     public final ListCommentsRoute listCommentsRoute;
+    public final ModerateCommentRoute moderateCommentRoute;
+    public final VoteCommentRoute voteCommentRoute;
 
     //
     public final ImageUploadRoute imageUploadRoute;
@@ -81,5 +85,7 @@ public class RouteObjects {
 
         addNewCommentRoute = beanFactory.getBean(AddNewCommentRoute.class);
         listCommentsRoute = beanFactory.getBean(ListCommentsRoute.class);
+        moderateCommentRoute = beanFactory.getBean(ModerateCommentRoute.class);
+        voteCommentRoute = beanFactory.getBean(VoteCommentRoute.class);
     }
 }

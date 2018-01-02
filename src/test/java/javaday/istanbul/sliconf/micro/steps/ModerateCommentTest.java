@@ -4,7 +4,8 @@ import cucumber.api.java.tr.Diyelimki;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
 import javaday.istanbul.sliconf.micro.builder.EventBuilder;
 import javaday.istanbul.sliconf.micro.controller.event.comment.AddNewCommentRoute;
-import javaday.istanbul.sliconf.micro.controller.event.comment.ListCommentsRoute;
+import javaday.istanbul.sliconf.micro.controller.event.comment.ModerateCommentRoute;
+import javaday.istanbul.sliconf.micro.model.ModerateCommentModel;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.*;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
@@ -23,6 +24,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -34,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class ListCommentsTest {
+public class ModerateCommentTest {
 
     @Autowired
     UserRepositoryService userRepositoryService;
@@ -49,7 +51,7 @@ public class ListCommentsTest {
     AddNewCommentRoute addNewCommentRoute;
 
     @Autowired
-    ListCommentsRoute listCommentsRoute;
+    ModerateCommentRoute moderateCommentRoute;
 
 
     private List<Speaker> speakers = new ArrayList<>();
@@ -57,12 +59,13 @@ public class ListCommentsTest {
     private List<Room> rooms = new ArrayList<>();
     private List<Floor> floors = new ArrayList<>();
 
-    @Diyelimki("^Kullanici yorumlari listelemek istedi$")
-    public void kullaniciYorumlariListelemekIstedi() throws Throwable {
+
+    @Diyelimki("^Moderator commenti onayliyor ya da onaylamiyor$")
+    public void moderatorCommentiOnayliyorYaDaOnaylamiyor() throws Throwable {
         // Given
         User user = new User();
-        user.setUsername("commentUser2");
-        user.setEmail("commentuser2@sliconf.com");
+        user.setUsername("commentUser1");
+        user.setEmail("commentuser1@sliconf.com");
         user.setPassword("123123123");
         ResponseMessage savedUserMessage = userRepositoryService.saveUser(user);
 
@@ -127,6 +130,7 @@ public class ListCommentsTest {
         comment5.setSessionId("agenda-element-1");
         comment5.setTime(LocalDateTime.now());
 
+
         // When
         ResponseMessage commentAddMessage1 = addNewCommentRoute.addNewComment(comment1);
 
@@ -136,32 +140,44 @@ public class ListCommentsTest {
         ResponseMessage commentAddMessage5 = addNewCommentRoute.addNewComment(comment5);
 
 
+        ModerateCommentModel model1 = new ModerateCommentModel();
+        model1.setEventId(eventId);
+        model1.setUserId(userId);
+        model1.setApproved(Arrays.asList("comment-1", "comment-2", "comment-3"));
+        model1.setDenied(Arrays.asList("comment-4", "comment-5"));
+
+        ModerateCommentModel model2 = new ModerateCommentModel();
+        model2.setEventId("false-eventId");
+        model2.setUserId(userId);
+        model2.setApproved(Arrays.asList("comment-1", "comment-2", "comment-3"));
+        model2.setDenied(Arrays.asList("comment-4", "comment-5"));
+
+        ModerateCommentModel model3 = new ModerateCommentModel();
+        model3.setEventId(eventId);
+        model3.setUserId("false-userId");
+        model3.setApproved(Arrays.asList("comment-1", "comment-2", "comment-3"));
+        model3.setDenied(Arrays.asList("comment-4", "comment-5"));
+
+
+
+        ResponseMessage moderateCommentMessage1 = moderateCommentRoute.moderateComment(model1);
+        ResponseMessage moderateCommentMessage2 = moderateCommentRoute.moderateComment(model2);
+        ResponseMessage moderateCommentMessage3 = moderateCommentRoute.moderateComment(model3);
+
+
         // Then
         assertTrue(commentAddMessage1.isStatus());
+
         assertTrue(commentAddMessage2.isStatus());
         assertTrue(commentAddMessage3.isStatus());
         assertTrue(commentAddMessage4.isStatus());
         assertTrue(commentAddMessage5.isStatus());
 
-        ResponseMessage listMessage1 = listCommentsRoute.listComments(eventId, "agenda-element-1", userId, "pending"); // true
-        ResponseMessage listMessage2 = listCommentsRoute.listComments(eventId, "agenda-element-1", "", "pending"); // true
-        ResponseMessage listMessage3 = listCommentsRoute.listComments(eventId, "", userId, ""); // false
-        ResponseMessage listMessage4 = listCommentsRoute.listComments(eventId, "", "",""); // false
-
-        ResponseMessage listMessage5 = listCommentsRoute.listComments("", "agenda-element-1", userId, "approved"); // false
-        ResponseMessage listMessage6 = listCommentsRoute.listComments("", "agenda-element-1", "", "approved"); // false
-        ResponseMessage listMessage7 = listCommentsRoute.listComments("", "", userId, "approved"); // false
-        ResponseMessage listMessage8 = listCommentsRoute.listComments("", "", "", "approved"); // false
-
-        assertTrue(listMessage1.isStatus());
-        assertTrue(listMessage2.isStatus());
-        assertFalse(listMessage3.isStatus());
-        assertFalse(listMessage4.isStatus());
-
-        assertFalse(listMessage5.isStatus());
-        assertFalse(listMessage6.isStatus());
-        assertFalse(listMessage7.isStatus());
-        assertFalse(listMessage8.isStatus());
-
+        assertTrue(moderateCommentMessage1.isStatus());
+        assertFalse(moderateCommentMessage2.isStatus());
+        assertFalse(moderateCommentMessage3.isStatus());
     }
+
+
+
 }

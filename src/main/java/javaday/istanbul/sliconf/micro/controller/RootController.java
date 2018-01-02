@@ -140,17 +140,20 @@ public class RootController {
 
                 path("comment/", () -> {
                     post("add-new", routeObjects.addNewCommentRoute, JsonUtil.json());
-                    
+                    post("moderate", routeObjects.moderateCommentRoute, JsonUtil.json());
+
+                    post("vote/:vote-value", routeObjects.voteCommentRoute, JsonUtil.json());
+
+                    /*
                     get("list/:eventId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:eventId/:sessionId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:eventId/:sessionId/:userId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:eventId/:sessionId/:userId/:status", routeObjects.listCommentsRoute, JsonUtil.json());
+                    */
 
-                    /*
                     get("list/:status/:eventId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:status/:eventId/:sessionId", routeObjects.listCommentsRoute, JsonUtil.json());
                     get("list/:status/:eventId/:sessionId/:userId", routeObjects.listCommentsRoute, JsonUtil.json());
-                    */
 
                 });
             });

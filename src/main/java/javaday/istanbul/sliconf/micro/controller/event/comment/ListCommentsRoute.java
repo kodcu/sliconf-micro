@@ -19,7 +19,7 @@ import java.util.Objects;
 
 
 @Api
-@Path("/service/events/comment/list/:eventId/:sessionId/:userId/:status")
+@Path("/service/events/comment/list/:status/:eventId/:sessionId/:userId")
 @Produces("application/json")
 @Component
 public class ListCommentsRoute implements Route {
@@ -64,21 +64,20 @@ public class ListCommentsRoute implements Route {
 
         List<Comment> comments = null;
 
-        if (Objects.nonNull(eventId) && !eventId.isEmpty()) {
-            if (Objects.nonNull(sessionId) && !sessionId.isEmpty()) {
-                if (Objects.nonNull(userId) && !userId.isEmpty()) {
-
-                    if (Objects.nonNull(status) && !status.isEmpty()) {
-                        comments = commentRepositoryService.findAllByEventIdAndSessionIdAndUserIdAndStatus(eventId, sessionId, userId, status);
+        if (Objects.nonNull(status) && !status.isEmpty()) {
+            if (Objects.nonNull(eventId) && !eventId.isEmpty()) {
+                if (Objects.nonNull(sessionId) && !sessionId.isEmpty()) {
+                    if (Objects.nonNull(userId) && !userId.isEmpty()) {
+                        comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionIdAndUserId(status, eventId, sessionId, userId);
                     } else {
-                        comments = commentRepositoryService.findAllByEventIdAndSessionIdAndUserId(eventId, sessionId, userId);
+                        comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionId(status, eventId, sessionId);
                     }
                 } else {
-                    comments = commentRepositoryService.findAllByEventIdAndSessionId(eventId, sessionId);
+                    comments = commentRepositoryService.findAllByStatusAndEventId(status, eventId);
                 }
-            } else {
-                comments = commentRepositoryService.findAllByEventId(eventId);
             }
+        } else {
+            return new ResponseMessage(false, commentMessageProvider.getMessage("youNeedTheSpecifyStatusOfComment"), new Object());
         }
 
         if (Objects.nonNull(comments)) {
