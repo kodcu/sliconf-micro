@@ -57,7 +57,6 @@ public class AddNewCommentRoute implements Route {
     @ApiOperation(value = "Adds a new comment to a talk", nickname = "AddNewCommentRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
-            @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
             @ApiImplicitParam(required = true, dataTypeClass = Comment.class, name = "comment", paramType = "body"), //
     }) //
     @ApiResponses(value = { //

@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 
 @Api
-@Path("/service/events/comment/vote/:vote-value")
+@Path("/service/events/comment/vote/:commentId/:userId/:voteValue")
 @Produces("application/json")
 @Component
 public class VoteCommentRoute implements Route {
@@ -52,10 +52,9 @@ public class VoteCommentRoute implements Route {
     @ApiOperation(value = "Votes a comment", nickname = "VoteCommentRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
-            @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "commentId", paramType = "path"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"), //
-            @ApiImplicitParam(required = true, dataType = "int", name = "vote-value", paramType = "path", allowableValues = "-1,0,1"), //
+            @ApiImplicitParam(required = true, dataType = "int", name = "voteValue", paramType = "path", allowableValues = "-1,0,1"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -69,7 +68,7 @@ public class VoteCommentRoute implements Route {
 
         String commentId = request.params("commentId");
         String userId = request.params("userId");
-        String stringVote = request.params("vote-value");
+        String stringVote = request.params("voteValue");
 
         if (Objects.isNull(commentId) || commentId.isEmpty()) {
             responseMessage = new ResponseMessage(false,

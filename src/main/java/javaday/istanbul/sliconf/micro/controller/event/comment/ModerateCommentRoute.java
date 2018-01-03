@@ -56,7 +56,6 @@ public class ModerateCommentRoute implements Route {
     @ApiOperation(value = "Moderates comments", nickname = "ModerateCommentRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
-            @ApiImplicitParam(required = true, dataType = "string", name = "event-key", paramType = "path"), //
             @ApiImplicitParam(required = true, dataTypeClass = ModerateCommentModel.class, name = "moderate", paramType = "body"), //
     }) //
     @ApiResponses(value = { //
