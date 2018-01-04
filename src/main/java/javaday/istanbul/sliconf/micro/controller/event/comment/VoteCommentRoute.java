@@ -132,7 +132,7 @@ public class VoteCommentRoute implements Route {
             return new ResponseMessage(false, "Can not vote to not approved comment", comment);
         }
 
-        if (!isCommentOwnedByUser(comment, user)) {
+        if (isCommentOwnedByUser(comment, user)) {
             return new ResponseMessage(false, "User can not vote her/his comment", comment);
         }
 
@@ -154,7 +154,7 @@ public class VoteCommentRoute implements Route {
 
         Comment savedComment = commentRepositoryService.save(comment);
 
-        if (Objects.nonNull(savedComment)) {
+        if (Objects.isNull(savedComment)) {
             return new ResponseMessage(false, "Comment can not saved", savedComment);
         }
 
