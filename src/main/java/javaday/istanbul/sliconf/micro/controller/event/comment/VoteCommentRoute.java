@@ -152,6 +152,8 @@ public class VoteCommentRoute implements Route {
             return voteResponseMessage;
         }
 
+        comment.setRate(comment.getLike() - comment.getDislike());
+
         Comment savedComment = commentRepositoryService.save(comment);
 
         if (Objects.isNull(savedComment)) {

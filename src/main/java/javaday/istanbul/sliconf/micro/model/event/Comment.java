@@ -34,6 +34,8 @@ public class Comment {
     private String roomName;
     private String topic;
 
+    private int rate;
+
     public String getId() {
         return id;
     }
@@ -160,5 +162,13 @@ public class Comment {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
     }
 }
