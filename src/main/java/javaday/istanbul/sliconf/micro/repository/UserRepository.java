@@ -27,4 +27,6 @@ public interface UserRepository extends CrudRepository<User, String> {
     List<User> findByIdNot(String id);
 
     void removeAllByEmailAndUsername(String email, String username);
+
+    List<User> findByDeviceId(String deviceId);
 }

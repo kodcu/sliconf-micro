@@ -123,9 +123,15 @@ public class AddNewCommentRoute implements Route {
         }
 
         if (Objects.nonNull(user)) {
-            comment.setUsername(user.getUsername());
-            comment.setFullname(user.getfullname());
+            if (Objects.nonNull(comment.getAnonymous()) && comment.getAnonymous()) {
+                if (Objects.isNull(comment.getFullname()) || comment.getFullname().isEmpty()) {
+                    comment.setFullname("Anonymous");
+                }
+            } else {
+                comment.setFullname(user.getFullname());
+            }
 
+            comment.setUsername(user.getUsername());
 
             String roomName = "";
             String topic = "";

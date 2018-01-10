@@ -23,8 +23,10 @@ public class RouteObjects {
 
     // User related routes
     public final CreateUserRoute createUserRoute;
+    public final CreateUserAnonymousRoute createUserAnonymousRoute;
 
     public final LoginUserRoute loginUserRoute;
+    public final LoginUserAnonymousRoute loginUserAnonymousRoute;
 
     public final SendPasswordResetRoute sendPasswordResetRoute;
     public final ResetPasswordRoute resetPasswordRoute;
@@ -59,7 +61,9 @@ public class RouteObjects {
     @Autowired
     public RouteObjects(BeanFactory beanFactory) {
         createUserRoute = beanFactory.getBean(CreateUserRoute.class);
+        createUserAnonymousRoute = beanFactory.getBean(CreateUserAnonymousRoute.class);
         loginUserRoute = beanFactory.getBean(LoginUserRoute.class);
+        loginUserAnonymousRoute = beanFactory.getBean(LoginUserAnonymousRoute.class);
         sendPasswordResetRoute = beanFactory.getBean(SendPasswordResetRoute.class);
         resetPasswordRoute = beanFactory.getBean(ResetPasswordRoute.class);
         updateUserRoute = beanFactory.getBean(UpdateUserRoute.class);

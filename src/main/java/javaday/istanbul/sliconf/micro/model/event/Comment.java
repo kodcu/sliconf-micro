@@ -36,6 +36,8 @@ public class Comment {
 
     private int rate;
 
+    private Boolean anonymous;
+
     public String getId() {
         return id;
     }
@@ -170,5 +172,13 @@ public class Comment {
 
     public void setRate(int rate) {
         this.rate = rate;
+    }
+
+    public Boolean getAnonymous() {
+        return anonymous;
+    }
+
+    public void setAnonymous(Boolean anonymous) {
+        this.anonymous = anonymous;
     }
 }

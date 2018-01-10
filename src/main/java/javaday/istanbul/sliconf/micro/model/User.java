@@ -39,6 +39,10 @@ public class User {
     @Field
     private byte[] salt;
 
+    private Boolean anonymous;
+
+    private String deviceId;
+
 
     public User() {
         // for instantiation
@@ -59,7 +63,9 @@ public class User {
         this.setId(user.getId());
         this.setSalt(user.getSalt());
         this.setHashedPassword(user.getHashedPassword());
-        this.setfullname(user.getfullname());
+        this.setFullname(user.getFullname());
+        this.setAnonymous(user.getAnonymous());
+        this.setDeviceId(user.getDeviceId());
     }
 
     public String getId() {
@@ -78,11 +84,11 @@ public class User {
         this.username = username;
     }
 
-    public String getfullname() {
+    public String getFullname() {
         return fullname;
     }
 
-    public void setfullname(String fullname) {
+    public void setFullname(String fullname) {
         this.fullname = fullname;
     }
 
@@ -116,5 +122,21 @@ public class User {
 
     public void setSalt(byte[] salt) {
         this.salt = salt;
+    }
+
+    public Boolean getAnonymous() {
+        return anonymous;
+    }
+
+    public void setAnonymous(Boolean anonymous) {
+        this.anonymous = anonymous;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 }

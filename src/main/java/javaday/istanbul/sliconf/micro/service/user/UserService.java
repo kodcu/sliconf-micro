@@ -12,6 +12,8 @@ public interface UserService {
 
     List<User> findByUsername(String username);
 
+    List<User> findByDeviceId(String deviceId);
+
     void delete(User user);
 
     ResponseMessage save(User user);
@@ -25,4 +27,6 @@ public interface UserService {
     User findById(String id);
 
     ResponseMessage saveUser(User saltedUser);
+
+    ResponseMessage saveAnonymousUser(User anonymousUser);
 }

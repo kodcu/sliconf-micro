@@ -50,6 +50,11 @@ public class UserRepositoryService implements UserService {
         return repo.findByUsername(username);
     }
 
+    @Override
+    public List<User> findByDeviceId(String deviceId) {
+        return repo.findByDeviceId(deviceId);
+    }
+
     public List<User> findByUsernameDiffrentThenId(String username, String id) {
         return repo.findByUsernameAndIdNot(username, id);
     }
@@ -214,8 +219,7 @@ public class UserRepositoryService implements UserService {
     public ResponseMessage saveUser(User user) {
         ResponseMessage responseMessage = new ResponseMessage(false,
                 String.format(userRepositoryMessageProvider.getMessage(passDoNotMeetRequiredLength),
-                        Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH)
-        , "");
+                        Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH), "");
 
         if (Objects.nonNull(user)) {
             responseMessage = isPasswordValid(user.getPassword());
@@ -233,4 +237,16 @@ public class UserRepositoryService implements UserService {
         return responseMessage;
     }
 
+    @Override
+    public ResponseMessage saveAnonymousUser(User anonymousUser) {
+        ResponseMessage responseMessage = new ResponseMessage(false,
+                String.format(userRepositoryMessageProvider.getMessage(passDoNotMeetRequiredLength),
+                        Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH), "");
+
+        if (Objects.nonNull(anonymousUser)) {
+            responseMessage = save(anonymousUser);
+        }
+
+        return responseMessage;
+    }
 }

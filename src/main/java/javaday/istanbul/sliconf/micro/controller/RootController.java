@@ -97,7 +97,10 @@ public class RootController {
         path("/service/", () -> {
             path("users/", () -> {
                 post("login", routeObjects.loginUserRoute, JsonUtil.json());
+                post("login/anonymous/:deviceId", routeObjects.loginUserAnonymousRoute, JsonUtil.json());
                 post("register", routeObjects.createUserRoute, JsonUtil.json());
+                post("register/anonymous/:deviceId", routeObjects.createUserAnonymousRoute, JsonUtil.json());
+
                 post("update", routeObjects.updateUserRoute, JsonUtil.json());
                 post("password-reset/send/:email", routeObjects.sendPasswordResetRoute, JsonUtil.json());
                 post("password-reset/reset/:token", routeObjects.resetPasswordRoute, JsonUtil.json());
