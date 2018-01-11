@@ -14,10 +14,10 @@ public class Star {
     private String id;
 
     private String eventId;
-    private String agendaId;
+    private String sessionId;
     private String userId;
 
-    private double value;
+    private int value;
 
     public String getId() {
         return id;
@@ -35,12 +35,12 @@ public class Star {
         this.eventId = eventId;
     }
 
-    public String getAgendaId() {
-        return agendaId;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setAgendaId(String agendaId) {
-        this.agendaId = agendaId;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getUserId() {
@@ -51,11 +51,11 @@ public class Star {
         this.userId = userId;
     }
 
-    public double getValue() {
+    public int getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(int value) {
         this.value = value;
     }
 }

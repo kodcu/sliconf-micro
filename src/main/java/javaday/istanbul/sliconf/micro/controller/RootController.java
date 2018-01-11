@@ -138,9 +138,10 @@ public class RootController {
                         post(createEventKey, routeObjects.createSpeakerRoute, JsonUtil.json())
                 );
 
-                path("agenda/", () ->
-                        post(createEventKey, routeObjects.createAgendaRoute, JsonUtil.json())
-                );
+                path("agenda/", () -> {
+                    post(createEventKey, routeObjects.createAgendaRoute, JsonUtil.json());
+                    post("vote/:eventId/:sessionId/:userId/:voteValue", routeObjects.voteAgendaElementRoute, JsonUtil.json());
+                });
 
                 path("comment/", () -> {
                     post("add-new", routeObjects.addNewCommentRoute, JsonUtil.json());

@@ -19,6 +19,7 @@ public class AgendaElement {
     private String speaker;
 
     private double star;
+    private long voteCount;
     private LocalDateTime date;
 
     private int duration;
@@ -86,6 +87,14 @@ public class AgendaElement {
 
     public void setStar(double star) {
         this.star = star;
+    }
+
+    public long getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(long voteCount) {
+        this.voteCount = voteCount;
     }
 
     public LocalDateTime getDate() {

@@ -2,6 +2,7 @@ package javaday.istanbul.sliconf.micro.controller;
 
 import javaday.istanbul.sliconf.micro.controller.event.*;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.CreateAgendaRoute;
+import javaday.istanbul.sliconf.micro.controller.event.agenda.VoteAgendaElementRoute;
 import javaday.istanbul.sliconf.micro.controller.event.comment.AddNewCommentRoute;
 import javaday.istanbul.sliconf.micro.controller.event.comment.ListCommentsRoute;
 import javaday.istanbul.sliconf.micro.controller.event.comment.ModerateCommentRoute;
@@ -45,6 +46,7 @@ public class RouteObjects {
     public final CreateSpeakerRoute createSpeakerRoute;
 
     public final CreateAgendaRoute createAgendaRoute;
+    public final VoteAgendaElementRoute voteAgendaElementRoute;
 
     public final AddNewCommentRoute addNewCommentRoute;
     public final ListCommentsRoute listCommentsRoute;
@@ -85,6 +87,7 @@ public class RouteObjects {
         createSpeakerRoute = beanFactory.getBean(CreateSpeakerRoute.class);
 
         createAgendaRoute = beanFactory.getBean(CreateAgendaRoute.class);
+        voteAgendaElementRoute = beanFactory.getBean(VoteAgendaElementRoute.class);
 
         addNewCommentRoute = beanFactory.getBean(AddNewCommentRoute.class);
         listCommentsRoute = beanFactory.getBean(ListCommentsRoute.class);
