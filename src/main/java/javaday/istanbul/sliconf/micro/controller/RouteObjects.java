@@ -1,9 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
-import javaday.istanbul.sliconf.micro.controller.event.CreateEventRoute;
-import javaday.istanbul.sliconf.micro.controller.event.DeleteEventRoute;
-import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
-import javaday.istanbul.sliconf.micro.controller.event.ListEventsRoute;
+import javaday.istanbul.sliconf.micro.controller.event.*;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.CreateAgendaRoute;
 import javaday.istanbul.sliconf.micro.controller.event.comment.AddNewCommentRoute;
 import javaday.istanbul.sliconf.micro.controller.event.comment.ListCommentsRoute;
@@ -37,6 +34,7 @@ public class RouteObjects {
     public final DeleteEventRoute deleteEventRoute;
     public final GetEventWithKeyRoute getEventWithKeyRoute;
     public final ListEventsRoute listEventsRoute;
+    public final GetStatisticsRoute getStatisticsRoute;
 
     public final CreateFloorRoute createFloorRoute;
 
@@ -72,6 +70,7 @@ public class RouteObjects {
         deleteEventRoute = beanFactory.getBean(DeleteEventRoute.class);
         getEventWithKeyRoute = beanFactory.getBean(GetEventWithKeyRoute.class);
         listEventsRoute = beanFactory.getBean(ListEventsRoute.class);
+        getStatisticsRoute = beanFactory.getBean(GetStatisticsRoute.class);
 
 
         imageUploadRoute = beanFactory.getBean(ImageUploadRoute.class);

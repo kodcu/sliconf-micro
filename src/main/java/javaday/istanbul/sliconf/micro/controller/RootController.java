@@ -113,9 +113,10 @@ public class RootController {
 
                 get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
 
-                path("get/", () ->
-                        get("with-key/:key", routeObjects.getEventWithKeyRoute, JsonUtil.json())
-                );
+                path("get/", () -> {
+                    get("with-key/:key", routeObjects.getEventWithKeyRoute, JsonUtil.json());
+                    get("statistics/:key", routeObjects.getStatisticsRoute, JsonUtil.json());
+                });
 
                 before();
 

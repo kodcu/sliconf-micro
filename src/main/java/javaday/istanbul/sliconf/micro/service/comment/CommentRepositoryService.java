@@ -5,9 +5,7 @@ import javaday.istanbul.sliconf.micro.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class CommentRepositoryService implements CommentService {
@@ -102,6 +100,46 @@ public class CommentRepositoryService implements CommentService {
         }
 
         return Objects.nonNull(comments) ? comments : new ArrayList<>();
+    }
+
+    public Comment findMostLikedComment(String status, String eventId) {
+        Comment comment = repo.findMostLikedComment(status, eventId);
+
+        return Objects.nonNull(comment) ? comment : new Comment();
+    }
+
+    public String findMostCommentedSessionId(String status, String eventId) {
+        List<Comment> comments = repo.findAllByApprovedAndEventId(status, eventId);
+
+        Map<String, Long> countBySessionId = new HashMap<>();
+
+        if (Objects.nonNull(comments)) {
+            comments.forEach(comment -> {
+                if (Objects.nonNull(comment) && Objects.nonNull(comment.getSessionId())) {
+                    Long count = countBySessionId.get(comment.getSessionId());
+
+                    if (Objects.nonNull(count)) {
+                        count = count + 1;
+                    } else {
+                        count = 0L;
+                    }
+                    countBySessionId.put(comment.getSessionId(), count);
+                }
+            });
+        }
+
+        String sessionId = "";
+
+        long count = 0;
+
+        for (Map.Entry<String, Long> entry : countBySessionId.entrySet()) {
+            if (Objects.nonNull(entry) && Objects.nonNull(entry.getValue()) && count < entry.getValue()) {
+                count = entry.getValue();
+                sessionId = entry.getKey();
+            }
+        }
+
+        return Objects.nonNull(sessionId) ? sessionId : "";
     }
 
     public Comment findById(String commentId) {

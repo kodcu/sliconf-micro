@@ -74,4 +74,7 @@ public interface CommentRepository extends CrudRepository<Comment, String> {
 
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 AND sessionId = $3 AND userId = $4 ORDER BY time DESC")
     List<Comment> findAllByApprovedAndEventIdAndSessionIdAndUserIdOrderByTimeDesc(String approve, String eventId, String sessionId, String userId);
+
+    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 ORDER BY rate DESC LIMIT 1")
+    Comment findMostLikedComment(String status, String eventId);
 }
