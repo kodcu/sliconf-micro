@@ -49,7 +49,6 @@ public class EventRepositoryService implements EventService {
      * @param name
      * @param key
      * @param deleted
-     *
      * @return
      */
     public List<Event> findByNameAndNotKeyAndDeleted(String name, String key, Boolean deleted) {
@@ -93,7 +92,7 @@ public class EventRepositoryService implements EventService {
     // Todo couchbase kullanrak yapilmali
     private List<Event> getNotDeletedEvents(List<Event> events) {
         if (Objects.nonNull(events)) {
-             return events.stream()
+            return events.stream()
                     .filter(event -> Objects.nonNull(event) && !event.isDeleted()).collect(Collectors.toList());
         }
         return null;
@@ -136,6 +135,12 @@ public class EventRepositoryService implements EventService {
     public boolean isKeyExists(String key) {
         Event event = repo.findEventByKeyEquals(key);
         return Objects.nonNull(event);
+    }
+
+    public void hideEventElements(Event event) {
+        if (Objects.nonNull(event)) {
+            event.setTotalUsers(null);
+        }
     }
 
 }

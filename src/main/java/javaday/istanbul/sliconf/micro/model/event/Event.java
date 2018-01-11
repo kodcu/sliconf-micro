@@ -53,6 +53,8 @@ public class Event {
 
     private StatusDetails statusDetails;
 
+    private TotalUsers totalUsers;
+
     public String getId() {
         return id;
     }
@@ -195,5 +197,13 @@ public class Event {
 
     public void setStatusDetails(StatusDetails statusDetails) {
         this.statusDetails = statusDetails;
+    }
+
+    public TotalUsers getTotalUsers() {
+        return totalUsers;
+    }
+
+    public void setTotalUsers(TotalUsers totalUsers) {
+        this.totalUsers = totalUsers;
     }
 }
