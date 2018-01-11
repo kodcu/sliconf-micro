@@ -30,4 +30,8 @@ public class StarRepositoryService implements StarService {
         }
         return new ResponseMessage(false, "An error occured while saving star", star);
     }
+
+    public Star getStarByEventIdAndSessionIdAndUserId(String eventId, String sessionId, String userId) {
+        return repository.findFirstByEventIdAndSessionIdAndUserId(eventId, sessionId, userId);
+    }
 }

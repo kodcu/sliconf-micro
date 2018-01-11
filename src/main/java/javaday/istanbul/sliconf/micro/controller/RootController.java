@@ -141,6 +141,7 @@ public class RootController {
                 path("agenda/", () -> {
                     post(createEventKey, routeObjects.createAgendaRoute, JsonUtil.json());
                     post("vote/:eventId/:sessionId/:userId/:voteValue", routeObjects.voteAgendaElementRoute, JsonUtil.json());
+                    get("get-vote/:eventId/:sessionId/:userId", routeObjects.getVoteAgendaElementRoute, JsonUtil.json());
                 });
 
                 path("comment/", () -> {

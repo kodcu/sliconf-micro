@@ -11,5 +11,5 @@ import java.util.List;
 public interface StarRepository extends CrudRepository<Star, String> {
 
     List<Star> findAllByEventIdAndSessionIdAndUserId(String eventId, String sessionId, String userId);
-
+    Star findFirstByEventIdAndSessionIdAndUserId(String eventId, String sessionId, String userId);
 }
