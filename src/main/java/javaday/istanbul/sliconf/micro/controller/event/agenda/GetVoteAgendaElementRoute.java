@@ -1,11 +1,12 @@
 package javaday.istanbul.sliconf.micro.controller.event.agenda;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.event.agenda.Star;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.star.StarRepositoryService;
-import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,11 @@ import spark.Route;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Api
@@ -27,12 +32,15 @@ import java.util.Objects;
 public class GetVoteAgendaElementRoute implements Route {
 
     private StarRepositoryService starRepositoryService;
+    private EventRepositoryService eventRepositoryService;
 
     private Logger logger = LoggerFactory.getLogger(GetVoteAgendaElementRoute.class);
 
     @Autowired
-    public GetVoteAgendaElementRoute(StarRepositoryService starRepositoryService) {
+    public GetVoteAgendaElementRoute(StarRepositoryService starRepositoryService,
+                                     EventRepositoryService eventRepositoryService) {
         this.starRepositoryService = starRepositoryService;
+        this.eventRepositoryService = eventRepositoryService;
     }
 
     @GET
@@ -85,6 +93,25 @@ public class GetVoteAgendaElementRoute implements Route {
             return new ResponseMessage(false, "Vote can not found!", new Object());
         }
 
-        return new ResponseMessage(true, "Vote fetched!", star);
+        Map<String, Object> returnMap = new HashMap<>();
+
+        returnMap.put("vote", star);
+
+
+        Event event = eventRepositoryService.findOne(eventId);
+
+        if (Objects.nonNull(event) && Objects.nonNull(event.getAgenda())) {
+            List<AgendaElement> agendaElementList = event.getAgenda().stream().filter(element ->
+                    Objects.nonNull(element) && Objects.nonNull(element.getId()) &&
+                            element.getId().equals(sessionId))
+                    .collect(Collectors.toList());
+
+            if (Objects.nonNull(agendaElementList) && Objects.nonNull(agendaElementList.get(0))) {
+                returnMap.put("session", agendaElementList.get(0));
+            }
+
+        }
+
+        return new ResponseMessage(true, "Vote fetched!", returnMap);
     }
 }

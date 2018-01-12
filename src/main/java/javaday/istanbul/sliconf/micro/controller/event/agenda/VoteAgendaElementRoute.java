@@ -156,17 +156,16 @@ public class VoteAgendaElementRoute implements Route {
             // oyu guncelle
             star = starList.get(0);
 
-
+            int oldVote = star.getValue();
+            star.setValue(vote);
             ResponseMessage starResponseMessage = starRepositoryService.saveStar(star);
 
             if (!starResponseMessage.isStatus()) {
                 return starResponseMessage;
             }
 
-            int oldVote = star.getValue();
             double newVoteMean = ((agendaElementSource.getVoteCount() * agendaElementSource.getStar()) - oldVote + vote) / (double) agendaElementSource.getVoteCount();
 
-            star.setValue(vote);
             agendaElementSource.setStar(newVoteMean);
 
         } else {
