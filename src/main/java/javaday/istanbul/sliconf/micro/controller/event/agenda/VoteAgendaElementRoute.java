@@ -164,7 +164,18 @@ public class VoteAgendaElementRoute implements Route {
                 return starResponseMessage;
             }
 
-            double newVoteMean = ((agendaElementSource.getVoteCount() * agendaElementSource.getStar()) - oldVote + vote) / (double) agendaElementSource.getVoteCount();
+            // double newVoteMean = ((agendaElementSource.getVoteCount() * agendaElementSource.getStar()) - oldVote + vote) / (double) agendaElementSource.getVoteCount();
+
+            long agendaVoteCount = agendaElementSource.getVoteCount();
+            double agendaStarValue = !Double.isNaN(agendaElementSource.getStar()) ? agendaElementSource.getStar() : 0.0;
+
+            double newVoteMean;
+
+            if (agendaVoteCount != 0) {
+                newVoteMean = ((agendaVoteCount * agendaStarValue) - oldVote + vote) / agendaVoteCount;
+            } else {
+                newVoteMean = vote;
+            }
 
             agendaElementSource.setStar(newVoteMean);
 
@@ -183,18 +194,35 @@ public class VoteAgendaElementRoute implements Route {
                 return starResponseMessage;
             }
 
-            double newVoteMean = (((double)agendaElementSource.getVoteCount() * agendaElementSource.getStar()) + vote) / (double) (agendaElementSource.getVoteCount() + 1);
-            agendaElementSource.setVoteCount(agendaElementSource.getVoteCount() + 1);
+            // double newVoteMean = (((double)agendaElementSource.getVoteCount() * agendaElementSource.getStar()) + vote) / (double) (agendaElementSource.getVoteCount() + 1);
+
+            long agendaVoteCount = agendaElementSource.getVoteCount();
+            double agendaStarValue = !Double.isNaN(agendaElementSource.getStar()) ? agendaElementSource.getStar() : 0.0;
+
+            double newVoteMean;
+
+            if (agendaVoteCount != 0) {
+                newVoteMean = ((agendaVoteCount * agendaStarValue) + vote) / (agendaVoteCount + 1);
+            } else {
+                newVoteMean = vote;
+            }
+
+            agendaElementSource.setVoteCount(agendaVoteCount + 1);
             agendaElementSource.setStar(newVoteMean);
         }
 
-        List<AgendaElement> newAgenda = agendaElements.stream().filter(agendaElement ->
-                Objects.nonNull(agendaElement) && Objects.nonNull(agendaElement.getId()) &&
-                        !agendaElement.getId().equals(sessionId)).collect(Collectors.toList());
+        for (AgendaElement element: agendaElements) {
+            if(Objects.nonNull(element) && Objects.nonNull(element.getId()) &&
+                    element.getId().equals(sessionId)) {
+                element.setVoteCount(agendaElementSource.getVoteCount());
 
-        newAgenda.add(agendaElementSource);
+                if (!Double.isNaN(agendaElementSource.getStar())) {
+                    element.setStar(agendaElementSource.getStar());
+                }
+            }
+        }
 
-        event.setAgenda(newAgenda);
+        event.setAgenda(agendaElements);
 
         ResponseMessage eventResponseMessage = eventRepositoryService.save(event);
 
