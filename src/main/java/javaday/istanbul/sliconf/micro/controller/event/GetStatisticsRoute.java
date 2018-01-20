@@ -78,11 +78,13 @@ public class GetStatisticsRoute implements Route {
 
         String mostCommentedSessionId = commentRepositoryService.findMostCommentedSessionId("approved", event.getId());
 
-        List<AgendaElement> agendaElements = event.getAgenda().stream().filter(agendaElement -> Objects.nonNull(agendaElement) &&
-                Objects.nonNull(agendaElement.getId()) && agendaElement.getId().equals(mostCommentedSessionId)).collect(Collectors.toList());
+        if (Objects.nonNull(event.getAgenda())) {
+            List<AgendaElement> agendaElements = event.getAgenda().stream().filter(agendaElement -> Objects.nonNull(agendaElement) &&
+                    Objects.nonNull(agendaElement.getId()) && agendaElement.getId().equals(mostCommentedSessionId)).collect(Collectors.toList());
 
-        if (Objects.nonNull(agendaElements) && !agendaElements.isEmpty() && Objects.nonNull(agendaElements.get(0))) {
-            statisticsMap.put("mostCommentedSession", agendaElements.get(0));
+            if (Objects.nonNull(agendaElements) && !agendaElements.isEmpty() && Objects.nonNull(agendaElements.get(0))) {
+                statisticsMap.put("mostCommentedSession", agendaElements.get(0));
+            }
         }
 
         statisticsMap.put("approvedComments", approvedComments);
