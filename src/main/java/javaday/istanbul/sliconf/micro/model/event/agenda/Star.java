@@ -14,8 +14,8 @@ public class Star {
     private String id;
 
     private String eventId;
-    private String sessionId;
     private String userId;
+    private String sessionId;
 
     private int value;
 
@@ -35,20 +35,20 @@ public class Star {
         this.eventId = eventId;
     }
 
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public int getValue() {

@@ -22,7 +22,7 @@ public class EventRepositoryService implements EventService {
     private EventRepository repo;
 
     public Event findOne(String id) {
-        return repo.findOne(id);
+        return repo.findById(id);
     }
 
     public List<Event> findAll() {

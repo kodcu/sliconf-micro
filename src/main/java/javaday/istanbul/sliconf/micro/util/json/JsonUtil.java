@@ -66,13 +66,6 @@ public class JsonUtil {
         return returnList;
     }
 
-    public static Map<String, Object> mapFromObject(Object object) {
-        Type type = new TypeToken<Map<String, Object>>() {
-        }.getType();
-
-        return gson.fromJson(toJson(object), type);
-    }
-
     public static ResponseTransformer json() {
         return JsonUtil::toJson;
     }

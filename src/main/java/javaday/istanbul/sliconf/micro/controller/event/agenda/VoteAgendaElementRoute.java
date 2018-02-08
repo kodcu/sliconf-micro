@@ -70,11 +70,6 @@ public class VoteAgendaElementRoute implements Route {
         String userId = request.params("userId");
         String stringVote = request.params("voteValue");
 
-        if (Objects.isNull(eventId) || eventId.isEmpty()) {
-            responseMessage = new ResponseMessage(false,
-                    "EventId can not be empty!", new Object());
-            return responseMessage;
-        }
 
         if (Objects.isNull(sessionId) || sessionId.isEmpty()) {
             responseMessage = new ResponseMessage(false,
@@ -82,9 +77,9 @@ public class VoteAgendaElementRoute implements Route {
             return responseMessage;
         }
 
-        if (Objects.isNull(userId) || userId.isEmpty()) {
+        if (Objects.isNull(eventId) || eventId.isEmpty()) {
             responseMessage = new ResponseMessage(false,
-                    "userId can not be empty!", new Object());
+                    "EventId can not be empty!", new Object());
             return responseMessage;
         }
 
@@ -94,14 +89,21 @@ public class VoteAgendaElementRoute implements Route {
             return responseMessage;
         }
 
-        boolean isNumberSafe = true;
+        if (Objects.isNull(userId) || userId.isEmpty()) {
+            responseMessage = new ResponseMessage(false,
+                    "userId can not be empty!", new Object());
+            return responseMessage;
+        }
+
+
         int vote = 0;
+        boolean isNumberSafe = true;
 
         try {
             vote = Integer.parseInt(stringVote);
         } catch (NumberFormatException e) {
-            isNumberSafe = false;
             logger.error(e.getMessage(), e);
+            isNumberSafe = false;
         }
 
         if (isNumberSafe) {
@@ -132,7 +134,7 @@ public class VoteAgendaElementRoute implements Route {
 
         List<AgendaElement> agendaElements = event.getAgenda();
 
-        AgendaElement agendaElementSource = null;
+        AgendaElement agendaElementSource;
 
         if (Objects.nonNull(agendaElements)) {
             List<AgendaElement> agendaElements1 = agendaElements.stream().filter(agendaElement ->
@@ -164,8 +166,6 @@ public class VoteAgendaElementRoute implements Route {
                 return starResponseMessage;
             }
 
-            // double newVoteMean = ((agendaElementSource.getVoteCount() * agendaElementSource.getStar()) - oldVote + vote) / (double) agendaElementSource.getVoteCount();
-
             long agendaVoteCount = agendaElementSource.getVoteCount();
             double agendaStarValue = !Double.isNaN(agendaElementSource.getStar()) ? agendaElementSource.getStar() : 0.0;
 
@@ -193,8 +193,6 @@ public class VoteAgendaElementRoute implements Route {
             if (!starResponseMessage.isStatus()) {
                 return starResponseMessage;
             }
-
-            // double newVoteMean = (((double)agendaElementSource.getVoteCount() * agendaElementSource.getStar()) + vote) / (double) (agendaElementSource.getVoteCount() + 1);
 
             long agendaVoteCount = agendaElementSource.getVoteCount();
             double agendaStarValue = !Double.isNaN(agendaElementSource.getStar()) ? agendaElementSource.getStar() : 0.0;

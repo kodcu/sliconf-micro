@@ -89,7 +89,7 @@ public class ModerateCommentRoute implements Route {
                     commentMessageProvider.getMessage(MODERATE_MODEL_MUST_BE_FILLED_CORRECTLY), model);
         }
 
-        ResponseMessage userCheckMessage = checkIfUserExists(model.getUserId());
+        ResponseMessage userCheckMessage = CommentSpecs.checkIfUserExists(model.getUserId(), userRepositoryService, commentMessageProvider);
 
         if (!userCheckMessage.isStatus()) {
             return userCheckMessage;
@@ -97,7 +97,7 @@ public class ModerateCommentRoute implements Route {
 
         User user = (User) userCheckMessage.getReturnObject();
 
-        ResponseMessage eventCheckMessage = checkIfEventExists(model.getEventId());
+        ResponseMessage eventCheckMessage = CommentSpecs.checkIfEventExists(model.getEventId(), eventRepositoryService, commentMessageProvider);
 
         if (!eventCheckMessage.isStatus()) {
             return eventCheckMessage;
@@ -123,26 +123,6 @@ public class ModerateCommentRoute implements Route {
         }
 
         return new ResponseMessage(true, commentMessageProvider.getMessage(COMMENTS_UPDATED_SUCCESSFULLY), model);
-    }
-
-    private ResponseMessage checkIfUserExists(String userId) {
-        User user = userRepositoryService.findById(userId);
-
-        if (Objects.nonNull(user)) {
-            return new ResponseMessage(true, commentMessageProvider.getMessage("userFoundWithGivenId"), user);
-        } else {
-            return new ResponseMessage(false, commentMessageProvider.getMessage("userCanNotFoundWithGivenId"), userId);
-        }
-    }
-
-    private ResponseMessage checkIfEventExists(String eventId) {
-        Event event = eventRepositoryService.findOne(eventId);
-
-        if (Objects.nonNull(event)) {
-            return new ResponseMessage(true, commentMessageProvider.getMessage("eventFoundWithGivenId"), event);
-        } else {
-            return new ResponseMessage(false, commentMessageProvider.getMessage("eventCanNotFoundWithGivenId"), eventId);
-        }
     }
 
     private ResponseMessage processApprovedComments(ModerateCommentModel model) {

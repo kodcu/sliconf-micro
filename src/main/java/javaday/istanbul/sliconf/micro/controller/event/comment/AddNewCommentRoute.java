@@ -90,7 +90,7 @@ public class AddNewCommentRoute implements Route {
                     commentMessageProvider.getMessage("commentValuesMustBeFilled"), comment);
         }
 
-        ResponseMessage userCheckMessage = checkIfUserExists(comment.getUserId());
+        ResponseMessage userCheckMessage = CommentSpecs.checkIfUserExists(comment.getUserId(), userRepositoryService, commentMessageProvider);
 
         if (!userCheckMessage.isStatus()) {
             return userCheckMessage;
@@ -98,7 +98,7 @@ public class AddNewCommentRoute implements Route {
 
         User user = (User) userCheckMessage.getReturnObject();
 
-        ResponseMessage eventCheckMessage = checkIfEventExists(comment.getEventId());
+        ResponseMessage eventCheckMessage = CommentSpecs.checkIfEventExists(comment.getEventId(), eventRepositoryService, commentMessageProvider);
 
         if (!eventCheckMessage.isStatus()) {
             return eventCheckMessage;
@@ -138,13 +138,8 @@ public class AddNewCommentRoute implements Route {
 
             if (Objects.nonNull(agendaElement)) {
                 List<Room> roomList = event.getRooms().stream()
-                        .filter(room -> {
-                            if (Objects.nonNull(room) && Objects.nonNull(room.getId()) &&
-                                    room.getId().equals(agendaElement.getRoom())) {
-                                return true;
-                            }
-                            return false;
-                        })
+                        .filter(room -> Objects.nonNull(room) && Objects.nonNull(room.getId()) &&
+                                    room.getId().equals(agendaElement.getRoom()))
                         .collect(Collectors.toList());
 
                 if (Objects.nonNull(roomList) && !roomList.isEmpty() &&
@@ -171,26 +166,6 @@ public class AddNewCommentRoute implements Route {
         }
 
         return new ResponseMessage(true, commentMessageProvider.getMessage("commentSavedSuccessfully"), comment);
-    }
-
-    private ResponseMessage checkIfUserExists(String userId) {
-        User user = userRepositoryService.findById(userId);
-
-        if (Objects.nonNull(user)) {
-            return new ResponseMessage(true, commentMessageProvider.getMessage("userFoundWithGivenId"), user);
-        } else {
-            return new ResponseMessage(false, commentMessageProvider.getMessage("userCanNotFoundWithGivenId"), userId);
-        }
-    }
-
-    private ResponseMessage checkIfEventExists(String eventId) {
-        Event event = eventRepositoryService.findOne(eventId);
-
-        if (Objects.nonNull(event)) {
-            return new ResponseMessage(true, commentMessageProvider.getMessage("eventFoundWithGivenId"), event);
-        } else {
-            return new ResponseMessage(false, commentMessageProvider.getMessage("eventCanNotFoundWithGivenId"), eventId);
-        }
     }
 
     private ResponseMessage checkIfCommentValid(AgendaElement agendaElement, Comment comment) {

@@ -7,8 +7,6 @@ import javaday.istanbul.sliconf.micro.model.event.agenda.Star;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.star.StarRepositoryService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -33,8 +31,6 @@ public class GetVoteAgendaElementRoute implements Route {
 
     private StarRepositoryService starRepositoryService;
     private EventRepositoryService eventRepositoryService;
-
-    private Logger logger = LoggerFactory.getLogger(GetVoteAgendaElementRoute.class);
 
     @Autowired
     public GetVoteAgendaElementRoute(StarRepositoryService starRepositoryService,

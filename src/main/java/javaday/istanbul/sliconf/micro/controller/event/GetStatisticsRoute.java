@@ -68,15 +68,17 @@ public class GetStatisticsRoute implements Route {
 
         Map<String, Object> statisticsMap = new HashMap<>();
 
-        long approvedComments = getCommentCount(event, "approved", "");
+        final String APPROVED = "approved";
+
+        long approvedComments = getCommentCount(event, APPROVED, "");
         long deniedComments = getCommentCount(event, "denied", "");
 
-        Comment mostLikedComment = getMostLikedComment(event, "approved");
+        Comment mostLikedComment = getMostLikedComment(event, APPROVED);
 
         mostLikedComment.setLikes(new ArrayList<>());
         mostLikedComment.setDislikes(new ArrayList<>());
 
-        String mostCommentedSessionId = commentRepositoryService.findMostCommentedSessionId("approved", event.getId());
+        String mostCommentedSessionId = commentRepositoryService.findMostCommentedSessionId(APPROVED, event.getId());
 
         if (Objects.nonNull(event.getAgenda())) {
             List<AgendaElement> agendaElements = event.getAgenda().stream().filter(agendaElement -> Objects.nonNull(agendaElement) &&
