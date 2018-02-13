@@ -34,7 +34,7 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class ListCommentsTest {
+public class ListCommentsTest {// NOSONAR
 
     @Autowired
     UserRepositoryService userRepositoryService;
@@ -143,15 +143,15 @@ public class ListCommentsTest {
         assertTrue(commentAddMessage4.isStatus());
         assertTrue(commentAddMessage5.isStatus());
 
-        ResponseMessage listMessage1 = listCommentsRoute.listComments(eventId, "agenda-element-1", userId, "pending", "0", null); // true
-        ResponseMessage listMessage2 = listCommentsRoute.listComments(eventId, "agenda-element-1", "", "pending", "0", null); // true
-        ResponseMessage listMessage3 = listCommentsRoute.listComments(eventId, "", userId, "", "0", null); // false
-        ResponseMessage listMessage4 = listCommentsRoute.listComments(eventId, "", "","", "0", null); // false
+        ResponseMessage listMessage1 = listCommentsRoute.listComments(eventId, "agenda-element-1", userId, "pending", "0", null, null); // true
+        ResponseMessage listMessage2 = listCommentsRoute.listComments(eventId, "agenda-element-1", "", "pending", "0", null, null); // true
+        ResponseMessage listMessage3 = listCommentsRoute.listComments(eventId, "", userId, "", "0", null, null); // false
+        ResponseMessage listMessage4 = listCommentsRoute.listComments(eventId, "", "","", "0", null, null); // false
 
-        ResponseMessage listMessage5 = listCommentsRoute.listComments("", "agenda-element-1", userId, "approved", "0", null); // false
-        ResponseMessage listMessage6 = listCommentsRoute.listComments("", "agenda-element-1", "", "approved", "0", null); // false
-        ResponseMessage listMessage7 = listCommentsRoute.listComments("", "", userId, "approved", "0", null); // false
-        ResponseMessage listMessage8 = listCommentsRoute.listComments("", "", "", "approved", "0", null); // false
+        ResponseMessage listMessage5 = listCommentsRoute.listComments("", "agenda-element-1", userId, "approved", "0", null, null); // false
+        ResponseMessage listMessage6 = listCommentsRoute.listComments("", "agenda-element-1", "", "approved", "0", null, null); // false
+        ResponseMessage listMessage7 = listCommentsRoute.listComments("", "", userId, "approved", "0", null, null); // false
+        ResponseMessage listMessage8 = listCommentsRoute.listComments("", "", "", "approved", "0", null, null); // false
 
         assertTrue(listMessage1.isStatus());
         assertTrue(listMessage2.isStatus());

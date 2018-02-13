@@ -317,13 +317,10 @@ public class VoteCommentRoute implements Route {
         List<VoteUser> oldVotes;
 
         if (Objects.nonNull(voteUsers) && Objects.nonNull(user)) {
-            oldVotes = voteUsers.stream().filter(voteUser -> {
-                if (Objects.nonNull(voteUser) &&
-                        Objects.nonNull(voteUser.getUserId()) && voteUser.getUserId().equals(user.getId())) {
-                    return false;
-                }
-                return true;
-            }).collect(Collectors.toList());
+            oldVotes = voteUsers.stream().filter(voteUser ->
+                 !Objects.nonNull(voteUser) ||
+                        !Objects.nonNull(voteUser.getUserId()) || !voteUser.getUserId().equals(user.getId())
+            ).collect(Collectors.toList());
 
             return oldVotes;
         }

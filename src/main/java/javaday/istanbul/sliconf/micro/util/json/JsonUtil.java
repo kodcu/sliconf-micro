@@ -4,7 +4,6 @@ package javaday.istanbul.sliconf.micro.util.json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.ResponseTransformer;
@@ -12,7 +11,6 @@ import spark.ResponseTransformer;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 

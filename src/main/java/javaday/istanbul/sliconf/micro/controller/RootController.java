@@ -25,8 +25,8 @@ public class RootController {
     private static Logger logger = LoggerFactory.getLogger(RootController.class);
 
     @Autowired
-    public RootController(RouteObjects routeObjects) {
-        RootController.routeObjects = routeObjects;
+    public RootController(RouteObjects routeObjects) {// NOSONAR
+        RootController.routeObjects = routeObjects;// NOSONAR
     }
 
     public static void setPaths() {

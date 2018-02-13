@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class AddNewCommentTest {
+public class AddNewCommentTest {// NOSONAR
 
     @Autowired
     UserRepositoryService userRepositoryService;

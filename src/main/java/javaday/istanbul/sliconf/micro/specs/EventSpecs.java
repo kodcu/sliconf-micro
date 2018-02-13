@@ -184,51 +184,75 @@ public class EventSpecs {
      */
     private static void checkOptionalFields(Event event, List<String> optionalPassed, List<String> optionalFailed) {
         if (Objects.nonNull(event)) {
-            if (Objects.isNull(event.getDescription()) || event.getDescription().isEmpty()) {
-                optionalFailed.add("Event description can be added");
-            } else {
-                optionalPassed.add("Event description added");
-            }
+            checkDescription(event, optionalPassed, optionalFailed);
 
-            if (Objects.isNull(event.getLogoPath()) || event.getLogoPath().isEmpty()) {
-                optionalFailed.add("Event logo can be added");
-            } else {
-                optionalPassed.add("Logo added");
-            }
+            checkLogo(event, optionalPassed, optionalFailed);
 
-            if (Objects.nonNull(event.getAbout())) {
+            checkAbout(event, optionalPassed, optionalFailed);
+        }
+    }
 
-                About about = event.getAbout();
+    private static void checkDescription(Event event, List<String> optionalPassed, List<String> optionalFailed) {
+        if (Objects.isNull(event.getDescription()) || event.getDescription().isEmpty()) {
+            optionalFailed.add("Event description can be added");
+        } else {
+            optionalPassed.add("Event description added");
+        }
+    }
 
-                if (Objects.isNull(about.getSocial()) || about.getSocial().isEmpty()) {
-                    optionalFailed.add("Social details can be added");
-                } else {
-                    optionalPassed.add("Social details added");
-                }
+    private static void checkLogo(Event event, List<String> optionalPassed, List<String> optionalFailed) {
+        if (Objects.isNull(event.getLogoPath()) || event.getLogoPath().isEmpty()) {
+            optionalFailed.add("Event logo can be added");
+        } else {
+            optionalPassed.add("Logo added");
+        }
+    }
 
-                if (Objects.isNull(about.getWeb()) || about.getWeb().isEmpty()) {
-                    optionalFailed.add("Web site address can be added");
-                } else {
-                    optionalPassed.add("Web site address added");
-                }
+    private static void checkAbout(Event event, List<String> optionalPassed, List<String> optionalFailed) {
+        if (Objects.nonNull(event.getAbout())) {
+            About about = event.getAbout();
 
-                if (Objects.isNull(about.getPhone()) || about.getPhone().isEmpty()) {
-                    optionalFailed.add("Phone can be added");
-                } else {
-                    optionalPassed.add("Phone added");
-                }
+            checkSocial(about, optionalPassed, optionalFailed);
+            checkWeb(about, optionalPassed, optionalFailed);
+            checkPhone(about, optionalPassed, optionalFailed);
+            checkEmail(about, optionalPassed, optionalFailed);
+        } else {
+            optionalFailed.add("Social details can be added");
+            optionalFailed.add("Web site address can be added");
+            optionalFailed.add("Phone can be added");
+            optionalFailed.add("E-mail address can be added");
+        }
+    }
 
-                if (Objects.isNull(about.getEmail()) || about.getEmail().isEmpty()) {
-                    optionalFailed.add("E-mail address can be added");
-                } else {
-                    optionalPassed.add("E-mail address added");
-                }
-            } else {
-                optionalFailed.add("Social details can be added");
-                optionalFailed.add("Web site address can be added");
-                optionalFailed.add("Phone can be added");
-                optionalFailed.add("E-mail address can be added");
-            }
+    private static void checkSocial(About about, List<String> optionalPassed, List<String> optionalFailed) {
+        if (Objects.isNull(about.getSocial()) || about.getSocial().isEmpty()) {
+            optionalFailed.add("Social details can be added");
+        } else {
+            optionalPassed.add("Social details added");
+        }
+    }
+
+    private static void checkWeb(About about, List<String> optionalPassed, List<String> optionalFailed) {
+        if (Objects.isNull(about.getWeb()) || about.getWeb().isEmpty()) {
+            optionalFailed.add("Web site address can be added");
+        } else {
+            optionalPassed.add("Web site address added");
+        }
+    }
+
+    private static void checkPhone(About about, List<String> optionalPassed, List<String> optionalFailed) {
+        if (Objects.isNull(about.getPhone()) || about.getPhone().isEmpty()) {
+            optionalFailed.add("Phone can be added");
+        } else {
+            optionalPassed.add("Phone added");
+        }
+    }
+
+    private static void checkEmail(About about, List<String> optionalPassed, List<String> optionalFailed) {
+        if (Objects.isNull(about.getEmail()) || about.getEmail().isEmpty()) {
+            optionalFailed.add("E-mail address can be added");
+        } else {
+            optionalPassed.add("E-mail address added");
         }
     }
 }

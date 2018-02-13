@@ -13,39 +13,34 @@ public class CommentRepositoryService implements CommentService {
     @Autowired
     private CommentRepository repo;
 
+    private static final String TOP_RATED = "top-rated";
+    private static final String RECENT = "recent";
+    private static final String OLDEST = "oldest";
+
     public Comment save(Comment comment) {
         return repo.save(comment);
     }
 
-    public List<Comment> findAllByEventIdAndSessionIdAndUserId(String eventId, String sessionId, String userId) {
-        List<Comment> comments = repo.findAllByEventIdAndSessionIdAndUserId(eventId, sessionId, userId);
-
-        return Objects.nonNull(comments) ? comments : new ArrayList<>();
-    }
-
-
-    public List<Comment> findFirstByApprovedAndEventIdOrderByRateDesc(String status, String eventId, int count) {
-        List<Comment> comments = repo.findFirstByApprovedAndEventIdOrderByRateDesc(status, eventId, count);
-
-        return Objects.nonNull(comments) ? comments : new ArrayList<>();
-    }
-
-    public List<Comment> findAllByStatusAndEventIdAndSessionIdAndUserId(String status, String eventId, String sessionId, String userId, int count, String type) {
+    public List<Comment> findAllByStatusAndEventIdAndSessionIdAndUserId(String status, String eventId, String sessionId, String userId, int count, String type, int page) {
         List<Comment> comments;
 
         if (count != 0) {
-            if ("top-rated".equals(type)) {
-                comments = repo.findFirstByApprovedAndEventIdAndSessionIdAndUserIdOrderByRateDesc(status, eventId, sessionId, userId, count);
-            } else if ("recent".equals(type)) {
-                comments = repo.findFirstByApprovedAndEventIdAndSessionIdAndUserIdOrderByTimeDesc(status, eventId, sessionId, userId, count);
+            if (TOP_RATED.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdAndUserIdOrderByRateDescPageable(status, eventId, sessionId, userId, page, count);
+            } else if (RECENT.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdAndUserIdOrderByTimeDescPageable(status, eventId, sessionId, userId, page, count);
+            } else if (OLDEST.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdAndUserIdOrderByTimeAscPageable(status, eventId, sessionId, userId, page, count);
             } else {
-                comments = repo.findFirstByApprovedAndEventIdAndSessionIdAndUserId(status, eventId, sessionId, userId, count);
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdAndUserIdPageable(status, eventId, sessionId, userId, page, count);
             }
         } else {
-            if ("top-rated".equals(type)) {
+            if (TOP_RATED.equals(type)) {
                 comments = repo.findAllByApprovedAndEventIdAndSessionIdAndUserIdOrderByRateDesc(status, eventId, sessionId, userId);
-            } else if ("recent".equals(type)) {
+            } else if (RECENT.equals(type)) {
                 comments = repo.findAllByApprovedAndEventIdAndSessionIdAndUserIdOrderByTimeDesc(status, eventId, sessionId, userId);
+            } else if (OLDEST.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdAndUserIdOrderByTimeAsc(status, eventId, sessionId, userId);
             } else {
                 comments = repo.findAllByApprovedAndEventIdAndSessionIdAndUserId(status, eventId, sessionId, userId);
             }
@@ -54,22 +49,26 @@ public class CommentRepositoryService implements CommentService {
         return Objects.nonNull(comments) ? comments : new ArrayList<>();
     }
 
-    public List<Comment> findAllByStatusAndEventIdAndSessionId(String status, String eventId, String sessionId, int count, String type) {
+    public List<Comment> findAllByStatusAndEventIdAndSessionId(String status, String eventId, String sessionId, int count, String type, int page) {
         List<Comment> comments;
 
         if (count != 0) {
-            if ("top-rated".equals(type)) {
-                comments = repo.findFirstByApprovedAndEventIdAndSessionIdOrderByRateDesc(status, eventId, sessionId, count);
-            } else if ("recent".equals(type)) {
-                comments = repo.findFirstByApprovedAndEventIdAndSessionIdOrderByTimeDesc(status, eventId, sessionId, count);
+            if (TOP_RATED.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdOrderByRateDescPageable(status, eventId, sessionId, page, count);
+            } else if (RECENT.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdOrderByTimeDescPageable(status, eventId, sessionId, page, count);
+            } else if (OLDEST.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdOrderByTimeAscPageable(status, eventId, sessionId, page, count);
             } else {
-                comments = repo.findFirstByApprovedAndEventIdAndSessionId(status, eventId, sessionId, count);
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdPageable(status, eventId, sessionId, page, count);
             }
         } else {
-            if ("top-rated".equals(type)) {
+            if (TOP_RATED.equals(type)) {
                 comments = repo.findAllByApprovedAndEventIdAndSessionIdOrderByRateDesc(status, eventId, sessionId);
-            } else if ("recent".equals(type)) {
+            } else if (RECENT.equals(type)) {
                 comments = repo.findAllByApprovedAndEventIdAndSessionIdOrderByTimeDesc(status, eventId, sessionId);
+            } else if (OLDEST.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdAndSessionIdOrderByTimeAsc(status, eventId, sessionId);
             } else {
                 comments = repo.findAllByApprovedAndEventIdAndSessionId(status, eventId, sessionId);
             }
@@ -78,22 +77,26 @@ public class CommentRepositoryService implements CommentService {
         return Objects.nonNull(comments) ? comments : new ArrayList<>();
     }
 
-    public List<Comment> findAllByStatusAndEventId(String status, String eventId, int count, String type) {
+    public List<Comment> findAllByStatusAndEventId(String status, String eventId, int count, String type, int page) {
         List<Comment> comments;
 
         if (count != 0) {
-            if ("top-rated".equals(type)) {
-                comments = repo.findFirstByApprovedAndEventIdOrderByRateDesc(status, eventId, count);
-            } else if ("recent".equals(type)) {
-                comments = repo.findFirstByApprovedAndEventIdOrderByTimeDesc(status, eventId, count);
+            if (TOP_RATED.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdOrderByRateDescPageable(status, eventId, page, count);
+            } else if (RECENT.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdOrderByTimeDescPageable(status, eventId, page, count);
+            } else if (OLDEST.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdOrderByTimeAscPageable(status, eventId, page, count);
             } else {
-                comments = repo.findFirstByApprovedAndEventId(status, eventId, count);
+                comments = repo.findAllByApprovedAndEventIdPageable(status, eventId, page, count);
             }
         } else {
-            if ("top-rated".equals(type)) {
+            if (TOP_RATED.equals(type)) {
                 comments = repo.findAllByApprovedAndEventIdOrderByRateDesc(status, eventId);
-            } else if ("recent".equals(type)) {
+            } else if (RECENT.equals(type)) {
                 comments = repo.findAllByApprovedAndEventIdOrderByTimeDesc(status, eventId);
+            } else if (OLDEST.equals(type)) {
+                comments = repo.findAllByApprovedAndEventIdOrderByTimeAsc(status, eventId);
             } else {
                 comments = repo.findAllByApprovedAndEventId(status, eventId);
             }

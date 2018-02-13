@@ -89,13 +89,13 @@ public class EventRepositoryService implements EventService {
         return repo.findEventByKeyEquals(key);
     }
 
-    // Todo couchbase kullanrak yapilmali
+
     private List<Event> getNotDeletedEvents(List<Event> events) {
         if (Objects.nonNull(events)) {
             return events.stream()
                     .filter(event -> Objects.nonNull(event) && !event.isDeleted()).collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class DeleteEventTest {
+public class DeleteEventTest {// NOSONAR
 
     @Autowired
     UserRepositoryService userRepositoryService;

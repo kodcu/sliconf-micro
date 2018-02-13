@@ -5,8 +5,6 @@ import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -27,8 +25,6 @@ public class LoginUserAnonymousRoute implements Route {
 
     private LoginControllerMessageProvider loginControllerMessageProvider;
     private UserRepositoryService userRepositoryService;
-
-    private Logger logger = LoggerFactory.getLogger(LoginUserAnonymousRoute.class);
 
     @Autowired
     public LoginUserAnonymousRoute(LoginControllerMessageProvider loginControllerMessageProvider,

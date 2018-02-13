@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class UpdateUserTest {
+public class UpdateUserTest {// NOSONAR
 
     @Autowired
     UserRepositoryService userRepositoryService;

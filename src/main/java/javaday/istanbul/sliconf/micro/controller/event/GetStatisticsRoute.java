@@ -105,7 +105,7 @@ public class GetStatisticsRoute implements Route {
         if (Objects.nonNull(event)) {
             List<Comment> commentList = null;
             if (Objects.nonNull(event.getId()) && Objects.nonNull(status) && !status.isEmpty()) {
-                commentList = commentRepositoryService.findAllByStatusAndEventId(status, event.getId(), 0, type);
+                commentList = commentRepositoryService.findAllByStatusAndEventId(status, event.getId(), 0, type, 0);
             }
 
             return Objects.nonNull(commentList) ? commentList.size() : 0;

@@ -2,6 +2,7 @@ package javaday.istanbul.sliconf.micro.controller.event.comment;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.event.Comment;
+import javaday.istanbul.sliconf.micro.model.response.ListCommentResponseMessage;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.CommentMessageProvider;
 import javaday.istanbul.sliconf.micro.service.comment.CommentRepositoryService;
@@ -45,9 +46,11 @@ public class ListCommentsRoute implements Route {
             @ApiImplicitParam(required = true, dataType = "string", name = "eventId", paramType = "path"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "sessionId", paramType = "path"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"), //
-            @ApiImplicitParam(dataType = "int", name = "count", paramType = "query"), //
-            @ApiImplicitParam(dataType = "string", name = "type", paramType = "query", example = "top-rated, recent"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "status", paramType = "path", example = "denied, pending, approved"), //
+            @ApiImplicitParam(dataType = "int", name = "count", paramType = "query"), //
+            @ApiImplicitParam(dataType = "string", name = "type", paramType = "query", example = "top-rated, recent, oldest"), //
+            @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", example = "1,2,5,10,100"), //
+            @ApiImplicitParam(dataType = "string", name = "clientType", paramType = "query", example = "web"), //
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -65,23 +68,48 @@ public class ListCommentsRoute implements Route {
 
         String count = request.queryParams("count");
         String type = request.queryParams("type");
+        String page = request.queryParams("page");
+        String clientType = request.queryParams("clientType");
 
-        return listComments(eventId, sessionId, userId, status, count, type);
+        ResponseMessage responseMessage = listComments(eventId, sessionId, userId, status, count, type, page);
+
+        if ("web".equals(clientType)) {
+            ListCommentResponseMessage listCommentResponseMessage = new ListCommentResponseMessage();
+
+            listCommentResponseMessage.setStatus(responseMessage.isStatus());
+            listCommentResponseMessage.setMessage(responseMessage.getMessage());
+            listCommentResponseMessage.setReturnObject(responseMessage.getReturnObject());
+            listCommentResponseMessage.setCommentType(status);
+
+            return listCommentResponseMessage;
+        }
+
+        return responseMessage;
     }
 
 
-    public ResponseMessage listComments(String eventId, String sessionId, String userId, String status, String countString, String type) {
+    public ResponseMessage listComments(String eventId, String sessionId, String userId, String status, String countString, String type, String pageString) {
 
         List<Comment> comments = null;
         int count = 0;
+        int page = 0;
 
         if (Objects.nonNull(type) && !CommentSpecs.isCommentTypeValid(type)) {
             return new ResponseMessage(false, "Comment type must be a valid type", new Object());
 
         }
+
         if (Objects.nonNull(countString)) {
             try {
                 count = Integer.parseInt(countString);
+            } catch (NumberFormatException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+
+        if (Objects.nonNull(pageString)) {
+            try {
+                page = Integer.parseInt(pageString);
             } catch (NumberFormatException e) {
                 logger.error(e.getMessage(), e);
             }
@@ -91,12 +119,12 @@ public class ListCommentsRoute implements Route {
             if (Objects.nonNull(eventId) && !eventId.isEmpty()) {
                 if (Objects.nonNull(sessionId) && !sessionId.isEmpty()) {
                     if (Objects.nonNull(userId) && !userId.isEmpty()) {
-                        comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionIdAndUserId(status, eventId, sessionId, userId, count, type);
+                        comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionIdAndUserId(status, eventId, sessionId, userId, count, type, page);
                     } else {
-                        comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionId(status, eventId, sessionId, count, type);
+                        comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionId(status, eventId, sessionId, count, type, page);
                     }
                 } else {
-                    comments = commentRepositoryService.findAllByStatusAndEventId(status, eventId, count, type);
+                    comments = commentRepositoryService.findAllByStatusAndEventId(status, eventId, count, type, page);
                 }
             }
         } else {

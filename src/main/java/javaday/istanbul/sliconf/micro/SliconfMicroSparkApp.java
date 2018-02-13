@@ -16,7 +16,7 @@ import spark.servlet.SparkApplication;
 public class SliconfMicroSparkApp implements SparkApplication {
 
     @Autowired
-    public static RootController rootController;
+    public static RootController rootController; // NOSONAR
 
     @Override
     public void init() {

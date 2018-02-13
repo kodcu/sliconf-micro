@@ -122,14 +122,21 @@ public class AddNewCommentRoute implements Route {
             return validMessage;
         }
 
+        this.setCommentValues(user, comment, agendaElement, event);
+
+        Comment savedComment = commentRepositoryService.save(comment);
+
+        if (Objects.isNull(savedComment)) {
+            return new ResponseMessage(false, commentMessageProvider.getMessage("commentCanNotSaved"), comment);
+        }
+
+        return new ResponseMessage(true, commentMessageProvider.getMessage("commentSavedSuccessfully"), comment);
+    }
+
+    private void setCommentValues(User user, Comment comment, AgendaElement agendaElement, Event event) {
         if (Objects.nonNull(user)) {
-            if (Objects.nonNull(comment.getAnonymous()) && comment.getAnonymous()) {
-                if (Objects.isNull(comment.getFullname()) || comment.getFullname().isEmpty()) {
-                    comment.setFullname("Anonymous");
-                }
-            } else {
-                comment.setFullname(user.getFullname());
-            }
+
+            this.setCommentFullName(comment, user);
 
             comment.setUsername(user.getUsername());
 
@@ -139,7 +146,7 @@ public class AddNewCommentRoute implements Route {
             if (Objects.nonNull(agendaElement)) {
                 List<Room> roomList = event.getRooms().stream()
                         .filter(room -> Objects.nonNull(room) && Objects.nonNull(room.getId()) &&
-                                    room.getId().equals(agendaElement.getRoom()))
+                                room.getId().equals(agendaElement.getRoom()))
                         .collect(Collectors.toList());
 
                 if (Objects.nonNull(roomList) && !roomList.isEmpty() &&
@@ -158,14 +165,17 @@ public class AddNewCommentRoute implements Route {
         comment.setApproved("pending");
         comment.setLikes(new ArrayList<>());
         comment.setDislikes(new ArrayList<>());
+    }
 
-        Comment savedComment = commentRepositoryService.save(comment);
-
-        if (Objects.isNull(savedComment)) {
-            return new ResponseMessage(false, commentMessageProvider.getMessage("commentCanNotSaved"), comment);
+    private void setCommentFullName(Comment comment, User user) {
+        if (Objects.nonNull(comment.getAnonymous()) && comment.getAnonymous()) {
+            if (Objects.isNull(comment.getFullname()) || comment.getFullname().isEmpty()) {
+                comment.setFullname("Anonymous");
+            }
+        } else {
+            comment.setFullname(user.getFullname());
         }
 
-        return new ResponseMessage(true, commentMessageProvider.getMessage("commentSavedSuccessfully"), comment);
     }
 
     private ResponseMessage checkIfCommentValid(AgendaElement agendaElement, Comment comment) {
