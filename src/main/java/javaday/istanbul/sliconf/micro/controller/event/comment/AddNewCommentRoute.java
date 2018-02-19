@@ -183,9 +183,12 @@ public class AddNewCommentRoute implements Route {
     }
 
     private ResponseMessage isDateValid(AgendaElement agendaElement, LocalDateTime commentTime) {
-        if (Objects.nonNull(agendaElement) && Objects.nonNull(commentTime) &&
-                (agendaElement.getDate().isBefore(commentTime) || agendaElement.getDate().isEqual(commentTime))) {
-            return new ResponseMessage(true, commentMessageProvider.getMessage("commentDateIsValid"), agendaElement);
+        if (Objects.nonNull(agendaElement) && Objects.nonNull(commentTime)) {
+            LocalDateTime endOfDay = agendaElement.getDate().toLocalDate().atStartOfDay().plusDays(1).minusSeconds(1);
+
+            if ((agendaElement.getDate().isBefore(commentTime) || agendaElement.getDate().isEqual(commentTime)) && (commentTime.isBefore(endOfDay) || commentTime.isEqual(endOfDay))) {
+                return new ResponseMessage(true, commentMessageProvider.getMessage("commentDateIsValid"), agendaElement);
+            }
         }
 
         return new ResponseMessage(false, commentMessageProvider.getMessage("commentDateIsNotValid"), agendaElement);
