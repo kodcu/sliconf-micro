@@ -77,23 +77,6 @@ public class RootController {
             return "OK";
         });
 
-        before((request, response) -> {
-
-            // Todo auth sistemini devreye alinca kullan
-
-            /*
-            String token = request.queryParams("token");
-            // ... check if authenticated
-            if (!"auth".equals(token)) {
-                ResponseMessage responseMessage = new ResponseMessage();
-                responseMessage.setStatus(false);
-                responseMessage.setMessage(loginControllerMessageProvider.getMessage("notAuthenticated"));
-                responseMessage.setReturnObject(new Object());
-                halt(401, JsonUtil.toJson(responseMessage));
-            }
-            */
-        });
-
         path("/service/", () -> {
             path("users/", () -> {
                 post("login", routeObjects.loginUserRoute, JsonUtil.json());

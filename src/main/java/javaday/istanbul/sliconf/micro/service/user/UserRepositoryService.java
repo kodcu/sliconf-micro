@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class UserRepositoryService implements UserService {
@@ -22,7 +23,7 @@ public class UserRepositoryService implements UserService {
     private Logger logger = LoggerFactory.getLogger(UserRepositoryService.class);
 
     @Autowired
-    private UserRepository repo;
+    protected UserRepository repo;
 
     @Autowired
     private UserRepositoryMessageProvider userRepositoryMessageProvider;
@@ -56,7 +57,19 @@ public class UserRepositoryService implements UserService {
     }
 
     public List<User> findByUsernameDiffrentThenId(String username, String id) {
-        return repo.findByUsernameAndIdNot(username, id);
+        List<User> users = repo.findByUsername(username);
+
+        if (Objects.nonNull(users)) {
+            users = users.stream().filter(user-> Objects.nonNull(user) &&
+                    Objects.nonNull(user.getId()) && !user.getId().equals(id)
+            ).collect(Collectors.toList());
+        }
+
+        if (Objects.nonNull(users) && users.isEmpty()) {
+            return null; // NOSONAR
+        } else {
+            return users;
+        }
     }
 
     public List<User> findUsersByEmail(String email) {

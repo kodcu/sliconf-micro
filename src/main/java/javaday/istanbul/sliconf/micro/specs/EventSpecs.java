@@ -125,41 +125,9 @@ public class EventSpecs {
      */
     private static void checkRequeiredFields(Event event, List<String> passed, List<String> failed) {
         if (Objects.nonNull(event)) {
-            if (Objects.isNull(event.getFloorPlan()) || event.getFloorPlan().isEmpty()) {
-                failed.add("At least one floor must be added");
-            } else {
-                passed.add("At least one floor added");
-            }
-
-            if (Objects.isNull(event.getRooms()) || event.getRooms().isEmpty()) {
-                failed.add("At least one room must be added");
-            } else {
-                passed.add("At least one room added");
-            }
-
-            if (Objects.isNull(event.getSpeakers()) || event.getSpeakers().isEmpty()) {
-                failed.add("At least one speaker must be added");
-            } else {
-                passed.add("At least one speaker added");
-            }
-
-            if (Objects.isNull(event.getAgenda()) || event.getAgenda().isEmpty()) {
-                failed.add("At least one agenda must be added");
-            } else {
-                passed.add("At least one agenda added");
-            }
-
-            if (Objects.isNull(event.getStartDate())) {
-                failed.add("Start date must be added");
-            } else {
-                passed.add("Start date added");
-            }
-
-            if (Objects.isNull(event.getName()) || event.getName().isEmpty()) {
-                failed.add("Event date must be added");
-            } else {
-                passed.add("Event name added");
-            }
+            checkFloorAndRoom(event,passed, failed);
+            checkSpeakersAndAgenda(event,passed, failed);
+            checkDateAndName(event,passed, failed);
 
             if (Objects.isNull(event.getAbout()) || Objects.isNull(event.getAbout().getLocation()) ||
                     Objects.isNull(event.getAbout().getLocation().getDescription()) ||
@@ -172,6 +140,48 @@ public class EventSpecs {
             } else {
                 passed.add("Event location added");
             }
+        }
+    }
+
+    private static void checkFloorAndRoom(Event event, List<String> passed, List<String> failed) {
+        if (Objects.isNull(event.getFloorPlan()) || event.getFloorPlan().isEmpty()) {
+            failed.add("At least one floor must be added");
+        } else {
+            passed.add("At least one floor added");
+        }
+
+        if (Objects.isNull(event.getRooms()) || event.getRooms().isEmpty()) {
+            failed.add("At least one room must be added");
+        } else {
+            passed.add("At least one room added");
+        }
+    }
+
+    private static void checkSpeakersAndAgenda(Event event, List<String> passed, List<String> failed) {
+        if (Objects.isNull(event.getSpeakers()) || event.getSpeakers().isEmpty()) {
+            failed.add("At least one speaker must be added");
+        } else {
+            passed.add("At least one speaker added");
+        }
+
+        if (Objects.isNull(event.getAgenda()) || event.getAgenda().isEmpty()) {
+            failed.add("At least one agenda must be added");
+        } else {
+            passed.add("At least one agenda added");
+        }
+    }
+
+    private static void checkDateAndName(Event event, List<String> passed, List<String> failed) {
+        if (Objects.isNull(event.getStartDate())) {
+            failed.add("Start date must be added");
+        } else {
+            passed.add("Start date added");
+        }
+
+        if (Objects.isNull(event.getName()) || event.getName().isEmpty()) {
+            failed.add("Event name must be added");
+        } else {
+            passed.add("Event name added");
         }
     }
 

@@ -90,7 +90,7 @@ public class ListCommentsRoute implements Route {
 
     public ResponseMessage listComments(String eventId, String sessionId, String userId, String status, String countString, String type, String pageString) {
 
-        List<Comment> comments = null;
+        List<Comment> comments;
         int count = 0;
         int page = 0;
 
@@ -116,17 +116,7 @@ public class ListCommentsRoute implements Route {
         }
 
         if (Objects.nonNull(status) && !status.isEmpty()) {
-            if (Objects.nonNull(eventId) && !eventId.isEmpty()) {
-                if (Objects.nonNull(sessionId) && !sessionId.isEmpty()) {
-                    if (Objects.nonNull(userId) && !userId.isEmpty()) {
-                        comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionIdAndUserId(status, eventId, sessionId, userId, count, type, page);
-                    } else {
-                        comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionId(status, eventId, sessionId, count, type, page);
-                    }
-                } else {
-                    comments = commentRepositoryService.findAllByStatusAndEventId(status, eventId, count, type, page);
-                }
-            }
+            comments = getComments(eventId, sessionId, userId, status, type, count, page);
         } else {
             return new ResponseMessage(false, commentMessageProvider.getMessage("youNeedTheSpecifyStatusOfComment"), new Object());
         }
@@ -136,5 +126,21 @@ public class ListCommentsRoute implements Route {
         }
 
         return new ResponseMessage(false, commentMessageProvider.getMessage("commentsCanNotFound"), new Object());
+    }
+
+    private List<Comment> getComments(String eventId, String sessionId, String userId, String status, String type, int count, int page) {
+        List<Comment> comments = null;
+        if (Objects.nonNull(eventId) && !eventId.isEmpty()) {
+            if (Objects.nonNull(sessionId) && !sessionId.isEmpty()) {
+                if (Objects.nonNull(userId) && !userId.isEmpty()) {
+                    comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionIdAndUserId(status, eventId, sessionId, userId, count, type, page);
+                } else {
+                    comments = commentRepositoryService.findAllByStatusAndEventIdAndSessionId(status, eventId, sessionId, count, type, page);
+                }
+            } else {
+                comments = commentRepositoryService.findAllByStatusAndEventId(status, eventId, count, type, page);
+            }
+        }
+        return comments;
     }
 }

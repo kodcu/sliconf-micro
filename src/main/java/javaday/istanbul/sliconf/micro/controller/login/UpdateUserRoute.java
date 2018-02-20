@@ -82,7 +82,7 @@ public class UpdateUserRoute implements Route {
 
                     List<User> users = userRepositoryService.findByUsernameDiffrentThenId(updateParams.getString(stringUsername), id);
 
-                    if (Objects.isNull(users) || !users.isEmpty()) {
+                    if (Objects.nonNull(users) && !users.isEmpty()) {
 
                         return new ResponseMessage(false, "Username already used by another user", updateParams.get("content"));
                     }

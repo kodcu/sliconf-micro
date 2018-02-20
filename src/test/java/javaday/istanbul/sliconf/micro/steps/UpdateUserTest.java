@@ -49,6 +49,16 @@ public class UpdateUserTest {// NOSONAR
 
         String id = ((User) responseMessageUser.getReturnObject()).getId();
 
+        // Given
+        User user1 = new User();
+        user1.setEmail("osmanUpdate12@baykal.com");
+        user1.setUsername("osmanbaykalUpdate12");
+        user1.setPassword("123123123");
+
+        ResponseMessage responseMessageUser1 = userRepositoryService.saveUser(user1);
+
+        String id2 = ((User) responseMessageUser1.getReturnObject()).getId();
+
         // When
 
         String body = "{\"id\" : \"" + id + "\"," +
@@ -59,11 +69,29 @@ public class UpdateUserTest {// NOSONAR
                 "\"oldpassword\": \"123123123\"," +
                 "\"password\": \"tlp123123\" }";
 
+        String bodyDiffrentId = "{" +
+                "\"id\": \"diffrentId123\"," +
+                "\"oldpassword\": \"123123123\"," +
+                "\"password\": \"tlp123123\" }";
+
+        String bodyNullPassword = "{\"id\" : \"" + id + "\"," +
+                "\"username\": \"diffUsername\" }";
+
+
+        String bodyAlreadyUsedName = "{\"id\" : \"" + id + "\"," +
+                "\"username\": \"osmanbaykalUpdate12\" }";
+
         JsonObject updateParams = JsonObject.fromJson(body);
         JsonObject updateParamsNullId = JsonObject.fromJson(bodyNullId);
+        JsonObject updateParamsDiffrentId = JsonObject.fromJson(bodyDiffrentId);
+        JsonObject updateParamsNullPass = JsonObject.fromJson(bodyNullPassword);
+        JsonObject updateParamsAlreadyUsedName = JsonObject.fromJson(bodyAlreadyUsedName);
 
         ResponseMessage responseMessageUpdate = updateUserRoute.updateUser(updateParams);
         ResponseMessage responseMessageUpdateNullId = updateUserRoute.updateUser(updateParamsNullId);
+        ResponseMessage responseMessageUpdateDiffId = updateUserRoute.updateUser(updateParamsDiffrentId);
+
+
 
         User loginUser = new User();
         loginUser.setUsername("osmanbaykalUpdate");
@@ -72,11 +100,19 @@ public class UpdateUserTest {// NOSONAR
 
         ResponseMessage responseMessageLogin = loginUserRoute.loginUser(loginUser);
 
+
+        ResponseMessage responseMessageUpdateNullPass = updateUserRoute.updateUser(updateParamsNullPass);
+        ResponseMessage responseMessageUpdateAlreadyUsedName = updateUserRoute.updateUser(updateParamsAlreadyUsedName);
+
+
         // Then
 
         assertTrue(responseMessageUpdate.isStatus());
+        assertTrue(responseMessageUpdateNullPass.isStatus());
 
         assertFalse(responseMessageUpdateNullId.isStatus());
+        assertFalse(responseMessageUpdateDiffId.isStatus());
+        assertFalse(responseMessageUpdateAlreadyUsedName.isStatus());
 
         assertTrue(responseMessageLogin.isStatus());
     }

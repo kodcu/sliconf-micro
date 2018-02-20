@@ -63,14 +63,16 @@ public class VoteAgendaElementRoute implements Route {
     })
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        ResponseMessage responseMessage;
-
         String eventId = request.params("eventId");
         String sessionId = request.params("sessionId");
         String userId = request.params("userId");
         String stringVote = request.params("voteValue");
 
+        return voteAgenda(eventId, sessionId, userId, stringVote);
+    }
 
+    public ResponseMessage voteAgenda(String eventId, String sessionId, String userId, String stringVote) {
+        ResponseMessage responseMessage;
         if (Objects.isNull(sessionId) || sessionId.isEmpty()) {
             responseMessage = new ResponseMessage(false,
                     "SessionId can not be empty!", new Object());
@@ -110,7 +112,7 @@ public class VoteAgendaElementRoute implements Route {
             if (vote < 1 || vote > 5) {
                 return new ResponseMessage(false, "Vote must be between 1 and 5 ", vote);
             } else {
-                return voteAgenda(eventId, sessionId, userId, vote);
+                return processVote(eventId, sessionId, userId, vote);
             }
         } else {
             return new ResponseMessage(false, "Vote must be integer value", stringVote);
@@ -118,7 +120,7 @@ public class VoteAgendaElementRoute implements Route {
     }
 
 
-    public synchronized ResponseMessage voteAgenda(String eventId, String sessionId, String userId, int vote) {
+    public synchronized ResponseMessage processVote(String eventId, String sessionId, String userId, int vote) {
 
         ResponseMessage userResponseMessage = checkIfUserExists(userId);
 
@@ -236,7 +238,7 @@ public class VoteAgendaElementRoute implements Route {
         //* vermedi ise yeni oyu olustur
         //* agendanın starını güncelle
 
-        return new ResponseMessage(true, "Session voted", new Object());
+        return new ResponseMessage(true, "Session voted", agendaElementSource);
     }
 
     private ResponseMessage checkIfUserExists(String userId) {
