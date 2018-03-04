@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
@@ -14,7 +15,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
  * Created by ttayfur on 7/6/17.
  */
 @Document
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = UNIQUE)
@@ -39,15 +40,24 @@ public class User {
     @Field
     private byte[] salt;
 
+    @Field
     private Boolean anonymous;
 
+    @Field
     private String deviceId;
+
+    @Field
+    private String role;
 
 
     public User() {
         // for instantiation
         if (Objects.isNull(fullname) || fullname.isEmpty()) {
             this.fullname = Constants.DEFAULT_USER_FULLNAME;
+        }
+
+        if (Objects.isNull(role) || role.isEmpty()) {
+            this.role = Constants.DEFAULT_USER_ROLE;
         }
     }
 
@@ -138,5 +148,13 @@ public class User {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

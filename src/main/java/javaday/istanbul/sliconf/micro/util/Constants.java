@@ -16,6 +16,8 @@ public class Constants {
 
     public static final String DEFAULT_USER_FULLNAME = "Guest";
 
+    public static final String DEFAULT_USER_ROLE = "ROLE_USER";
+
 
     public enum COMMENT_VOTES {
         DISLIKE(-1), NOTR(0), LIKE(1);

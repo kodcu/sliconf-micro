@@ -5,6 +5,7 @@ import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.UserCaptcha;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.EmailUtil;
@@ -33,14 +34,17 @@ public class LoginUserRoute implements Route {
 
     private LoginControllerMessageProvider loginControllerMessageProvider;
     private UserRepositoryService userRepositoryService;
+    private TokenAuthenticationService tokenAuthenticationService;
 
     private Logger logger = LoggerFactory.getLogger(LoginUserRoute.class);
 
     @Autowired
     public LoginUserRoute(LoginControllerMessageProvider loginControllerMessageProvider,
-                          UserRepositoryService userRepositoryService) {
+                          UserRepositoryService userRepositoryService,
+                          TokenAuthenticationService tokenAuthenticationService) {
         this.loginControllerMessageProvider = loginControllerMessageProvider;
         this.userRepositoryService = userRepositoryService;
+        this.tokenAuthenticationService = tokenAuthenticationService;
     }
 
     @POST
@@ -70,7 +74,13 @@ public class LoginUserRoute implements Route {
         requestUser.setPassword(userCaptcha.getPassword());
         requestUser.setUsername(userCaptcha.getUsername());
 
-        return loginUser(requestUser);
+        ResponseMessage responseMessage = loginUser(requestUser);
+
+        if (Objects.nonNull(responseMessage) && responseMessage.isStatus()) {
+            tokenAuthenticationService.addAuthentication(response.raw(), (User) responseMessage.getReturnObject());
+        }
+
+        return responseMessage;
     }
 
     private boolean isCaptchaValid(UserCaptcha userCaptcha) {
@@ -105,6 +115,10 @@ public class LoginUserRoute implements Route {
                 if (userService.checkIfUserAuthenticated(dbUser, requestUser)) {
                     dbUser.setHashedPassword(null);
                     dbUser.setSalt(null);
+
+                    if (Objects.isNull(dbUser.getRole())) {
+                        dbUser.setRole("ROLE_USER");
+                    }
 
                     return new ResponseMessage(true, "User successfully logged in", dbUser);
                 }

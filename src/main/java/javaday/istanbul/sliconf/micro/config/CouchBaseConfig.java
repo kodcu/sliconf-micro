@@ -45,7 +45,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     private static final String USERS_BUCKET_NAME = "users";
     private static final String EVENTS_BUCKET_NAME = "events";
-    private static final String DEFAULT_BUCKET_NAME = "default";
+    private static final String DEFAULT_BUCKET_NAME = "defaultBucket";
     private static final String TOKENS_BUCKET_NAME = "tokens";
     private static final String COMMENTS_BUCKET_NAME = "comments";
     private static final String STARS_BUCKET_NAME = "stars";
@@ -62,7 +62,7 @@ public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     @Override
     protected String getBucketPassword() {
-        return "";
+        return bucketPass;
     }
 
 
