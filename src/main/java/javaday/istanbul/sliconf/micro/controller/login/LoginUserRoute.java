@@ -113,14 +113,15 @@ public class LoginUserRoute implements Route {
                 UserPassService userService = new UserPassService();
 
                 if (userService.checkIfUserAuthenticated(dbUser, requestUser)) {
-                    dbUser.setHashedPassword(null);
-                    dbUser.setSalt(null);
+                    User responseUser = new User(dbUser);
+                    responseUser.setHashedPassword(null);
+                    responseUser.setSalt(null);
 
-                    if (Objects.isNull(dbUser.getRole())) {
-                        dbUser.setRole("ROLE_USER");
+                    if (Objects.isNull(responseUser.getRole())) {
+                        responseUser.setRole("ROLE_USER");
                     }
 
-                    return new ResponseMessage(true, "User successfully logged in", dbUser);
+                    return new ResponseMessage(true, "User successfully logged in", responseUser);
                 }
             }
         }

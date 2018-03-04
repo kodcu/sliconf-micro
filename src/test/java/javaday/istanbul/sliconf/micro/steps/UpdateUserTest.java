@@ -104,6 +104,40 @@ public class UpdateUserTest {// NOSONAR
         ResponseMessage responseMessageUpdateNullPass = updateUserRoute.updateUser(updateParamsNullPass);
         ResponseMessage responseMessageUpdateAlreadyUsedName = updateUserRoute.updateUser(updateParamsAlreadyUsedName);
 
+        // Given
+        User user13 = new User();
+        user13.setUsername("osmanbaykalUpdate13");
+        user13.setEmail("osmanUpdate13@baykal.com");
+        user13.setPassword("tlp123123");
+
+        ResponseMessage responseMessageUser13 = userRepositoryService.saveUser(user13);
+
+        User loginUser1 = new User();
+        loginUser1.setUsername("osmanbaykalUpdate13");
+        loginUser1.setEmail("osmanUpdate13@baykal.com");
+        loginUser1.setPassword("tlp123123");
+
+        ResponseMessage responseMessageLogin1 = loginUserRoute.loginUser(loginUser1);
+
+        loginUser1.setUsername("osmanUpdate13@baykal.com");
+
+        ResponseMessage responseMessageLogin2 = loginUserRoute.loginUser(loginUser1);
+
+        loginUser1.setUsername("osmanbaykalUpdate13");
+        loginUser1.setPassword("123ddd");
+        ResponseMessage responseMessageLogin3 = loginUserRoute.loginUser(loginUser1);
+
+        loginUser1.setPassword("");
+        ResponseMessage responseMessageLogin4 = loginUserRoute.loginUser(loginUser1);
+
+        loginUser1.setPassword(null);
+        ResponseMessage responseMessageLogin5 = loginUserRoute.loginUser(loginUser1);
+
+        loginUser1.setPassword("tlp123123");
+        loginUser1.setUsername("username133123");
+        ResponseMessage responseMessageLogin6 = loginUserRoute.loginUser(loginUser1);
+
+
 
         // Then
 
@@ -115,6 +149,14 @@ public class UpdateUserTest {// NOSONAR
         assertFalse(responseMessageUpdateAlreadyUsedName.isStatus());
 
         assertTrue(responseMessageLogin.isStatus());
+
+        assertTrue(responseMessageLogin1.isStatus());
+        assertTrue(responseMessageLogin2.isStatus());
+
+        assertFalse(responseMessageLogin3.isStatus());
+        assertFalse(responseMessageLogin4.isStatus());
+        assertFalse(responseMessageLogin5.isStatus());
+        assertFalse(responseMessageLogin6.isStatus());
     }
 
 }

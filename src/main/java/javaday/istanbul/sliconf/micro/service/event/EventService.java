@@ -13,11 +13,29 @@ public interface EventService {
 
     List<Event> findByName(String name);
 
-    Event findEventByKeyEquals(String key);
+    List<Event> findByNameAndDeleted(String name, Boolean deleted);
+
+
+    List<Event> findByNameAndNotKeyAndDeleted(String name, String key, Boolean deleted);
 
     void delete(Event event);
 
-    ResponseMessage save(Event event);
+    Event findByKeyAndExecutiveUser(String key, String userId);
+
+    public ResponseMessage save(Event event);
+
+
+    Event findEventByKeyEquals(String key);
+
+
+    List<Event> getNotDeletedEvents(List<Event> events);
+
 
     Map<String, List<Event>> findByExecutiveUser(String executiveUser);
+
+
+    boolean isKeyExists(String key);
+
+
+    void hideEventElements(Event event);
 }

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Objects;
 
 
 /**
@@ -76,8 +77,12 @@ public class UserPassService {
      * @return
      */
     public boolean checkIfUserAuthenticated(User sourceUser, User targetUser) {
-        byte[] salt = sourceUser.getSalt();
-        byte[] hashedPassword = sourceUser.getHashedPassword();
+        byte[] salt = Objects.nonNull(sourceUser) ? sourceUser.getSalt() : null;
+        byte[] hashedPassword = Objects.nonNull(sourceUser) ? sourceUser.getHashedPassword() : null;
+
+        if (Objects.isNull(salt) || Objects.isNull(hashedPassword) || Objects.isNull(targetUser) || Objects.isNull(targetUser.getPassword())) {
+            return false;
+        }
 
         return checkPassword(targetUser.getPassword(), hashedPassword, salt);
     }

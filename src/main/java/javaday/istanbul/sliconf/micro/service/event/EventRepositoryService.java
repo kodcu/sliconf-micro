@@ -7,6 +7,7 @@ import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,12 +15,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Profile({"prod", "dev"})
 public class EventRepositoryService implements EventService {
 
-    private Logger logger = LoggerFactory.getLogger(EventRepositoryService.class);
+    protected Logger logger = LoggerFactory.getLogger(EventRepositoryService.class);
 
     @Autowired
-    private EventRepository repo;
+    protected EventRepository repo;
 
     public Event findOne(String id) {
         return repo.findById(id);
@@ -90,10 +92,20 @@ public class EventRepositoryService implements EventService {
     }
 
 
-    private List<Event> getNotDeletedEvents(List<Event> events) {
+    public List<Event> getNotDeletedEvents(List<Event> events) {
         if (Objects.nonNull(events)) {
             return events.stream()
                     .filter(event -> Objects.nonNull(event) && !event.isDeleted()).collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Event> getNotKeyEquals(List<Event> events, String key) {
+        if (Objects.nonNull(events)) {
+            return events.stream()
+                    .filter(event -> Objects.nonNull(event) && Objects.nonNull(event.getKey()) &&
+                            !event.getKey().equals(key))
+                    .collect(Collectors.toList());
         }
         return new ArrayList<>();
     }

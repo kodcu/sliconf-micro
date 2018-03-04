@@ -3,7 +3,7 @@ package javaday.istanbul.sliconf.micro.specs;
 import javaday.istanbul.sliconf.micro.model.event.About;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.event.StatusDetails;
-import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.service.event.EventService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.RandomGenerator;
 
@@ -59,7 +59,7 @@ public class EventSpecs {
         return dateTime.isBefore(event.getStartDate());
     }
 
-    public static String generateKanbanNumber(Event event, EventRepositoryService eventRepositoryService) {
+    public static String generateKanbanNumber(Event event, EventService eventRepositoryService) {
         boolean isKeyUnique = false;
         String key;
 
@@ -125,9 +125,9 @@ public class EventSpecs {
      */
     private static void checkRequeiredFields(Event event, List<String> passed, List<String> failed) {
         if (Objects.nonNull(event)) {
-            checkFloorAndRoom(event,passed, failed);
-            checkSpeakersAndAgenda(event,passed, failed);
-            checkDateAndName(event,passed, failed);
+            checkFloorAndRoom(event, passed, failed);
+            checkSpeakersAndAgenda(event, passed, failed);
+            checkDateAndName(event, passed, failed);
 
             if (Objects.isNull(event.getAbout()) || Objects.isNull(event.getAbout().getLocation()) ||
                     Objects.isNull(event.getAbout().getLocation().getDescription()) ||

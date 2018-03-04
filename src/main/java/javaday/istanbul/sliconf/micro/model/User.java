@@ -76,6 +76,7 @@ public class User implements Serializable {
         this.setFullname(user.getFullname());
         this.setAnonymous(user.getAnonymous());
         this.setDeviceId(user.getDeviceId());
+        this.setRole(user.getRole());
     }
 
     public String getId() {

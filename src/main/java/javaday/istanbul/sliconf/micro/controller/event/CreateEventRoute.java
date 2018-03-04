@@ -6,6 +6,7 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.service.event.EventService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
@@ -30,7 +31,7 @@ public class CreateEventRoute implements Route {
 
 
     private EventControllerMessageProvider messageProvider;
-    private EventRepositoryService repositoryService;
+    private EventService repositoryService;
 
     private UserRepositoryService userRepositoryService;
 
@@ -61,7 +62,6 @@ public class CreateEventRoute implements Route {
         ResponseMessage responseMessage;
 
         String body = request.body();
-
         String userId = request.params("userId");
 
         if (Objects.isNull(userId) || userId.isEmpty()) {
@@ -78,13 +78,20 @@ public class CreateEventRoute implements Route {
 
         Event event = JsonUtil.fromJson(body, Event.class);
 
-        if (Objects.isNull(event.getKey()) || event.getKey().isEmpty()) {
-            responseMessage = saveNewEvent(event, userId);
-        } else {
-            responseMessage = updateEvent(event, userId);
+        return processEvent(event, userId);
+    }
+
+    public ResponseMessage processEvent(Event event, String userId) {
+
+        if (Objects.isNull(event)) {
+            return new ResponseMessage(false, "Event can not be null", "");
         }
 
-        return responseMessage;
+        if (Objects.isNull(event.getKey()) || event.getKey().isEmpty()) {
+            return saveNewEvent(event, userId);
+        } else {
+            return updateEvent(event, userId);
+        }
     }
 
     private ResponseMessage saveNewEvent(Event event, String userId) {
