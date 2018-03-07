@@ -58,21 +58,21 @@ public class GetEventWithKeyRoute implements Route {
     })
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        ResponseMessage responseMessage;
 
         String key = request.params("key");
-
         String userId = request.queryParams("userId");
-
         String statistic = request.queryParams("statistic");
 
+        return getEventWithKey(key, userId, statistic);
+    }
+
+    public ResponseMessage getEventWithKey(String key, String userId, String statistic) {
         // event var mı diye kontrol et
         Event event = repositoryService.findEventByKeyEquals(key);
 
         if (Objects.isNull(event)) {
-            responseMessage = new ResponseMessage(false,
+            return new ResponseMessage(false,
                     messageProvider.getMessage("eventCanNotFound"), new Object());
-            return responseMessage;
         }
 
         this.addUserToEvent(event, userId);
@@ -83,10 +83,8 @@ public class GetEventWithKeyRoute implements Route {
             event.setTotalUsers(null);
         }
 
-        responseMessage = new ResponseMessage(true,
+        return new ResponseMessage(true,
                 messageProvider.getMessage("eventFetchedSuccessfully"), event);
-
-        return responseMessage;
     }
 
     /**

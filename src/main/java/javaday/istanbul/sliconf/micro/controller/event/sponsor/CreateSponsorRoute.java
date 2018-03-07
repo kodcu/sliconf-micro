@@ -74,9 +74,15 @@ public class CreateSponsorRoute implements Route {
      * @param eventKey
      * @return
      */
-    private ResponseMessage saveSponsorsAndSponsorTags(Map<String, List<Sponsor>> sponsorMap, Map<String, String> sponsorTags, String eventKey) {
+    public ResponseMessage saveSponsorsAndSponsorTags(Map<String, List<Sponsor>> sponsorMap, Map<String, String> sponsorTags, String eventKey) {
 
         ResponseMessage responseMessage;
+
+        if (Objects.isNull(sponsorMap) || Objects.isNull(sponsorTags)) {
+            responseMessage = new ResponseMessage(false,
+                    "Sponsors or Tags can not be null", new Object());
+            return responseMessage;
+        }
 
         responseMessage = SponsorSpecs.isSponsorMapValid(sponsorMap, sponsorTags);
 

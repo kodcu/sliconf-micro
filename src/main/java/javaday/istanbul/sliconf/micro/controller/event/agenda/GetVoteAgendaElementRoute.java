@@ -55,34 +55,30 @@ public class GetVoteAgendaElementRoute implements Route {
     })
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        ResponseMessage responseMessage;
-
         String eventId = request.params("eventId");
         String sessionId = request.params("sessionId");
         String userId = request.params("userId");
 
-        if (Objects.isNull(eventId) || eventId.isEmpty()) {
-            responseMessage = new ResponseMessage(false,
-                    "EventId can not be empty!", new Object());
-            return responseMessage;
-        }
-
-        if (Objects.isNull(sessionId) || sessionId.isEmpty()) {
-            responseMessage = new ResponseMessage(false,
-                    "SessionId can not be empty!", new Object());
-            return responseMessage;
-        }
-
-        if (Objects.isNull(userId) || userId.isEmpty()) {
-            responseMessage = new ResponseMessage(false,
-                    "userId can not be empty!", new Object());
-            return responseMessage;
-        }
-
         return getVote(eventId, sessionId, userId);
     }
 
-    private ResponseMessage getVote(String eventId, String sessionId, String userId) {
+    public ResponseMessage getVote(String eventId, String sessionId, String userId) {
+
+        if (Objects.isNull(eventId) || eventId.isEmpty()) {
+            return new ResponseMessage(false,
+                    "EventId can not be empty!", new Object());
+        }
+
+        if (Objects.isNull(sessionId) || sessionId.isEmpty()) {
+            return new ResponseMessage(false,
+                    "SessionId can not be empty!", new Object());
+        }
+
+        if (Objects.isNull(userId) || userId.isEmpty()) {
+            return new ResponseMessage(false,
+                    "userId can not be empty!", new Object());
+        }
+
         Star star = starRepositoryService.getStarByEventIdAndSessionIdAndUserId(eventId, sessionId, userId);
 
         if (Objects.isNull(star)) {

@@ -10,6 +10,7 @@ import javaday.istanbul.sliconf.micro.specs.CommentSpecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -39,6 +40,7 @@ public class ListCommentsRoute implements Route {
         this.commentRepositoryService = commentRepositoryService;
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GET
     @ApiOperation(value = "Lists comments", nickname = "ListCommentsRoute")
     @ApiImplicitParams({ //

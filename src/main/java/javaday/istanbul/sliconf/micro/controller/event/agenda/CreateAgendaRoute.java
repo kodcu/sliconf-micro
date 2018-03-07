@@ -76,7 +76,7 @@ public class CreateAgendaRoute implements Route {
      * @param eventKey
      * @return
      */
-    private ResponseMessage saveAgenda(List<AgendaElement> agenda, String eventKey) {
+    public ResponseMessage saveAgenda(List<AgendaElement> agenda, String eventKey) {
 
         ResponseMessage responseMessage;
 
