@@ -1,52 +1,32 @@
 package javaday.istanbul.sliconf.micro.model;
 
-import com.couchbase.client.java.repository.annotation.Field;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
-
 /**
  * Created by ttayfur on 7/6/17.
  */
-@Document
+@Document(collection = "users")
+@CompoundIndexes(
+        @CompoundIndex(def = "{'id':1}")
+)
 public class User implements Serializable {
-
     @Id
-    @GeneratedValue(strategy = UNIQUE)
-    @Field
     private String id;
-
-    @Field
     private String username;
-
-    @Field
     private String fullname;
-
-    @Field
     private String email;
-
-    @Field
     private String password;
-
-    @Field
     private byte[] hashedPassword;
-
-    @Field
     private byte[] salt;
-
-    @Field
     private Boolean anonymous;
-
-    @Field
     private String deviceId;
-
-    @Field
     private String role;
 
 

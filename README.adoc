@@ -25,72 +25,6 @@ https://help.github.com/articles/cloning-a-repository/#platform-mac
 Gerekli bilgilar bu linkte:
 http://docs.oracle.com/javase/7/docs/webnotes/install/index.html
 
-=== Sisteme Couchbase kurulumu
-
-https://www.couchbase.com/downloads adresinden Enterprise 4.6.x sürümünü indiriyoruz
-
-Linux sistemler için şu adımları takip ediyoruz:
-https://developer.couchbase.com/documentation/server/4.6/install/install-linux.html
-
-Windows sistemler için şu adımları takip ediyoruz:
-https://developer.couchbase.com/documentation/server/4.6/install/install-package-windows.html
-
-Mac Os X sistemler için şu adımları takip ediyoruz:
-https://developer.couchbase.com/documentation/server/4.6/install/macos-install.html
-
-Kurulum işlemleri bittikten sonra http://localhost:8091 adresi üzerinden Couchbase
-Server'a erişebilirsiniz.
-
-İlk kurulumda şifreyi girip , çıkan herşeye next demeniz yeterlidir.
-
-=== Cluster Ekleme ===
-http://localhost:8091/ui/index.html#/servers/active
-
-üzerinden sisteme bir cluster eklenmesi gerekiyor. Add Server Butonu ile yeni bir cluster
-ekleyelim.
-
-=== Bucket Ekleme ===
-http://localhost:8091/ui/index.html#/buckets
-
-üzerinden sisteme bir bucket ekleyeceğiz (Bu kısım şimdilik elle yapılıyor).
-Create New Data Bucket butonuna basarak gelen ekran üzerinde:
-
-Bucket Name kısmına "users" (tırnaklar olmadan) yazıyoruz.
-
-Bucketler için 100 mb yeterlidir.
-
-Access Control kısmında Standart port seçeneğinde bulunan password kısmına
-"jfFMd8Nd" (users bucket'imiz için erişim parolası olacak)yazıyoruz. Diğer kısımlar varsayılan olarak kalabilir.
-Aynı şeyleri:
-
-default
-events
-tokens
-comments
-stars
-
-bucketları için yapıyoruz.
-
-
-Defaultta şifre sormayacak.
-
-=== Index Ekleme ===
-http://localhost:8091/ui/index.html#/query/workbench
-
-Queryler kısmından sıra sıra alttaki kodları çalıştırıyoruz:
-
-create primary index on users;
-
-create primary index on events;
-
-create primary index on default;
-
-create primary index on tokens;
-
-create primary index on comments;
-
-create primary index on stars;
-
 === Intellij IDEA kurulumu
 
 Buradan sisteme göre gerekli dosyaları indiriyoruz:
@@ -98,8 +32,6 @@ https://www.jetbrains.com/idea/download/#section=windows
 
 Kurulum için gerekli bilgiler burada:
 https://www.jetbrains.com/help/idea/installing-and-launching.html 
-
-Import ederken maven'ı seçip jdk'nın doğru seçildiğine emin olduktan sonra src/main/java/Main.java'ya girip solda fonksiyonların yanındaki yeşil oklardan birini tıklayarak ilk kez çalıştırıyoruz.Çalıştırmadan biraz beklemeniz gerekebilir IDE gerekli dependancyleri çekiceğinden.Bir sonraki kullanımlarda yukarıda ki okları kullanabilirsiniz.
 
 === Postman
 
@@ -110,17 +42,42 @@ Gerekli routeların kontrolü için bu link size yardımcı olacaktır.Sadece ch
 https://www.getpostman.com/collections/dae7508c1fe7667f32bd
 
 
-== Couchbase sample query for getting matching element of an array
+## MongoDB
 
-``SELECT FIRST t FOR t IN hashedPassword WHEN t.a1 = -74 END
- FROM users WHERE ANY t IN hashedPassword SATISFIES t.a1 = -74 END;``
+Lokalde mongo sunucusu kurulduktan sonra aşağıdaki adımlarla ayağa kaldırılması gerekiyor.
 
+### Yetkilendirme
 
-== Couchbase Backup ==
-cd /opt/couchbase/bin
+MongoDB, yetkilendirme aktifleştirilerek ayağa kaldırılmalı. Windows için:
 
-./cbbackup http://localhost:8091 /home/ttayfur/couchbase-backup/back-15-08-17 -u admin -p jfFMd8Nd
+```
+$mongod --dbpath dataPath --auth
+```
 
-== Couchbase Docker ile Calistirma ==
+### Yetkilendirilmiş Kullanıcı Oluşturulması
 
-sudo docker run -d --name couchbase -p 8091-8094:8091-8094 -p 11210:11210 -v /opt/couchbase/var:/opt/couchbase/var couchbase:4.6.4
+Mongo Shell'e yetkilendirilmiş kullanıcı girişi için projedekiyle benzer isim, şifre ve role sahip bir kullanıcı eklenmesi gerekiyor:
+
+```
+$mongo
+use admin
+db.createUser({user: "sliconfSecretUser", pwd: "LJYKkAw6b3TtQt3f", roles:[{role: "root", db: "admin"}]})
+```
+
+Komut, aşağıdakine benzer bir çıktı döndürmeli
+```
+Successfully added user: {
+	"user" : "sliconfSecretUser",
+	"roles" : [
+		{
+			"role" : "root",
+			"db" : "admin"
+		}
+	]
+}
+```
+
+### Mongo Shell'e Giriş
+```
+mongo -u sliconfSecretUser --authenticationDatabase admin -p LJYKkAw6b3TtQt3f
+```

@@ -25,6 +25,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/service/users/login").permitAll()
                 .antMatchers("/service/users/login/anonymous/:deviceId").permitAll()
+                .antMatchers("/service/users/register").permitAll()
+                .antMatchers("/service/users/register/anonymous/:deviceId").permitAll()
                 .antMatchers("/service/swagger").permitAll()
                 .antMatchers("/resources/**").permitAll()
                 .antMatchers("/service/**")

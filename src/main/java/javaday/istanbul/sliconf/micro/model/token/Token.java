@@ -1,31 +1,23 @@
 package javaday.istanbul.sliconf.micro.model.token;
 
-import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
-@Document
+@Document(collection = "tokens")
+@CompoundIndexes(
+        @CompoundIndex(def = "{'id':1}")
+)
 public class Token {
-
     @Id
-    @GeneratedValue(strategy = UNIQUE)
     private String id;
-
-    @Field
     private String tokenValue;
-
-    @Field
     private LocalDateTime validUntilDate;
-
-    @Field
     private String validMail;
-
-    @Field
     private String type;
 
     public String getId() {

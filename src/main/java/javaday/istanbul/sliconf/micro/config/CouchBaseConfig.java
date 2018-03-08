@@ -25,11 +25,8 @@ import java.util.Base64;
 import java.util.List;
 
 
-/**
- * Created by ttayfur on 7/8/17.
- */
 @Configuration
-@Profile({"prod", "dev"})
+@Profile("couchbase")
 public class CouchBaseConfig extends AbstractCouchbaseConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(CouchBaseConfig.class);

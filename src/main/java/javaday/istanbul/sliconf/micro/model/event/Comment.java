@@ -1,20 +1,20 @@
 package javaday.istanbul.sliconf.micro.model.event;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
-
-@Document
+@Document(collection = "comments")
+@CompoundIndexes(
+        @CompoundIndex(def = "{'id':1}")
+)
 public class Comment {
-
     @Id
-    @GeneratedValue(strategy = UNIQUE)
     private String id;
     private String eventId;
     private String sessionId;

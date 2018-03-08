@@ -10,6 +10,7 @@ import javaday.istanbul.sliconf.micro.provider.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -42,6 +43,7 @@ public class GetEventWithKeyRoute implements Route {
         this.userRepositoryService = userRepositoryService;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GET
     @ApiOperation(value = "Returns event with given key", nickname = "GetEventWithKeyRoute")
     @ApiImplicitParams({ //

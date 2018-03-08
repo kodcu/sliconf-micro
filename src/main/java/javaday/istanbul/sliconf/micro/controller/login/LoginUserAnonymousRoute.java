@@ -4,6 +4,7 @@ import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,12 +26,15 @@ public class LoginUserAnonymousRoute implements Route {
 
     private LoginControllerMessageProvider loginControllerMessageProvider;
     private UserRepositoryService userRepositoryService;
+    private TokenAuthenticationService tokenAuthenticationService;
 
     @Autowired
     public LoginUserAnonymousRoute(LoginControllerMessageProvider loginControllerMessageProvider,
-                                   UserRepositoryService userRepositoryService) {
+                                   UserRepositoryService userRepositoryService,
+                                   TokenAuthenticationService tokenAuthenticationService) {
         this.loginControllerMessageProvider = loginControllerMessageProvider;
         this.userRepositoryService = userRepositoryService;
+        this.tokenAuthenticationService = tokenAuthenticationService;
     }
 
     @POST
@@ -53,7 +57,13 @@ public class LoginUserAnonymousRoute implements Route {
             return new ResponseMessage(false, "Device id can not be empty or null!", deviceId);
         }
 
-        return getUserWithDeviceId(deviceId);
+        ResponseMessage responseMessage = getUserWithDeviceId(deviceId);
+
+        if (Objects.nonNull(responseMessage) && responseMessage.isStatus()) {
+            tokenAuthenticationService.addAuthentication(response.raw(), (User) responseMessage.getReturnObject());
+        }
+
+        return responseMessage;
     }
 
     public ResponseMessage getUserWithDeviceId(String deviceId) {

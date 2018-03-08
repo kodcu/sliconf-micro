@@ -1,16 +1,16 @@
 package javaday.istanbul.sliconf.micro.model.event.agenda;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
-
-@Document
+@Document(collection = "stars")
+@CompoundIndexes(
+        @CompoundIndex(def = "{'id':1}")
+)
 public class Star {
-
     @Id
-    @GeneratedValue(strategy = UNIQUE)
     private String id;
 
     private String eventId;

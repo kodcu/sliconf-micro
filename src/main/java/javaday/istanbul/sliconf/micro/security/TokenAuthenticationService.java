@@ -92,7 +92,7 @@ public class TokenAuthenticationService {
                 SecurityToken securityToken = securityTokenMap.get(username);
 
                 if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
-                        Objects.nonNull(date) && !date.after(securityToken.getValidUntilDate())) {
+                        Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
                     return new UsernamePasswordAuthenticationToken(username, user, AuthorityUtils.createAuthorityList(role));
                 }
             }
