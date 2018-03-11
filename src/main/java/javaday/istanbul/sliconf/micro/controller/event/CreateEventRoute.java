@@ -172,7 +172,7 @@ public class CreateEventRoute implements Route {
             return responseMessage;
         }
 
-        if (Objects.nonNull(dbEvent.isDeleted()) && dbEvent.isDeleted()) {
+        if (Objects.nonNull(dbEvent.getDeleted()) && dbEvent.getDeleted()) {
             return new ResponseMessage(false, messageProvider.getMessage("canNotUpdateDeletedEvent"), event);
         }
 

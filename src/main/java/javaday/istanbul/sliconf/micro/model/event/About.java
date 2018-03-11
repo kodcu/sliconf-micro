@@ -1,8 +1,13 @@
 package javaday.istanbul.sliconf.micro.model.event;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.Map;
 
+@Getter
+@Setter
 public class About {
     private Map<String, String> social;
 
@@ -13,44 +18,4 @@ public class About {
     private Location location;
 
     private String email;
-
-    public Map<String, String> getSocial() {
-        return social;
-    }
-
-    public void setSocial(Map<String, String> social) {
-        this.social = social;
-    }
-
-    public String getWeb() {
-        return web;
-    }
-
-    public void setWeb(String web) {
-        this.web = web;
-    }
-
-    public List<String> getPhone() {
-        return phone;
-    }
-
-    public void setPhone(List<String> phone) {
-        this.phone = phone;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

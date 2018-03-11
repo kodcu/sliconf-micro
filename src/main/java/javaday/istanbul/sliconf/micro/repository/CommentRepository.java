@@ -131,5 +131,5 @@ public interface CommentRepository extends MongoRepository<Comment, String>, Cru
 
     // MOST LIKED COMMENT
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 ORDER BY rate DESC LIMIT 1")
-    Comment findTopByRateAndApprovedAndEventId(String status, String eventId);
+    Page<Comment> findByApprovedAndEventId(String status, String eventId, Pageable pageable);
 }

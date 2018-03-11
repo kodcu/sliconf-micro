@@ -32,6 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/service/**")
                 .access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new Sliconf401AuthenticationEntryPoint())
+                .and()
                 // And filter other requests to check the presence of JWT in header
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()

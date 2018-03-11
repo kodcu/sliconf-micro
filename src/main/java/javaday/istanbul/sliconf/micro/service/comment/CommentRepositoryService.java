@@ -21,6 +21,10 @@ public class CommentRepositoryService implements CommentService {
     private static final String RECENT = "recent";
     private static final String OLDEST = "oldest";
 
+    private Sort sortRate = new Sort(Sort.Direction.DESC, "rate");
+    private Sort sortTimeDESC = new Sort(Sort.Direction.DESC, "time");
+    private Sort sortTimeASC = new Sort(Sort.Direction.ASC, "time");
+
     public Comment save(Comment comment) {
         return repo.save(comment);
     }
@@ -30,9 +34,6 @@ public class CommentRepositoryService implements CommentService {
         Page<Comment> pages = null;
 
         if (count != 0) {
-            Sort sortRate = new Sort(Sort.Direction.DESC, "rate");
-            Sort sortTimeDESC = new Sort(Sort.Direction.DESC, "time");
-            Sort sortTimeASC = new Sort(Sort.Direction.ASC, "time");
 
             Pageable ratePageable = new PageRequest(page, count, sortRate);
             Pageable timePageableDESC = new PageRequest(page, count, sortTimeDESC);
@@ -73,9 +74,6 @@ public class CommentRepositoryService implements CommentService {
         Page<Comment> pages = null;
 
         if (count != 0) {
-            Sort sortRate = new Sort(Sort.Direction.DESC, "rate");
-            Sort sortTimeDESC = new Sort(Sort.Direction.DESC, "time");
-            Sort sortTimeASC = new Sort(Sort.Direction.ASC, "time");
 
             Pageable ratePageable = new PageRequest(page, count, sortRate);
             Pageable timePageableDESC = new PageRequest(page, count, sortTimeDESC);
@@ -116,9 +114,6 @@ public class CommentRepositoryService implements CommentService {
         Page<Comment> pages = null;
 
         if (count != 0) {
-            Sort sortRate = new Sort(Sort.Direction.DESC, "rate");
-            Sort sortTimeDESC = new Sort(Sort.Direction.DESC, "time");
-            Sort sortTimeASC = new Sort(Sort.Direction.ASC, "time");
 
             Pageable ratePageable = new PageRequest(page, count, sortRate);
             Pageable timePageableDESC = new PageRequest(page, count, sortTimeDESC);
@@ -155,7 +150,12 @@ public class CommentRepositoryService implements CommentService {
     }
 
     public Comment findMostLikedComment(String status, String eventId) {
-        Comment comment = repo.findTopByRateAndApprovedAndEventId(status, eventId);
+        Pageable ratePageable = new PageRequest(0, 1, sortRate);
+        Page<Comment> commentPage = repo.findByApprovedAndEventId(status, eventId, ratePageable);
+
+        List<Comment> comments = Objects.nonNull(commentPage) ? commentPage.getContent() : new ArrayList<>();
+
+        Comment comment = Objects.nonNull(comments) && !comments.isEmpty() ? comments.get(0) : new Comment();
 
         return Objects.nonNull(comment) ? comment : new Comment();
     }

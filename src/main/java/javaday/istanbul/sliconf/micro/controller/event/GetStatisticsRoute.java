@@ -53,17 +53,17 @@ public class GetStatisticsRoute implements Route {
     })
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        ResponseMessage responseMessage;
-
         String key = request.params("key");
 
+        return getStatistics(key);
+    }
+
+    public ResponseMessage getStatistics(String key) {
         // event var mı diye kontrol et
         Event event = repositoryService.findEventByKeyEquals(key);
 
         if (Objects.isNull(event)) {
-            responseMessage = new ResponseMessage(false,
-                    messageProvider.getMessage("eventCanNotFound"), new Object());
-            return responseMessage;
+            return new ResponseMessage(false, messageProvider.getMessage("eventCanNotFound"), new Object());
         }
 
         Map<String, Object> statisticsMap = new HashMap<>();
@@ -81,8 +81,10 @@ public class GetStatisticsRoute implements Route {
         String mostCommentedSessionId = commentRepositoryService.findMostCommentedSessionId(APPROVED, event.getId());
 
         if (Objects.nonNull(event.getAgenda())) {
-            List<AgendaElement> agendaElements = event.getAgenda().stream().filter(agendaElement -> Objects.nonNull(agendaElement) &&
-                    Objects.nonNull(agendaElement.getId()) && agendaElement.getId().equals(mostCommentedSessionId)).collect(Collectors.toList());
+            List<AgendaElement> agendaElements = event.getAgenda().stream()
+                    .filter(agendaElement -> Objects.nonNull(agendaElement) &&
+                    Objects.nonNull(agendaElement.getId()) && agendaElement.getId().equals(mostCommentedSessionId))
+                    .collect(Collectors.toList());
 
             if (Objects.nonNull(agendaElements) && !agendaElements.isEmpty() && Objects.nonNull(agendaElements.get(0))) {
                 statisticsMap.put("mostCommentedSession", agendaElements.get(0));
@@ -95,10 +97,7 @@ public class GetStatisticsRoute implements Route {
         statisticsMap.put("totalUsers", event.getTotalUsers());
 
 
-        responseMessage = new ResponseMessage(true,
-                messageProvider.getMessage("eventStatisticsQueried"), statisticsMap);
-
-        return responseMessage;
+        return new ResponseMessage(true, messageProvider.getMessage("eventStatisticsQueried"), statisticsMap);
     }
 
     private long getCommentCount(Event event, String status, String type) {

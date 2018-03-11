@@ -51,11 +51,14 @@ public class CreateUserRoute implements Route {
             @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
     })
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-
-        ResponseMessage responseMessage;
-
         String body = request.body();
         User user = JsonUtil.fromJson(body, User.class);
+
+        return registerUser(user);
+    }
+
+    public ResponseMessage registerUser(User user) {
+        ResponseMessage responseMessage;
 
         if (Objects.isNull(user)) {
             responseMessage = new ResponseMessage(false, "User can not be empty", "");

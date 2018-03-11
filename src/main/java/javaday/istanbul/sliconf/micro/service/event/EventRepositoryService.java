@@ -95,7 +95,7 @@ public class EventRepositoryService implements EventService {
     public List<Event> getNotDeletedEvents(List<Event> events) {
         if (Objects.nonNull(events)) {
             return events.stream()
-                    .filter(event -> Objects.nonNull(event) && !event.isDeleted()).collect(Collectors.toList());
+                    .filter(event -> Objects.nonNull(event) && !event.getDeleted()).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }

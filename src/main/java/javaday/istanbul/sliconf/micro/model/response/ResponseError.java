@@ -1,8 +1,13 @@
 package javaday.istanbul.sliconf.micro.model.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Created by ttayfur on 7/6/17.
  */
+@Getter
+@Setter
 public class ResponseError {
 
     private String message;
@@ -13,9 +18,5 @@ public class ResponseError {
 
     public ResponseError(Exception e) {
         this.message = e.getMessage();
-    }
-
-    public String getMessage() {
-        return this.message;
     }
 }

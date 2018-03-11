@@ -14,6 +14,8 @@ import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -23,6 +25,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,6 +40,8 @@ public class LoginUserRoute implements Route {
     private TokenAuthenticationService tokenAuthenticationService;
 
     private Logger logger = LoggerFactory.getLogger(LoginUserRoute.class);
+
+    private String pwString = "password";
 
     @Autowired
     public LoginUserRoute(LoginControllerMessageProvider loginControllerMessageProvider,
@@ -61,6 +66,22 @@ public class LoginUserRoute implements Route {
     })
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (Objects.nonNull(authentication) &&
+                Objects.nonNull(authentication.getCredentials()) &&
+                authentication.getCredentials() instanceof LinkedHashMap) {
+
+            LinkedHashMap<String, Object> authUser = (LinkedHashMap) authentication.getCredentials();
+
+            authUser.put("salt", null);
+            authUser.put("hashedPassword", null);
+            authUser.put(pwString, null);
+
+            return new ResponseMessage(true, "User Authenticated", authUser);
+        }
+
         String body = request.body();
         UserCaptcha userCaptcha = JsonUtil.fromJson(body, UserCaptcha.class);
 

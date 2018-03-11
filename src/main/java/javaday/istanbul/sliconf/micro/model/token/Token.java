@@ -1,5 +1,7 @@
 package javaday.istanbul.sliconf.micro.model.token;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
@@ -12,6 +14,8 @@ import java.time.LocalDateTime;
 @CompoundIndexes(
         @CompoundIndex(def = "{'id':1}")
 )
+@Getter
+@Setter
 public class Token {
     @Id
     private String id;
@@ -19,44 +23,4 @@ public class Token {
     private LocalDateTime validUntilDate;
     private String validMail;
     private String type;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTokenValue() {
-        return tokenValue;
-    }
-
-    public void setTokenValue(String tokenValue) {
-        this.tokenValue = tokenValue;
-    }
-
-    public LocalDateTime getValidUntilDate() {
-        return validUntilDate;
-    }
-
-    public void setValidUntilDate(LocalDateTime validUntilDate) {
-        this.validUntilDate = validUntilDate;
-    }
-
-    public String getValidMail() {
-        return validMail;
-    }
-
-    public void setValidMail(String validMail) {
-        this.validMail = validMail;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 }
