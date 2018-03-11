@@ -28,17 +28,6 @@ public interface CommentRepository extends MongoRepository<Comment, String>, Cru
 
     List<Comment> findAllByApprovedAndEventIdAndSessionIdAndUserId(String approved, String eventId, String sessionId, String userId);
 
-    /*
-    // Count and Order By rate
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 ORDER BY rate DESC LIMIT $3")
-    List<Comment> findFirstByApprovedAndEventIdOrderByRateDesc(String approved, String eventId, int count);
-
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 AND sessionId = $3 ORDER BY rate DESC LIMIT $4")
-    List<Comment> findFirstByApprovedAndEventIdAndSessionIdOrderByRateDesc(String approved, String eventId, String sessionId, int count);
-
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 AND sessionId = $3 AND userId = $4 ORDER BY rate DESC LIMIT $5")
-    List<Comment> findFirstByApprovedAndEventIdAndSessionIdAndUserIdOrderByRateDesc(String approved, String eventId, String sessionId, String userId, int count);
-*/
     /////////////////////////////////////////
     // Order By rate
     // eventId
@@ -63,20 +52,12 @@ public interface CommentRepository extends MongoRepository<Comment, String>, Cru
     Page<Comment> findAllByApprovedAndEventIdAndSessionIdAndUserIdOrderByRateDesc(String approve, String eventId, String sessionId, String userId, Pageable pageable);
 
     // Count
-    //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 LIMIT $3")
-    //List<Comment> findFirstByApprovedAndEventId(String approved, String eventId, int count);
 
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 OFFSET $3 LIMIT $4")
     Page<Comment> findAllByApprovedAndEventId(String approve, String eventId, Pageable pageable);
 
-    //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 AND sessionId = $3 LIMIT $4")
-    //List<Comment> findFirstByApprovedAndEventIdAndSessionId(String approved, String eventId, String sessionId, int count);
-
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 AND sessionId = $3 OFFSET $4 LIMIT $5")
     Page<Comment> findAllByApprovedAndEventIdAndSessionId(String approve, String eventId, String sessionId, Pageable pageable);
-
-    //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 AND sessionId = $3 AND userId = $4 LIMIT $5")
-    //List<Comment> findFirstByApprovedAndEventIdAndSessionIdAndUserId(String approved, String eventId, String sessionId, String userId, int count);
 
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 AND sessionId = $3 AND userId = $4 OFFSET $5 LIMIT $6")
     Page<Comment> findAllByApprovedAndEventIdAndSessionIdAndUserId(String approve, String eventId, String sessionId, String userId, Pageable pageable);
@@ -148,25 +129,6 @@ public interface CommentRepository extends MongoRepository<Comment, String>, Cru
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 AND sessionId = $3 AND userId = $4 ORDER BY time ASC OFFSET $5 LIMIT $6")
     Page<Comment> findAllByApprovedAndEventIdAndSessionIdAndUserIdOrderByTimeAsc(String approve, String eventId, String sessionId, String userId, Pageable pageable);
 
-    ///////////////////////////////////////
-    /*
-    // Page Count
-    @Query("#SELECT CEIL(count(*) / $3) FROM comments WHERE approved = $1 AND eventId = $2")
-    int getPageCountForApprovedAndEventId(String approve, String eventId, long count);
-
-    @Query("#SELECT CEIL(count(*) / $5) FROM comments WHERE approved = $1 AND eventId = $2 AND sessionId = $3 AND userId = $4")
-    int getPageCountForApprovedAndEventIdAndSessionIdAndUserId(String approve, String eventId, String sessionId, String userId, long count);
-
-    @Query("#SELECT CEIL(count(*) / $4) FROM comments WHERE approved = $1 AND eventId = $2 AND sessionId = $3")
-    int getPageCountForApprovedAndEventIdAndSessionId(String approve, String eventId, String sessionId, long count);
-
-    ////////////////////////////////////////////////////////////////////
-    @Query("#SELECT CEIL(count(*) / 10) FROM comments WHERE approved = $1 AND eventId = $2 AND sessionId = $3 AND userId = $4")
-    int getPageCountForApprovedAndEventIdAndSessionIdAndUserId(String approve, String eventId, String sessionId, String userId);
-
-    @Query("#SELECT COUNT(1) FROM comments WHERE 1")
-    int getPageCountForApprovedAndEventIdAndSessionIdAndUserId();
-*/
     // MOST LIKED COMMENT
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND approved = $1 AND eventId = $2 ORDER BY rate DESC LIMIT 1")
     Comment findTopByRateAndApprovedAndEventId(String status, String eventId);

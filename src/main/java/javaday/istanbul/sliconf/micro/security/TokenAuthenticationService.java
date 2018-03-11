@@ -1,9 +1,7 @@
 package javaday.istanbul.sliconf.micro.security;
 
 import com.hazelcast.core.IMap;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.token.SecurityToken;
 import javaday.istanbul.sliconf.micro.provider.DistributedMapProvider;
@@ -42,7 +40,7 @@ public class TokenAuthenticationService {
         this.distributedMapProvider = distributedMapProvider;
     }
 
-    public void addAuthentication(HttpServletResponse res, User user) {
+    public String addAuthentication(HttpServletResponse res, User user) {
         Date date = Date.from(Instant.now(Clock.system(
                 ZoneId.of("Asia/Istanbul")
                 )
@@ -69,6 +67,8 @@ public class TokenAuthenticationService {
                 securityToken, EXPIRATION_TIME, expirationTimeUnit);
 
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + jwt);
+
+        return TOKEN_PREFIX + " " + jwt;
     }
 
     public Authentication getAuthentication(HttpServletRequest request) {
@@ -76,25 +76,31 @@ public class TokenAuthenticationService {
 
         if (Objects.nonNull(token)) {
 
-            Claims claims = Jwts.parser()
-                    .setSigningKey(SECRET)
-                    .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-                    .getBody();
+            try {
+                Claims claims = Jwts.parser()
+                        .setSigningKey(SECRET)
+                        .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+                        .getBody();
 
-            String username = claims.get("username", String.class);
-            String role = claims.get("role", String.class);
-            Date date = claims.get("date", Date.class);
-            Object user = claims.get("user", Object.class);
+                String username = claims.get("username", String.class);
+                String role = claims.get("role", String.class);
+                Date date = claims.get("date", Date.class);
+                Object user = claims.get("user", Object.class);
 
-            IMap<String, SecurityToken> securityTokenMap = distributedMapProvider.getSecurityTokenMap("securityTokens");
+                IMap<String, SecurityToken> securityTokenMap = distributedMapProvider.getSecurityTokenMap("securityTokens");
 
-            if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
-                SecurityToken securityToken = securityTokenMap.get(username);
+                if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
+                    SecurityToken securityToken = securityTokenMap.get(username);
 
-                if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
-                        Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
-                    return new UsernamePasswordAuthenticationToken(username, user, AuthorityUtils.createAuthorityList(role));
+                    if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
+                            Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
+                        return new UsernamePasswordAuthenticationToken(username, user, AuthorityUtils.createAuthorityList(role));
+                    }
                 }
+
+            } catch (ExpiredJwtException | UnsupportedJwtException |
+                    MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                return null;
             }
         }
 

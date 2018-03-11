@@ -59,8 +59,13 @@ public class LoginUserAnonymousRoute implements Route {
 
         ResponseMessage responseMessage = getUserWithDeviceId(deviceId);
 
-        if (Objects.nonNull(responseMessage) && responseMessage.isStatus()) {
-            tokenAuthenticationService.addAuthentication(response.raw(), (User) responseMessage.getReturnObject());
+        if (Objects.nonNull(responseMessage) && responseMessage.isStatus() &&
+                Objects.nonNull(responseMessage.getReturnObject()) &&
+                responseMessage.getReturnObject() instanceof User) {
+            String token = tokenAuthenticationService.addAuthentication(response.raw(), (User) responseMessage.getReturnObject());
+            User anonymousUser = (User) responseMessage.getReturnObject();
+            anonymousUser.setToken(token);
+            responseMessage.setReturnObject(anonymousUser);
         }
 
         return responseMessage;

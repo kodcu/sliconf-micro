@@ -94,7 +94,7 @@ public class ListCommentsRoute implements Route {
 
         List<Comment> comments;
         int count = 0;
-        int page = 1;
+        int page = 0;
 
         if (Objects.nonNull(type) && !CommentSpecs.isCommentTypeValid(type)) {
             return new ResponseMessage(false, "Comment type must be a valid type", new Object());
@@ -122,8 +122,8 @@ public class ListCommentsRoute implements Route {
             }
         }
 
-        if (page < 1) {
-            return new ResponseMessage(false, "Page value must be greater than 0", new Object());
+        if (page < 0) {
+            return new ResponseMessage(false, "Page value must be greater than -1", new Object());
         }
 
         if (Objects.nonNull(status) && !status.isEmpty()) {

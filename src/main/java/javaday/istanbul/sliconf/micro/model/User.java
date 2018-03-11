@@ -28,6 +28,7 @@ public class User implements Serializable {
     private Boolean anonymous;
     private String deviceId;
     private String role;
+    private String token;
 
 
     public User() {
@@ -137,5 +138,13 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

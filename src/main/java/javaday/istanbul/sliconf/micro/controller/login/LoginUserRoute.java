@@ -76,8 +76,13 @@ public class LoginUserRoute implements Route {
 
         ResponseMessage responseMessage = loginUser(requestUser);
 
-        if (Objects.nonNull(responseMessage) && responseMessage.isStatus()) {
-            tokenAuthenticationService.addAuthentication(response.raw(), (User) responseMessage.getReturnObject());
+        if (Objects.nonNull(responseMessage) && responseMessage.isStatus() &&
+                Objects.nonNull(responseMessage.getReturnObject()) &&
+                responseMessage.getReturnObject() instanceof User) {
+            User user = (User) responseMessage.getReturnObject();
+            String token = tokenAuthenticationService.addAuthentication(response.raw(), (User) responseMessage.getReturnObject());
+            user.setToken(token);
+            responseMessage.setReturnObject(user);
         }
 
         return responseMessage;
