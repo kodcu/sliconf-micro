@@ -34,4 +34,8 @@ public class StarRepositoryService implements StarService {
     public Star getStarByEventIdAndSessionIdAndUserId(String eventId, String sessionId, String userId) {
         return repository.findFirstByEventIdAndSessionIdAndUserId(eventId, sessionId, userId);
     }
+
+    public List<Star> findAll() {
+        return repository.findAll();
+    }
 }

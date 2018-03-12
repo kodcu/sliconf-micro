@@ -1,7 +1,6 @@
 package javaday.istanbul.sliconf.micro.repository;
 
 import javaday.istanbul.sliconf.micro.model.event.Event;
-import org.springframework.data.couchbase.core.query.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

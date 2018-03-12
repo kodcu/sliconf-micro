@@ -197,4 +197,8 @@ public class CommentRepositoryService implements CommentService {
     public Comment findById(String commentId) {
         return repo.findOne(commentId);
     }
+
+    public List<Comment> findAll() {
+        return repo.findAll();
+    }
 }

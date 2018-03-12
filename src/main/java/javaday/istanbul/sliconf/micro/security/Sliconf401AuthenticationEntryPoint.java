@@ -18,8 +18,7 @@ public class Sliconf401AuthenticationEntryPoint implements AuthenticationEntryPo
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,application/json");
         response.addHeader("Access-Control-Allow-Credentials", "true");
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-                authException.getMessage());
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED,authException.getMessage());
     }
 
 }

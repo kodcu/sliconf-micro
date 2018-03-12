@@ -49,10 +49,13 @@ public class CreateUserAnonymousRoute implements Route {
             @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
     })
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-
-        ResponseMessage responseMessage;
-
         String deviceId = request.params("deviceId");
+
+        return createAnonymousUser(deviceId);
+    }
+
+    public ResponseMessage createAnonymousUser(String deviceId) {
+        ResponseMessage responseMessage;
 
         if (Objects.isNull(deviceId) || deviceId.isEmpty()) {
             responseMessage = new ResponseMessage(false, "Device id can not be empty or null!", "");

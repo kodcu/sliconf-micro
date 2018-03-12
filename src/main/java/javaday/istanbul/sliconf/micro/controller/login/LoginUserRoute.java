@@ -9,6 +9,7 @@ import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.service.UserPassService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.EmailUtil;
+import javaday.istanbul.sliconf.micro.util.LoginTokenUtil;
 import javaday.istanbul.sliconf.micro.util.VerifyCaptcha;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.slf4j.Logger;
@@ -97,14 +98,7 @@ public class LoginUserRoute implements Route {
 
         ResponseMessage responseMessage = loginUser(requestUser);
 
-        if (Objects.nonNull(responseMessage) && responseMessage.isStatus() &&
-                Objects.nonNull(responseMessage.getReturnObject()) &&
-                responseMessage.getReturnObject() instanceof User) {
-            User user = (User) responseMessage.getReturnObject();
-            String token = tokenAuthenticationService.addAuthentication(response.raw(), (User) responseMessage.getReturnObject());
-            user.setToken(token);
-            responseMessage.setReturnObject(user);
-        }
+        LoginTokenUtil.addAuthenticationTokenOnLogin(responseMessage, response, tokenAuthenticationService);
 
         return responseMessage;
     }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -81,5 +82,9 @@ public class TokenRepositoryService implements TokenService {
         token.setType(TokenType.PASSWORD_RESET.toString());
 
         return token;
+    }
+
+    public List<Token> findAll() {
+        return repo.findAll();
     }
 }

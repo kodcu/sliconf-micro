@@ -6,6 +6,7 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.util.LoginTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -59,14 +60,7 @@ public class LoginUserAnonymousRoute implements Route {
 
         ResponseMessage responseMessage = getUserWithDeviceId(deviceId);
 
-        if (Objects.nonNull(responseMessage) && responseMessage.isStatus() &&
-                Objects.nonNull(responseMessage.getReturnObject()) &&
-                responseMessage.getReturnObject() instanceof User) {
-            String token = tokenAuthenticationService.addAuthentication(response.raw(), (User) responseMessage.getReturnObject());
-            User anonymousUser = (User) responseMessage.getReturnObject();
-            anonymousUser.setToken(token);
-            responseMessage.setReturnObject(anonymousUser);
-        }
+        LoginTokenUtil.addAuthenticationTokenOnLogin(responseMessage, response, tokenAuthenticationService);
 
         return responseMessage;
     }
