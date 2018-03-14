@@ -310,6 +310,35 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- PITEST for mutation tests-->
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.1.11</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <targetClasses>
+                        <param>javaday.istanbul.sliconf.micro.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>javaday.istanbul.sliconf.micro.*</param>
+
+                    </targetTests>
+                    <outputFormats>
+                        <outputFormat>XML</outputFormat>
+                        <outputFormat>HTML</outputFormat>
+                    </outputFormats>
+                    <environmentVariables> <environment>test</environment> </environmentVariables>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.alexvictoor</groupId>
+                        <artifactId>pitest-cucumber-plugin</artifactId>
+                        <version>0.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 </project>

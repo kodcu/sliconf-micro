@@ -14,6 +14,7 @@ public class EmailUtil {
 
     private EmailUtil() {
         // empty constructor for static
+        throw new IllegalStateException("You can not create a new instance from this class!");
     }
 
     /**

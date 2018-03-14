@@ -10,6 +10,8 @@ import javaday.istanbul.sliconf.micro.controller.event.comment.ModerateCommentRo
 import javaday.istanbul.sliconf.micro.controller.event.comment.VoteCommentRoute;
 import javaday.istanbul.sliconf.micro.controller.event.floor.CreateFloorRoute;
 import javaday.istanbul.sliconf.micro.controller.event.room.CreateRoomRoute;
+import javaday.istanbul.sliconf.micro.controller.event.schedule.AddToScheduleRoute;
+import javaday.istanbul.sliconf.micro.controller.event.schedule.RemoveFromScheduleRoute;
 import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRoute;
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorRoute;
 import javaday.istanbul.sliconf.micro.controller.login.*;
@@ -59,6 +61,10 @@ public class RouteObjects {
     public final ImageUploadRoute imageUploadRoute;
     public final ImageGetRoute imageGetRoute;
 
+    public final AddToScheduleRoute addToScheduleRoute;
+
+    public final RemoveFromScheduleRoute removeFromScheduleRoute;
+
 
     @Autowired
     public RouteObjects(BeanFactory beanFactory) {
@@ -96,5 +102,8 @@ public class RouteObjects {
         listCommentsRoute = beanFactory.getBean(ListCommentsRoute.class);
         moderateCommentRoute = beanFactory.getBean(ModerateCommentRoute.class);
         voteCommentRoute = beanFactory.getBean(VoteCommentRoute.class);
+
+        addToScheduleRoute = beanFactory.getBean(AddToScheduleRoute.class);
+        removeFromScheduleRoute = beanFactory.getBean(RemoveFromScheduleRoute.class);
     }
 }

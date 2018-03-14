@@ -62,7 +62,7 @@ public class CreateAgendaRoute implements Route {
             return responseMessage;
         }
 
-        List<AgendaElement> agenda = JsonUtil.fromJsonForList(body, AgendaElement.class);
+        final List<AgendaElement> agenda = JsonUtil.fromJsonForList(body, AgendaElement.class);
 
         String eventKey = request.params("event-key");
 

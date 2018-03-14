@@ -140,6 +140,13 @@ public class RootController {
                 });
             });
 
+            path("schedule/", () -> {
+                post("add", routeObjects.addToScheduleRoute, JsonUtil.json());
+                delete("remove", routeObjects.removeFromScheduleRoute, JsonUtil.json());
+
+                get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
+            });
+
             path("image/", () -> {
                 post("upload", routeObjects.imageUploadRoute, JsonUtil.json());
                 get("get/:id", routeObjects.imageGetRoute, JsonUtil.json());
