@@ -4,8 +4,10 @@ import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.EmailUtil;
+import javaday.istanbul.sliconf.micro.util.LoginTokenUtil;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,12 +31,16 @@ public class CreateUserRoute implements Route {
 
     private UserRepositoryService userRepositoryService;
 
+    private TokenAuthenticationService tokenAuthenticationService;
+
 
     @Autowired
     public CreateUserRoute(LoginControllerMessageProvider loginControllerMessageProvider,
-                           UserRepositoryService userRepositoryService) {
+                           UserRepositoryService userRepositoryService,
+                           TokenAuthenticationService tokenAuthenticationService) {
         this.loginControllerMessageProvider = loginControllerMessageProvider;
         this.userRepositoryService = userRepositoryService;
+        this.tokenAuthenticationService = tokenAuthenticationService;
     }
 
 
@@ -54,7 +60,11 @@ public class CreateUserRoute implements Route {
         String body = request.body();
         User user = JsonUtil.fromJson(body, User.class);
 
-        return registerUser(user);
+        ResponseMessage responseMessage = registerUser(user);
+
+        LoginTokenUtil.addAuthenticationTokenOnLogin(responseMessage, response, tokenAuthenticationService);
+
+        return responseMessage;
     }
 
     public ResponseMessage registerUser(User user) {

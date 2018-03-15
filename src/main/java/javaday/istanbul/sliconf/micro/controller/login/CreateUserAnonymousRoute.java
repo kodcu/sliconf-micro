@@ -4,7 +4,9 @@ import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.util.LoginTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -27,12 +29,16 @@ public class CreateUserAnonymousRoute implements Route {
 
     private UserRepositoryService userRepositoryService;
 
+    private TokenAuthenticationService tokenAuthenticationService;
+
 
     @Autowired
     public CreateUserAnonymousRoute(LoginControllerMessageProvider loginControllerMessageProvider,
-                                    UserRepositoryService userRepositoryService) {
+                                    UserRepositoryService userRepositoryService,
+                                    TokenAuthenticationService tokenAuthenticationService) {
         this.loginControllerMessageProvider = loginControllerMessageProvider;
         this.userRepositoryService = userRepositoryService;
+        this.tokenAuthenticationService = tokenAuthenticationService;
     }
 
 
@@ -51,7 +57,11 @@ public class CreateUserAnonymousRoute implements Route {
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
         String deviceId = request.params("deviceId");
 
-        return createAnonymousUser(deviceId);
+        ResponseMessage responseMessage = createAnonymousUser(deviceId);
+
+        LoginTokenUtil.addAuthenticationTokenOnLogin(responseMessage, response, tokenAuthenticationService);
+
+        return responseMessage;
     }
 
     public ResponseMessage createAnonymousUser(String deviceId) {
