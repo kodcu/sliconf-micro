@@ -11,6 +11,7 @@ import javaday.istanbul.sliconf.micro.controller.event.comment.VoteCommentRoute;
 import javaday.istanbul.sliconf.micro.controller.event.floor.CreateFloorRoute;
 import javaday.istanbul.sliconf.micro.controller.event.room.CreateRoomRoute;
 import javaday.istanbul.sliconf.micro.controller.event.schedule.AddToScheduleRoute;
+import javaday.istanbul.sliconf.micro.controller.event.schedule.ListScheduleRoute;
 import javaday.istanbul.sliconf.micro.controller.event.schedule.RemoveFromScheduleRoute;
 import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRoute;
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorRoute;
@@ -62,8 +63,8 @@ public class RouteObjects {
     public final ImageGetRoute imageGetRoute;
 
     public final AddToScheduleRoute addToScheduleRoute;
-
     public final RemoveFromScheduleRoute removeFromScheduleRoute;
+    public final ListScheduleRoute listScheduleRoute;
 
 
     @Autowired
@@ -105,5 +106,6 @@ public class RouteObjects {
 
         addToScheduleRoute = beanFactory.getBean(AddToScheduleRoute.class);
         removeFromScheduleRoute = beanFactory.getBean(RemoveFromScheduleRoute.class);
+        listScheduleRoute = beanFactory.getBean(ListScheduleRoute.class);
     }
 }

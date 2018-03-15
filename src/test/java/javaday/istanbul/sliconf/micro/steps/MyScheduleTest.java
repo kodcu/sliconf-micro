@@ -6,6 +6,7 @@ import javaday.istanbul.sliconf.micro.CucumberConfiguration;
 import javaday.istanbul.sliconf.micro.builder.EventBuilder;
 import javaday.istanbul.sliconf.micro.builder.UserBuilder;
 import javaday.istanbul.sliconf.micro.controller.event.schedule.AddToScheduleRoute;
+import javaday.istanbul.sliconf.micro.controller.event.schedule.ListScheduleRoute;
 import javaday.istanbul.sliconf.micro.controller.event.schedule.RemoveFromScheduleRoute;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.UserScheduleElement;
@@ -29,11 +30,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 @ContextConfiguration(classes = {CucumberConfiguration.class})
@@ -58,10 +56,10 @@ public class MyScheduleTest {// NOSONAR
     @Autowired
     RemoveFromScheduleRoute removeFromScheduleRoute;
 
-    /*
+
     @Autowired
     ListScheduleRoute listScheduleRoute;
-    */
+
 
     private List<Speaker> speakers = new ArrayList<>();
     private List<AgendaElement> agendaElements = new ArrayList<>();
@@ -348,8 +346,29 @@ public class MyScheduleTest {// NOSONAR
 
     @Diyelimki("^Kullanici gitmek istedigi konusmalari listeliyor$")
     public void kullaniciGitmekIstedigiKonusmalariListeliyor() throws Throwable {
+        // Given
 
+        // When
+        ResponseMessage listResponseMessage1 = listScheduleRoute.listSchedule(this.user1.getId(), this.event1.getId());
+        ResponseMessage listResponseMessage2 = listScheduleRoute.listSchedule(this.user1.getId(), null);
+        ResponseMessage listResponseMessage3 = listScheduleRoute.listSchedule(this.user1.getId(), "");
+        ResponseMessage listResponseMessage4 = listScheduleRoute.listSchedule(null, this.event1.getId());
+        ResponseMessage listResponseMessage5 = listScheduleRoute.listSchedule("", this.event1.getId());
+        ResponseMessage listResponseMessage6 = listScheduleRoute.listSchedule(null, null);
+        ResponseMessage listResponseMessage7 = listScheduleRoute.listSchedule(null, "");
+        ResponseMessage listResponseMessage8 = listScheduleRoute.listSchedule("", "");
+        ResponseMessage listResponseMessage9 = listScheduleRoute.listSchedule("", null);
+
+        // Then
+        assertTrue(listResponseMessage1.isStatus());
+
+        assertFalse(listResponseMessage2.isStatus());
+        assertFalse(listResponseMessage3.isStatus());
+        assertFalse(listResponseMessage4.isStatus());
+        assertFalse(listResponseMessage5.isStatus());
+        assertFalse(listResponseMessage6.isStatus());
+        assertFalse(listResponseMessage7.isStatus());
+        assertFalse(listResponseMessage8.isStatus());
+        assertFalse(listResponseMessage9.isStatus());
     }
-
-
 }

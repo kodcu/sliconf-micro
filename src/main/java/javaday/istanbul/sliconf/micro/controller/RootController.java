@@ -143,8 +143,7 @@ public class RootController {
             path("schedule/", () -> {
                 post("add", routeObjects.addToScheduleRoute, JsonUtil.json());
                 delete("remove", routeObjects.removeFromScheduleRoute, JsonUtil.json());
-
-                get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
+                get("list/:userId/:eventId", routeObjects.listScheduleRoute, JsonUtil.json());
             });
 
             path("image/", () -> {
