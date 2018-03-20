@@ -109,7 +109,7 @@ public class LoginUserRoute implements Route {
         try {
             result = VerifyCaptcha.verify(userCaptcha.getCaptcha());
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            this.logger.error(e.getMessage(), e);
         }
 
         return result;
@@ -141,6 +141,7 @@ public class LoginUserRoute implements Route {
                         responseUser.setRole("ROLE_USER");
                     }
 
+                    logger.info("User logged successfully %s", responseUser.getUsername());
                     return new ResponseMessage(true, "User successfully logged in", responseUser);
                 }
             }

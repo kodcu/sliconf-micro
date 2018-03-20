@@ -4,6 +4,9 @@ import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.UserScheduleElement;
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.model.event.Floor;
+import javaday.istanbul.sliconf.micro.model.event.Room;
+import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
@@ -19,6 +22,7 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -106,10 +110,37 @@ public class AddToScheduleRoute implements Route {
             return new ResponseMessage(false, "Event can not found with given id", userScheduleElement);
         }
 
-        if(!isAgendaElementExists(event.getAgenda(), userScheduleElement.getSessionId())) {
+        AgendaElement agendaElement = getAgendaElement(event.getAgenda(), userScheduleElement.getSessionId());
+
+        if (Objects.isNull(agendaElement)) {
             return new ResponseMessage(false, "Session can not found with given id", userScheduleElement);
         }
 
+        userScheduleElement.setAgendaElement(agendaElement);
+
+        Speaker speaker = getSpeaker(event.getSpeakers(), agendaElement.getSpeaker());
+
+        if (Objects.isNull(speaker)) {
+            return new ResponseMessage(false, "Speaker can not found with given id", userScheduleElement);
+        }
+
+        userScheduleElement.setSpeaker(speaker);
+
+        Room room = getRoom(event.getRooms(), agendaElement.getRoom());
+
+        if (Objects.isNull(room)) {
+            return new ResponseMessage(false, "Room can not found with given id", userScheduleElement);
+        }
+
+        userScheduleElement.setRoom(room);
+
+        Floor floor = getFloor(event.getFloorPlan(), room.getFloor());
+
+        if (Objects.isNull(floor)) {
+            return new ResponseMessage(false, "Floor can not found with given id", userScheduleElement);
+        }
+
+        userScheduleElement.setFloor(floor);
 
         UserScheduleElement userScheduleElementSaved = userScheduleRepositoryService.save(userScheduleElement);
 
@@ -118,22 +149,72 @@ public class AddToScheduleRoute implements Route {
         }
 
         List<UserScheduleElement> userScheduleElementList = userScheduleRepositoryService
-                .findByUserIdAndEventId(userScheduleElement.getUserId(), userScheduleElement.getUserId());
+                .findByUserIdAndEventId(userScheduleElement.getUserId(), userScheduleElement.getEventId());
 
         return new ResponseMessage(true, "Schedule element added", userScheduleElementList);
     }
 
-    private boolean isAgendaElementExists(List<AgendaElement> agendaElements, String sessionId) {
-        if (Objects.nonNull(agendaElements)) {
-            List<AgendaElement> agendaElementsNew = agendaElements.stream().filter(agendaElement ->
-                    Objects.nonNull(agendaElement) && Objects.nonNull(agendaElement.getId())
-                            && agendaElement.getId().equals(sessionId)
-            ).collect(Collectors.toList());
+    private AgendaElement getAgendaElement(List<AgendaElement> agendaElements, String sessionId) {
+        AgendaElement returnAgendaElement = null;
 
-            return (Objects.nonNull(agendaElementsNew) && !agendaElementsNew.isEmpty() &&
-                    Objects.nonNull(agendaElementsNew.get(0)));
+        if (Objects.nonNull(agendaElements)) {
+            for (AgendaElement agendaElement : agendaElements) {
+                if (Objects.nonNull(agendaElement) && Objects.nonNull(agendaElement.getId())
+                        && agendaElement.getId().equals(sessionId)) {
+                    returnAgendaElement = agendaElement;
+                    break;
+                }
+            }
         }
 
-        return false;
+        return returnAgendaElement;
+    }
+
+    private Speaker getSpeaker(List<Speaker> speakers, String speakerId) {
+        Speaker returnSpeaker = null;
+
+        if (Objects.nonNull(speakers)) {
+            for (Speaker speaker : speakers) {
+                if (Objects.nonNull(speaker) && Objects.nonNull(speaker.getId())
+                        && speaker.getId().equals(speakerId)) {
+                    returnSpeaker = speaker;
+                    break;
+                }
+            }
+        }
+
+        return returnSpeaker;
+    }
+
+    private Room getRoom(List<Room> rooms, String roomId) {
+        Room returnRoom = null;
+
+        if (Objects.nonNull(rooms)) {
+            for (Room room : rooms) {
+                if (Objects.nonNull(room) && Objects.nonNull(room.getId())
+                        && room.getId().equals(roomId)) {
+                    returnRoom = room;
+                    break;
+                }
+            }
+        }
+
+        return returnRoom;
+    }
+
+    private Floor getFloor(List<Floor> floors, String floorId) {
+        Floor returnFloor = null;
+
+        if (Objects.nonNull(floors)) {
+            for (Floor floor : floors) {
+                if (Objects.nonNull(floor) && Objects.nonNull(floor.getId())
+                        && floor.getId().equals(floorId)) {
+                    returnFloor = floor;
+                    break;
+                }
+            }
+        }
+
+        return returnFloor;
     }
 }

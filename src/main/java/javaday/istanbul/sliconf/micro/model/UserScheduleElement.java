@@ -1,5 +1,9 @@
 package javaday.istanbul.sliconf.micro.model;
 
+import javaday.istanbul.sliconf.micro.model.event.Floor;
+import javaday.istanbul.sliconf.micro.model.event.Room;
+import javaday.istanbul.sliconf.micro.model.event.Speaker;
+import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -20,4 +24,9 @@ public class UserScheduleElement {
     private String eventId;
     private String sessionId;
     private String userId;
+
+    private AgendaElement agendaElement;
+    private Speaker speaker;
+    private Room room;
+    private Floor floor;
 }
