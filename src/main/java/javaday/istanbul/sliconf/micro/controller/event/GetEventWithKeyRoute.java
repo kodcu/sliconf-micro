@@ -70,6 +70,12 @@ public class GetEventWithKeyRoute implements Route {
 
     public ResponseMessage getEventWithKey(String key, String userId, String statistic) {
         // event var mı diye kontrol et
+        if (Objects.isNull(key)) {
+            return new ResponseMessage(false,
+                    messageProvider.getMessage("eventKeyCantBeEmpty"), new Object());
+        }
+
+        key = key.trim();
         Event event = repositoryService.findEventByKeyEquals(key);
 
         if (Objects.isNull(event)) {

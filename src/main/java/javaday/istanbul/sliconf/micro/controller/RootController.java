@@ -146,6 +146,13 @@ public class RootController {
                 get("list/:userId/:eventId", routeObjects.listScheduleRoute, JsonUtil.json());
             });
 
+            path("admin/", () ->
+                    path("list/", () -> {
+                        get("users", routeObjects.adminListUsersRoute, JsonUtil.json());
+                        get("events", routeObjects.adminListEventsRoute, JsonUtil.json());
+                    })
+            );
+
             path("image/", () -> {
                 post("upload", routeObjects.imageUploadRoute, JsonUtil.json());
                 get("get/:id", routeObjects.imageGetRoute, JsonUtil.json());

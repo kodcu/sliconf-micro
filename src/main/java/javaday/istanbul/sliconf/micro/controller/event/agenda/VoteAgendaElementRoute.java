@@ -9,6 +9,7 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.star.StarRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.specs.AgendaSpecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 @Api
@@ -136,29 +136,70 @@ public class VoteAgendaElementRoute implements Route {
 
         List<AgendaElement> agendaElements = event.getAgenda();
 
-        AgendaElement agendaElementSource;
+        AgendaElement agendaElementSource = AgendaSpecs.getAgendaElement(agendaElements, sessionId);
 
-        if (Objects.nonNull(agendaElements)) {
-            List<AgendaElement> agendaElements1 = agendaElements.stream().filter(agendaElement ->
-                    Objects.nonNull(agendaElement) && Objects.nonNull(agendaElement.getId()) &&
-                            agendaElement.getId().equals(sessionId)).collect(Collectors.toList());
-
-            if (Objects.nonNull(agendaElements1) && !agendaElements1.isEmpty()) {
-                agendaElementSource = agendaElements1.get(0);
-            } else {
-                return new ResponseMessage(false, "Session can not found with given session id", sessionId);
-            }
-        } else {
+        if (Objects.isNull(agendaElementSource)) {
             return new ResponseMessage(false, "Session can not found with given session id", sessionId);
         }
 
         List<Star> starList = starRepositoryService.findAllByEventIdAndSessionIdAndUserId(eventId, sessionId, userId);
 
-        Star star;
 
+        ResponseMessage createOrUpdateMessage = createOrUpdateStar(starList, agendaElementSource, eventId, sessionId, userId, vote);
+
+        if (!createOrUpdateMessage.isStatus()) {
+            return createOrUpdateMessage;
+        }
+
+        updateStarOnAgendaElement(agendaElements, agendaElementSource, sessionId);
+
+        event.setAgenda(agendaElements);
+
+        ResponseMessage eventResponseMessage = eventRepositoryService.save(event);
+
+        if (!eventResponseMessage.isStatus()) {
+            return eventResponseMessage;
+        }
+
+        //* user kontrol et
+        //* event kontrol et
+        //* session kontrol et
+        //* daha once oy vermis mi kontrol et
+        //* verdi ise replace et
+        //* vermedi ise yeni oyu olustur
+        //* agendanın starını güncelle
+
+        return new ResponseMessage(true, "Session voted", agendaElementSource);
+    }
+
+    private ResponseMessage checkIfUserExists(String userId) {
+        User user = userRepositoryService.findById(userId);
+
+        if (Objects.nonNull(user)) {
+            return new ResponseMessage(true, "User found with given id", user);
+        } else {
+            return new ResponseMessage(false, "User can not found with given id", userId);
+        }
+    }
+
+    private void updateStarOnAgendaElement(List<AgendaElement> agendaElements, AgendaElement agendaElementSource, String sessionId) {
+        for (AgendaElement element : agendaElements) {
+            if (Objects.nonNull(element) && Objects.nonNull(element.getId()) &&
+                    element.getId().equals(sessionId)) {
+                element.setVoteCount(agendaElementSource.getVoteCount());
+
+                if (!Double.isNaN(agendaElementSource.getStar())) {
+                    element.setStar(agendaElementSource.getStar());
+                }
+            }
+        }
+    }
+
+    private ResponseMessage createOrUpdateStar(List<Star> starList, AgendaElement agendaElementSource,
+                                               String eventId, String sessionId, String userId, int vote) {
         if (Objects.nonNull(starList) && !starList.isEmpty() && Objects.nonNull(starList.get(0))) {
             // oyu guncelle
-            star = starList.get(0);
+            Star star = starList.get(0);
 
             int oldVote = star.getValue();
             star.setValue(vote);
@@ -168,18 +209,7 @@ public class VoteAgendaElementRoute implements Route {
                 return starResponseMessage;
             }
 
-            long agendaVoteCount = agendaElementSource.getVoteCount();
-            double agendaStarValue = !Double.isNaN(agendaElementSource.getStar()) ? agendaElementSource.getStar() : 0.0;
-
-            double newVoteMean;
-
-            if (agendaVoteCount != 0) {
-                newVoteMean = ((agendaVoteCount * agendaStarValue) - oldVote + vote) / agendaVoteCount;
-            } else {
-                newVoteMean = vote;
-            }
-
-            agendaElementSource.setStar(newVoteMean);
+            saveOnAgendaElementStar(agendaElementSource, vote, oldVote);
 
         } else {
             // yeni oy olustur
@@ -211,43 +241,21 @@ public class VoteAgendaElementRoute implements Route {
             agendaElementSource.setStar(newVoteMean);
         }
 
-        for (AgendaElement element: agendaElements) {
-            if(Objects.nonNull(element) && Objects.nonNull(element.getId()) &&
-                    element.getId().equals(sessionId)) {
-                element.setVoteCount(agendaElementSource.getVoteCount());
-
-                if (!Double.isNaN(agendaElementSource.getStar())) {
-                    element.setStar(agendaElementSource.getStar());
-                }
-            }
-        }
-
-        event.setAgenda(agendaElements);
-
-        ResponseMessage eventResponseMessage = eventRepositoryService.save(event);
-
-        if (!eventResponseMessage.isStatus()) {
-            return eventResponseMessage;
-        }
-
-        //* user kontrol et
-        //* event kontrol et
-        //* session kontrol et
-        //* daha once oy vermis mi kontrol et
-        //* verdi ise replace et
-        //* vermedi ise yeni oyu olustur
-        //* agendanın starını güncelle
-
-        return new ResponseMessage(true, "Session voted", agendaElementSource);
+        return new ResponseMessage(true, "Star updated", agendaElementSource);
     }
 
-    private ResponseMessage checkIfUserExists(String userId) {
-        User user = userRepositoryService.findById(userId);
+    private void saveOnAgendaElementStar(AgendaElement agendaElementSource, int vote, int oldVote) {
+        long agendaVoteCount = agendaElementSource.getVoteCount();
+        double agendaStarValue = !Double.isNaN(agendaElementSource.getStar()) ? agendaElementSource.getStar() : 0.0;
 
-        if (Objects.nonNull(user)) {
-            return new ResponseMessage(true, "User found with given id", user);
+        double newVoteMean;
+
+        if (agendaVoteCount != 0) {
+            newVoteMean = ((agendaVoteCount * agendaStarValue) - oldVote + vote) / agendaVoteCount;
         } else {
-            return new ResponseMessage(false, "User can not found with given id", userId);
+            newVoteMean = vote;
         }
+
+        agendaElementSource.setStar(newVoteMean);
     }
 }

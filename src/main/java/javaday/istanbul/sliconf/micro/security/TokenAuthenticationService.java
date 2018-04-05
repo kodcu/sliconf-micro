@@ -47,15 +47,6 @@ public class TokenAuthenticationService {
                 ).plus(EXPIRATION_TIME, expirationUnit)
         );
 
-        String jwt = Jwts.builder()
-                .claim("username", user.getUsername())
-                .claim("role", user.getRole())
-                .claim("user", user)
-                .claim("date", date)
-                .setExpiration(date)
-                .signWith(SignatureAlgorithm.HS512, SECRET)
-                .compact();
-
         SecurityToken securityToken = new SecurityToken();
 
         securityToken.setUsername(user.getUsername());
@@ -66,9 +57,31 @@ public class TokenAuthenticationService {
         distributedMapProvider.putSecurityToken("securityTokens", user.getUsername(),
                 securityToken, EXPIRATION_TIME, expirationTimeUnit);
 
+        String jwt = generateJwtString(user, date);
+
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + jwt);
 
         return TOKEN_PREFIX + " " + jwt;
+    }
+
+    public String generateJwtString(User user, Date date) {
+        if (Objects.nonNull(date) && isUserFieldsAreNotNull(user)) {
+            return Jwts.builder()
+                    .claim("username", user.getUsername())
+                    .claim("role", user.getRole())
+                    .claim("user", user)
+                    .claim("date", date)
+                    .setExpiration(date)
+                    .signWith(SignatureAlgorithm.HS512, SECRET)
+                    .compact();
+        }
+
+        return null;
+    }
+
+    private boolean isUserFieldsAreNotNull(User user) {
+        return Objects.nonNull(user) && Objects.nonNull(user.getUsername()) &&
+                Objects.nonNull(user.getRole());
     }
 
     public Authentication getAuthentication(HttpServletRequest request) {
@@ -94,7 +107,7 @@ public class TokenAuthenticationService {
 
                     if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
                             Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
-                        return new UsernamePasswordAuthenticationToken(username, user, AuthorityUtils.createAuthorityList(role));
+                        return generateAuthentication(username, role, user);
                     }
                 }
 
@@ -105,5 +118,9 @@ public class TokenAuthenticationService {
         }
 
         return null;
+    }
+
+    public Authentication generateAuthentication(String username, String role, Object user) {
+        return new UsernamePasswordAuthenticationToken(username, user, AuthorityUtils.createAuthorityList(role));
     }
 }

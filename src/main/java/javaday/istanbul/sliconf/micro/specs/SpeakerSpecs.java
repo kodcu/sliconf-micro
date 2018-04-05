@@ -116,4 +116,20 @@ public class SpeakerSpecs {
                 Objects.nonNull(agendaElement) && Objects.nonNull(agendaElement.getId()) &&
                 speaker.getId().equals(agendaElement.getSpeaker());
     }
+
+    public static Speaker getSpeaker(List<Speaker> speakers, String speakerId) {
+        Speaker returnSpeaker = null;
+
+        if (Objects.nonNull(speakers)) {
+            for (Speaker speaker : speakers) {
+                if (Objects.nonNull(speaker) && Objects.nonNull(speaker.getId())
+                        && speaker.getId().equals(speakerId)) {
+                    returnSpeaker = speaker;
+                    break;
+                }
+            }
+        }
+
+        return returnSpeaker;
+    }
 }

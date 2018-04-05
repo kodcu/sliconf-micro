@@ -1,5 +1,7 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import javaday.istanbul.sliconf.micro.controller.admin.AdminListEventsRoute;
+import javaday.istanbul.sliconf.micro.controller.admin.AdminListUsersRoute;
 import javaday.istanbul.sliconf.micro.controller.event.*;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.CreateAgendaRoute;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.GetVoteAgendaElementRoute;
@@ -66,6 +68,9 @@ public class RouteObjects {
     public final RemoveFromScheduleRoute removeFromScheduleRoute;
     public final ListScheduleRoute listScheduleRoute;
 
+    public final AdminListUsersRoute adminListUsersRoute;
+    public final AdminListEventsRoute adminListEventsRoute;
+
 
     @Autowired
     public RouteObjects(BeanFactory beanFactory) {
@@ -107,5 +112,8 @@ public class RouteObjects {
         addToScheduleRoute = beanFactory.getBean(AddToScheduleRoute.class);
         removeFromScheduleRoute = beanFactory.getBean(RemoveFromScheduleRoute.class);
         listScheduleRoute = beanFactory.getBean(ListScheduleRoute.class);
+
+        adminListUsersRoute = beanFactory.getBean(AdminListUsersRoute.class);
+        adminListEventsRoute = beanFactory.getBean(AdminListEventsRoute.class);
     }
 }

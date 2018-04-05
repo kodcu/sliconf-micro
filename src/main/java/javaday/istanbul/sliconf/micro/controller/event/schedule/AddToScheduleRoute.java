@@ -12,6 +12,8 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.schedule.UserScheduleRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.specs.AgendaSpecs;
+import javaday.istanbul.sliconf.micro.specs.SpeakerSpecs;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,10 +24,8 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 @Api
@@ -72,77 +72,24 @@ public class AddToScheduleRoute implements Route {
     }
 
     public ResponseMessage addToSchedule(UserScheduleElement userScheduleElement) {
+
         if (Objects.isNull(userScheduleElement)) {
             return new ResponseMessage(false, "User schedule Element can not be empty", new Object());
         }
 
-        if (Objects.isNull(userScheduleElement.getEventId()) || userScheduleElement.getEventId().isEmpty()) {
-            return new ResponseMessage(false, "Event Id can not be empty", new Object());
+        ResponseMessage fieldsResponseMessage = isFieldsNotNull(userScheduleElement);
+
+        if (!fieldsResponseMessage.isStatus()) {
+            return fieldsResponseMessage;
         }
 
-        if (Objects.isNull(userScheduleElement.getSessionId()) || userScheduleElement.getSessionId().isEmpty()) {
-            return new ResponseMessage(false, "Session Id can not be empty", new Object());
+        ResponseMessage userScheduleElementMessage = prepareUserScheduleElementForSave(userScheduleElement);
+
+        if (!userScheduleElementMessage.isStatus()) {
+            return userScheduleElementMessage;
         }
 
-        if (Objects.isNull(userScheduleElement.getUserId()) || userScheduleElement.getUserId().isEmpty()) {
-            return new ResponseMessage(false, "User Id can not be empty", new Object());
-        }
-
-        if (Objects.nonNull(userScheduleElement.getId()) && !userScheduleElement.getId().isEmpty()) {
-            return new ResponseMessage(false, "This element already added to schedule", userScheduleElement);
-        }
-
-        UserScheduleElement userScheduleElementFromDB = userScheduleRepositoryService.findByUserIdAndEventIdAndSessionId(userScheduleElement.getUserId(), userScheduleElement.getEventId(), userScheduleElement.getSessionId());
-
-        if (Objects.nonNull(userScheduleElementFromDB)) {
-            return new ResponseMessage(false, "This element already added to schedule", userScheduleElement);
-        }
-
-        User user = userRepositoryService.findById(userScheduleElement.getUserId());
-
-        if (Objects.isNull(user)) {
-            return new ResponseMessage(false, "User can not found with given id", userScheduleElement);
-        }
-
-        Event event = eventRepositoryService.findOne(userScheduleElement.getEventId());
-
-        if (Objects.isNull(event)) {
-            return new ResponseMessage(false, "Event can not found with given id", userScheduleElement);
-        }
-
-        AgendaElement agendaElement = getAgendaElement(event.getAgenda(), userScheduleElement.getSessionId());
-
-        if (Objects.isNull(agendaElement)) {
-            return new ResponseMessage(false, "Session can not found with given id", userScheduleElement);
-        }
-
-        userScheduleElement.setAgendaElement(agendaElement);
-
-        Speaker speaker = getSpeaker(event.getSpeakers(), agendaElement.getSpeaker());
-
-        if (Objects.isNull(speaker)) {
-            return new ResponseMessage(false, "Speaker can not found with given id", userScheduleElement);
-        }
-
-        userScheduleElement.setSpeaker(speaker);
-
-        Room room = getRoom(event.getRooms(), agendaElement.getRoom());
-
-        if (Objects.isNull(room)) {
-            return new ResponseMessage(false, "Room can not found with given id", userScheduleElement);
-        }
-
-        userScheduleElement.setRoom(room);
-
-        Floor floor = getFloor(event.getFloorPlan(), room.getFloor());
-
-        if (Objects.isNull(floor)) {
-            return new ResponseMessage(false, "Floor can not found with given id", userScheduleElement);
-        }
-
-        userScheduleElement.setFloor(floor);
-
-        UserScheduleElement userScheduleElementSaved = userScheduleRepositoryService.save(userScheduleElement);
+        UserScheduleElement userScheduleElementSaved = userScheduleRepositoryService.save((UserScheduleElement) userScheduleElementMessage.getReturnObject());
 
         if (Objects.isNull(userScheduleElementSaved)) {
             return new ResponseMessage(false, "Schedule can not saved to db", "");
@@ -154,37 +101,7 @@ public class AddToScheduleRoute implements Route {
         return new ResponseMessage(true, "Schedule element added", userScheduleElementList);
     }
 
-    private AgendaElement getAgendaElement(List<AgendaElement> agendaElements, String sessionId) {
-        AgendaElement returnAgendaElement = null;
 
-        if (Objects.nonNull(agendaElements)) {
-            for (AgendaElement agendaElement : agendaElements) {
-                if (Objects.nonNull(agendaElement) && Objects.nonNull(agendaElement.getId())
-                        && agendaElement.getId().equals(sessionId)) {
-                    returnAgendaElement = agendaElement;
-                    break;
-                }
-            }
-        }
-
-        return returnAgendaElement;
-    }
-
-    private Speaker getSpeaker(List<Speaker> speakers, String speakerId) {
-        Speaker returnSpeaker = null;
-
-        if (Objects.nonNull(speakers)) {
-            for (Speaker speaker : speakers) {
-                if (Objects.nonNull(speaker) && Objects.nonNull(speaker.getId())
-                        && speaker.getId().equals(speakerId)) {
-                    returnSpeaker = speaker;
-                    break;
-                }
-            }
-        }
-
-        return returnSpeaker;
-    }
 
     private Room getRoom(List<Room> rooms, String roomId) {
         Room returnRoom = null;
@@ -216,5 +133,81 @@ public class AddToScheduleRoute implements Route {
         }
 
         return returnFloor;
+    }
+
+    private ResponseMessage isFieldsNotNull(UserScheduleElement userScheduleElement) {
+
+
+        if (Objects.isNull(userScheduleElement.getEventId()) || userScheduleElement.getEventId().isEmpty()) {
+            return new ResponseMessage(false, "Event Id can not be empty", new Object());
+        }
+
+        if (Objects.isNull(userScheduleElement.getSessionId()) || userScheduleElement.getSessionId().isEmpty()) {
+            return new ResponseMessage(false, "Session Id can not be empty", new Object());
+        }
+
+        if (Objects.isNull(userScheduleElement.getUserId()) || userScheduleElement.getUserId().isEmpty()) {
+            return new ResponseMessage(false, "User Id can not be empty", new Object());
+        }
+
+        if (Objects.nonNull(userScheduleElement.getId()) && !userScheduleElement.getId().isEmpty()) {
+            return new ResponseMessage(false, "This element already added to schedule", userScheduleElement);
+        }
+
+        return new ResponseMessage(true, "", "");
+    }
+
+    private ResponseMessage prepareUserScheduleElementForSave(UserScheduleElement userScheduleElement) {
+        UserScheduleElement userScheduleElementFromDB = userScheduleRepositoryService.findByUserIdAndEventIdAndSessionId(userScheduleElement.getUserId(), userScheduleElement.getEventId(), userScheduleElement.getSessionId());
+
+        if (Objects.nonNull(userScheduleElementFromDB)) {
+            return new ResponseMessage(false, "This element already added to schedule", userScheduleElement);
+        }
+
+        User user = userRepositoryService.findById(userScheduleElement.getUserId());
+
+        if (Objects.isNull(user)) {
+            return new ResponseMessage(false, "User can not found with given id", userScheduleElement);
+        }
+
+        Event event = eventRepositoryService.findOne(userScheduleElement.getEventId());
+
+        if (Objects.isNull(event)) {
+            return new ResponseMessage(false, "Event can not found with given id", userScheduleElement);
+        }
+
+        AgendaElement agendaElement = AgendaSpecs.getAgendaElement(event.getAgenda(), userScheduleElement.getSessionId());
+
+        if (Objects.isNull(agendaElement)) {
+            return new ResponseMessage(false, "Session can not found with given id", userScheduleElement);
+        }
+
+        userScheduleElement.setAgendaElement(agendaElement);
+
+        Speaker speaker = SpeakerSpecs.getSpeaker(event.getSpeakers(), agendaElement.getSpeaker());
+
+        if (Objects.isNull(speaker)) {
+            return new ResponseMessage(false, "Speaker can not found with given id", userScheduleElement);
+        }
+
+        userScheduleElement.setSpeaker(speaker);
+
+        Room room = getRoom(event.getRooms(), agendaElement.getRoom());
+
+        if (Objects.isNull(room)) {
+            return new ResponseMessage(false, "Room can not found with given id", userScheduleElement);
+        }
+
+        userScheduleElement.setRoom(room);
+
+        Floor floor = getFloor(event.getFloorPlan(), room.getFloor());
+
+        if (Objects.isNull(floor)) {
+            return new ResponseMessage(false, "Floor can not found with given id", userScheduleElement);
+        }
+
+        userScheduleElement.setFloor(floor);
+
+        return new ResponseMessage(true, "", userScheduleElement);
     }
 }

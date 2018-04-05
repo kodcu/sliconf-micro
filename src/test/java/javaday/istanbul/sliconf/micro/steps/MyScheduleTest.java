@@ -358,6 +358,10 @@ public class MyScheduleTest {// NOSONAR
         ResponseMessage listResponseMessage7 = listScheduleRoute.listSchedule(null, "");
         ResponseMessage listResponseMessage8 = listScheduleRoute.listSchedule("", "");
         ResponseMessage listResponseMessage9 = listScheduleRoute.listSchedule("", null);
+        ResponseMessage listResponseMessage10 = listScheduleRoute.listSchedule("asdasd", this.event1.getId());
+        ResponseMessage listResponseMessage11 = listScheduleRoute.listSchedule("asdasd", "");
+        ResponseMessage listResponseMessage12 = listScheduleRoute.listSchedule(this.user1.getId(), "asdasfas");
+        ResponseMessage listResponseMessage13 = listScheduleRoute.listSchedule("", "asdasfas");
 
         // Then
         assertTrue(listResponseMessage1.isStatus());
@@ -370,5 +374,9 @@ public class MyScheduleTest {// NOSONAR
         assertFalse(listResponseMessage7.isStatus());
         assertFalse(listResponseMessage8.isStatus());
         assertFalse(listResponseMessage9.isStatus());
+        assertFalse(listResponseMessage10.isStatus());
+        assertFalse(listResponseMessage11.isStatus());
+        assertFalse(listResponseMessage12.isStatus());
+        assertFalse(listResponseMessage13.isStatus());
     }
 }

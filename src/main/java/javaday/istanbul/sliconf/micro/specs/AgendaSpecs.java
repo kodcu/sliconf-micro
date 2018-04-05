@@ -96,4 +96,20 @@ public class AgendaSpecs {
 
         return agenda;
     }
+
+    public static AgendaElement getAgendaElement(List<AgendaElement> agendaElements, String sessionId) {
+        AgendaElement returnAgendaElement = null;
+
+        if (Objects.nonNull(agendaElements)) {
+            for (AgendaElement agendaElement : agendaElements) {
+                if (Objects.nonNull(agendaElement) && Objects.nonNull(agendaElement.getId())
+                        && agendaElement.getId().equals(sessionId)) {
+                    returnAgendaElement = agendaElement;
+                    break;
+                }
+            }
+        }
+
+        return returnAgendaElement;
+    }
 }
