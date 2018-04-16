@@ -81,6 +81,8 @@ public class RootController {
             path("users/", () -> {
                 post("login", routeObjects.loginUserRoute, JsonUtil.json());
                 post("login/anonymous/:deviceId", routeObjects.loginUserAnonymousRoute, JsonUtil.json());
+                post("login/auth/:serviceName/:token", routeObjects.loginUserAuthRoute, JsonUtil.json());
+
                 post("register", routeObjects.createUserRoute, JsonUtil.json());
                 post("register/anonymous/:deviceId", routeObjects.createUserAnonymousRoute, JsonUtil.json());
 

@@ -18,6 +18,10 @@ public class UserBuilder {
         return this;
     }
 
+    public UserBuilder setFullName(String fullName) {
+        this.user.setFullname(fullName);
+        return this;
+    }
 
     public UserBuilder setEmail(String email) {
         this.user.setEmail(email);

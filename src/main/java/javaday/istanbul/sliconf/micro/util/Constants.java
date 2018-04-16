@@ -23,6 +23,9 @@ public class Constants {
 
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
+    // Kullanici herhangi event acmissa event_manager statusune yukselir
+    public static final String ROLE_EVENT_MANAGER = "ROLE_EVENT_MANAGER";
+
     private static final List<String> USER_ROLES;
 
     public enum COMMENT_VOTES {
@@ -43,6 +46,7 @@ public class Constants {
         USER_ROLES = new ArrayList<>();
         USER_ROLES.add(DEFAULT_USER_ROLE);
         USER_ROLES.add(ROLE_ADMIN);
+        USER_ROLES.add(ROLE_EVENT_MANAGER);
     }
 
 

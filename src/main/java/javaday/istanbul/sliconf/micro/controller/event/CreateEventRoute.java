@@ -9,6 +9,7 @@ import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.event.EventService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -133,6 +134,7 @@ public class CreateEventRoute implements Route {
 
         event.setExecutiveUser(userId);
 
+        updateUserRoleAndSave(user);
 
         return saveEvent(event);
     }
@@ -203,6 +205,18 @@ public class CreateEventRoute implements Route {
 
         return new ResponseMessage(true,
                 messageProvider.getMessage("eventCreatedSuccessfully"), event);
+    }
+
+    /**
+     * Eger kullanici bir event olusturmus ise rolu ROLE_USER dan ROLE_EVENT_MANAGER a degisir
+     */
+    private void updateUserRoleAndSave(User user) {
+        if (Objects.nonNull(user) &&
+                Constants.DEFAULT_USER_ROLE.equals(user.getRole())) {
+            user.setRole(Constants.ROLE_EVENT_MANAGER);
+
+            userRepositoryService.save(user);
+        }
     }
 
     private void copyUpdatedFields(Event dbEvent, Event updatedEvent) {

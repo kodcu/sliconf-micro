@@ -31,6 +31,7 @@ public class RouteObjects {
 
     public final LoginUserRoute loginUserRoute;
     public final LoginUserAnonymousRoute loginUserAnonymousRoute;
+    public final LoginUserAuthRoute loginUserAuthRoute;
 
     public final SendPasswordResetRoute sendPasswordResetRoute;
     public final ResetPasswordRoute resetPasswordRoute;
@@ -76,8 +77,11 @@ public class RouteObjects {
     public RouteObjects(BeanFactory beanFactory) {
         createUserRoute = beanFactory.getBean(CreateUserRoute.class);
         createUserAnonymousRoute = beanFactory.getBean(CreateUserAnonymousRoute.class);
+
         loginUserRoute = beanFactory.getBean(LoginUserRoute.class);
         loginUserAnonymousRoute = beanFactory.getBean(LoginUserAnonymousRoute.class);
+        loginUserAuthRoute = beanFactory.getBean(LoginUserAuthRoute.class);
+
         sendPasswordResetRoute = beanFactory.getBean(SendPasswordResetRoute.class);
         resetPasswordRoute = beanFactory.getBean(ResetPasswordRoute.class);
         updateUserRoute = beanFactory.getBean(UpdateUserRoute.class);
