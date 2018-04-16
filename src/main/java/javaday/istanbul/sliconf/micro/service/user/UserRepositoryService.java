@@ -228,6 +228,13 @@ public class UserRepositoryService implements UserService {
         return repo.findOne(id);
     }
 
+    /**
+     * Yeni kullanici ve kullanici update sirasinda kullanilan save metodu
+     * Sifrenin kurallara uyup uymadigini kontrol ederek save islemi gerceklestirir
+     *
+     * @param user
+     * @return
+     */
     @Override
     public ResponseMessage saveUser(User user) {
         ResponseMessage responseMessage = new ResponseMessage(false,
