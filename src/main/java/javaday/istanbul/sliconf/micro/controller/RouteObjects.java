@@ -1,5 +1,7 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import javaday.istanbul.sliconf.micro.controller.admin.AdminChangeEventStateForEventRoute;
+import javaday.istanbul.sliconf.micro.controller.admin.AdminListEventStatesRoute;
 import javaday.istanbul.sliconf.micro.controller.admin.AdminListEventsRoute;
 import javaday.istanbul.sliconf.micro.controller.admin.AdminListUsersRoute;
 import javaday.istanbul.sliconf.micro.controller.event.*;
@@ -71,6 +73,8 @@ public class RouteObjects {
 
     public final AdminListUsersRoute adminListUsersRoute;
     public final AdminListEventsRoute adminListEventsRoute;
+    public final AdminListEventStatesRoute adminListEventStatesRoute;
+    public final AdminChangeEventStateForEventRoute adminChangeEventStateForEventRoute;
 
 
     @Autowired
@@ -119,5 +123,7 @@ public class RouteObjects {
 
         adminListUsersRoute = beanFactory.getBean(AdminListUsersRoute.class);
         adminListEventsRoute = beanFactory.getBean(AdminListEventsRoute.class);
+        adminListEventStatesRoute = beanFactory.getBean(AdminListEventStatesRoute.class);
+        adminChangeEventStateForEventRoute = beanFactory.getBean(AdminChangeEventStateForEventRoute.class);
     }
 }

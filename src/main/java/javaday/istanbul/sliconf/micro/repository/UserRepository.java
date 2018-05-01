@@ -31,4 +31,6 @@ public interface UserRepository extends MongoRepository<User, String>,
     void removeAllByEmailAndUsername(String email, String username);
 
     List<User> findByDeviceId(String deviceId);
+
+    List<User> findByAnonymousOrAnonymous(Boolean anonymous, Boolean anonymous2);
 }

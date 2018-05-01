@@ -50,9 +50,9 @@ public class VerifyCaptcha {
             wr.close();
 
             int responseCode = con.getResponseCode();
-            logger.info("Sending 'POST' request to URL : %s", URL);
-            logger.info("Post parameters : %s", postParams);
-            logger.info("Response Code : %d", responseCode);
+            logger.info("Sending 'POST' request to URL : {}", URL);
+            logger.info("Post parameters : {}", postParams);
+            logger.info("Response Code : {}", responseCode);
 
 
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));

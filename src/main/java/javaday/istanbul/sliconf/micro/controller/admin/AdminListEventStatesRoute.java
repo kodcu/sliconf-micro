@@ -1,9 +1,9 @@
 package javaday.istanbul.sliconf.micro.controller.admin;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.model.User;
+import javaday.istanbul.sliconf.micro.model.event.BaseEventState;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.service.event.EventStateService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +15,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import javax.ws.rs.POST;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.List;
@@ -23,20 +23,20 @@ import java.util.Objects;
 
 
 @Api
-@Path("/service/admin/list/users")
+@Path("/service/admin/list/event-states")
 @Produces("application/json")
 @Component
-public class AdminListUsersRoute implements Route {
+public class AdminListEventStatesRoute implements Route {
 
-    private UserRepositoryService userRepositoryService;
+    private EventStateService eventStateService;
 
     @Autowired
-    public AdminListUsersRoute(UserRepositoryService userRepositoryService) {
-        this.userRepositoryService = userRepositoryService;
+    public AdminListEventStatesRoute(EventStateService eventStateService) {
+        this.eventStateService = eventStateService;
     }
 
-    @POST
-    @ApiOperation(value = "Lists users for admin", nickname = "AdminListUsersRoute")
+    @GET
+    @ApiOperation(value = "Lists event states for admin", nickname = "AdminListEventStatesRoute")
     @ApiImplicitParams({})
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -49,10 +49,10 @@ public class AdminListUsersRoute implements Route {
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return getUsers(authentication);
+        return getEventStates(authentication);
     }
 
-    public ResponseMessage getUsers(Authentication authentication) {
+    public ResponseMessage getEventStates(Authentication authentication) {
 
         if (Objects.isNull(authentication)) {
             return new ResponseMessage(false, "You have no authorization to do this!", new Object());
@@ -62,8 +62,8 @@ public class AdminListUsersRoute implements Route {
             return new ResponseMessage(false, "You have no authorization to do this!", new Object());
         }
 
-        List<User> users = userRepositoryService.findAllByAnonymous();
+        List<BaseEventState> eventStates = eventStateService.findAll();
 
-        return new ResponseMessage(true, "Users listed", users);
+        return new ResponseMessage(true, "Event states listed", eventStates);
     }
 }

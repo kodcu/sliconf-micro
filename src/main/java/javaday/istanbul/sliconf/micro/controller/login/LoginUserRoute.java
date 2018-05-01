@@ -141,7 +141,7 @@ public class LoginUserRoute implements Route {
                         responseUser.setRole("ROLE_USER");
                     }
 
-                    logger.info("User logged successfully %s", responseUser.getUsername());
+                    logger.info("User logged successfully {}", responseUser.getUsername());
                     return new ResponseMessage(true, "User successfully logged in", responseUser);
                 }
             }

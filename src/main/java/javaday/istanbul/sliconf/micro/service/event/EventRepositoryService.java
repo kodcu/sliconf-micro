@@ -4,6 +4,7 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.repository.EventRepository;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
+import javaday.istanbul.sliconf.micro.specs.state.state.StateManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class EventRepositoryService implements EventService {
 
     @Autowired
     protected EventRepository repo;
+
+    @Autowired
+    protected EventStateService eventStateService;
 
     public Event findOne(String id) {
         return repo.findById(id);
@@ -68,8 +72,30 @@ public class EventRepositoryService implements EventService {
     public ResponseMessage save(Event event) {
         ResponseMessage message = new ResponseMessage(false, "An error occured while saving event", null);
 
+        ResponseMessage eventStateMessage = StateManager.isEventCompatibleWithState(findOne(event.getId()), event, eventStateService);
+
+        if (!eventStateMessage.isStatus()) {
+            return eventStateMessage;
+        }
+
         EventSpecs.generateStatusDetails(event);
 
+        saveEvent(event, message);
+
+        return message;
+    }
+
+    public ResponseMessage saveAdmin(Event event) {
+        ResponseMessage message = new ResponseMessage(false, "An error occured while saving event", null);
+
+        EventSpecs.generateStatusDetails(event);
+
+        saveEvent(event, message);
+
+        return message;
+    }
+
+    protected void saveEvent(Event event, ResponseMessage message) {
         try {
             Event savedEvent = repo.save(event);
 
@@ -82,8 +108,6 @@ public class EventRepositoryService implements EventService {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-
-        return message;
     }
 
     @Override

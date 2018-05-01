@@ -3,13 +3,10 @@ package javaday.istanbul.sliconf.micro.controller.login;
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.AuthUtil;
 import javaday.istanbul.sliconf.micro.util.LoginTokenUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -27,17 +24,13 @@ import java.util.Objects;
 @Component
 public class LoginUserAuthRoute implements Route {
 
-    private LoginControllerMessageProvider loginControllerMessageProvider;
     private UserRepositoryService userRepositoryService;
     private TokenAuthenticationService tokenAuthenticationService;
 
-    private Logger logger = LoggerFactory.getLogger(LoginUserAuthRoute.class);
 
     @Autowired
-    public LoginUserAuthRoute(LoginControllerMessageProvider loginControllerMessageProvider,
-                              UserRepositoryService userRepositoryService,
+    public LoginUserAuthRoute(UserRepositoryService userRepositoryService,
                               TokenAuthenticationService tokenAuthenticationService) {
-        this.loginControllerMessageProvider = loginControllerMessageProvider;
         this.userRepositoryService = userRepositoryService;
         this.tokenAuthenticationService = tokenAuthenticationService;
     }

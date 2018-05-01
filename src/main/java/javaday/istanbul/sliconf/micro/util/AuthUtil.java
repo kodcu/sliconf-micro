@@ -81,13 +81,12 @@ public class AuthUtil {
                     .build();
         } else {
 
-            logger.error("Invalid ID token while login with google", idTokenString);
+            logger.error("Invalid ID token while login with google {}", idTokenString);
             return null;
         }
     }
 
     /**
-     * Todo henuz linkedin duzgun calismiyor. Linkedin access tokeni kabul etmiyor
      * @param token
      * @return
      */
@@ -127,7 +126,7 @@ public class AuthUtil {
 
             String contentStr = content.toString();
 
-            logger.info("LinkedIn login: %s", contentStr);
+            logger.info("LinkedIn login: {}", contentStr);
 
         } catch (ProtocolException e) {
             logger.error("LinkedIn ProtocolException: ", e);

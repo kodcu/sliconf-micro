@@ -46,6 +46,23 @@ public class UserRepositoryService implements UserService {
         return users;
     }
 
+    /**
+     * Anonim olmayan kullanicilari dondurur. Anoninm alaninin false ya da null olmasina bakar
+     *
+     * @param
+     * @return
+     */
+    public List<User> findAllByAnonymous() {
+        List<User> users = new ArrayList<>();
+
+        for (User user : repo.findAll()) {
+            if (Objects.nonNull(user) && Objects.nonNull(user.getAnonymous()) && !user.getAnonymous())
+                users.add(user);
+        }
+
+        return users;
+    }
+
     @Override
     public List<User> findByUsername(String username) {
         return repo.findByUsername(username);
@@ -60,7 +77,7 @@ public class UserRepositoryService implements UserService {
         List<User> users = repo.findByUsername(username);
 
         if (Objects.nonNull(users)) {
-            users = users.stream().filter(user-> Objects.nonNull(user) &&
+            users = users.stream().filter(user -> Objects.nonNull(user) &&
                     Objects.nonNull(user.getId()) && !user.getId().equals(id)
             ).collect(Collectors.toList());
         }
@@ -196,7 +213,7 @@ public class UserRepositoryService implements UserService {
             responseMessage.setMessage(
                     String.format(userRepositoryMessageProvider.getMessage(passDoNotMeetRequiredLength),
                             Constants.MIN_PASS_LENGTH, Constants.MAX_PASS_LENGTH)
-                    );
+            );
             return responseMessage;
         }
 
@@ -205,6 +222,7 @@ public class UserRepositoryService implements UserService {
 
     /**
      * Gonderilen password gerekli kriterleri karsiliyor mu kontrolu
+     *
      * @param password
      * @return
      */

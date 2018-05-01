@@ -28,9 +28,10 @@ public class TokenAuthenticationService {
     private static final long EXPIRATION_TIME = 1; // days
     private static final ChronoUnit expirationUnit = ChronoUnit.DAYS; // days
     private static final TimeUnit expirationTimeUnit = TimeUnit.DAYS; // days
-    private static final String SECRET = "ThisIsASecret";
+    private static final String SECRET = "0MLYpRduz8m10E1eMyUYczc7xBp13nDc";
     private static final String TOKEN_PREFIX = "Bearer";
     private static final String HEADER_STRING = "Authorization";
+    private static final String SECURITY_TOKENS = "securityTokens";
 
     @Autowired
     private DistributedMapProvider distributedMapProvider;
@@ -47,21 +48,35 @@ public class TokenAuthenticationService {
                 ).plus(EXPIRATION_TIME, expirationUnit)
         );
 
-        SecurityToken securityToken = new SecurityToken();
+        SecurityToken securityToken = getSecurityTokenFromMap(user);
 
-        securityToken.setUsername(user.getUsername());
-        securityToken.setRole(user.getRole());
-        securityToken.setUser(user);
-        securityToken.setValidUntilDate(date);
+        if (Objects.isNull(securityToken)) {
+            securityToken = new SecurityToken();
 
-        distributedMapProvider.putSecurityToken("securityTokens", user.getUsername(),
-                securityToken, EXPIRATION_TIME, expirationTimeUnit);
+            securityToken.setUsername(user.getUsername());
+            securityToken.setRole(user.getRole());
+            securityToken.setUser(user);
+            securityToken.setValidUntilDate(date);
+
+            distributedMapProvider.putSecurityToken(SECURITY_TOKENS, user.getUsername(),
+                    securityToken, EXPIRATION_TIME, expirationTimeUnit);
+        }
 
         String jwt = generateJwtString(user, date);
 
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + jwt);
 
         return TOKEN_PREFIX + " " + jwt;
+    }
+
+    private SecurityToken getSecurityTokenFromMap(User user) {
+        IMap<String, SecurityToken> securityTokenMap = distributedMapProvider.getSecurityTokenMap(SECURITY_TOKENS);
+
+        if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
+            return securityTokenMap.get(user.getUsername());
+        }
+
+        return null;
     }
 
     public String generateJwtString(User user, Date date) {
@@ -100,7 +115,7 @@ public class TokenAuthenticationService {
                 Date date = claims.get("date", Date.class);
                 Object user = claims.get("user", Object.class);
 
-                IMap<String, SecurityToken> securityTokenMap = distributedMapProvider.getSecurityTokenMap("securityTokens");
+                IMap<String, SecurityToken> securityTokenMap = distributedMapProvider.getSecurityTokenMap(SECURITY_TOKENS);
 
                 if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
                     SecurityToken securityToken = securityTokenMap.get(username);

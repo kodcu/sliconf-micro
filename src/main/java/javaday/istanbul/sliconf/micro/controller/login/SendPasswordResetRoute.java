@@ -62,7 +62,7 @@ public class SendPasswordResetRoute implements Route {
             userCaptchaString = captcha.getAsJsonPrimitive(captchaString).getAsString();
         }
 
-        logger.info("Password reset started for user %s", email);
+        logger.info("Password reset started for user {}", email);
 
 
         if (Objects.nonNull(userCaptchaString) && !userCaptchaString.isEmpty() &&

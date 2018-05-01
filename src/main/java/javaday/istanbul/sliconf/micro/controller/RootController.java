@@ -148,12 +148,17 @@ public class RootController {
                 get("list/:userId/:eventId", routeObjects.listScheduleRoute, JsonUtil.json());
             });
 
-            path("admin/", () ->
-                    path("list/", () -> {
-                        get("users", routeObjects.adminListUsersRoute, JsonUtil.json());
-                        get("events", routeObjects.adminListEventsRoute, JsonUtil.json());
-                    })
-            );
+            path("admin/", () -> {
+                path("list/", () -> {
+                    get("users", routeObjects.adminListUsersRoute, JsonUtil.json());
+                    get("events", routeObjects.adminListEventsRoute, JsonUtil.json());
+                    get("event-states", routeObjects.adminListEventStatesRoute, JsonUtil.json());
+                });
+
+                path("change/", () ->
+                    post("event-state/:eventId/:stateId", routeObjects.adminChangeEventStateForEventRoute, JsonUtil.json())
+                );
+            });
 
             path("image/", () -> {
                 post("upload", routeObjects.imageUploadRoute, JsonUtil.json());
