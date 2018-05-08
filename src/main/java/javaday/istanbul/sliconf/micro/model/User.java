@@ -36,7 +36,6 @@ public class User implements Serializable {
 
 
     public User() {
-        // for instantiation
         if (Objects.isNull(fullname) || fullname.isEmpty()) {
             this.fullname = Constants.DEFAULT_USER_FULLNAME;
         }
@@ -62,6 +61,7 @@ public class User implements Serializable {
         this.setAnonymous(user.getAnonymous());
         this.setDeviceId(user.getDeviceId());
         this.setRole(user.getRole());
+        this.setToken(user.getToken());
     }
 
 }

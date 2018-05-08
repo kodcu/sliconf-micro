@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Web uzerinde gelen yorumlarin onaylanip ya da onaylanmadigini gosteren model nesnesi
+ * approved ve denied listesi icerisinde degerler commentlerin id sidir
+ */
 @Getter
 @Setter
 public class ModerateCommentModel {

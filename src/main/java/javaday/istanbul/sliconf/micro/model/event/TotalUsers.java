@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Event uzerinde total users istatistigi icin tutulan nesne
+ */
 @Getter
 @Setter
 public class TotalUsers {

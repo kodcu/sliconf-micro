@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * Konusmaya verilen oy model nesnesi
+ */
 @Document(collection = "stars")
 @CompoundIndexes(
         @CompoundIndex(def = "{'id':1}")

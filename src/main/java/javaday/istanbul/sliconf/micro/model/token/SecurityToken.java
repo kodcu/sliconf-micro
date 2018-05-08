@@ -7,6 +7,9 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Hazelcast uzerinde tutulan authetication tokeni
+ */
 @Getter
 @Setter
 public class SecurityToken implements Serializable {
