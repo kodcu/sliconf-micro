@@ -13,6 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by ttayfur on 13/3/17.
+ *
+ * Kullanicinin katilacagi etkinligi tutan nesne
  */
 @Document(collection = "userSchedules")
 @CompoundIndexes(@CompoundIndex(def = "{'id':1}"))

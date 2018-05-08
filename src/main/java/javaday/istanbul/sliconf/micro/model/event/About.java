@@ -6,6 +6,9 @@ import lombok.Setter;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Etkinlik hakkinda genel bilgilerin bulundugu nesne
+ */
 @Getter
 @Setter
 public class About {

@@ -7,7 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * Hazelcast ile alakali islemlerin yapildigi nesne.
+ *
+ * Auth tokenlerin tutuldugu mapin getirilmesi ve mape yeni elemanlar eklenmesi ile alakali
+ * islemler gerceklestiriliyor
+ *
+ */
 @Component
 public class DistributedMapProvider {
 

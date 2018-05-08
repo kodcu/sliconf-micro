@@ -9,7 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-
+/**
+ * Sifre sifirlama sirasinda kullanilan token
+ */
 @Document(collection = "tokens")
 @CompoundIndexes(
         @CompoundIndex(def = "{'id':1}")
