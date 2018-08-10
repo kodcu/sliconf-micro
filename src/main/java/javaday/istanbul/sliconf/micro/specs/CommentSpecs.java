@@ -60,7 +60,7 @@ public class CommentSpecs {
     }
 
     public static ResponseMessage checkIfUserExists(String userId, UserRepositoryService userRepositoryService, CommentMessageProvider commentMessageProvider) {
-        User user = userRepositoryService.findById(userId);
+        User user = userRepositoryService.findById(userId).get();
 
         if (Objects.nonNull(user)) {
             return new ResponseMessage(true, commentMessageProvider.getMessage("userFoundWithGivenId"), user);

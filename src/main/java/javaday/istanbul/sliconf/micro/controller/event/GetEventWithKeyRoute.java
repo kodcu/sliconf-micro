@@ -116,7 +116,7 @@ public class GetEventWithKeyRoute implements Route {
             }
 
             if (Objects.nonNull(userId) && !userId.isEmpty() && !isUserAlreadyInTotalUserList(event.getTotalUsers().getUsers(), userId)) {
-                User user = userRepositoryService.findById(userId);
+                User user = userRepositoryService.findById(userId).get();
                 if (Objects.nonNull(user)) {
                     TotalUser totalUser = new TotalUser();
 

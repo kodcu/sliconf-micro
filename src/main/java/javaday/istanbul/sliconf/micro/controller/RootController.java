@@ -140,6 +140,12 @@ public class RootController {
                     get("list/:status/:eventId/:sessionId/:userId", routeObjects.listCommentsRoute, JsonUtil.json());
 
                 });
+
+
+                path("survey/", () -> {
+                    post("add-new", routeObjects.addNewSurveyRoute, JsonUtil.json());
+
+                });
             });
 
             path("schedule/", () -> {

@@ -12,13 +12,18 @@ import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfigurat
 import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
  * Created by ttayfur on 7/4/17.
  */
 
+@EnableMongoRepositories
 //@SpringBootApplication
 @EnableAutoConfiguration(
         exclude={MongoAutoConfiguration.class,
@@ -38,6 +43,17 @@ import org.springframework.context.annotation.Configuration;
         produces = {"application/json"}, //
         tags = {@Tag(name = "swagger")})
 public class SliconfMicroApp {
+
+    // Mongo documentlerini validate edebilmek icin bu iki bean gerekli.
+    @Bean
+    public LocalValidatorFactoryBean localValidatorFactoryBean() {
+        return new LocalValidatorFactoryBean();
+    }
+
+    @Bean
+    public ValidatingMongoEventListener validatingMongoEventListener(LocalValidatorFactoryBean lfb) {
+        return new ValidatingMongoEventListener(lfb);
+    }
 
     public static final String APP_PACKAGE = "javaday.istanbul.sliconf.micro";
 
