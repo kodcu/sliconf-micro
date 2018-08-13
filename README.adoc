@@ -61,7 +61,7 @@ Mongo Shell'e yetkilendirilmiş kullanıcı girişi için projedekiyle benzer is
 ```
 $mongo
 use admin
-db.createUser({user: "sliconfSecretUser", pwd: "LJYKkAw6b3TtQt3f", roles:[{role: "root", db: "admin"}]})
+db.createUser({user: "sliconfSecretUser", pwd: "<providedPassword>", roles:[{role: "root", db: "admin"}]})
 ```
 
 Komut, aşağıdakine benzer bir çıktı döndürmeli
@@ -79,5 +79,6 @@ Successfully added user: {
 
 ### Mongo Shell'e Giriş
 ```
-mongo -u sliconfSecretUser --authenticationDatabase admin -p LJYKkAw6b3TtQt3f
+mongo -u sliconfSecretUser --authenticationDatabase admin -p
 ```
+
