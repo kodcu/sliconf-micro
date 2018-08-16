@@ -33,6 +33,10 @@ https://www.jetbrains.com/idea/download/#section=windows
 Kurulum için gerekli bilgiler burada:
 https://www.jetbrains.com/help/idea/installing-and-launching.html 
 
+=== Properties Dosyaları Düzenlenmesi
+"src/main/resources" dizini içerisindeki .example uzantılı dosyalar, .properties uzantısı haline getirilip dosya içerisindeki "<example-tag>" formatındaki alanlar yorum satırlarındaki yönergelere göre düzenlenmelidir.
+
+
 === Postman
 
 Chromeun Postman eklentisi deneme amaçlı POST/GET vb istekleri göndermek için bir eklentidir.Kullanım  sistemin çalışması için gerekli değildir.
