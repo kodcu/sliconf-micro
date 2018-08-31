@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import javaday.istanbul.sliconf.micro.survey.SurveyException;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.SwaggerParser;
@@ -144,7 +145,19 @@ public class RootController {
 
                 path("survey/", () -> {
                     post("add-new", routeObjects.addNewSurveyRoute, JsonUtil.json());
+                    delete("delete/:userId/:surveyId", routeObjects.removeSurveyRoute, JsonUtil.json());
+                    put("update", routeObjects.updateSurveyRoute, JsonUtil.json());
+                    post("answer/:userId/:surveyId", routeObjects.answerSurveyRoute, JsonUtil.json());
+                    get("get/:eventId/:sessionId", routeObjects.getSurveyRoute, JsonUtil.json());
 
+                    exception(SurveyException.class, (exception, request1, response1)-> {
+                        String message = exception.getMessage();
+                        Object rejectedValue = exception.getRejectedValue();
+                        ResponseMessage responseMessage = new ResponseMessage(false, message, rejectedValue);
+                        response1.type("application/json");
+                        response1.body(JsonUtil.toJson(responseMessage));
+
+                    });
                 });
             });
 

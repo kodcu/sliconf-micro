@@ -14,9 +14,9 @@ public class Question {
 
     @NotBlank
     int order;
-    @NotNull
+    @NotBlank
     private String text;
-    @NotNull
+    @NotBlank
     @Size(max = 4)
     private List<String> options;
 

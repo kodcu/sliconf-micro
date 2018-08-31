@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,14 +22,17 @@ class Survey {
 
     @Id
     private String id;
-    @NotBlank(message = "{survey.name.blank")
+    @NotBlank(message = "{survey.name.blank}")
     private String name;
+    @NotBlank(message = "{survey.userId.blank}")
     private String userId;
+    @NotBlank(message = "{survey.eventId.blank}")
     private String eventId;
+    @NotBlank(message = "{survey.sessionId.blank}")
     private String sessionId;
     private LocalDateTime time;
     private String description;
-    @NotBlank
+
     private List<Question> questions;
     private List<Answer> answers;
 }
