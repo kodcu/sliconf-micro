@@ -5,6 +5,7 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface EventService {
     Event findOne(String id);
@@ -38,4 +39,6 @@ public interface EventService {
 
 
     void hideEventElements(Event event);
+
+    <T> Optional<T> findByKey(String eventKey);
 }

@@ -1,7 +1,9 @@
-package javaday.istanbul.sliconf.micro.survey;
+package javaday.istanbul.sliconf.micro.survey.routes.survey;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.survey.model.Survey;
+import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -9,26 +11,25 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.Objects;
 
 @AllArgsConstructor
 @Api
-@Path("/service/events/update")
+@Path("/service/events/:eventKey/survey/add-new")
 @Produces("application/json")
 @Component
-public class UpdateSurveyRoute implements Route {
+public class CreateNewSurvey implements Route {
 
     private final SurveyService surveyService;
 
-    @PUT
-    @ApiOperation(value = "Update a survey.", nickname = "UpdateSurveyRoute")
+    @POST
+    @ApiOperation(value = "Adds a new survey to a event", nickname = "AddNewSurveyRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataTypeClass = Survey.class, name = "survey", paramType = "body"), //
-
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -36,11 +37,15 @@ public class UpdateSurveyRoute implements Route {
             @ApiResponse(code = 401, message = "Unauthorized", response = ResponseMessage.class), //
             @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
     })
-    @Override
-    public ResponseMessage handle(Request request, Response response) throws Exception {
-        ResponseMessage responseMessage;
 
+
+    @Override
+    public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response)
+            throws Exception {
+
+        ResponseMessage responseMessage;
         String body = request.body();
+
         if (Objects.isNull(body) || body.isEmpty()) {
             responseMessage = new ResponseMessage(false,
                     "Body can not be empty!", new Object());
@@ -49,8 +54,8 @@ public class UpdateSurveyRoute implements Route {
 
         Survey survey = JsonUtil.fromJson(body, Survey.class);
 
-        responseMessage = surveyService.updateSurvey(survey);
-        return  responseMessage;
-
+        responseMessage = surveyService.addNewSurvey(survey);
+        return responseMessage;
     }
+
 }

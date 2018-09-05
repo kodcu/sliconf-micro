@@ -143,13 +143,19 @@ public class RootController {
                 });
 
 
-                path("survey/", () -> {
-                    post("add-new", routeObjects.addNewSurveyRoute, JsonUtil.json());
-                    delete("delete/:userId/:surveyId", routeObjects.removeSurveyRoute, JsonUtil.json());
+                path(":eventKey/survey/", () -> {
+                    post("add-new", routeObjects.createNewSurvey, JsonUtil.json());
+                    delete(":surveyId/delete/:userId", routeObjects.removeSurvey, JsonUtil.json());
                     put("update", routeObjects.updateSurveyRoute, JsonUtil.json());
-                    post("answer/:userId/:surveyId", routeObjects.answerSurveyRoute, JsonUtil.json());
-                    get("get/:eventId/:sessionId", routeObjects.getSurveyRoute, JsonUtil.json());
+                    get("get-surveys", routeObjects.getSurveys, JsonUtil.json());
+                    get(":surveyId/get", routeObjects.getSurvey, JsonUtil.json());
 
+                    path(":surveyId/answer/", () -> {
+                        post("submit-answers/:userId", routeObjects.submitAnswers, JsonUtil.json());
+                        get("get-answers/:userId", routeObjects.getAnswers, JsonUtil.json());
+                        put(":answerId/update-answers", routeObjects.updateAnswers, JsonUtil.json());
+
+                    });
                     exception(SurveyException.class, (exception, request1, response1)-> {
                         String message = exception.getMessage();
                         Object rejectedValue = exception.getRejectedValue();

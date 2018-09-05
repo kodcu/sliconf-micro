@@ -1,7 +1,8 @@
-package javaday.istanbul.sliconf.micro.survey;
+package javaday.istanbul.sliconf.micro.survey.routes.survey;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -14,18 +15,18 @@ import javax.ws.rs.Produces;
 
 @AllArgsConstructor
 @Api
-@Path("/service/events/survey/delete/:userId/:surveyId")
+@Path("/service/events/:eventKey/survey/:surveyId/delete/:userId")
 @Produces("application/json")
 @Component
-public class RemoveSurveyRoute implements Route {
+public class RemoveSurvey implements Route {
 
     private final SurveyService surveyService;
 
     @DELETE
     @ApiOperation(value = "Remove a survey from session.", nickname = "RemoveSurveyRoute")
     @ApiImplicitParams({ //
-            @ApiImplicitParam(required = true, dataType = "string", name = "token",    paramType = "header"), //
-            @ApiImplicitParam(required = true, dataType = "string", name = "userId",   paramType = "path"),
+            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
+            @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"),
             @ApiImplicitParam(required = true, dataType = "string", name = "surveyId", paramType = "path")
     }) //
     @ApiResponses(value = { //
@@ -36,7 +37,9 @@ public class RemoveSurveyRoute implements Route {
     })
 
     @Override
-    public ResponseMessage handle(Request request, Response response) throws Exception {
+    public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response)
+            throws Exception {
+
         ResponseMessage responseMessage;
         String userId = request.params("userId");
         String surveyId = request.params("surveyId");

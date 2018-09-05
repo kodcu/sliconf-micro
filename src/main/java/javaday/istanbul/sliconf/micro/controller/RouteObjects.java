@@ -21,10 +21,11 @@ import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRout
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorRoute;
 import javaday.istanbul.sliconf.micro.controller.login.*;
 
-import javaday.istanbul.sliconf.micro.survey.*;
+import javaday.istanbul.sliconf.micro.survey.routes.answer.GetAnswers;
+import javaday.istanbul.sliconf.micro.survey.routes.answer.SubmitAnswers;
+import javaday.istanbul.sliconf.micro.survey.routes.answer.UpdateAnswers;
+import javaday.istanbul.sliconf.micro.survey.routes.survey.*;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -69,11 +70,15 @@ public class RouteObjects {
     public final ModerateCommentRoute moderateCommentRoute;
     public final VoteCommentRoute voteCommentRoute;
 
-    public final AddNewSurveyRoute addNewSurveyRoute;
-    public final RemoveSurveyRoute removeSurveyRoute;
-    public final AnswerSurveyRoute answerSurveyRoute;
-    public final GetSurveyRoute getSurveyRoute;
-    public final UpdateSurveyRoute updateSurveyRoute;
+    public final CreateNewSurvey createNewSurvey;
+    public final RemoveSurvey removeSurvey;
+    public final GetSurveys getSurveys;
+    public final GetSurvey getSurvey;
+    public final UpdateSurvey updateSurveyRoute;
+
+    public final SubmitAnswers submitAnswers;
+    public final GetAnswers getAnswers;
+    public final UpdateAnswers updateAnswers;
 
     //
     public final ImageUploadRoute imageUploadRoute;
