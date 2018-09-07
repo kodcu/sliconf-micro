@@ -14,8 +14,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 @AllArgsConstructor
-@Api
-@Path("/service/events/:eventKey/survey/:surveyId/delete/:userId")
+@Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
+@Path("/service/events/:eventId/survey/:surveyId/")
 @Produces("application/json")
 @Component
 public class RemoveSurvey implements Route {
@@ -25,7 +25,8 @@ public class RemoveSurvey implements Route {
     @DELETE
     @ApiOperation(value = "Remove a survey from session.", nickname = "RemoveSurveyRoute")
     @ApiImplicitParams({ //
-            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
+            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
+                    example = "Authorization: Bearer <tokenValue>"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"),
             @ApiImplicitParam(required = true, dataType = "string", name = "surveyId", paramType = "path")
     }) //

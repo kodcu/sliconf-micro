@@ -1,12 +1,9 @@
-package javaday.istanbul.sliconf.micro.survey;
+package javaday.istanbul.sliconf.micro.survey.validator;
 
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,16 +13,17 @@ import java.util.function.Predicate;
 @Component
 public class SurveyValidator {
 
-    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    private final Validator validator = factory.getValidator();
+    private final static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private final static Validator validator = factory.getValidator();
 
-    public ResponseMessage validate(List<Object> validatingObjects ) {
+    public static  <T> ResponseMessage validate(List<Object> validatingObjects, Class<T> clazz) {
         ResponseMessage responseMessage = new ResponseMessage();
+
         responseMessage.setStatus(true);
         responseMessage.setMessage("");
 
         Set<ConstraintViolation<Object>> constraintViolations = new HashSet<>();
-        validatingObjects.forEach(o -> constraintViolations.addAll(validator.validate(o)));
+        validatingObjects.forEach(o -> constraintViolations.addAll(validator.validate(o, clazz)));
 
         responseMessage.setStatus(constraintViolations.isEmpty());
         List<Object> violatingObjects = new ArrayList<>();

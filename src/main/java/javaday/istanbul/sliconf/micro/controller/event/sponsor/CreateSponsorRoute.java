@@ -67,7 +67,7 @@ public class CreateSponsorRoute implements Route {
     }
 
     /**
-     * Gelen sponsorMap ve sponsorTag gelen eventKey ile gerekli evente yazilir
+     * Gelen sponsorMap ve sponsorTag gelen eventId ile gerekli evente yazilir
      *
      * @param sponsorMap
      * @param sponsorTags

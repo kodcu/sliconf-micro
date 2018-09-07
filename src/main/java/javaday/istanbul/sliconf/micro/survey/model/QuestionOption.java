@@ -1,15 +1,18 @@
 package javaday.istanbul.sliconf.micro.survey.model;
 
+import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyQuestionOptionValidatorGroup;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.validation.annotation.Validated;
 
 @Data
+
 public class QuestionOption {
 
-    @NotBlank(message = "{survey.question.questionOptions.id.blank}")
+    @NotBlank(message = "{survey.question.questionOptions.id.blank}", groups = SurveyQuestionOptionValidatorGroup.class)
     private String id;
 
-    @NotBlank(message = "{survey.question.questionOptions.text.blank}")
+    @NotBlank(message = "{survey.question.questionOptions.text.blank}", groups = SurveyQuestionOptionValidatorGroup.class)
     private String text;
 
     private Integer voters;

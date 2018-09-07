@@ -1,10 +1,7 @@
 package javaday.istanbul.sliconf.micro;
 
 
-import io.swagger.annotations.Contact;
-import io.swagger.annotations.Info;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.annotations.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
  * Created by ttayfur on 7/4/17.
@@ -33,7 +31,8 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @EnableConfigurationProperties
 @ComponentScan
 @Configuration
-@SwaggerDefinition(host = "localhost:8090", //
+@SwaggerDefinition(
+        host = "localhost:8090", //
         info = @Info(description = "Sliconf Micro API", //
                 version = "V0.0.1", //
                 title = "Sliconf Micro API for Web and Mobile", //
@@ -41,7 +40,12 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
         schemes = {SwaggerDefinition.Scheme.HTTP, SwaggerDefinition.Scheme.HTTPS}, //
         consumes = {"application/json"}, //
         produces = {"application/json"}, //
-        tags = {@Tag(name = "swagger")})
+        tags = {@Tag(name = "survey", description = "Survey Operations")},
+        securityDefinition = @SecurityDefinition(
+                apiKeyAuthDefinitions = @ApiKeyAuthDefinition
+                        (name = "Authorization", in = ApiKeyAuthDefinition.ApiKeyLocation.HEADER, key = "Bearer"))
+)
+
 public class SliconfMicroApp {
 
     // Mongo documentlerini validate edebilmek icin bu iki bean gerekli.

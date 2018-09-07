@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 
-// all arg const ile beanlar otomatik olarak constructor injection edilebilir.
+// all arg const ile. beanlar otomatik olarak constructor injection edilebilir.
 @AllArgsConstructor
 @Component
 public class RouteObjects {

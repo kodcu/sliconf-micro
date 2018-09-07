@@ -37,8 +37,8 @@ public class Answer {
     @NotBlank(message = "{survey.answer.userId.blank}")
     private String userId;
 
-    @NotBlank(message = "{survey.answer.eventKey.blank}")
-    private String eventKey;
+    @NotBlank(message = "{survey.answer.eventId.blank}")
+    private String eventId;
 
 //    @NotBlank
 //    private String sessionId;

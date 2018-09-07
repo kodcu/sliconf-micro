@@ -1,8 +1,11 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.annotations.Tag;
 import javaday.istanbul.sliconf.micro.survey.SurveyException;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.util.SwaggerParser;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.slf4j.Logger;
@@ -95,7 +98,7 @@ public class RootController {
             path("events/", () -> {
 
                 post("create/:userId", routeObjects.createEventRoute, JsonUtil.json());
-                delete("delete/:eventKey/:userId", routeObjects.deleteEventRoute, JsonUtil.json());
+                delete("delete/:eventId/:userId", routeObjects.deleteEventRoute, JsonUtil.json());
 
                 get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
 
@@ -142,18 +145,17 @@ public class RootController {
 
                 });
 
-
-                path(":eventKey/survey/", () -> {
-                    post("add-new", routeObjects.createNewSurvey, JsonUtil.json());
-                    delete(":surveyId/delete/:userId", routeObjects.removeSurvey, JsonUtil.json());
-                    put("update", routeObjects.updateSurveyRoute, JsonUtil.json());
-                    get("get-surveys", routeObjects.getSurveys, JsonUtil.json());
-                    get(":surveyId/get", routeObjects.getSurvey, JsonUtil.json());
+                path(":eventId/survey/", () -> {
+                    post("", routeObjects.createNewSurvey, JsonUtil.json());
+                    put("", routeObjects.updateSurveyRoute, JsonUtil.json());
+                    get("", routeObjects.getSurveys, JsonUtil.json());
+                    delete(":surveyId", routeObjects.removeSurvey, JsonUtil.json());
+                    get(":surveyId", routeObjects.getSurvey, JsonUtil.json());
 
                     path(":surveyId/answer/", () -> {
-                        post("submit-answers/:userId", routeObjects.submitAnswers, JsonUtil.json());
-                        get("get-answers/:userId", routeObjects.getAnswers, JsonUtil.json());
-                        put(":answerId/update-answers", routeObjects.updateAnswers, JsonUtil.json());
+                        post("", routeObjects.submitAnswers, JsonUtil.json());
+                        get(":userId", routeObjects.getAnswers, JsonUtil.json());
+                        put(":answerId", routeObjects.updateAnswers, JsonUtil.json());
 
                     });
                     exception(SurveyException.class, (exception, request1, response1)-> {

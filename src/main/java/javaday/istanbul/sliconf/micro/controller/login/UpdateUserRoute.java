@@ -68,7 +68,7 @@ public class UpdateUserRoute implements Route {
             return new ResponseMessage(false, "User id can not be null!", new Object());
         }
 
-        User user = userRepositoryService.findById(id).get();
+        User user = userRepositoryService.findById(id).orElse(null);
 
         String stringUsername = "username";
         String stringFullname = "fullname";

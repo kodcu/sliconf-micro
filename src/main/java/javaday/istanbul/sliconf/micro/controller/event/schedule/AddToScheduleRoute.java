@@ -164,7 +164,7 @@ public class AddToScheduleRoute implements Route {
             return new ResponseMessage(false, "This element already added to schedule", userScheduleElement);
         }
 
-        User user = userRepositoryService.findById(userScheduleElement.getUserId()).get();
+        User user = userRepositoryService.findById(userScheduleElement.getUserId()).orElse(null);
 
         if (Objects.isNull(user)) {
             return new ResponseMessage(false, "User can not found with given id", userScheduleElement);

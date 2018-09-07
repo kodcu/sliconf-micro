@@ -75,7 +75,7 @@ public class ListScheduleRoute implements Route {
             return new ResponseMessage(false, "User Id can not be empty", emptyArray);
         }
 
-        User user = userRepositoryService.findById(userId).get();
+        User user = userRepositoryService.findById(userId).orElse(null);
 
         if (Objects.isNull(user)) {
             return new ResponseMessage(false, "User can not found with given id", emptyArray);

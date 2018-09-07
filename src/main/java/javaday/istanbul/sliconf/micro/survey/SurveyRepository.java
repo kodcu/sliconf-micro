@@ -13,5 +13,5 @@ public interface SurveyRepository extends MongoRepository<Survey, String> {
 
     Optional<Survey> findById(String id);
 
-    List<Survey> findSurveysByEventKey(String eventId);
+    List<Survey> findSurveysByEventId(String eventId);
 }

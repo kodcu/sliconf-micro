@@ -44,12 +44,12 @@ public class GeneralService {
         return responseMessage;
     }
 
-    ResponseMessage findEventByKey(String eventKey) {
+    ResponseMessage findEventById(String eventId) {
         ResponseMessage responseMessage = new ResponseMessage();
-        Event event = (Event) eventRepositoryService.findByKey(eventKey).orElseThrow(() -> {
-            log.error("event not found by id: {}", eventKey);
+        Event event = (Event) eventRepositoryService.findById(eventId).orElseThrow(() -> {
+            log.error("event not found by id: {}", eventId);
             String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenId");
-            return new SurveyException(message, eventKey);
+            return new SurveyException(message, eventId);
         });
         responseMessage.setStatus(true);
         responseMessage.setReturnObject(event);

@@ -1,5 +1,10 @@
 package javaday.istanbul.sliconf.micro.survey.model;
 
+import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidatorSequence;
+import javaday.istanbul.sliconf.micro.survey.validator.ValidStartAndEndLocalDateTime;
+import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyQuestionValidatorGroup;
+import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyStartAndEndLocalDateTimeValidatorGroup;
+import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyValidatorGroup;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -9,7 +14,8 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 
@@ -19,24 +25,31 @@ import java.util.List;
 )
 @Getter
 @Setter
+
+// anketin baslangic ve bitis tarihini kontrol icin custom validation.
+@ValidStartAndEndLocalDateTime(groups = SurveyStartAndEndLocalDateTimeValidatorGroup.class)
 public class Survey {
 
     @Id
     private String id;
 
-    @NotBlank(message = "{survey.name.blank}")
+    @NotBlank(message = "{survey.name.blank}", groups = SurveyValidatorGroup.class)
     private String name;
 
-    @NotBlank(message = "{survey.userId.blank}")
+    @NotBlank(message = "{survey.userId.blank}", groups = SurveyValidatorGroup.class)
     private String userId;
 
-    @NotBlank(message = "{survey.eventKey.blank}")
-    private String eventKey;
+    @NotBlank(message = "{survey.eventId.blank}", groups = SurveyValidatorGroup.class)
+    private String eventId;
 
 //    @NotBlank(message = "{survey.sessionId.blank}")
 //    private String sessionId;
 
-    private LocalDateTime time;
+    @Pattern(regexp = "^\\d+\\d$", groups = SurveyValidatorGroup.class, message = "{survey.localDateTime.invalid}")
+    private String startTime;
+
+    @Pattern(regexp = "^\\d+\\d$", groups = SurveyValidatorGroup.class)
+    private String endTime;
 
     private String description;
 
@@ -44,6 +57,6 @@ public class Survey {
 
     private Integer participants;
 
-    @NotEmpty(message = "{survey.questions.empty}")
+    @NotEmpty(message = "{survey.questions.empty}", groups = SurveyQuestionValidatorGroup.class)
     private List<Question> questions;
 }

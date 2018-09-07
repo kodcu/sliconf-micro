@@ -17,8 +17,8 @@ import javax.ws.rs.Produces;
 import java.util.Objects;
 
 @AllArgsConstructor
-@Api
-@Path("/service/events/:eventKey/survey/update")
+@Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
+@Path("/service/events/:eventId/survey")
 @Produces("application/json")
 @Component
 public class UpdateSurvey implements Route {
@@ -28,7 +28,8 @@ public class UpdateSurvey implements Route {
     @PUT
     @ApiOperation(value = "Update a survey.", nickname = "UpdateSurveyRoute")
     @ApiImplicitParams({ //
-            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
+            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
+                    example = "Authorization: Bearer <tokenValue>"), //
             @ApiImplicitParam(required = true, dataTypeClass = Survey.class, name = "survey", paramType = "body"), //
 
     }) //
