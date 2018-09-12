@@ -9,12 +9,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.NumberFormat;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Map;
+
 /**
  * Bir kullanıcının bir ankete verdiği cevaplara karşılık gelen model nesnesi.
  */
@@ -25,7 +23,7 @@ import java.util.Map;
 )
 @Getter
 @Setter
-public class Answer {
+public class Answer implements Serializable {
 
     @Id
     @NotBlank(message = "{survey.answer.id.blank}")
@@ -40,10 +38,7 @@ public class Answer {
     @NotBlank(message = "{survey.answer.eventId.blank}")
     private String eventId;
 
-//    @NotBlank
-//    private String sessionId;
-
     //burada key question id, value ise verdigi cevaptir..
     @NotEmpty(message = "survey.answers.empty")
-    Map<String, String> answeredQuestions;
+    private Map<String, String> answeredQuestions;
 }

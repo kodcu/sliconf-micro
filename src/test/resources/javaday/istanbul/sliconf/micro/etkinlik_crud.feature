@@ -17,7 +17,7 @@
     Ve sistem etkinliğe özel ve eşşiz bir etkinlik kodu üretir.
     O zaman sistem etkinlik sahibini kayıt eder ve etkinlik oluşturulmuş olur
 
-  Senaryo: Z926 - Etkinlik sahibi yeni bir etkinlik daha açmak istiyor.
+  Senaryo: Z926 - Etkinlik sahibi yeni bir etkinlik daha açmak istiyor
     Diyelim ki etkinlik sahibi daha önceden JugEvents sistemine kayıtlıdır
     Eğer ki etkinlik sahibi yeni bir etkinliği etkinlik kurallarına uygun bir şekilde girerse
     O zaman sistem etkinlik sahibinin yeni etkinliğini başarılı bir şekilde oluşturur.

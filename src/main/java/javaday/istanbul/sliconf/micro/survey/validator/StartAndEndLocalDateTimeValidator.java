@@ -12,7 +12,17 @@ public class StartAndEndLocalDateTimeValidator
         implements ConstraintValidator<ValidStartAndEndLocalDateTime, Survey> {
     @Override
     public void initialize(ValidStartAndEndLocalDateTime constraintAnnotation) {
-
+        /**
+         * Initializes the validator in preparation for
+         * {@link #isValid(Object, ConstraintValidatorContext)} calls.
+         * The constraint annotation for a given constraint declaration
+         * is passed.
+         * <p/>
+         * This method is guaranteed to be called before any use of this instance for
+         * validation.
+         *
+         * @param constraintAnnotation annotation instance for a given constraint declaration
+         */
     }
 
     @Override

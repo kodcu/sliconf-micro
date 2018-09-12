@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.survey.model;
 
-import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidatorSequence;
 import javaday.istanbul.sliconf.micro.survey.validator.ValidStartAndEndLocalDateTime;
 import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyQuestionValidatorGroup;
 import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyStartAndEndLocalDateTimeValidatorGroup;
@@ -14,8 +13,8 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -28,7 +27,7 @@ import java.util.List;
 
 // anketin baslangic ve bitis tarihini kontrol icin custom validation.
 @ValidStartAndEndLocalDateTime(groups = SurveyStartAndEndLocalDateTimeValidatorGroup.class)
-public class Survey {
+public class Survey implements Serializable {
 
     @Id
     private String id;
@@ -41,9 +40,6 @@ public class Survey {
 
     @NotBlank(message = "{survey.eventId.blank}", groups = SurveyValidatorGroup.class)
     private String eventId;
-
-//    @NotBlank(message = "{survey.sessionId.blank}")
-//    private String sessionId;
 
     @Pattern(regexp = "^\\d+\\d$", groups = SurveyValidatorGroup.class, message = "{survey.localDateTime.invalid}")
     private String startTime;

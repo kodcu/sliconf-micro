@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.survey.routes.survey;
+package javaday.istanbul.sliconf.micro.survey.controller.survey;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
@@ -15,20 +15,19 @@ import javax.ws.rs.Produces;
 
 @AllArgsConstructor
 @Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
-@Path("/service/events/:eventId/survey/:surveyId/")
+@Path("/service/events/:eventId/surveys/")
 @Produces("application/json")
 @Component
-public class GetSurvey implements Route {
+public class GetSurveys implements Route {
 
     private final SurveyService surveyService;
 
     @GET
-    @ApiOperation(value = "Gets a survey from specific event.", nickname = "GetSurveyRoute")
+    @ApiOperation(value = "Gets all surveys of specific event.", nickname = "GetSurveysRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "eventId",   paramType = "path"),
-            @ApiImplicitParam(required = true, dataType = "string", name = "surveyId", paramType = "path"),
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -41,12 +40,10 @@ public class GetSurvey implements Route {
             throws Exception {
 
         ResponseMessage responseMessage;
-        String surveyId = request.params("surveyId");
+        String eventId = request.params("eventId");
 
-
-        responseMessage = surveyService.getSurvey(surveyId);
+        responseMessage = surveyService.getSurveys(eventId);
         return responseMessage;
 
     }
 }
-

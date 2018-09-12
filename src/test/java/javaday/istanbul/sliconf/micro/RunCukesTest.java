@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = "src/test/resources",
+        features = {"src/test/resources"},
         plugin = "pretty",
         snippets = SnippetType.CAMELCASE,
         strict = true)

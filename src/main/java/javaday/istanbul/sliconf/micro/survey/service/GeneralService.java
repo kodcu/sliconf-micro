@@ -2,9 +2,7 @@ package javaday.istanbul.sliconf.micro.survey.service;
 
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.provider.CommentMessageProvider;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.survey.SurveyException;
@@ -12,12 +10,8 @@ import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @AllArgsConstructor
@@ -28,8 +22,6 @@ public class GeneralService {
     private final SurveyRepository surveyRepository;
     private final EventRepositoryService eventRepositoryService;
     private final UserRepositoryService userRepositoryService;
-    private final CommentMessageProvider commentMessageProvider;
-
 
     ResponseMessage findSurveyById(String surveyId) {
 
@@ -46,7 +38,7 @@ public class GeneralService {
 
     ResponseMessage findEventById(String eventId) {
         ResponseMessage responseMessage = new ResponseMessage();
-        Event event = (Event) eventRepositoryService.findById(eventId).orElseThrow(() -> {
+        Event event = eventRepositoryService.findById(eventId).orElseThrow(() -> {
             log.error("event not found by id: {}", eventId);
             String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenId");
             return new SurveyException(message, eventId);
@@ -66,21 +58,5 @@ public class GeneralService {
         responseMessage.setStatus(true);
         responseMessage.setReturnObject(user);
         return responseMessage;
-    }
-
-    ResponseMessage getAgendaElement(List<AgendaElement> agendaElements, String agendaElementId) {
-        if (Objects.nonNull(agendaElements)) {
-            AgendaElement agendaElementReturn = agendaElements
-                    .stream()
-                    .filter(agendaElement -> Objects.nonNull(agendaElement) &&
-                            Objects.nonNull(agendaElement.getId()) &&
-                            agendaElement.getId().equals(agendaElementId)).findFirst().orElse(null);
-
-            if (Objects.nonNull(agendaElementReturn)) {
-                return new ResponseMessage(true, commentMessageProvider.getMessage("agendaElementFoundWithGivenId"), agendaElementReturn);
-            }
-        }
-
-        return new ResponseMessage(false, commentMessageProvider.getMessage("agendaElementCanNotFoundWithGivenId"), agendaElementId);
     }
 }

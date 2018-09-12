@@ -3,20 +3,20 @@ package javaday.istanbul.sliconf.micro.survey.validator;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import org.springframework.stereotype.Component;
 
-import javax.validation.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.*;
 import java.util.function.Predicate;
 
 @Component
 public class SurveyValidator {
 
-    private final static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-    private final static Validator validator = factory.getValidator();
+    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private final Validator validator = factory.getValidator();
 
-    public static  <T> ResponseMessage validate(List<Object> validatingObjects, Class<T> clazz) {
+    public <T> ResponseMessage validate(List<Object> validatingObjects, Class<T> clazz) {
         ResponseMessage responseMessage = new ResponseMessage();
 
         responseMessage.setStatus(true);
@@ -30,15 +30,22 @@ public class SurveyValidator {
 
         constraintViolations.forEach(constraintViolation -> {
             String constraintViolationMessages = responseMessage.getMessage();
-            String rejectedValue = constraintViolation.getInvalidValue().toString();
+
+            String rejectedValue;
+
+            if (Objects.isNull(constraintViolation.getInvalidValue()))
+                rejectedValue = "null";
+            else
+                rejectedValue = constraintViolation.getInvalidValue().toString();
+
             String newConstraintMessage = constraintViolation.getMessage() + " --> Invalid Value = " + rejectedValue + ", ";
             responseMessage.setMessage(constraintViolationMessages + newConstraintMessage);
 
             Predicate<Object> objectPredicate = o -> o.hashCode() == constraintViolation.getLeafBean().hashCode();
 
             /* kisitlamalari ihlal eden model kisitlamalari ihlal eden objeler listesinde degilse ekliyoruz. */
-            violatingObjects.stream().filter(objectPredicate)
-                    .findFirst().orElseGet(() -> violatingObjects.add(constraintViolation.getLeafBean()));
+            if(violatingObjects.stream().noneMatch(objectPredicate))
+                violatingObjects.add(constraintViolation.getLeafBean());
         });
 
         responseMessage.setReturnObject(violatingObjects);

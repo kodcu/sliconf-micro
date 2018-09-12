@@ -13,7 +13,7 @@ import javax.validation.groups.Default;
  *  {@link Survey} modelini validate ederken  hangi kisitlamalarin önce calisacagini belirlemek icin kullanilir.
  *  Burada önce ana Survey modeli, daha sonra sınıf seviyesinde olan başlangıç ve bitiş tarihi kontrol ediliyor.
  *  Bunun sebebi default olarak sınıf seviyesinde uygulanan {@link ValidStartAndEndLocalDateTime} kısıtlaması
- *  {@link ValidLocalDateTime} den önce çalışacağı için  yanlış girilen bir LocalDateTime validate edilmeden
+ *  tarih verisini kontrol ettiğimiz patternden den önce çalışacağı için  yanlış girilen bir LocalDateTime validate edilmeden
  *  başlangıç ve bitiş zamanı kullanılmaya çalışılacak. Eğer başlangıç ve bitiş tarihi uygun formatta değil ise
  *  bunlardan {@link java.time.LocalDateTime} oluşturulamayacağı için  {@link NumberFormatException} türünde
  *  bir exceptiona sebep olacak. Bunun önüne geçmek için bu yapıyla önce doğru bir {@link java.time.LocalDateTime}

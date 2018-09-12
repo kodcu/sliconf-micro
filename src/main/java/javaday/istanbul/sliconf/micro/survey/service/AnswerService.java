@@ -36,10 +36,11 @@ public class AnswerService {
     private SurveyService surveyService;
 
 
-    public ResponseMessage answerSurvey(Answer answer, String userId, String surveyId) {
+    public ResponseMessage answerSurvey(Answer answer, String surveyId) {
         ResponseMessage responseMessage;
 
         generalService.findUserById(answer.getUserId());
+        generalService.findEventById(answer.getEventId());
 
         List<Object> validatingObjects = new ArrayList<>();
         validatingObjects.add(answer);
@@ -49,8 +50,9 @@ public class AnswerService {
         }
 
         Survey survey = (Survey) generalService.findSurveyById(surveyId).getReturnObject();
+        generalService.findEventById(survey.getEventId());
 
-        boolean alreadyAnswered = this.checkIfUserAlreadyAnsweredSurvey(userId, surveyId).isStatus();
+        boolean alreadyAnswered = this.checkIfUserAlreadyAnsweredSurvey(answer.getUserId(), surveyId).isStatus();
         if (alreadyAnswered) {
             responseMessage.setStatus(false);
             responseMessage.setMessage(surveyMessageProvider.getMessage("surveyAlreadyAnswered"));
@@ -136,15 +138,11 @@ public class AnswerService {
             questionPredicate = surveyQuestion -> surveyQuestion.getId().equals(answeredQuestionId);
 
             //
-            survey.getQuestions()
-                    .stream()
-                    .filter(questionPredicate)
-                    .findAny()
-                    .orElseThrow(() -> {
-                        log.error("Question not found by id: {}", answeredQuestionId);
-                        String message = surveyMessageProvider.getMessage("questionCanNotFoundWithGivenId");
-                        return new SurveyException(message, answeredQuestionId);
-            });
+            if (survey.getQuestions().stream().noneMatch(questionPredicate)) {
+                log.error("Question not found by id: {}", answeredQuestionId);
+                String message = surveyMessageProvider.getMessage("questionCanNotFoundWithGivenId");
+                throw new SurveyException(message, answeredQuestionId);
+            }
 
             Predicate<QuestionOption> questionOptionPredicate;
             questionOptionPredicate = questionOption -> questionOption.getText().equals(answeredOption);
@@ -152,15 +150,13 @@ public class AnswerService {
             survey.getQuestions()
                     .stream()
                     .filter(questionPredicate)
-                    .forEach(question -> question.getOptions()
-                    .stream()
-                    .filter(questionOptionPredicate)
-                    .findAny()
-                    .orElseThrow(() -> {
-                        log.error("Answer does not match with any question option: {}", answeredOption);
-                        String message = surveyMessageProvider.getMessage("questionAndAnswerMismatch");
-                        return new SurveyException(message, answeredOption);
-                    }));
+                    .forEach(question -> {
+                        if (question.getOptions().stream().noneMatch(questionOptionPredicate)) {
+                            log.error("Answer does not match with any question option: {}", answeredOption);
+                            String message = surveyMessageProvider.getMessage("questionAndAnswerMismatch");
+                            throw new SurveyException(message, answeredOption);
+                        }
+                    });
         });
     }
 
@@ -177,17 +173,17 @@ public class AnswerService {
 
 
     private void findAnswerById(String answerId) {
-        answerRepository.findById(answerId).orElseThrow(() -> {
+        if(!answerRepository.findById(answerId).isPresent()) {
             log.error("Answer not found by id: {}", answerId);
             String message = surveyMessageProvider.getMessage("answerCanNotFoundWithGivenId");
-            return new SurveyException(message, answerId);
-        });
+            throw  new SurveyException(message, answerId);
+        }
 
 
     }
 
     // Removes answers of deleted survey.
-    public void removeAnswers(List<Answer> answers) {
+    void removeAnswers(List<Answer> answers) {
         answerRepository.delete(answers);
     }
 }

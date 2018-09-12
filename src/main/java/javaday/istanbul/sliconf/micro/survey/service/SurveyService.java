@@ -37,7 +37,7 @@ public class SurveyService {
     @Autowired
     private  AnswerService answerService;
 
-    public ResponseMessage addNewSurvey(Survey survey) throws RuntimeException {
+    public ResponseMessage addNewSurvey(Survey survey) {
 
         List<Object> validatingObjects = new ArrayList<>();
         // validate edilecek objeleri ekle.
@@ -58,8 +58,6 @@ public class SurveyService {
         ResponseMessage userResponse = generalService.findUserById(survey.getUserId());
         User user = (User) userResponse.getReturnObject();
 
-
-        // TODO: 10.08.2018 Validate questions somehow before save.
         survey.setEventId(event.getId());
         survey.setUserId(user.getId());
 

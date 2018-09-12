@@ -1,9 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
-import javaday.istanbul.sliconf.micro.controller.admin.AdminChangeEventStateForEventRoute;
-import javaday.istanbul.sliconf.micro.controller.admin.AdminListEventStatesRoute;
-import javaday.istanbul.sliconf.micro.controller.admin.AdminListEventsRoute;
-import javaday.istanbul.sliconf.micro.controller.admin.AdminListUsersRoute;
+import javaday.istanbul.sliconf.micro.controller.admin.*;
 import javaday.istanbul.sliconf.micro.controller.event.*;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.CreateAgendaRoute;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.GetVoteAgendaElementRoute;
@@ -21,10 +18,10 @@ import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRout
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorRoute;
 import javaday.istanbul.sliconf.micro.controller.login.*;
 
-import javaday.istanbul.sliconf.micro.survey.routes.answer.GetAnswers;
-import javaday.istanbul.sliconf.micro.survey.routes.answer.SubmitAnswers;
-import javaday.istanbul.sliconf.micro.survey.routes.answer.UpdateAnswers;
-import javaday.istanbul.sliconf.micro.survey.routes.survey.*;
+import javaday.istanbul.sliconf.micro.survey.controller.answer.GetAnswers;
+import javaday.istanbul.sliconf.micro.survey.controller.answer.SubmitAnswers;
+import javaday.istanbul.sliconf.micro.survey.controller.answer.UpdateAnswers;
+import javaday.istanbul.sliconf.micro.survey.controller.survey.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RouteObjects {
 
-    // User related routes
+    // User related controller
     public final CreateUserRoute createUserRoute;
     public final CreateUserAnonymousRoute createUserAnonymousRoute;
 
@@ -46,7 +43,7 @@ public class RouteObjects {
     public final ResetPasswordRoute resetPasswordRoute;
     public final UpdateUserRoute updateUserRoute;
 
-    // Event related routes
+    // Event related controller
     public final CreateEventRoute createEventRoute;
     public final DeleteEventRoute deleteEventRoute;
     public final GetEventWithKeyRoute getEventWithKeyRoute;
@@ -92,6 +89,7 @@ public class RouteObjects {
     public final AdminListEventsRoute adminListEventsRoute;
     public final AdminListEventStatesRoute adminListEventStatesRoute;
     public final AdminChangeEventStateForEventRoute adminChangeEventStateForEventRoute;
+    public final AdminGetUserInfo adminGetUserInfo;
 
 
 //    @Autowired

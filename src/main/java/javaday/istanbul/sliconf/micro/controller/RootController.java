@@ -145,7 +145,7 @@ public class RootController {
 
                 });
 
-                path(":eventId/survey/", () -> {
+                path(":eventId/surveys/", () -> {
                     post("", routeObjects.createNewSurvey, JsonUtil.json());
                     put("", routeObjects.updateSurveyRoute, JsonUtil.json());
                     get("", routeObjects.getSurveys, JsonUtil.json());
@@ -184,6 +184,10 @@ public class RootController {
 
                 path("change/", () ->
                     post("event-state/:eventId/:stateId", routeObjects.adminChangeEventStateForEventRoute, JsonUtil.json())
+                );
+
+                path("users/", () ->
+                        get(":userId", routeObjects.adminGetUserInfo, JsonUtil.json())
                 );
             });
 
