@@ -7,6 +7,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 public class StartAndEndLocalDateTimeValidator
         implements ConstraintValidator<ValidStartAndEndLocalDateTime, Survey> {
@@ -31,11 +32,11 @@ public class StartAndEndLocalDateTimeValidator
             return true;
         }
 
-        LocalDateTime startDateTime =
-                LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(survey.getStartTime())), ZoneId.systemDefault());
-        LocalDateTime endDateTime =
-                LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(survey.getEndTime())), ZoneId.systemDefault());
+        long epochSecondStartTime = Long.parseLong(survey.getStartTime());
+        LocalDateTime startDateTime = LocalDateTime.ofEpochSecond(epochSecondStartTime, 0, ZoneOffset.UTC);
 
+        long epochSecondEndTime = Long.parseLong(survey.getEndTime());
+        LocalDateTime endDateTime = LocalDateTime.ofEpochSecond(epochSecondEndTime, 0, ZoneOffset.UTC);
 
         if (startDateTime.isAfter(endDateTime)) {
             context.disableDefaultConstraintViolation();

@@ -15,10 +15,12 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -37,6 +39,7 @@ public class SurveyService {
     @Autowired
     private  AnswerService answerService;
 
+    @Transactional
     public ResponseMessage addNewSurvey(Survey survey) {
 
         List<Object> validatingObjects = new ArrayList<>();
@@ -65,25 +68,26 @@ public class SurveyService {
         if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("app-prod")))
             survey.getQuestions().forEach(question -> {
                 question.setId(new ObjectId().toString());
+                question.getOptions()
+                        .forEach(questionOption -> questionOption.setId(new ObjectId().toString()));
+            });
+
+            survey.getQuestions().forEach(question -> {
                 question.setTotalVoters(0);
                 question.getOptions()
-                        .forEach(questionOption -> {
-                            questionOption.setId(new ObjectId().toString());
-                            questionOption.setVoters(0);
-
-                        });
+                        .forEach(questionOption -> questionOption.setVoters(0));
             });
+
 
         survey.setParticipants(0);
         survey.setViewers(0);
-        survey.getQuestions().forEach(question -> question.setTotalVoters(0));
         surveyRepository.save(survey);
 
         String message = surveyMessageProvider.getMessage("surveyCreatedSuccessfully");
         return new ResponseMessage(true, message, survey);
 
     }
-
+    @Transactional
     public ResponseMessage deleteSurvey(String userId, String surveyId) {
         ResponseMessage responseMessage = new ResponseMessage();
 
@@ -102,6 +106,7 @@ public class SurveyService {
         return responseMessage;
     }
 
+    @Transactional
     public ResponseMessage updateSurvey(Survey survey) {
         ResponseMessage responseMessage;
         List<Object> validatingObjects = new ArrayList<>();

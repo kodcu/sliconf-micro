@@ -18,7 +18,8 @@ import org.springframework.test.context.ActiveProfiles;
         features = {"src/test/resources"},
         plugin = "pretty",
         snippets = SnippetType.CAMELCASE,
-        strict = true)
+        strict = true,
+tags = {"@Anket"})
 @ActiveProfiles("test")
 public class RunCukesTest {
 

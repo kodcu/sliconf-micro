@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class AnswerService {
     @Autowired
     private SurveyService surveyService;
 
-
+    @Transactional
     public ResponseMessage answerSurvey(Answer answer, String surveyId) {
         ResponseMessage responseMessage;
 
@@ -71,7 +72,7 @@ public class AnswerService {
         responseMessage.setReturnObject(answer);
         return responseMessage;
     }
-
+    @Transactional
     public ResponseMessage updateSurveyAnswers(Answer answer) {
         ResponseMessage responseMessage;
 
@@ -94,6 +95,7 @@ public class AnswerService {
         return responseMessage;
     }
 
+    @Transactional
     public ResponseMessage getSurveyAnswers(String eventId, String surveyId) {
         ResponseMessage responseMessage = new ResponseMessage();
         //check if event exists.
@@ -117,6 +119,7 @@ public class AnswerService {
             Predicate<QuestionOption> optionPredicate;
             questionPredicate = surveyQuestion -> surveyQuestion.getId().equals(answeredQuestionId);
             optionPredicate = questionOption -> questionOption.getText().equals(answeredOption);
+
             survey.getQuestions()
                     .stream()
                     .filter(questionPredicate)
@@ -164,10 +167,8 @@ public class AnswerService {
 
         ResponseMessage responseMessage = new ResponseMessage();
         Answer answer = answerRepository.findByUserIdAndSurveyId(userId, surveyId).orElse(null);
-        if (Objects.isNull(answer))
-            responseMessage.setStatus(false);
-        else
-            responseMessage.setStatus(true);
+
+        responseMessage.setStatus(Objects.isNull(answer));
         return responseMessage;
     }
 

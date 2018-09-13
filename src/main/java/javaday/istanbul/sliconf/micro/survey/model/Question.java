@@ -24,7 +24,6 @@ public class Question implements Serializable {
     @NotBlank(message = "{survey.question.text.blank}", groups = SurveyQuestionValidatorGroup.class)
     private String text;
 
-    @NotNull
     private Integer totalVoters;
 
 
