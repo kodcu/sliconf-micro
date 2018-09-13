@@ -56,7 +56,7 @@ public class EventSpecs {
      * @return
      */
     public static boolean checkIfEventDateAfterFromGivenDate(Event event, LocalDateTime dateTime) {
-        return dateTime.isBefore(event.getStartDate());
+        return dateTime.isBefore(event.getEndDate());
     }
 
     public static String generateKanbanNumber(Event event, EventService eventRepositoryService) {
