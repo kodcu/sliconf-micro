@@ -33,6 +33,10 @@ https://www.jetbrains.com/idea/download/#section=windows
 Kurulum için gerekli bilgiler burada:
 https://www.jetbrains.com/help/idea/installing-and-launching.html 
 
+=== Properties Dosyaları Düzenlenmesi
+"src/main/resources" dizini içerisindeki .example uzantılı dosyalar, .properties uzantısı haline getirilip dosya içerisindeki "<example-tag>" formatındaki alanlar yorum satırlarındaki yönergelere göre düzenlenmelidir.
+
+
 === Postman
 
 Chromeun Postman eklentisi deneme amaçlı POST/GET vb istekleri göndermek için bir eklentidir.Kullanım  sistemin çalışması için gerekli değildir.
@@ -61,7 +65,7 @@ Mongo Shell'e yetkilendirilmiş kullanıcı girişi için projedekiyle benzer is
 ```
 $mongo
 use admin
-db.createUser({user: "sliconfSecretUser", pwd: "LJYKkAw6b3TtQt3f", roles:[{role: "root", db: "admin"}]})
+db.createUser({user: "sliconfSecretUser", pwd: "<providedPassword>", roles:[{role: "root", db: "admin"}]})
 ```
 
 Komut, aşağıdakine benzer bir çıktı döndürmeli
@@ -79,5 +83,6 @@ Successfully added user: {
 
 ### Mongo Shell'e Giriş
 ```
-mongo -u sliconfSecretUser --authenticationDatabase admin -p LJYKkAw6b3TtQt3f
+mongo -u sliconfSecretUser --authenticationDatabase admin -p
 ```
+
