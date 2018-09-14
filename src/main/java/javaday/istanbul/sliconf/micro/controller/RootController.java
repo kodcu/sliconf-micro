@@ -145,17 +145,17 @@ public class RootController {
 
                 });
 
-                path(":eventId/surveys/", () -> {
+                path(":eventIdentifier/surveys", () -> {
                     post("", routeObjects.createNewSurvey, JsonUtil.json());
                     put("", routeObjects.updateSurveyRoute, JsonUtil.json());
                     get("", routeObjects.getSurveys, JsonUtil.json());
-                    delete(":surveyId", routeObjects.removeSurvey, JsonUtil.json());
-                    get(":surveyId", routeObjects.getSurvey, JsonUtil.json());
+                    delete("/:surveyId", routeObjects.removeSurvey, JsonUtil.json());
+                    get("/:surveyId", routeObjects.getSurvey, JsonUtil.json());
 
-                    path(":surveyId/answer/", () -> {
+                    path(":surveyId/answers", () -> {
                         post("", routeObjects.submitAnswers, JsonUtil.json());
-                        get(":userId", routeObjects.getAnswers, JsonUtil.json());
-                        put(":answerId", routeObjects.updateAnswers, JsonUtil.json());
+                        get("/:userId", routeObjects.getAnswers, JsonUtil.json());
+                        put("/:answerId", routeObjects.updateAnswers, JsonUtil.json());
 
                     });
                     exception(SurveyException.class, (exception, request1, response1)-> {

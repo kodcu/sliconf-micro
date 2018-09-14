@@ -41,7 +41,7 @@ public class AnswerService {
         ResponseMessage responseMessage;
 
         generalService.findUserById(answer.getUserId());
-        generalService.findEventById(answer.getEventId());
+        generalService.findEventByIdOrEventKey(answer.getEventId());
 
         List<Object> validatingObjects = new ArrayList<>();
         validatingObjects.add(answer);
@@ -51,7 +51,7 @@ public class AnswerService {
         }
 
         Survey survey = (Survey) generalService.findSurveyById(surveyId).getReturnObject();
-        generalService.findEventById(survey.getEventId());
+        generalService.findEventByIdOrEventKey(survey.getEventId());
 
         boolean alreadyAnswered = this.checkIfUserAlreadyAnsweredSurvey(answer.getUserId(), surveyId).isStatus();
         if (alreadyAnswered) {
@@ -64,7 +64,7 @@ public class AnswerService {
         this.checkAnsweredQuestions(survey, answer);
         this.updateSurveyVoteCount(answer, survey);
 
-        surveyService.updateSurvey(survey);
+        surveyService.updateSurvey(survey, eventKey);
         answerRepository.save(answer);
 
         responseMessage.setStatus(true);
@@ -99,7 +99,7 @@ public class AnswerService {
     public ResponseMessage getSurveyAnswers(String eventId, String surveyId) {
         ResponseMessage responseMessage = new ResponseMessage();
         //check if event exists.
-        generalService.findEventById(eventId);
+        generalService.findEventByIdOrEventKey(eventId);
         generalService.findSurveyById(surveyId);
 
         List<Answer> answers = answerRepository.findAnswersByEventIdAndSurveyId(eventId, surveyId);

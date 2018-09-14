@@ -40,5 +40,5 @@ public interface EventService {
 
     void hideEventElements(Event event);
 
-    <T> Optional<T> findByKey(String eventKey);
+    Optional<Event> findByEventIdOrEventKey(String identifier);
 }

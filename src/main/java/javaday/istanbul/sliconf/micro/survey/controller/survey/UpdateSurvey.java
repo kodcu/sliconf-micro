@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @AllArgsConstructor
 @Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
-@Path("/service/events/:eventId/surveys")
+@Path("/service/events/:eventIdentifier/surveys")
 @Produces("application/json")
 @Component
 public class UpdateSurvey implements Route {
@@ -44,7 +44,7 @@ public class UpdateSurvey implements Route {
             throws Exception {
 
         ResponseMessage responseMessage;
-
+        String eventIdentifier = request.params("eventIdentifier");
         String body = request.body();
         if (Objects.isNull(body) || body.isEmpty()) {
             responseMessage = new ResponseMessage(false,
@@ -54,7 +54,7 @@ public class UpdateSurvey implements Route {
 
         Survey survey = JsonUtil.fromJson(body, Survey.class);
 
-        responseMessage = surveyService.updateSurvey(survey);
+        responseMessage = surveyService.updateSurvey(survey, eventIdentifier);
         return responseMessage;
 
     }

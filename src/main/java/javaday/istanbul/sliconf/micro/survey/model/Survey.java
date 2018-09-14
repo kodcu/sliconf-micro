@@ -44,7 +44,7 @@ public class Survey implements Serializable {
     @Pattern(regexp = "^\\d+\\d$", groups = SurveyValidatorGroup.class, message = "{survey.localDateTime.invalid}")
     private String startTime;
 
-    @Pattern(regexp = "^\\d+\\d$", groups = SurveyValidatorGroup.class)
+    @Pattern(regexp = "^\\d+\\d$", groups = SurveyValidatorGroup.class, message = "{survey.localDateTime.invalid}")
     private String endTime;
 
     private String description;

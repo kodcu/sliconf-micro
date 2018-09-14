@@ -35,4 +35,7 @@ public interface EventRepository extends MongoRepository<Event, String>,
     List<Event> findByNameAndKeyNot(String name, String key);
 
     List<Event> findByNameAndKeyNotAndDeleted(String name, String key, Boolean deleted);
+
+    Optional<Event> findByIdOrKey(String identifier);
+
 }

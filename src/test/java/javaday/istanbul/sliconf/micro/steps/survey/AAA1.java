@@ -1,22 +1,16 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
-import com.couchbase.client.java.document.json.JsonObject;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import cucumber.api.java.tr.Ve;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
-import javaday.istanbul.sliconf.micro.builder.EventBuilder;
 import javaday.istanbul.sliconf.micro.controller.event.CreateEventRoute;
-import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
-import javaday.istanbul.sliconf.micro.survey.model.Question;
-import javaday.istanbul.sliconf.micro.survey.model.QuestionOption;
-import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsEmptyCollection;
@@ -29,10 +23,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Pattern;
 
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.*;
 
@@ -42,95 +35,54 @@ import static org.junit.Assert.*;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class CreateSurveyTest {// NOSONAR
+public class AAA1 {// NOSONAR
 
     @Autowired
-    private UserRepositoryService userRepositoryService;
-    @Autowired
-    private CreateEventRoute createEventRoute;
+    private InitialData initialData;
 
     @Autowired
-    private EventRepositoryService eventRepositoryService;
+    protected UserRepositoryService userRepositoryService;
+    @Autowired
+    protected CreateEventRoute createEventRoute;
 
     @Autowired
-    private SurveyService surveyService;
+    protected EventRepositoryService eventRepositoryService;
 
-    private JsonObject request = JsonObject.create();
+    @Autowired
+    protected SurveyService surveyService;
 
-    private User user;
 
-    private Event event;
-
-    private Survey survey;
-
-    void init() {
-        user = new User();
-        user.setUsername("createSurveyUser01");
-        user.setEmail("createSurveyUser01@sliconf.com");
-        user.setPassword("123123123");
-
-        ResponseMessage savedUserMessage = userRepositoryService.saveUser(user);
-
-        String userId1 = ((User) savedUserMessage.getReturnObject()).getId();
-
-        event = new EventBuilder()
-                .setName("Create Event 01")
-                .setExecutiveUser(userId1)
-                .setDate(LocalDateTime.now().plusMonths(1))
-
-                .build();
-//        ResponseMessage createEventMessage1 = createEventRoute.processEvent(event, userId1);
-//        assertTrue(createEventMessage1.isStatus());
-        eventRepositoryService.save(event);
-        event.setId(eventRepositoryService.findByName(event.getName()).get(0).getId());
-    }
 
     @Diyelimki("^Etkinlik sahibi kendi etkinliğine bir anket eklemek istiyor$")
     public void etkinlikSahibiKendiEtkinliğineBirAnketEklemekIstiyor() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        this.init();
-        survey = new Survey();
-        survey.setEventId(event.getId());
-        survey.setUserId(user.getId());
-        survey.setName("Anket 01");
-
-        long date = LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC);
-        survey.setStartTime(Long.toString(date));
-        long date2 = LocalDateTime.now().plusDays(2).toEpochSecond(ZoneOffset.UTC);
-        survey.setEndTime(Long.toString(date2));
-
-        Question question = new Question();
-        question.setText("Soru 01");
-        question.setId("questionId");
-        List<Question> questions = new ArrayList<>();
-        questions.add(question);
-
-        QuestionOption questionOption1 = new QuestionOption();
-        QuestionOption questionOption2 = new QuestionOption();
-        questionOption1.setText("Seçenek 01"); questionOption1.setId("questionOption1Id");
-        questionOption2.setText("Seçenek 02"); questionOption2.setId("questionOption2Id");
-        List<QuestionOption> questionOptions = new ArrayList<>();
-        questionOptions.add(questionOption1);
-        questionOptions.add(questionOption2);
-        question.setOptions(questionOptions);
-
-        survey.setQuestions(questions);
-        survey.setEventId(event.getId());
-
+        initialData.init();
     }
 
     @Eğerki("^Etkinlik sahibi geçerli bir anket ismi vermiş ise$")
     public void etkinlikSahibiGeçerliBirAnketIsmiVermişIse() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        assertNotNull(event.getName());
-        assertNotEquals("", event.getName());
+        assertThat(initialData.survey.getName(), not(isEmptyOrNullString()));
 
+        assertThat(initialData.survey.getName().length(), greaterThanOrEqualTo(Constants.EVENT_MIN_NAME_LENGTH));
+        assertThat(initialData.survey.getName().length(), lessThanOrEqualTo(Constants.EVENT_MAX_NAME_LENGTH));
+
+        Pattern pattern = Pattern.compile("^[\\w\\s]+[\\w\\d\\s]+$", Pattern.UNICODE_CHARACTER_CLASS);
+        assertTrue(pattern.matcher(initialData.survey.getName()).matches());
+
+    }
+
+    @Ve("^Anketin başlangıç ve bitiş tarihi geçerli formatta ise$")
+    public void anketinBaşlangıçVeBitişTarihiGeçerliFormattaIse() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        assertTrue(initialData.survey.getStartTime().matches("^\\d+\\d$"));
+        assertTrue(initialData.survey.getEndTime().matches("^\\d+\\d$"));
     }
 
     @Ve("^Anketin başlangıç tarihi bugün veya daha ileri bir tarih olarak belirtilmiş ise$")
     public void anketinBaşlangıçTarihiBugünVeyaDahaIleriBirTarihOlarakBelirtilmişIse() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        long epochSecond = Long.parseLong(survey.getStartTime());
+        long epochSecond = Long.parseLong(initialData.survey.getStartTime());
         LocalDateTime startTime = LocalDateTime.ofEpochSecond(epochSecond, 0, ZoneOffset.UTC);
         assertTrue(LocalDateTime.now(ZoneOffset.UTC).isBefore(startTime));
     }
@@ -138,8 +90,8 @@ public class CreateSurveyTest {// NOSONAR
     @Ve("^Anketin bitiş tarihi başlangıç tarihinden önce değil ise$")
     public void anketinBitişTarihiBaşlangıçTarihindenÖnceDeğilIse() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        long epochSecondStartTime = Long.parseLong(survey.getStartTime());
-        long epochSecondEndTime = Long.parseLong(survey.getEndTime());
+        long epochSecondStartTime = Long.parseLong(initialData.survey.getStartTime());
+        long epochSecondEndTime = Long.parseLong(initialData.survey.getEndTime());
         LocalDateTime startTime = LocalDateTime.ofEpochSecond(epochSecondStartTime, 0, ZoneOffset.UTC);
         LocalDateTime endtime = LocalDateTime.ofEpochSecond(epochSecondEndTime, 0, ZoneOffset.UTC);
         assertTrue(startTime.isBefore(endtime));
@@ -148,25 +100,25 @@ public class CreateSurveyTest {// NOSONAR
     @Ve("^Anket en az bir soru içeriyorsa$")
     public void anketEnAzBirSoruIçeriyorsa() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        assertThat(survey.getQuestions(), Matchers.not(IsEmptyCollection.empty()));
+        assertThat(initialData.survey.getQuestions(), Matchers.not(IsEmptyCollection.empty()));
     }
 
     @Ve("^Anketteki soruların isimleri geçerli ise$")
     public void ankettekiSorularınIsimleriGeçerliIse() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        survey.getQuestions().forEach(question -> assertThat(question.getText(), Matchers.not(isEmptyString())));
+        initialData.survey.getQuestions().forEach(question -> assertThat(question.getText(), Matchers.not(isEmptyString())));
     }
 
     @Ve("^Anketteki sorular en az iki şık içeriyorsa$")
     public void ankettekiSorularEnAzIkiŞıkIçeriyorsa() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        survey.getQuestions().forEach(question -> assertThat(question.getOptions(), hasSize(2)));
+        initialData.survey.getQuestions().forEach(question -> assertThat(question.getOptions(), hasSize(2)));
     }
 
     @Ve("^Anketteki soru şıklarının isimleri geçerli ise$")
     public void ankettekiSoruŞıklarınınIsimleriGeçerliIse() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        survey.getQuestions()
+        initialData.survey.getQuestions()
                 .forEach(question -> question.getOptions()
                         .forEach(questionOption ->
                                 assertThat(questionOption.getText(), Matchers.not(isEmptyString()))));
@@ -176,10 +128,12 @@ public class CreateSurveyTest {// NOSONAR
     public void sistemAnketiKayıtEderVeEtkinlikSahibiAnketiOluşturmuşOlur() throws Throwable {
         ResponseMessage responseMessage = new ResponseMessage();
 
-        responseMessage = surveyService.addNewSurvey(survey);
+        responseMessage = surveyService.addNewSurvey(initialData.survey, eventKey);
         log.info(responseMessage.getMessage());
 
         assertTrue(responseMessage.isStatus());
 
     }
+
+
 }

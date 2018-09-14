@@ -17,6 +17,13 @@ public class Constants {
 
     public static final int EVENT_KEY_LENGTH = 4;
 
+    public static final int EVENT_MIN_NAME_LENGTH = 4;
+    public static final int EVENT_MAX_NAME_LENGTH = 50;
+
+    public static final int SURVEY_MIN_NAME_LENGTH = 4;
+    public static final int SURVEY_MAX_NAME_LENGTH = 25;
+
+
     public static final String DEFAULT_USER_FULLNAME = "Guest";
 
     public static final String DEFAULT_USER_ROLE = "ROLE_USER";

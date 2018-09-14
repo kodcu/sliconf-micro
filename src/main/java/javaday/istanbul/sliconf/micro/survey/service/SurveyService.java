@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -40,7 +39,7 @@ public class SurveyService {
     private  AnswerService answerService;
 
     @Transactional
-    public ResponseMessage addNewSurvey(Survey survey) {
+    public ResponseMessage addNewSurvey(Survey survey, String eventIdentifier) {
 
         List<Object> validatingObjects = new ArrayList<>();
         // validate edilecek objeleri ekle.
@@ -55,7 +54,7 @@ public class SurveyService {
         }
 
 
-        ResponseMessage eventResponse= generalService.findEventById(survey.getEventId());
+        ResponseMessage eventResponse= generalService.findEventByIdOrEventKey(eventIdentifier);
         Event event = (Event)  eventResponse.getReturnObject();
 
         ResponseMessage userResponse = generalService.findUserById(survey.getUserId());
@@ -65,7 +64,9 @@ public class SurveyService {
         survey.setUserId(user.getId());
 
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
-        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("app-prod")))
+        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("app-prod"))) {
+            survey.setEventId(event.getExecutiveUser());
+            survey.setUserId(user.getId());
             survey.getQuestions().forEach(question -> {
                 question.setId(new ObjectId().toString());
                 question.getOptions()
@@ -77,7 +78,7 @@ public class SurveyService {
                 question.getOptions()
                         .forEach(questionOption -> questionOption.setVoters(0));
             });
-
+        }
 
         survey.setParticipants(0);
         survey.setViewers(0);
@@ -107,7 +108,7 @@ public class SurveyService {
     }
 
     @Transactional
-    public ResponseMessage updateSurvey(Survey survey) {
+    public ResponseMessage updateSurvey(Survey survey, String eventIdentifier) {
         ResponseMessage responseMessage;
         List<Object> validatingObjects = new ArrayList<>();
         /* validate edilecek objeleri ekle. */
@@ -121,8 +122,8 @@ public class SurveyService {
         }
 
         generalService.findSurveyById(survey.getId());
-        generalService.findUserById(survey.getUserId());
-        generalService.findEventById(survey.getEventId());
+        Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
+        generalService.findUserById(event.getExecutiveUser());
 
         surveyRepository.save(survey);
         String message = surveyMessageProvider.getMessage("surveyUpdatedSuccessfully");
@@ -133,7 +134,7 @@ public class SurveyService {
     public ResponseMessage getSurveys(String eventId) {
         ResponseMessage responseMessage = new ResponseMessage();
         //check if event exists.
-        generalService.findEventById(eventId);
+        generalService.findEventByIdOrEventKey(eventId);
 
         List<Survey> surveys = surveyRepository.findSurveysByEventId(eventId);
         responseMessage.setStatus(true);

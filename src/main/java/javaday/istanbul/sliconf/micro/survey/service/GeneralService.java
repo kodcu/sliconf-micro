@@ -36,12 +36,12 @@ public class GeneralService {
         return responseMessage;
     }
 
-    ResponseMessage findEventById(String eventId) {
+    ResponseMessage findEventByIdOrEventKey(String eventIdentifier) {
         ResponseMessage responseMessage = new ResponseMessage();
-        Event event = eventRepositoryService.findById(eventId).orElseThrow(() -> {
-            log.error("event not found by id: {}", eventId);
+        Event event = eventRepositoryService.findByEventIdOrEventKey(eventIdentifier).orElseThrow(() -> {
+            log.error("event not found by id: {}", eventIdentifier);
             String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenId");
-            return new SurveyException(message, eventId);
+            return new SurveyException(message, eventIdentifier);
         });
         responseMessage.setStatus(true);
         responseMessage.setReturnObject(event);
@@ -59,4 +59,5 @@ public class GeneralService {
         responseMessage.setReturnObject(user);
         return responseMessage;
     }
+
 }
