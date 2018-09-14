@@ -128,7 +128,7 @@ public class AAA1 {// NOSONAR
     public void sistemAnketiKayıtEderVeEtkinlikSahibiAnketiOluşturmuşOlur() throws Throwable {
         ResponseMessage responseMessage = new ResponseMessage();
 
-        responseMessage = surveyService.addNewSurvey(initialData.survey, eventKey);
+        responseMessage = surveyService.addNewSurvey(initialData.survey, initialData.event.getKey());
         log.info(responseMessage.getMessage());
 
         assertTrue(responseMessage.isStatus());

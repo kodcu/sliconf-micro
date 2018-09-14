@@ -9,6 +9,7 @@ import javaday.istanbul.sliconf.micro.survey.SurveyException;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,11 +39,20 @@ public class GeneralService {
 
     ResponseMessage findEventByIdOrEventKey(String eventIdentifier) {
         ResponseMessage responseMessage = new ResponseMessage();
-        Event event = eventRepositoryService.findByEventIdOrEventKey(eventIdentifier).orElseThrow(() -> {
+        Event event;
+        if(eventIdentifier.length() > Constants.EVENT_KEY_LENGTH)
+            event = eventRepositoryService.findById(eventIdentifier).orElseThrow(() -> {
             log.error("event not found by id: {}", eventIdentifier);
             String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenId");
             return new SurveyException(message, eventIdentifier);
         });
+        else
+            event = eventRepositoryService.findByKey(eventIdentifier).orElseThrow(() -> {
+                log.error("event not found by id: {}", eventIdentifier);
+                String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenId");
+                return new SurveyException(message, eventIdentifier);
+            });
+
         responseMessage.setStatus(true);
         responseMessage.setReturnObject(event);
         return responseMessage;

@@ -2,9 +2,9 @@ package javaday.istanbul.sliconf.micro;
 
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.security.TokenAuthenticationServiceProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
  * Created by ttayfur on 7/4/17.
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
                 MongoDataAutoConfiguration.class,
                 MongoRepositoriesAutoConfiguration.class})
 
-@EnableConfigurationProperties
+@EnableConfigurationProperties(value = {TokenAuthenticationServiceProperties.class})
 @ComponentScan
 @Configuration
 @SwaggerDefinition(

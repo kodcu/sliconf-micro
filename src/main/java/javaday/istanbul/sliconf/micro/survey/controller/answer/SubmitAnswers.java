@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @AllArgsConstructor
 @Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
-@Path("/service/events/:eventId/surveys/:surveyId/answer/")
+@Path("/service/events/:eventIdentifier/surveys/:surveyId/answer")
 @Produces("application/json")
 @Component
 public class SubmitAnswers implements Route {

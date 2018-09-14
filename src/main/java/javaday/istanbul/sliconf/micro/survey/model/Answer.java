@@ -38,6 +38,9 @@ public class Answer implements Serializable {
     @NotBlank(message = "{survey.answer.eventId.blank}")
     private String eventId;
 
+    @NotBlank(message = "{survey.answer.eventKey.blank}")
+    private String eventKey;
+
     //burada key question id, value ise verdigi cevaptir..
     @NotEmpty(message = "survey.answers.empty")
     private Map<String, String> answeredQuestions;

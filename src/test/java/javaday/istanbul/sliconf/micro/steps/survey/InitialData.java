@@ -39,7 +39,7 @@ public class InitialData {
 
     public   boolean checkErrorMessages(String exceptedErrorMessage, Survey invalidSurvey){
         ResponseMessage responseMessage;
-        responseMessage = surveyService.addNewSurvey(invalidSurvey, eventKey);
+        responseMessage = surveyService.addNewSurvey(invalidSurvey, this.event.getKey());
         String[] message =  responseMessage.getMessage().split("-->");
         return (exceptedErrorMessage.equals(message[0]));
     }
@@ -58,7 +58,7 @@ public class InitialData {
                 .setName("Create Event 01")
                 .setExecutiveUser(userId1)
                 .setDate(LocalDateTime.now().plusMonths(1))
-
+                .setKey("AAA1")
                 .build();
 //        ResponseMessage createEventMessage1 = createEventRoute.processEvent(event, userId1);
 //        assertTrue(createEventMessage1.isStatus());

@@ -1,18 +1,12 @@
 package javaday.istanbul.sliconf.micro.security;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.hazelcast.core.IMap;
 import io.jsonwebtoken.*;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.token.SecurityToken;
 import javaday.istanbul.sliconf.micro.provider.DistributedMapProvider;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
-import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import lombok.AllArgsConstructor;
-import org.apache.http.protocol.HTTP;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -20,8 +14,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -34,12 +26,12 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TokenAuthenticationService {
 
+    private final TokenAuthenticationServiceProperties tokenAuthenticationServiceProperties;
     //    private static final long EXPIRATION_TIME = 864_000_000; // 10 days
     private static final long EXPIRATION_TIME = 1; // days
     private static final ChronoUnit expirationUnit = ChronoUnit.DAYS; // days
     private static final TimeUnit expirationTimeUnit = TimeUnit.DAYS; // days
-    // TODO: 27.08.2018 Proje github da oldugundan bu secretin buradan kaldirilmasi gerekebilir.?
-    private static final String SECRET = "0MLYpRduz8m10E1eMyUYczc7xBp13nDc";
+    private static final String SECRET = TokenAuthenticationServiceProperties.getSecret();
     private static final String TOKEN_PREFIX = "Bearer";
     private static final String HEADER_STRING = "Authorization";
     private static final String SECURITY_TOKENS = "securityTokens";

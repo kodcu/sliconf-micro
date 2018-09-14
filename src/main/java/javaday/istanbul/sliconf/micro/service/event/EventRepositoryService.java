@@ -182,9 +182,8 @@ public class EventRepositoryService implements EventService {
     }
 
     @Override
-    public Optional<Event> findByEventIdOrEventKey(String identifier) {
-        return repo.findByIdOrKey(identifier);
+    public Optional<Event> findByKey(String eventKey) {
+        return repo.findByKey(eventKey);
     }
-
 
 }

@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @AllArgsConstructor
 @Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
-@Path("/service/events/:eventKey/surveys/")
+@Path("/service/events/:eventIdentifier/surveys/")
 @Produces("application/json")
 @Component
 public class CreateNewSurvey implements Route {
@@ -31,6 +31,8 @@ public class CreateNewSurvey implements Route {
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
             @ApiImplicitParam(required = true, dataTypeClass = Survey.class, name = "survey", paramType = "body"), //
+            @ApiImplicitParam(required = true, dataType= "string", name = "eventIdentifier", paramType = "request"), //
+
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //

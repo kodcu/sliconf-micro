@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.survey.service;
 
+import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.AnswerRepository;
 import javaday.istanbul.sliconf.micro.survey.SurveyException;
@@ -41,7 +42,7 @@ public class AnswerService {
         ResponseMessage responseMessage;
 
         generalService.findUserById(answer.getUserId());
-        generalService.findEventByIdOrEventKey(answer.getEventId());
+        Event event = (Event) generalService.findEventByIdOrEventKey(answer.getEventId()).getReturnObject();
 
         List<Object> validatingObjects = new ArrayList<>();
         validatingObjects.add(answer);
@@ -64,7 +65,7 @@ public class AnswerService {
         this.checkAnsweredQuestions(survey, answer);
         this.updateSurveyVoteCount(answer, survey);
 
-        surveyService.updateSurvey(survey, eventKey);
+        surveyService.updateSurvey(survey, event.getKey());
         answerRepository.save(answer);
 
         responseMessage.setStatus(true);
@@ -96,13 +97,13 @@ public class AnswerService {
     }
 
     @Transactional
-    public ResponseMessage getSurveyAnswers(String eventId, String surveyId) {
+    public ResponseMessage getSurveyAnswers(String eventIdentifier, String surveyId) {
         ResponseMessage responseMessage = new ResponseMessage();
         //check if event exists.
-        generalService.findEventByIdOrEventKey(eventId);
+        generalService.findEventByIdOrEventKey(eventIdentifier);
         generalService.findSurveyById(surveyId);
 
-        List<Answer> answers = answerRepository.findAnswersByEventIdAndSurveyId(eventId, surveyId);
+        List<Answer> answers = answerRepository.findAnswersByEventIdOrEventKeyAndSurveyId(eventIdentifier, surveyId);
         responseMessage.setStatus(true);
         responseMessage.setMessage(surveyMessageProvider.getMessage("answersListedSuccessfully"));
         responseMessage.setReturnObject(answers);
