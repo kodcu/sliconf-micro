@@ -152,9 +152,9 @@ public class RootController {
                     delete("/:surveyId", routeObjects.removeSurvey, JsonUtil.json());
                     get("/:surveyId", routeObjects.getSurvey, JsonUtil.json());
 
-                    path(":surveyId/answers", () -> {
+                    path("/:surveyId/answers", () -> {
                         post("", routeObjects.submitAnswers, JsonUtil.json());
-                        get("/:userId", routeObjects.getAnswers, JsonUtil.json());
+                        get("", routeObjects.getAnswers, JsonUtil.json());
                         put("/:answerId", routeObjects.updateAnswers, JsonUtil.json());
 
                     });

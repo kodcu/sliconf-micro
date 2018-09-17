@@ -5,9 +5,9 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
-import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidator;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
+import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidator;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidatorSequence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +48,12 @@ public class SurveyService {
 
         survey.getQuestions().forEach(question -> question.getOptions().forEach(validatingObjects::add));
         ResponseMessage responseMessage;
-        responseMessage = surveyValidator.validate(validatingObjects, SurveyValidatorSequence.class );
+
+        responseMessage = surveyValidator.validate(validatingObjects, SurveyValidatorSequence.class);
+
         if (!responseMessage.isStatus()) {
             return responseMessage;
         }
-
 
         ResponseMessage eventResponse= generalService.findEventByIdOrEventKey(eventIdentifier);
         Event event = (Event)  eventResponse.getReturnObject();
@@ -61,6 +62,7 @@ public class SurveyService {
         User user = (User) userResponse.getReturnObject();
 
         survey.setEventId(event.getId());
+        survey.setEventKey(event.getKey());
         survey.setUserId(user.getId());
 
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
@@ -131,12 +133,14 @@ public class SurveyService {
 
     }
 
-    public ResponseMessage getSurveys(String eventId) {
+    public ResponseMessage getSurveys(String eventIdentifier) {
         ResponseMessage responseMessage = new ResponseMessage();
         //check if event exists.
-        generalService.findEventByIdOrEventKey(eventId);
+        generalService.findEventByIdOrEventKey(eventIdentifier);
 
-        List<Survey> surveys = surveyRepository.findSurveysByEventId(eventId);
+        List<Survey> surveys = surveyRepository.findSurveysByEventId(eventIdentifier);
+        if (surveys.isEmpty())
+            surveys = surveyRepository.findSurveysByEventKey(eventIdentifier);
         responseMessage.setStatus(true);
         responseMessage.setMessage(surveyMessageProvider.getMessage("surveysListedSuccessfully"));
         responseMessage.setReturnObject(surveys);

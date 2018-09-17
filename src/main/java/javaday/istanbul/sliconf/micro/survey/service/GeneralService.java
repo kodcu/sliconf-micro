@@ -37,7 +37,7 @@ public class GeneralService {
         return responseMessage;
     }
 
-    ResponseMessage findEventByIdOrEventKey(String eventIdentifier) {
+    public ResponseMessage findEventByIdOrEventKey(String eventIdentifier) {
         ResponseMessage responseMessage = new ResponseMessage();
         Event event;
         if(eventIdentifier.length() > Constants.EVENT_KEY_LENGTH)
@@ -49,7 +49,7 @@ public class GeneralService {
         else
             event = eventRepositoryService.findByKey(eventIdentifier).orElseThrow(() -> {
                 log.error("event not found by id: {}", eventIdentifier);
-                String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenId");
+                String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenKey");
                 return new SurveyException(message, eventIdentifier);
             });
 

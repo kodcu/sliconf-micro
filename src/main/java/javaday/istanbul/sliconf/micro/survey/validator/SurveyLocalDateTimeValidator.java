@@ -1,18 +1,28 @@
 package javaday.istanbul.sliconf.micro.survey.validator;
 
+import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
+import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 
-public class StartAndEndLocalDateTimeValidator
-        implements ConstraintValidator<ValidStartAndEndLocalDateTime, Survey> {
+/**
+  * Anketin başlangıç ve bitiş tarihini iş mantığına göre kontrol etmemizi sağlayan custom validator.
+ */
+@Component
+public class SurveyLocalDateTimeValidator
+        implements ConstraintValidator<ValidSurveyLocalDateTime, Survey> {
+
     @Override
-    public void initialize(ValidStartAndEndLocalDateTime constraintAnnotation) {
+    public void initialize(ValidSurveyLocalDateTime constraintAnnotation) {
         /**
          * Initializes the validator in preparation for
          * {@link #isValid(Object, ConstraintValidatorContext)} calls.
@@ -28,9 +38,7 @@ public class StartAndEndLocalDateTimeValidator
 
     @Override
     public boolean isValid(Survey survey, ConstraintValidatorContext context) {
-        if ( survey == null ) {
-            return true;
-        }
+        if ( survey == null ) { return true; }
 
         long epochSecondStartTime = Long.parseLong(survey.getStartTime());
         LocalDateTime startDateTime = LocalDateTime.ofEpochSecond(epochSecondStartTime, 0, ZoneOffset.UTC);
@@ -47,10 +55,11 @@ public class StartAndEndLocalDateTimeValidator
 
         if (startDateTime.isBefore(LocalDateTime.now().minusMinutes(1))) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("{survey.startTime.invalid}")
+            context.buildConstraintViolationWithTemplate("{survey.startTime-after-now}")
             .addConstraintViolation();
             return false;
         }
+
         return true;
     }
 }

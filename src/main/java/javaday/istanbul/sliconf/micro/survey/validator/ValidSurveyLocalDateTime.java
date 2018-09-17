@@ -12,9 +12,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({TYPE, ANNOTATION_TYPE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = { StartAndEndLocalDateTimeValidator.class })
+@Constraint(validatedBy = { SurveyLocalDateTimeValidator.class })
 @Documented
-public @interface ValidStartAndEndLocalDateTime   {
+public @interface ValidSurveyLocalDateTime {
     String message() default "{javaday.istanbul.sliconf.micro." +
             "Invalid start and end date.}";
 

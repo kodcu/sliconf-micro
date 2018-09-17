@@ -31,6 +31,7 @@ public class UpdateSurvey implements Route {
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
             @ApiImplicitParam(required = true, dataTypeClass = Survey.class, name = "survey", paramType = "body"), //
+            @ApiImplicitParam(required = true, dataType = "string", name = "eventIdentifier", paramType = "path"), //
 
     }) //
     @ApiResponses(value = { //

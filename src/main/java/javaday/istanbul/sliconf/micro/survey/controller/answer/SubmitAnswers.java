@@ -17,8 +17,8 @@ import javax.ws.rs.Produces;
 import java.util.Objects;
 
 @AllArgsConstructor
-@Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
-@Path("/service/events/:eventIdentifier/surveys/:surveyId/answer")
+@Api(value = "survey", authorizations = {@Authorization(value = "Bearer")})
+@Path("/service/events/:eventIdentifier/surveys/:surveyId/answers")
 @Produces("application/json")
 @Component
 public class SubmitAnswers implements Route {
@@ -30,7 +30,7 @@ public class SubmitAnswers implements Route {
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
-                  @ApiImplicitParam(required = true, dataType = "string", name = "surveyId", paramType = "path"),
+            @ApiImplicitParam(required = true, dataType = "string", name = "surveyId", paramType = "path"),
             @ApiImplicitParam(required = true, dataTypeClass = Answer.class, name = "answer", paramType = "body"), //
 
     }) //
@@ -42,24 +42,20 @@ public class SubmitAnswers implements Route {
     })
 
     @Override
-    public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response)
-            throws Exception {
+    public ResponseMessage handle(@ApiParam(hidden = true) Request request,
+                                  @ApiParam(hidden = true) Response response) throws Exception {
 
         ResponseMessage responseMessage;
-
         String surveyId = request.params("surveyId");
-
+        String eventIdentifier = request.params("eventIdentifier");
         String body = request.body();
-
         if (Objects.isNull(body) || body.isEmpty()) {
             responseMessage = new ResponseMessage(false,
                     "Body can not be empty!", new Object());
             return responseMessage;
         }
-
         Answer answer = JsonUtil.fromJson(body, Answer.class);
-
-        responseMessage = answerService.answerSurvey(answer, surveyId);
+        responseMessage = answerService.answerSurvey(answer, surveyId, eventIdentifier);
         return responseMessage;
     }
 }

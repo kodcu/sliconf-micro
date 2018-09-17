@@ -31,7 +31,7 @@ public class TokenAuthenticationService {
     private static final long EXPIRATION_TIME = 1; // days
     private static final ChronoUnit expirationUnit = ChronoUnit.DAYS; // days
     private static final TimeUnit expirationTimeUnit = TimeUnit.DAYS; // days
-    private static final String SECRET = TokenAuthenticationServiceProperties.getSecret();
+    private static final String SECRET = TokenAuthenticationServiceProperties.getTokenSecret();
     private static final String TOKEN_PREFIX = "Bearer";
     private static final String HEADER_STRING = "Authorization";
     private static final String SECURITY_TOKENS = "securityTokens";

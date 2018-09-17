@@ -23,26 +23,24 @@ public class SurveyValidator {
         responseMessage.setMessage("");
 
         Set<ConstraintViolation<Object>> constraintViolations = new HashSet<>();
-        validatingObjects.forEach(o -> constraintViolations.addAll(validator.validate(o, clazz)));
+        validatingObjects.forEach(object -> constraintViolations.addAll(validator.validate(object, clazz)));
 
         responseMessage.setStatus(constraintViolations.isEmpty());
+
         List<Object> violatingObjects = new ArrayList<>();
 
         constraintViolations.forEach(constraintViolation -> {
+
             String constraintViolationMessages = responseMessage.getMessage();
+            boolean isNull = Objects.isNull(constraintViolation.getInvalidValue());
+            String rejectedValue = " --> Invalid Value = ";
+            rejectedValue += isNull ? "null" : rejectedValue + constraintViolation.getInvalidValue().toString();
 
-            String rejectedValue;
-
-            if (Objects.isNull(constraintViolation.getInvalidValue()))
-                rejectedValue = "null";
-            else
-                rejectedValue = constraintViolation.getInvalidValue().toString();
-
-            String newConstraintMessage = constraintViolation.getMessage() + " --> Invalid Value = " + rejectedValue + ", ";
+            String newConstraintMessage = constraintViolation.getMessage() + rejectedValue + ", ";
             responseMessage.setMessage(constraintViolationMessages + newConstraintMessage);
 
-            Predicate<Object> objectPredicate = o -> o.hashCode() == constraintViolation.getLeafBean().hashCode();
-
+            Predicate<Object> objectPredicate;
+            objectPredicate = object -> object.hashCode() == constraintViolation.getLeafBean().hashCode();
             /* kisitlamalari ihlal eden model kisitlamalari ihlal eden objeler listesinde degilse ekliyoruz. */
             if(violatingObjects.stream().noneMatch(objectPredicate))
                 violatingObjects.add(constraintViolation.getLeafBean());

@@ -21,13 +21,12 @@ import javax.ws.rs.Produces;
 public class GetSurvey implements Route {
 
     private final SurveyService surveyService;
-
     @GET
     @ApiOperation(value = "Gets a given survey from specific event.", nickname = "GetSurveyRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
-            @ApiImplicitParam(required = true, dataType = "string", name = "eventId",   paramType = "path"),
+            @ApiImplicitParam(required = true, dataType = "string", name = "eventIdentifier",   paramType = "path"),
             @ApiImplicitParam(required = true, dataType = "string", name = "surveyId", paramType = "path"),
     }) //
     @ApiResponses(value = { //
@@ -37,13 +36,11 @@ public class GetSurvey implements Route {
             @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
     })
     @Override
-    public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response)
-            throws Exception {
+    public ResponseMessage handle(@ApiParam(hidden = true) Request request,
+                                  @ApiParam(hidden = true) Response response) throws Exception {
 
         ResponseMessage responseMessage;
         String surveyId = request.params("surveyId");
-
-
         responseMessage = surveyService.getSurvey(surveyId);
         return responseMessage;
 

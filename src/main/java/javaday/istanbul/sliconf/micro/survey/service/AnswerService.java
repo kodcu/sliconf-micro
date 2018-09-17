@@ -38,7 +38,7 @@ public class AnswerService {
     private SurveyService surveyService;
 
     @Transactional
-    public ResponseMessage answerSurvey(Answer answer, String surveyId) {
+    public ResponseMessage answerSurvey(Answer answer, String surveyId, String eventIdentifier) {
         ResponseMessage responseMessage;
 
         generalService.findUserById(answer.getUserId());
@@ -54,6 +54,9 @@ public class AnswerService {
         Survey survey = (Survey) generalService.findSurveyById(surveyId).getReturnObject();
         generalService.findEventByIdOrEventKey(survey.getEventId());
 
+        // TODO: 17.09.2018 kullanıcı eğer anketin belirli sorularına cevap verdikten
+        // TODO: sonra cevap vermediği bir soruyu cevaplamak
+        // TODO: isterse zaten cevap verdin hatası alacaktır. bunu düzelt.
         boolean alreadyAnswered = this.checkIfUserAlreadyAnsweredSurvey(answer.getUserId(), surveyId).isStatus();
         if (alreadyAnswered) {
             responseMessage.setStatus(false);
@@ -65,7 +68,7 @@ public class AnswerService {
         this.checkAnsweredQuestions(survey, answer);
         this.updateSurveyVoteCount(answer, survey);
 
-        surveyService.updateSurvey(survey, event.getKey());
+        surveyService.updateSurvey(survey, eventIdentifier);
         answerRepository.save(answer);
 
         responseMessage.setStatus(true);
@@ -102,8 +105,8 @@ public class AnswerService {
         //check if event exists.
         generalService.findEventByIdOrEventKey(eventIdentifier);
         generalService.findSurveyById(surveyId);
+        List<Answer> answers = answerRepository.findBySurveyId(surveyId);
 
-        List<Answer> answers = answerRepository.findAnswersByEventIdOrEventKeyAndSurveyId(eventIdentifier, surveyId);
         responseMessage.setStatus(true);
         responseMessage.setMessage(surveyMessageProvider.getMessage("answersListedSuccessfully"));
         responseMessage.setReturnObject(answers);
@@ -137,11 +140,9 @@ public class AnswerService {
     private void checkAnsweredQuestions(Survey survey, Answer answer) {
 
         answer.getAnsweredQuestions().forEach((answeredQuestionId, answeredOption) -> {
-
             Predicate<Question> questionPredicate;
             questionPredicate = surveyQuestion -> surveyQuestion.getId().equals(answeredQuestionId);
 
-            //
             if (survey.getQuestions().stream().noneMatch(questionPredicate)) {
                 log.error("Question not found by id: {}", answeredQuestionId);
                 String message = surveyMessageProvider.getMessage("questionCanNotFoundWithGivenId");
@@ -169,7 +170,7 @@ public class AnswerService {
         ResponseMessage responseMessage = new ResponseMessage();
         Answer answer = answerRepository.findByUserIdAndSurveyId(userId, surveyId).orElse(null);
 
-        responseMessage.setStatus(Objects.isNull(answer));
+        responseMessage.setStatus(!Objects.isNull(answer));
         return responseMessage;
     }
 

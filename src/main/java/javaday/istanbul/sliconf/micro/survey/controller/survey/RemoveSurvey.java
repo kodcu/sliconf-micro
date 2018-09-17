@@ -15,7 +15,7 @@ import javax.ws.rs.Produces;
 
 @AllArgsConstructor
 @Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
-@Path("/service/events/:eventId/surveys/:surveyId/")
+@Path("/service/events/:eventIdentifier/surveys/:surveyId/")
 @Produces("application/json")
 @Component
 public class RemoveSurvey implements Route {

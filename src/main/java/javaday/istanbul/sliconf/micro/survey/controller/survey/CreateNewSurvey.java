@@ -43,8 +43,8 @@ public class CreateNewSurvey implements Route {
 
 
     @Override
-    public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response)
-            throws Exception {
+    public ResponseMessage handle(@ApiParam(hidden = true) Request request,
+                                  @ApiParam(hidden = true) Response response) throws Exception {
 
         ResponseMessage responseMessage;
         String body = request.body();

@@ -10,7 +10,11 @@ public interface AnswerRepository extends MongoRepository<Answer, String> {
 
     Optional<Answer> findByUserIdAndSurveyId(String userId, String surveyId);
 
-    List<Answer> findAnswersByEventIdOrEventKeyAndSurveyId(String eventIdentifier, String surveyId);
+    List<Answer> findAnswersByEventIdAndSurveyId(String eventIdentifier, String surveyId);
+
+    List<Answer> findAnswersByEventKeyAndSurveyId(String eventIdentifier, String surveyId);
+
+    List<Answer> findBySurveyId(String surveyId);
 
     Optional<Answer> findById(String id);
 }

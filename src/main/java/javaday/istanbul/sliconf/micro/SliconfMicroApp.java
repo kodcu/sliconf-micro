@@ -27,7 +27,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
                 MongoDataAutoConfiguration.class,
                 MongoRepositoriesAutoConfiguration.class})
 
-@EnableConfigurationProperties(value = {TokenAuthenticationServiceProperties.class})
+@EnableConfigurationProperties
 @ComponentScan
 @Configuration
 @SwaggerDefinition(

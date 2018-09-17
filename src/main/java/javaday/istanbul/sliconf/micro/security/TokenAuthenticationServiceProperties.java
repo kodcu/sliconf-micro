@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "sliconf.security.authentication")
 public  class TokenAuthenticationServiceProperties {
 
-    private static String secret;
+    private static String tokenSecret;
 
-    public static String getSecret() {
-        return secret;
+    public static String getTokenSecret() {
+        return tokenSecret;
     }
 
-    public static void setSecret(String secret) {
-        TokenAuthenticationServiceProperties.secret = secret;
+    public static void setTokenSecret(String tokenSecret) {
+        TokenAuthenticationServiceProperties.tokenSecret = tokenSecret;
     }
 }
