@@ -29,6 +29,7 @@ public class Event {
     private String logoPath;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private boolean dateLock;
     private String executiveUser;
     private List<AgendaElement> agenda;
     private List<Speaker> speakers;
@@ -43,4 +44,5 @@ public class Event {
     private StatusDetails statusDetails;
     private TotalUsers totalUsers;
     private BaseEventState eventState;
+
 }

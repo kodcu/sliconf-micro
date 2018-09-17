@@ -20,6 +20,7 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -181,6 +182,14 @@ public class CreateEventRoute implements Route {
         if (Objects.nonNull(dbEvent.getExecutiveUser()) && !dbEvent.getExecutiveUser().equals(userId)) {
             return new ResponseMessage(false, messageProvider.getMessage("onlyOwnedEventsCanBeUpdated"), event);
         }
+
+        if (LocalDateTime.now().plusHours(48).isAfter(event.getStartDate()))
+            event.setDateLock(true);
+        if((event.getStartDate() != dbEvent.getStartDate()) && event.isDateLock())
+            return new ResponseMessage(false, messageProvider.getMessage("eventStartDateCanNotBeUpdatedAnymore"), event);
+        if(event.getStartDate().minusWeeks(1).isBefore(LocalDateTime.now()))
+            return new ResponseMessage(false, messageProvider.getMessage("eventStartDateCanNotBeUpdatedGivenDate"), event);
+
 
         copyUpdatedFields(dbEvent, event);
 

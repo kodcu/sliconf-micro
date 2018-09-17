@@ -4,6 +4,4 @@ target/
 log/
 upload/
 .git
-application-dev.properties
-application-prod.properties
-application-test.properties
+application-*.properties
