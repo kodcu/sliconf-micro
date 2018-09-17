@@ -112,6 +112,12 @@ public class CreateEventRoute implements Route {
             return responseMessage;
         }
 
+        if(event.getStartDate().plusWeeks(1).isBefore(event.getEndDate())) {
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventStartAndEntDateInvalid"), event);
+            return responseMessage;
+        }
+
         // event var mı diye kontrol et
         List<Event> dbEvents = repositoryService.findByNameAndDeleted(event.getName(), false);
 
@@ -153,6 +159,12 @@ public class CreateEventRoute implements Route {
         if (!EventSpecs.checkIfEventDateAfterOrInNow(event)) {
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventDataInvalid"), event);
+            return responseMessage;
+        }
+
+        if(event.getStartDate().plusWeeks(1).isBefore(event.getEndDate())) {
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventStartAndEntDateInvalid"), event);
             return responseMessage;
         }
 
