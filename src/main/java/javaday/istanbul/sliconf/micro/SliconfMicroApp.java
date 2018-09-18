@@ -33,13 +33,14 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @SwaggerDefinition(
         host = "localhost:8090", //
         info = @Info(description = "Sliconf Micro API", //
-                version = "V0.0.1", //
+                version = "V1.0.0", //
                 title = "Sliconf Micro API for Web and Mobile", //
                 contact = @Contact(name = "Taifuru", url = "http://sliconf.com")), //
         schemes = {SwaggerDefinition.Scheme.HTTP, SwaggerDefinition.Scheme.HTTPS}, //
         consumes = {"application/json"}, //
         produces = {"application/json"}, //
-        tags = {@Tag(name = "survey", description = "Survey Operations")},
+        tags = {@Tag(name = "survey", description = "Survey Operations"),
+                @Tag(name = "statistics", description = "Statistics about app")},
         securityDefinition = @SecurityDefinition(
                 apiKeyAuthDefinitions = @ApiKeyAuthDefinition
                         (name = "Authorization", in = ApiKeyAuthDefinition.ApiKeyLocation.HEADER, key = "Bearer"))
