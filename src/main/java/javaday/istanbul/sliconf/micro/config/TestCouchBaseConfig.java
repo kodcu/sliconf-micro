@@ -10,7 +10,7 @@ import org.springframework.data.map.repository.config.MapRepositoryConfiguration
  * Created by ttayfur on 7/8/17.
  */
 @Configuration
-@EnableMapRepositories(basePackages = {"javaday.istanbul.sliconf.micro.repository"})
+@EnableMapRepositories(basePackages = {"javaday.istanbul.sliconf.micro"})
 @Profile("test")
 public class TestCouchBaseConfig extends MapRepositoryConfigurationExtension {
 

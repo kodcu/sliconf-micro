@@ -34,7 +34,7 @@ public class JsonUtil {
         return gson.toJson(object);
     }
 
-    public static <T> T fromJson(String json, Class<T> clazz) {
+    public static <T> T fromJson(String json, Class<T> clazz)  {
         T returnedClass = null;
 
         try {

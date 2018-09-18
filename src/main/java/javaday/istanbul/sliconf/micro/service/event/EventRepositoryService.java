@@ -27,8 +27,10 @@ public class EventRepositoryService implements EventService {
     @Autowired
     protected EventStateService eventStateService;
 
+    public Optional<Event> findById(String id) { return repo.findById(id); }
+
     public Event findOne(String id) {
-        return repo.findById(id);
+        return repo.findOne(id);
     }
 
     public List<Event> findAll() {
@@ -177,6 +179,11 @@ public class EventRepositoryService implements EventService {
         if (Objects.nonNull(event)) {
             event.setTotalUsers(null);
         }
+    }
+
+    @Override
+    public Optional<Event> findByKey(String eventKey) {
+        return repo.findByKey(eventKey);
     }
 
 }

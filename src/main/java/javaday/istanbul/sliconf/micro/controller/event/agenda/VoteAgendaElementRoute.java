@@ -173,7 +173,7 @@ public class VoteAgendaElementRoute implements Route {
     }
 
     private ResponseMessage checkIfUserExists(String userId) {
-        User user = userRepositoryService.findById(userId);
+        User user = userRepositoryService.findById(userId).get();
 
         if (Objects.nonNull(user)) {
             return new ResponseMessage(true, "User found with given id", user);
