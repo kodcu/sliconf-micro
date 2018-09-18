@@ -21,7 +21,6 @@ public class StatisticsService {
 
     private final GeneralService generalService;
 
-    private final EventSessionStatisticsDTO eventSessionStatisticsDTO;
 
     ResponseMessage getEventSessionsStatistics(String eventKey) {
 
@@ -33,6 +32,7 @@ public class StatisticsService {
         agendaElements.forEach(agendaElement -> {
             speakers.forEach(speaker -> {
                 if(agendaElement.getSpeaker().equals(speaker.getId())) {
+                    EventSessionStatisticsDTO eventSessionStatisticsDTO = new EventSessionStatisticsDTO();
                     eventSessionStatisticsDTO.setPhoto(speaker.getProfilePicture());
                     String average = String.valueOf(agendaElement.getStar()) ;
                     eventSessionStatisticsDTO.setAverage(average);

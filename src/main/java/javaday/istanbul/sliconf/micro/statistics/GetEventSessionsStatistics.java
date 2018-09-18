@@ -13,7 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 @AllArgsConstructor
-@Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
+@Api(value = "statistics", authorizations = {@Authorization(value = "Bearer" )})
 @Path("/service/events/:eventKey/statistics/sessions")
 @Produces("application/json")
 @Component
@@ -22,7 +22,7 @@ public class GetEventSessionsStatistics implements Route {
     private final StatisticsService statisticsService;
 
     @POST
-    @ApiOperation(value = "Adds a new survey to a event", nickname = "AddNewSurveyRoute")
+    @ApiOperation(value = "Gets statistics for sessions of a event", nickname = "GetSessionStatistics")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
@@ -41,7 +41,7 @@ public class GetEventSessionsStatistics implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String eventKey = request.params("eventKey");
-        ResponseMessage responseMessage = new ResponseMessage();
+        ResponseMessage responseMessage;
         responseMessage = statisticsService.getEventSessionsStatistics(eventKey);
 
         return responseMessage;
