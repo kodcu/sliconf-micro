@@ -1,11 +1,8 @@
 package javaday.istanbul.sliconf.micro.controller;
 
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
 import javaday.istanbul.sliconf.micro.survey.SurveyException;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.util.SwaggerParser;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.slf4j.Logger;
@@ -166,6 +163,10 @@ public class RootController {
                         response1.body(JsonUtil.toJson(responseMessage));
 
                     });
+                });
+
+                path(":eventKey/statistics", () -> {
+                    get("/sessions", routeObjects.getEventSessionsStatistics, JsonUtil.json());
                 });
             });
 
