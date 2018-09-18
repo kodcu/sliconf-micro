@@ -14,12 +14,14 @@ import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import javaday.istanbul.sliconf.micro.util.Constants;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
@@ -45,7 +47,7 @@ public class F633 {
     @Diyelimki("^potansiyel etkinlik sahibi JugEvents sisteminde yeni bir etkinlik açmak istedi$")
     public void potansiyelEtkinlikSahibiJugEventsSistemindeYeniBirEtkinlikAçmakIstedi() throws Throwable {
         event = new EventBuilder().setName("javaday 2018").
-                setDate(LocalDateTime.of(2018, 5, 27, 10, 0)).build();
+                setDate(LocalDateTime.of(4018, 5, 27, 10, 0)).build();
 
         assertNotNull(event);
     }

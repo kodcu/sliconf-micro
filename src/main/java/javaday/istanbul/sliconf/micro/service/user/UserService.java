@@ -4,9 +4,9 @@ import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
-    User findOne(String id);
 
     List<User> findAll();
 
@@ -24,7 +24,7 @@ public interface UserService {
 
     ResponseMessage changePassword(String email, String newPassword, String newPasswordAgain);
 
-    User findById(String id);
+    Optional<User> findById(String id);
 
     ResponseMessage saveUser(User saltedUser);
 

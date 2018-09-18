@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import javaday.istanbul.sliconf.micro.survey.SurveyException;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.SwaggerParser;
@@ -94,7 +95,7 @@ public class RootController {
             path("events/", () -> {
 
                 post("create/:userId", routeObjects.createEventRoute, JsonUtil.json());
-                delete("delete/:eventKey/:userId", routeObjects.deleteEventRoute, JsonUtil.json());
+                delete("delete/:eventId/:userId", routeObjects.deleteEventRoute, JsonUtil.json());
 
                 get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
 
@@ -140,6 +141,33 @@ public class RootController {
                     get("list/:status/:eventId/:sessionId/:userId", routeObjects.listCommentsRoute, JsonUtil.json());
 
                 });
+
+                path(":eventIdentifier/surveys", () -> {
+                    post("", routeObjects.createNewSurvey, JsonUtil.json());
+                    put("", routeObjects.updateSurveyRoute, JsonUtil.json());
+                    get("", routeObjects.getSurveys, JsonUtil.json());
+                    delete("/:surveyId", routeObjects.removeSurvey, JsonUtil.json());
+                    get("/:surveyId", routeObjects.getSurvey, JsonUtil.json());
+
+                    path("/:surveyId/answers", () -> {
+                        post("", routeObjects.submitAnswers, JsonUtil.json());
+                        get("", routeObjects.getAnswers, JsonUtil.json());
+                        put("/:answerId", routeObjects.updateAnswers, JsonUtil.json());
+
+                    });
+                    exception(SurveyException.class, (exception, request1, response1)-> {
+                        String message = exception.getMessage();
+                        Object rejectedValue = exception.getRejectedValue();
+                        ResponseMessage responseMessage = new ResponseMessage(false, message, rejectedValue);
+                        response1.type("application/json");
+                        response1.body(JsonUtil.toJson(responseMessage));
+
+                    });
+                });
+
+                path(":eventKey/statistics", () -> {
+                    get("/sessions", routeObjects.getEventSessionsStatistics, JsonUtil.json());
+                });
             });
 
             path("schedule/", () -> {
@@ -157,6 +185,10 @@ public class RootController {
 
                 path("change/", () ->
                     post("event-state/:eventId/:stateId", routeObjects.adminChangeEventStateForEventRoute, JsonUtil.json())
+                );
+
+                path("users/", () ->
+                        get(":userId", routeObjects.adminGetUserInfo, JsonUtil.json())
                 );
             });
 

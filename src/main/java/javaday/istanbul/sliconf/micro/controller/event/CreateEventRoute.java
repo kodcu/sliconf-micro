@@ -125,7 +125,7 @@ public class CreateEventRoute implements Route {
         //Kanban numarası oluştur
         EventSpecs.generateKanbanNumber(event, repositoryService);
 
-        User user = userRepositoryService.findById(userId);
+        User user = userRepositoryService.findById(userId).orElse(null);
 
         if (Objects.isNull(user)) {
             responseMessage = new ResponseMessage(false,

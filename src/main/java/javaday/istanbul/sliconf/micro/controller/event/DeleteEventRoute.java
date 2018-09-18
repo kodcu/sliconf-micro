@@ -20,7 +20,7 @@ import java.util.Objects;
 
 
 @Api
-@Path("/service/events/delete/:eventKey/:userId")
+@Path("/service/events/delete/:eventId/:userId")
 @Produces("application/json")
 @Component
 public class DeleteEventRoute implements Route {
@@ -45,7 +45,7 @@ public class DeleteEventRoute implements Route {
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"),
-            @ApiImplicitParam(required = true, dataType = "string", name = "eventKey", paramType = "path")
+            @ApiImplicitParam(required = true, dataType = "string", name = "eventId", paramType = "path")
     }) //
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
@@ -56,7 +56,7 @@ public class DeleteEventRoute implements Route {
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
         String userId = request.params("userId");
-        String eventKey = request.params("eventKey");
+        String eventKey = request.params("eventId");
 
         return deleteEvent(eventKey, userId);
     }
@@ -82,7 +82,7 @@ public class DeleteEventRoute implements Route {
             return responseMessage;
         }
 
-        User user = userRepositoryService.findById(userId);
+        User user = userRepositoryService.findById(userId).get();
 
         if (Objects.isNull(user)) {
             responseMessage = new ResponseMessage(false,

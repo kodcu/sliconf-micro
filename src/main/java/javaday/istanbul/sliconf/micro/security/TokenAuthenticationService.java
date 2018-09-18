@@ -5,7 +5,8 @@ import io.jsonwebtoken.*;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.token.SecurityToken;
 import javaday.istanbul.sliconf.micro.provider.DistributedMapProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -21,25 +22,25 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+@AllArgsConstructor
 @Component
 public class TokenAuthenticationService {
 
+    private final TokenAuthenticationServiceProperties tokenAuthenticationServiceProperties;
     //    private static final long EXPIRATION_TIME = 864_000_000; // 10 days
     private static final long EXPIRATION_TIME = 1; // days
     private static final ChronoUnit expirationUnit = ChronoUnit.DAYS; // days
     private static final TimeUnit expirationTimeUnit = TimeUnit.DAYS; // days
-    private static final String SECRET = "0MLYpRduz8m10E1eMyUYczc7xBp13nDc";
+    private static final String SECRET = TokenAuthenticationServiceProperties.getTokenSecret();
     private static final String TOKEN_PREFIX = "Bearer";
     private static final String HEADER_STRING = "Authorization";
     private static final String SECURITY_TOKENS = "securityTokens";
 
-    @Autowired
-    private DistributedMapProvider distributedMapProvider;
+    private final UserRepositoryService userRepositoryService;
+    private final DistributedMapProvider distributedMapProvider;
 
-    @Autowired
-    public TokenAuthenticationService(DistributedMapProvider distributedMapProvider) {
-        this.distributedMapProvider = distributedMapProvider;
-    }
+
+
 
     public String addAuthentication(HttpServletResponse res, User user) {
         Date date = Date.from(Instant.now(Clock.system(
@@ -116,15 +117,34 @@ public class TokenAuthenticationService {
                 Object user = claims.get("user", Object.class);
 
                 IMap<String, SecurityToken> securityTokenMap = distributedMapProvider.getSecurityTokenMap(SECURITY_TOKENS);
+//                JsonObject jsonObject;
+//                Gson gson = new Gson();
+//                try {
+//                   BufferedReader bufferedReader = request.getReader();
+//                    jsonObject = gson.fromJson(bufferedReader, JsonObject.class);
+//
+//               } catch (IOException e) {
+//                   return null;
+//               }
+//                String userIdFromRequest;
+//                String userIdFromToken;
+//                if(!Objects.nonNull(jsonObject)) {
+//                    // TODO: 28.08.2018 dinamik bir sekilde yap.
+//                    userIdFromRequest = "5b72dc350662c13c3378411f";
+//                }
+//                else
+//                    userIdFromRequest = jsonObject.get("userId").toString();
+//                userIdFromToken = userRepositoryService.findByUsername(username).get(0).getId();
 
-                if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
-                    SecurityToken securityToken = securityTokenMap.get(username);
+                    if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
+                        SecurityToken securityToken = securityTokenMap.get(username);
 
-                    if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
-                            Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
-                        return generateAuthentication(username, role, user);
+                        if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
+                                Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
+                            return generateAuthentication(username, role, user);
+                        }
                     }
-                }
+
 
             } catch (ExpiredJwtException | UnsupportedJwtException |
                     MalformedJwtException | SignatureException | IllegalArgumentException e) {

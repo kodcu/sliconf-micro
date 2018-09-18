@@ -7,11 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String>,
-        CrudRepository<User, String>  {
+public interface UserRepository extends MongoRepository<User, String> {
     List<User> findByUsername(String username);
 
     List<User> findUsersByEmail(String email);
@@ -24,7 +24,9 @@ public interface UserRepository extends MongoRepository<User, String>,
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND username = $1 AND META().id != $2")
     List<User> findByUsernameAndIdNot(String username, String id);
 
-    List<User> findById(String id);
+    Optional<User> findById(String id);
+
+
 
     List<User> findByIdNot(String id);
 
