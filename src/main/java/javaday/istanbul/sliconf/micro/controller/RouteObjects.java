@@ -1,9 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
-import javaday.istanbul.sliconf.micro.controller.admin.AdminChangeEventStateForEventRoute;
-import javaday.istanbul.sliconf.micro.controller.admin.AdminListEventStatesRoute;
-import javaday.istanbul.sliconf.micro.controller.admin.AdminListEventsRoute;
-import javaday.istanbul.sliconf.micro.controller.admin.AdminListUsersRoute;
+import javaday.istanbul.sliconf.micro.controller.admin.*;
 import javaday.istanbul.sliconf.micro.controller.event.*;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.CreateAgendaRoute;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.GetVoteAgendaElementRoute;
@@ -20,10 +17,12 @@ import javaday.istanbul.sliconf.micro.controller.event.schedule.RemoveFromSchedu
 import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRoute;
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorRoute;
 import javaday.istanbul.sliconf.micro.controller.login.*;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@AllArgsConstructor
 @Component
 public class RouteObjects {
 
@@ -75,55 +74,56 @@ public class RouteObjects {
     public final AdminListEventsRoute adminListEventsRoute;
     public final AdminListEventStatesRoute adminListEventStatesRoute;
     public final AdminChangeEventStateForEventRoute adminChangeEventStateForEventRoute;
+    public final AdminGetUserInfo adminGetUserInfo;
 
 
-    @Autowired
-    public RouteObjects(BeanFactory beanFactory) {
-        createUserRoute = beanFactory.getBean(CreateUserRoute.class);
-        createUserAnonymousRoute = beanFactory.getBean(CreateUserAnonymousRoute.class);
-
-        loginUserRoute = beanFactory.getBean(LoginUserRoute.class);
-        loginUserAnonymousRoute = beanFactory.getBean(LoginUserAnonymousRoute.class);
-        loginUserAuthRoute = beanFactory.getBean(LoginUserAuthRoute.class);
-
-        sendPasswordResetRoute = beanFactory.getBean(SendPasswordResetRoute.class);
-        resetPasswordRoute = beanFactory.getBean(ResetPasswordRoute.class);
-        updateUserRoute = beanFactory.getBean(UpdateUserRoute.class);
-
-        createEventRoute = beanFactory.getBean(CreateEventRoute.class);
-        deleteEventRoute = beanFactory.getBean(DeleteEventRoute.class);
-        getEventWithKeyRoute = beanFactory.getBean(GetEventWithKeyRoute.class);
-        listEventsRoute = beanFactory.getBean(ListEventsRoute.class);
-        getStatisticsRoute = beanFactory.getBean(GetStatisticsRoute.class);
-
-
-        imageUploadRoute = beanFactory.getBean(ImageUploadRoute.class);
-        imageGetRoute = beanFactory.getBean(ImageGetRoute.class);
-
-        createFloorRoute = beanFactory.getBean(CreateFloorRoute.class);
-
-        createRoomRoute = beanFactory.getBean(CreateRoomRoute.class);
-
-        createSponsorRoute = beanFactory.getBean(CreateSponsorRoute.class);
-
-        createSpeakerRoute = beanFactory.getBean(CreateSpeakerRoute.class);
-
-        createAgendaRoute = beanFactory.getBean(CreateAgendaRoute.class);
-        voteAgendaElementRoute = beanFactory.getBean(VoteAgendaElementRoute.class);
-        getVoteAgendaElementRoute = beanFactory.getBean(GetVoteAgendaElementRoute.class);
-
-        addNewCommentRoute = beanFactory.getBean(AddNewCommentRoute.class);
-        listCommentsRoute = beanFactory.getBean(ListCommentsRoute.class);
-        moderateCommentRoute = beanFactory.getBean(ModerateCommentRoute.class);
-        voteCommentRoute = beanFactory.getBean(VoteCommentRoute.class);
-
-        addToScheduleRoute = beanFactory.getBean(AddToScheduleRoute.class);
-        removeFromScheduleRoute = beanFactory.getBean(RemoveFromScheduleRoute.class);
-        listScheduleRoute = beanFactory.getBean(ListScheduleRoute.class);
-
-        adminListUsersRoute = beanFactory.getBean(AdminListUsersRoute.class);
-        adminListEventsRoute = beanFactory.getBean(AdminListEventsRoute.class);
-        adminListEventStatesRoute = beanFactory.getBean(AdminListEventStatesRoute.class);
-        adminChangeEventStateForEventRoute = beanFactory.getBean(AdminChangeEventStateForEventRoute.class);
-    }
+//    @Autowired
+//    public RouteObjects(BeanFactory beanFactory) {
+//        createUserRoute = beanFactory.getBean(CreateUserRoute.class);
+//        createUserAnonymousRoute = beanFactory.getBean(CreateUserAnonymousRoute.class);
+//
+//        loginUserRoute = beanFactory.getBean(LoginUserRoute.class);
+//        loginUserAnonymousRoute = beanFactory.getBean(LoginUserAnonymousRoute.class);
+//        loginUserAuthRoute = beanFactory.getBean(LoginUserAuthRoute.class);
+//
+//        sendPasswordResetRoute = beanFactory.getBean(SendPasswordResetRoute.class);
+//        resetPasswordRoute = beanFactory.getBean(ResetPasswordRoute.class);
+//        updateUserRoute = beanFactory.getBean(UpdateUserRoute.class);
+//
+//        createEventRoute = beanFactory.getBean(CreateEventRoute.class);
+//        deleteEventRoute = beanFactory.getBean(DeleteEventRoute.class);
+//        getEventWithKeyRoute = beanFactory.getBean(GetEventWithKeyRoute.class);
+//        listEventsRoute = beanFactory.getBean(ListEventsRoute.class);
+//        getStatisticsRoute = beanFactory.getBean(GetStatisticsRoute.class);
+//
+//
+//        imageUploadRoute = beanFactory.getBean(ImageUploadRoute.class);
+//        imageGetRoute = beanFactory.getBean(ImageGetRoute.class);
+//
+//        createFloorRoute = beanFactory.getBean(CreateFloorRoute.class);
+//
+//        createRoomRoute = beanFactory.getBean(CreateRoomRoute.class);
+//
+//        createSponsorRoute = beanFactory.getBean(CreateSponsorRoute.class);
+//
+//        createSpeakerRoute = beanFactory.getBean(CreateSpeakerRoute.class);
+//
+//        createAgendaRoute = beanFactory.getBean(CreateAgendaRoute.class);
+//        voteAgendaElementRoute = beanFactory.getBean(VoteAgendaElementRoute.class);
+//        getVoteAgendaElementRoute = beanFactory.getBean(GetVoteAgendaElementRoute.class);
+//
+//        addNewCommentRoute = beanFactory.getBean(AddNewCommentRoute.class);
+//        listCommentsRoute = beanFactory.getBean(ListCommentsRoute.class);
+//        moderateCommentRoute = beanFactory.getBean(ModerateCommentRoute.class);
+//        voteCommentRoute = beanFactory.getBean(VoteCommentRoute.class);
+//
+//        addToScheduleRoute = beanFactory.getBean(AddToScheduleRoute.class);
+//        removeFromScheduleRoute = beanFactory.getBean(RemoveFromScheduleRoute.class);
+//        listScheduleRoute = beanFactory.getBean(ListScheduleRoute.class);
+//
+//        adminListUsersRoute = beanFactory.getBean(AdminListUsersRoute.class);
+//        adminListEventsRoute = beanFactory.getBean(AdminListEventsRoute.class);
+//        adminListEventStatesRoute = beanFactory.getBean(AdminListEventStatesRoute.class);
+//        adminChangeEventStateForEventRoute = beanFactory.getBean(AdminChangeEventStateForEventRoute.class);
+//    }
 }

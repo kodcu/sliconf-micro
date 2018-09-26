@@ -158,6 +158,10 @@ public class RootController {
                 path("change/", () ->
                     post("event-state/:eventId/:stateId", routeObjects.adminChangeEventStateForEventRoute, JsonUtil.json())
                 );
+
+                path("users/", () ->
+                        get(":userId", routeObjects.adminGetUserInfo, JsonUtil.json())
+                );
             });
 
             path("image/", () -> {
