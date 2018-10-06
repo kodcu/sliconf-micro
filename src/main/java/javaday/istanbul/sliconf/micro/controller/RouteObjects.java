@@ -74,6 +74,7 @@ public class RouteObjects {
     public final GetSurveys getSurveys;
     public final GetSurvey getSurvey;
     public final UpdateSurvey updateSurveyRoute;
+    public final UserViewedSurvey userViewedSurvey;
 
     public final SubmitAnswers submitAnswers;
     public final GetAnswers getAnswers;

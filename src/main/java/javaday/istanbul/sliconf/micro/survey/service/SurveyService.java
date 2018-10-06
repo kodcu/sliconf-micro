@@ -41,20 +41,6 @@ public class SurveyService {
     @Transactional
     public ResponseMessage addNewSurvey(Survey survey, String eventIdentifier) {
 
-        List<Object> validatingObjects = new ArrayList<>();
-        // validate edilecek objeleri ekle.
-        validatingObjects.add(survey);
-        survey.getQuestions().forEach(validatingObjects::add);
-
-        survey.getQuestions().forEach(question -> question.getOptions().forEach(validatingObjects::add));
-        ResponseMessage responseMessage;
-
-        responseMessage = surveyValidator.validate(validatingObjects, SurveyValidatorSequence.class);
-
-        if (!responseMessage.isStatus()) {
-            return responseMessage;
-        }
-
         ResponseMessage eventResponse= generalService.findEventByIdOrEventKey(eventIdentifier);
         Event event = (Event)  eventResponse.getReturnObject();
 
@@ -64,6 +50,10 @@ public class SurveyService {
         survey.setEventId(event.getId());
         survey.setEventKey(event.getKey());
         survey.setUserId(user.getId());
+
+        survey.setParticipants(0);
+        survey.setViewers(0);
+        survey.setViewerList(new ArrayList<>());
 
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
         if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("app-prod"))) {
@@ -81,9 +71,20 @@ public class SurveyService {
                         .forEach(questionOption -> questionOption.setVoters(0));
             });
         }
+        List<Object> validatingObjects = new ArrayList<>();
+        // validate edilecek objeleri ekle.
+        validatingObjects.add(survey);
+        survey.getQuestions().forEach(validatingObjects::add);
 
-        survey.setParticipants(0);
-        survey.setViewers(0);
+        survey.getQuestions().forEach(question -> question.getOptions().forEach(validatingObjects::add));
+        ResponseMessage responseMessage;
+
+        responseMessage = surveyValidator.validate(validatingObjects, SurveyValidatorSequence.class);
+
+        if (!responseMessage.isStatus()) {
+            return responseMessage;
+        }
+
         surveyRepository.save(survey);
 
         String message = surveyMessageProvider.getMessage("surveyCreatedSuccessfully");
@@ -133,6 +134,7 @@ public class SurveyService {
 
     }
 
+    @Transactional
     public ResponseMessage getSurveys(String eventIdentifier) {
         ResponseMessage responseMessage = new ResponseMessage();
         //check if event exists.
@@ -151,7 +153,26 @@ public class SurveyService {
         return generalService.findSurveyById(surveyId);
     }
 
-
-
-
+    @Transactional
+    public ResponseMessage updateSurveyViewers(String userId, String surveyId, String eventIdentifier) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        Survey survey = (Survey) generalService.findSurveyById(surveyId).getReturnObject();
+        generalService.findUserById(userId);
+        List<String> viewers = new ArrayList<>(survey.getViewerList());
+        if( viewers.stream().noneMatch(s -> s.equals(userId))) {
+            viewers.add(userId);
+            survey.setViewerList(viewers);
+            survey.setViewers(viewers.size());
+            this.updateSurvey(survey, eventIdentifier);
+            responseMessage.setMessage("User has added viewerList list");
+            responseMessage.setStatus(true);
+            responseMessage.setReturnObject(userId);
+        }
+        else{
+            responseMessage.setReturnObject(userId);
+            responseMessage.setStatus(false);
+            responseMessage.setMessage("User already view the survey");
+        }
+        return  responseMessage;
+    }
 }

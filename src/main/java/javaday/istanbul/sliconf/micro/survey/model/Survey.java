@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.survey.model;
 
+import io.swagger.annotations.ApiModel;
 import javaday.istanbul.sliconf.micro.survey.validator.ValidSurveyLocalDateTime;
 import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyQuestionValidatorGroup;
 import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyLocalDateTimeValidatorGroup;
@@ -27,6 +28,7 @@ import java.util.List;
 
 // anketin baslangic ve bitis tarihini kontrol icin custom validation.
 @ValidSurveyLocalDateTime(groups = SurveyLocalDateTimeValidatorGroup.class)
+@ApiModel
 public class Survey implements Serializable {
 
     @Id
@@ -51,6 +53,8 @@ public class Survey implements Serializable {
     private String endTime;
 
     private String description;
+
+    private List<String> viewerList;
 
     private Integer viewers;
 

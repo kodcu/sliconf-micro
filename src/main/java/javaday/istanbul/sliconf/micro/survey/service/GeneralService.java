@@ -42,13 +42,13 @@ public class GeneralService {
         Event event;
         if(eventIdentifier.length() > Constants.EVENT_KEY_LENGTH)
             event = eventRepositoryService.findById(eventIdentifier).orElseThrow(() -> {
-            log.error("event not found by id: {}", eventIdentifier);
+            log.error("event not found by given id: {}", eventIdentifier);
             String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenId");
             return new SurveyException(message, eventIdentifier);
         });
         else
             event = eventRepositoryService.findByKey(eventIdentifier).orElseThrow(() -> {
-                log.error("event not found by id: {}", eventIdentifier);
+                log.error("event not found by given key: {}", eventIdentifier);
                 String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenKey");
                 return new SurveyException(message, eventIdentifier);
             });
