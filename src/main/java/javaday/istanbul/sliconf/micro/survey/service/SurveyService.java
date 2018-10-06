@@ -56,7 +56,7 @@ public class SurveyService {
         survey.setViewerList(new ArrayList<>());
 
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
-        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("app-prod"))) {
+        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("prod"))) {
             survey.setEventId(event.getExecutiveUser());
             survey.setUserId(user.getId());
             survey.getQuestions().forEach(question -> {
