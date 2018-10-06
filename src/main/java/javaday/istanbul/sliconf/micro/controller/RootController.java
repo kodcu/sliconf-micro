@@ -148,6 +148,7 @@ public class RootController {
                     get("", routeObjects.getSurveys, JsonUtil.json());
                     delete("/:surveyId", routeObjects.removeSurvey, JsonUtil.json());
                     get("/:surveyId", routeObjects.getSurvey, JsonUtil.json());
+                    post("/:surveyId/view", routeObjects.userViewedSurvey, JsonUtil.json());
 
                     path("/:surveyId/answers", () -> {
                         post("", routeObjects.submitAnswers, JsonUtil.json());
@@ -155,6 +156,7 @@ public class RootController {
                         put("/:answerId", routeObjects.updateAnswers, JsonUtil.json());
 
                     });
+
                     exception(SurveyException.class, (exception, request1, response1)-> {
                         String message = exception.getMessage();
                         Object rejectedValue = exception.getRejectedValue();
