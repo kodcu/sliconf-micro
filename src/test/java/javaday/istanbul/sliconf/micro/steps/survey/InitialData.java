@@ -68,6 +68,7 @@ public class InitialData {
         survey.setEventId(event.getId());
         survey.setUserId(user.getId());
         survey.setName("Anket 01");
+        survey.setEventKey(event.getKey());
 
         long date = LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC);
         survey.setStartTime(Long.toString(date));
