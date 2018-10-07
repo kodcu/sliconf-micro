@@ -42,7 +42,7 @@ public class AnswerService {
         ResponseMessage responseMessage;
 
         generalService.findUserById(answer.getUserId());
-        Event event = (Event) generalService.findEventByIdOrEventKey(answer.getEventId()).getReturnObject();
+        generalService.findEventByIdOrEventKey(answer.getEventId()).getReturnObject();
 
         List<Object> validatingObjects = new ArrayList<>();
         validatingObjects.add(answer);

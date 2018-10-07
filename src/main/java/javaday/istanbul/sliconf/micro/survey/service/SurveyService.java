@@ -56,27 +56,15 @@ public class SurveyService {
         survey.setViewerList(new ArrayList<>());
 
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
-        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("prod"))) {
-            survey.setEventId(event.getExecutiveUser());
-            survey.setUserId(user.getId());
-            survey.getQuestions().forEach(question -> {
-                question.setId(new ObjectId().toString());
-                question.getOptions()
-                        .forEach(questionOption -> questionOption.setId(new ObjectId().toString()));
-            });
+        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("dev")))
+            this.generateQuestionIds(survey, event, user);
 
-            survey.getQuestions().forEach(question -> {
-                question.setTotalVoters(0);
-                question.getOptions()
-                        .forEach(questionOption -> questionOption.setVoters(0));
-            });
-        }
         List<Object> validatingObjects = new ArrayList<>();
         // validate edilecek objeleri ekle.
         validatingObjects.add(survey);
-        survey.getQuestions().forEach(validatingObjects::add);
+        validatingObjects.addAll(survey.getQuestions());
 
-        survey.getQuestions().forEach(question -> question.getOptions().forEach(validatingObjects::add));
+        survey.getQuestions().forEach(question -> validatingObjects.addAll(question.getOptions()));
         ResponseMessage responseMessage;
 
         responseMessage = surveyValidator.validate(validatingObjects, SurveyValidatorSequence.class);
@@ -84,7 +72,7 @@ public class SurveyService {
         if (!responseMessage.isStatus()) {
             return responseMessage;
         }
-
+        generalService.findSurveyById(survey.getId());
         surveyRepository.save(survey);
 
         String message = surveyMessageProvider.getMessage("surveyCreatedSuccessfully");
@@ -113,25 +101,47 @@ public class SurveyService {
     @Transactional
     public ResponseMessage updateSurvey(Survey survey, String eventIdentifier) {
         ResponseMessage responseMessage;
+
+        Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
+        User user = (User) generalService.findUserById(event.getExecutiveUser()).getReturnObject();
+
+        // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
+        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("dev")))
+            this.generateQuestionIds(survey, event, user);
+
+
         List<Object> validatingObjects = new ArrayList<>();
         /* validate edilecek objeleri ekle. */
         validatingObjects.add(survey);
-        survey.getQuestions().forEach(validatingObjects::add);
+        validatingObjects.addAll(survey.getQuestions());
 
-        survey.getQuestions().forEach(question -> question.getOptions().forEach(validatingObjects::add));
+        survey.getQuestions().forEach(question -> validatingObjects.addAll(question.getOptions()));
         responseMessage = surveyValidator.validate(validatingObjects, SurveyValidatorSequence.class);
         if (!responseMessage.isStatus()) {
             return responseMessage;
         }
 
         generalService.findSurveyById(survey.getId());
-        Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
-        generalService.findUserById(event.getExecutiveUser());
-
         surveyRepository.save(survey);
         String message = surveyMessageProvider.getMessage("surveyUpdatedSuccessfully");
         return new ResponseMessage(true, message, survey);
 
+    }
+
+    private void generateQuestionIds(Survey survey, Event event, User user) {
+        survey.setEventId(event.getExecutiveUser());
+        survey.setUserId(user.getId());
+        survey.getQuestions().forEach(question -> {
+            question.setId(new ObjectId().toString());
+            question.getOptions()
+                    .forEach(questionOption -> questionOption.setId(new ObjectId().toString()));
+        });
+
+        survey.getQuestions().forEach(question -> {
+            question.setTotalVoters(0);
+            question.getOptions()
+                    .forEach(questionOption -> questionOption.setVoters(0));
+        });
     }
 
     @Transactional
