@@ -17,9 +17,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -55,8 +58,18 @@ public class SurveyService {
         survey.setViewers(0);
         survey.setViewerList(new ArrayList<>());
 
+        if(Objects.isNull(survey.getStartTime())) {
+            if (event.getStartDate().isAfter(LocalDateTime.now()))
+                survey.setStartTime(String.valueOf(event.getStartDate().toEpochSecond(ZoneOffset.UTC)));
+            else
+                survey.setStartTime(String.valueOf(event.getStartDate().plusMinutes(1).toEpochSecond(ZoneOffset.UTC)));
+
+        }
+        if(Objects.isNull(survey.getEndTime()))
+            survey.setEndTime(String.valueOf(event.getEndDate().toEpochSecond(ZoneOffset.UTC)));
+
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
-        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("dev")))
+        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("prod")))
             this.generateQuestionIds(survey, event, user);
 
         List<Object> validatingObjects = new ArrayList<>();
@@ -72,7 +85,6 @@ public class SurveyService {
         if (!responseMessage.isStatus()) {
             return responseMessage;
         }
-        generalService.findSurveyById(survey.getId());
         surveyRepository.save(survey);
 
         String message = surveyMessageProvider.getMessage("surveyCreatedSuccessfully");
