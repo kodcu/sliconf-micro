@@ -118,7 +118,7 @@ public class SurveyService {
         User user = (User) generalService.findUserById(event.getExecutiveUser()).getReturnObject();
 
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
-        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("dev")))
+        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("prod")))
             this.generateQuestionIds(survey, event, user);
 
 
