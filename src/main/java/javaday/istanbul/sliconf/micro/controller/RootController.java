@@ -142,19 +142,28 @@ public class RootController {
 
                 });
 
-                path(":eventIdentifier/surveys", () -> {
-                    post("", routeObjects.createNewSurvey, JsonUtil.json());
-                    put("", routeObjects.updateSurveyRoute, JsonUtil.json());
-                    get("", routeObjects.getSurveys, JsonUtil.json());
-                    delete("/:surveyId", routeObjects.removeSurvey, JsonUtil.json());
-                    get("/:surveyId", routeObjects.getSurvey, JsonUtil.json());
-                    post("/:surveyId/view", routeObjects.userViewedSurvey, JsonUtil.json());
+                path(":eventIdentifier", () -> {
+                    path("/surveys", () -> {
+                        post("", routeObjects.createNewSurvey, JsonUtil.json());
+                        put("", routeObjects.updateSurveyRoute, JsonUtil.json());
+                        get("", routeObjects.getSurveys, JsonUtil.json());
+                        delete("/:surveyId", routeObjects.removeSurvey, JsonUtil.json());
+                        get("/:surveyId", routeObjects.getSurvey, JsonUtil.json());
+                        post("/:surveyId/view", routeObjects.userViewedSurvey, JsonUtil.json());
 
-                    path("/:surveyId/answers", () -> {
-                        post("", routeObjects.submitAnswers, JsonUtil.json());
-                        get("", routeObjects.getAnswers, JsonUtil.json());
-                        put("/:answerId", routeObjects.updateAnswers, JsonUtil.json());
+                        path("/:surveyId/answers", () -> {
+                            post("", routeObjects.submitAnswers, JsonUtil.json());
+                            get("", routeObjects.getAnswers, JsonUtil.json());
+                            put("/:answerId", routeObjects.updateAnswers, JsonUtil.json());
 
+                        });
+
+                    });
+
+                    path("/users", () -> {
+                        path("/:userId", () -> {
+                            get("/answers", routeObjects.getSurveyAnswers, JsonUtil.json());
+                        });
                     });
 
                     exception(SurveyException.class, (exception, request1, response1)-> {
@@ -165,6 +174,7 @@ public class RootController {
                         response1.body(JsonUtil.toJson(responseMessage));
 
                     });
+
                 });
 
                 path(":eventKey/statistics", () -> {

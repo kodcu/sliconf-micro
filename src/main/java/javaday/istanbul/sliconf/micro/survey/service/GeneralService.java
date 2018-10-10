@@ -58,7 +58,7 @@ public class GeneralService {
         return responseMessage;
     }
 
-    ResponseMessage findUserById(String userId) {
+    public ResponseMessage findUserById(String userId) {
         ResponseMessage responseMessage = new ResponseMessage();
         User user = userRepositoryService.findById(userId).orElseThrow(() -> {
             log.error("User not found by id: {}", userId);

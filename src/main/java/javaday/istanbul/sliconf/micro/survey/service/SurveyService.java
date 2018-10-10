@@ -47,11 +47,12 @@ public class SurveyService {
         ResponseMessage eventResponse= generalService.findEventByIdOrEventKey(eventIdentifier);
         Event event = (Event)  eventResponse.getReturnObject();
 
+        survey.setEventId(event.getId());
+        survey.setEventKey(event.getKey());
+
         ResponseMessage userResponse = generalService.findUserById(survey.getUserId());
         User user = (User) userResponse.getReturnObject();
 
-        survey.setEventId(event.getId());
-        survey.setEventKey(event.getKey());
         survey.setUserId(user.getId());
 
         survey.setParticipants(0);
@@ -141,7 +142,7 @@ public class SurveyService {
     }
 
     private void generateQuestionIds(Survey survey, Event event, User user) {
-        survey.setEventId(event.getExecutiveUser());
+        survey.setEventId(event.getId());
         survey.setUserId(user.getId());
         survey.getQuestions().forEach(question -> {
             question.setId(new ObjectId().toString());
