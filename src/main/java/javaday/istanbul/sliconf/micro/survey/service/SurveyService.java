@@ -54,23 +54,13 @@ public class SurveyService {
         ResponseMessage userResponse = generalService.findUserById(survey.getUserId());
         User user = (User) userResponse.getReturnObject();
 
+        this.generateDates(survey, event);
         survey.setUserId(user.getId());
 
         survey.setParticipants(0);
         survey.setViewers(0);
         survey.setViewerList(new ArrayList<>());
-        if(Objects.isNull(survey.getStartTime()))
-            survey.setStartTime(String.valueOf(event.getStartDate().toEpochSecond(ZoneOffset.UTC)));
-        if(Objects.isNull(survey.getEndTime()))
-            survey.setEndTime(String.valueOf(event.getEndDate().toEpochSecond(ZoneOffset.UTC)));
 
-        if(Objects.isNull(survey.getStartTime())) {
-            if (event.getStartDate().isAfter(LocalDateTime.now()))
-                survey.setStartTime(String.valueOf(event.getStartDate().toEpochSecond(ZoneOffset.UTC)));
-            else
-                survey.setStartTime(String.valueOf(event.getStartDate().plusMinutes(1).toEpochSecond(ZoneOffset.UTC)));
-
-        }
         if(Objects.isNull(survey.getEndTime()))
             survey.setEndTime(String.valueOf(event.getEndDate().toEpochSecond(ZoneOffset.UTC)));
 
@@ -123,6 +113,7 @@ public class SurveyService {
         Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
         User user = (User) generalService.findUserById(event.getExecutiveUser()).getReturnObject();
 
+        this.generateDates(survey, event);
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
         if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("prod")))
             this.generateQuestionIds(survey, event, user);
@@ -144,22 +135,6 @@ public class SurveyService {
         String message = surveyMessageProvider.getMessage("surveyUpdatedSuccessfully");
         return new ResponseMessage(true, message, survey);
 
-    }
-
-    private void generateQuestionIds(Survey survey, Event event, User user) {
-        survey.setEventId(event.getId());
-        survey.setUserId(user.getId());
-        survey.getQuestions().forEach(question -> {
-            question.setId(new ObjectId().toString());
-            question.getOptions()
-                    .forEach(questionOption -> questionOption.setId(new ObjectId().toString()));
-        });
-
-        survey.getQuestions().forEach(question -> {
-            question.setTotalVoters(0);
-            question.getOptions()
-                    .forEach(questionOption -> questionOption.setVoters(0));
-        });
     }
 
     @Transactional
@@ -202,5 +177,35 @@ public class SurveyService {
             responseMessage.setMessage("User already view the survey");
         }
         return  responseMessage;
+    }
+
+    private void generateQuestionIds(Survey survey, Event event, User user) {
+        survey.setEventId(event.getId());
+        survey.setUserId(user.getId());
+        survey.getQuestions().forEach(question -> {
+            question.setId(new ObjectId().toString());
+            question.getOptions()
+                    .forEach(questionOption -> questionOption.setId(new ObjectId().toString()));
+        });
+
+        survey.getQuestions().forEach(question -> {
+            question.setTotalVoters(0);
+            question.getOptions()
+                    .forEach(questionOption -> questionOption.setVoters(0));
+        });
+    }
+
+    private void generateDates(Survey survey, Event event) {
+
+        if(Objects.isNull(survey.getEndTime()))
+            survey.setEndTime(String.valueOf(event.getEndDate().toEpochSecond(ZoneOffset.UTC)));
+
+        if(Objects.isNull(survey.getStartTime())) {
+            if (event.getStartDate().isAfter(LocalDateTime.now()))
+                survey.setStartTime(String.valueOf(event.getStartDate().toEpochSecond(ZoneOffset.UTC)));
+            else
+                survey.setStartTime(String.valueOf(event.getStartDate().plusMinutes(1).toEpochSecond(ZoneOffset.UTC)));
+
+        }
     }
 }
