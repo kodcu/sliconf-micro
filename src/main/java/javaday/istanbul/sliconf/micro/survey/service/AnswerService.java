@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.survey.service;
 
-import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.AnswerRepository;
 import javaday.istanbul.sliconf.micro.survey.SurveyException;
@@ -111,6 +110,16 @@ public class AnswerService {
         responseMessage.setMessage(surveyMessageProvider.getMessage("answersListedSuccessfully"));
         responseMessage.setReturnObject(answers);
         return responseMessage;
+    }
+
+    // Kullanicinin bir etkinlikteki anketlere vermis oldugu tüm cevaplari dondurur.
+    public ResponseMessage getEventSurveysAnswersOfUser(String eventId, String userId) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        List<Answer> answers = answerRepository.findByEventIdAndUserId(eventId, userId);
+        responseMessage.setStatus(true);
+        responseMessage.setReturnObject(answers);
+        responseMessage.setMessage("Users answers of surveys in specific events listed, if any.");
+        return  responseMessage;
     }
 
     private void updateSurveyVoteCount(Answer answer, Survey survey) {

@@ -17,6 +17,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,11 +48,12 @@ public class SurveyService {
         ResponseMessage eventResponse= generalService.findEventByIdOrEventKey(eventIdentifier);
         Event event = (Event)  eventResponse.getReturnObject();
 
+        survey.setEventId(event.getId());
+        survey.setEventKey(event.getKey());
+
         ResponseMessage userResponse = generalService.findUserById(survey.getUserId());
         User user = (User) userResponse.getReturnObject();
 
-        survey.setEventId(event.getId());
-        survey.setEventKey(event.getKey());
         survey.setUserId(user.getId());
 
         survey.setParticipants(0);
@@ -58,6 +61,16 @@ public class SurveyService {
         survey.setViewerList(new ArrayList<>());
         if(Objects.isNull(survey.getStartTime()))
             survey.setStartTime(String.valueOf(event.getStartDate().toEpochSecond(ZoneOffset.UTC)));
+        if(Objects.isNull(survey.getEndTime()))
+            survey.setEndTime(String.valueOf(event.getEndDate().toEpochSecond(ZoneOffset.UTC)));
+
+        if(Objects.isNull(survey.getStartTime())) {
+            if (event.getStartDate().isAfter(LocalDateTime.now()))
+                survey.setStartTime(String.valueOf(event.getStartDate().toEpochSecond(ZoneOffset.UTC)));
+            else
+                survey.setStartTime(String.valueOf(event.getStartDate().plusMinutes(1).toEpochSecond(ZoneOffset.UTC)));
+
+        }
         if(Objects.isNull(survey.getEndTime()))
             survey.setEndTime(String.valueOf(event.getEndDate().toEpochSecond(ZoneOffset.UTC)));
 
@@ -111,7 +124,7 @@ public class SurveyService {
         User user = (User) generalService.findUserById(event.getExecutiveUser()).getReturnObject();
 
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
-        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("dev")))
+        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("prod")))
             this.generateQuestionIds(survey, event, user);
 
 
@@ -134,7 +147,7 @@ public class SurveyService {
     }
 
     private void generateQuestionIds(Survey survey, Event event, User user) {
-        survey.setEventId(event.getExecutiveUser());
+        survey.setEventId(event.getId());
         survey.setUserId(user.getId());
         survey.getQuestions().forEach(question -> {
             question.setId(new ObjectId().toString());

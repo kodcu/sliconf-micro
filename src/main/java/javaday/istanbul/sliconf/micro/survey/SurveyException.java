@@ -5,7 +5,7 @@ public class SurveyException extends RuntimeException {
     private final transient Object rejectedValue;
     public SurveyException(String message, Object rejectedValue) {
         super(message);
-        this.rejectedValue = rejectedValue;
+        this.rejectedValue = rejectedValue != null ? rejectedValue : "null";
     }
     @Override
     public final String getMessage() {

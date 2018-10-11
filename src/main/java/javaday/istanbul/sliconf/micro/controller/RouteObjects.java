@@ -23,6 +23,7 @@ import javaday.istanbul.sliconf.micro.survey.controller.answer.GetAnswers;
 import javaday.istanbul.sliconf.micro.survey.controller.answer.SubmitAnswers;
 import javaday.istanbul.sliconf.micro.survey.controller.answer.UpdateAnswers;
 import javaday.istanbul.sliconf.micro.survey.controller.survey.*;
+import javaday.istanbul.sliconf.micro.user.GetSurveyAnswers;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -69,6 +70,8 @@ public class RouteObjects {
     public final ModerateCommentRoute moderateCommentRoute;
     public final VoteCommentRoute voteCommentRoute;
 
+
+    // survey
     public final CreateNewSurvey createNewSurvey;
     public final RemoveSurvey removeSurvey;
     public final GetSurveys getSurveys;
@@ -82,6 +85,9 @@ public class RouteObjects {
 
     // event statistics
     public final GetEventSessionsStatistics getEventSessionsStatistics;
+
+    // user
+    public final GetSurveyAnswers getSurveyAnswers;
 
     //
     public final ImageUploadRoute imageUploadRoute;
