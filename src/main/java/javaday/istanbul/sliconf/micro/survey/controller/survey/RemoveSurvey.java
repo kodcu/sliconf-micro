@@ -15,7 +15,7 @@ import javax.ws.rs.Produces;
 
 @AllArgsConstructor
 @Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
-@Path("/service/events/:eventIdentifier/surveys/:surveyId/")
+@Path("/service/events/:eventIdentifier/surveys/:surveyId")
 @Produces("application/json")
 @Component
 public class RemoveSurvey implements Route {
@@ -27,7 +27,6 @@ public class RemoveSurvey implements Route {
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
-            @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"),
             @ApiImplicitParam(required = true, dataType = "string", name = "surveyId", paramType = "path")
     }) //
     @ApiResponses(value = { //
@@ -42,10 +41,9 @@ public class RemoveSurvey implements Route {
             throws Exception {
 
         ResponseMessage responseMessage;
-        String userId = request.params("userId");
         String surveyId = request.params("surveyId");
 
-        responseMessage = surveyService.deleteSurvey(userId, surveyId);
+        responseMessage = surveyService.deleteSurvey(surveyId);
         return responseMessage;
     }
 }

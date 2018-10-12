@@ -61,9 +61,6 @@ public class SurveyService {
         survey.setViewers(0);
         survey.setViewerList(new ArrayList<>());
 
-        if(Objects.isNull(survey.getEndTime()))
-            survey.setEndTime(String.valueOf(event.getEndDate().toEpochSecond(ZoneOffset.UTC)));
-
         // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
         if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("prod")))
             this.generateQuestionIds(survey, event, user);
@@ -88,10 +85,8 @@ public class SurveyService {
 
     }
     @Transactional
-    public ResponseMessage deleteSurvey(String userId, String surveyId) {
+    public ResponseMessage deleteSurvey(String surveyId) {
         ResponseMessage responseMessage = new ResponseMessage();
-
-        generalService.findUserById(userId);
         ResponseMessage surveyResponseMessage =  generalService.findSurveyById(surveyId);
         Survey survey = (Survey) surveyResponseMessage.getReturnObject();
 
