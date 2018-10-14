@@ -1,6 +1,7 @@
 package javaday.istanbul.sliconf.micro.model.event;
 
 
+import javaday.istanbul.sliconf.micro.admin.LifeCycleState;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,5 +45,6 @@ public class Event {
     private StatusDetails statusDetails;
     private TotalUsers totalUsers;
     private BaseEventState eventState;
+    private LifeCycleState lifeCycleState;
 
 }

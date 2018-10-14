@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.specs;
 
+import javaday.istanbul.sliconf.micro.admin.LifeCycleState;
 import javaday.istanbul.sliconf.micro.model.event.About;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.event.StatusDetails;
@@ -109,9 +110,9 @@ public class EventSpecs {
             event.setStatusDetails(statusDetails);
 
             if (percentage >= 100) {
-                event.setStatus(true);
+                event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.ACTIVE);
             } else {
-                event.setStatus(false);
+                event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.ACTIVE);
             }
         }
     }

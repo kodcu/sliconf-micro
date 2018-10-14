@@ -202,6 +202,10 @@ public class RootController {
                 path("users/", () ->
                         get(":userId", routeObjects.adminGetUserInfo, JsonUtil.json())
                 );
+
+                path("events", () ->
+                        get("", routeObjects.listEvents, JsonUtil.json())
+                );
             });
 
             path("image/", () -> {

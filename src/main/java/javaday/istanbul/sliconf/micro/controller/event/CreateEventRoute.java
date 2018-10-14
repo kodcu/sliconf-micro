@@ -1,6 +1,7 @@
 package javaday.istanbul.sliconf.micro.controller.event;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.admin.LifeCycleState;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
@@ -139,6 +140,10 @@ public class CreateEventRoute implements Route {
             return responseMessage;
         }
 
+        LifeCycleState lifeCycleState = new LifeCycleState();
+        event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.PASSIVE);
+        event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.UPCOMING);
+        event.setLifeCycleState(lifeCycleState);
         event.setExecutiveUser(userId);
 
         updateUserRoleAndSave(user);

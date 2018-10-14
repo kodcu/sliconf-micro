@@ -1,8 +1,12 @@
 package javaday.istanbul.sliconf.micro.repository;
 
+import javaday.istanbul.sliconf.micro.admin.LifeCycleState;
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,11 +15,13 @@ import java.util.Optional;
 
 @Repository
 public interface EventRepository extends MongoRepository<Event, String>,
-        CrudRepository<Event, String> {
+        PagingAndSortingRepository<Event, String> {
 
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND Meta(events).id = $1")
     Optional<Event> findById(String id);
     Optional<Event> findByKey(String key);
+
+    Page<Event> findByLifeCycleState_EventStatuses(List<LifeCycleState.EventStatus> eventStatuses, Pageable pageable);
 
     List<Event> findByName(String name);
 

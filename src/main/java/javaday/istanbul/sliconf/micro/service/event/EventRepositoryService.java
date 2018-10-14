@@ -27,6 +27,7 @@ public class EventRepositoryService implements EventService {
     @Autowired
     protected EventStateService eventStateService;
 
+
     public Optional<Event> findById(String id) { return repo.findById(id); }
 
     public Event findOne(String id) {
@@ -72,7 +73,7 @@ public class EventRepositoryService implements EventService {
     }
 
     public ResponseMessage save(Event event) {
-        ResponseMessage message = new ResponseMessage(false, "An error occured while saving event", null);
+        ResponseMessage message = new ResponseMessage(false, "An error occurred while saving event", null);
 
         // TODO: 02.10.2018 update ve create ayni yerden yapildigi icin bir takim sikintilar mevcut olabiliyor. bunlari ayirmali. #1158
         Event dbEvent = this.findById(event.getId()).orElse(null);

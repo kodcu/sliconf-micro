@@ -39,7 +39,8 @@ public class GetSurveyAnswers implements Route {
     })
 
     @Override
-    public ResponseMessage handle(Request request, Response response) throws Exception {
+    public ResponseMessage handle(@ApiParam(hidden = true) Request request,
+                                  @ApiParam(hidden = true) Response response) throws Exception {
         ResponseMessage responseMessage;
         String eventIdentifier = request.params("eventIdentifier");
         String userId = request.params("userId");

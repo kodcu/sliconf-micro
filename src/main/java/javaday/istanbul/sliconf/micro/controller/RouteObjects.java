@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.controller;
 
+import javaday.istanbul.sliconf.micro.admin.ListEvents;
 import javaday.istanbul.sliconf.micro.controller.admin.*;
 import javaday.istanbul.sliconf.micro.controller.event.*;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.CreateAgendaRoute;
@@ -102,6 +103,7 @@ public class RouteObjects {
     public final AdminListEventStatesRoute adminListEventStatesRoute;
     public final AdminChangeEventStateForEventRoute adminChangeEventStateForEventRoute;
     public final AdminGetUserInfo adminGetUserInfo;
+    public final ListEvents listEvents;
 
 
 //    @Autowired

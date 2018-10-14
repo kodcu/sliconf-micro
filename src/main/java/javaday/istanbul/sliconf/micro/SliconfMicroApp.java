@@ -2,7 +2,6 @@ package javaday.istanbul.sliconf.micro;
 
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.security.TokenAuthenticationServiceProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
@@ -39,8 +38,14 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
         schemes = {SwaggerDefinition.Scheme.HTTP, SwaggerDefinition.Scheme.HTTPS}, //
         consumes = {"application/json"}, //
         produces = {"application/json"}, //
-        tags = {@Tag(name = "survey", description = "Survey Operations"),
-                @Tag(name = "statistics", description = "Statistics about app")},
+        tags = {
+                @Tag(name = "survey", description = "Survey Operations"),
+                @Tag(name = "statistics", description = "Statistics about app"),
+                @Tag(name = "user", description = "User related endpoints"),
+                @Tag(name = "admin", description = "Admin related endpoints"),
+
+        },
+
         securityDefinition = @SecurityDefinition(
                 apiKeyAuthDefinitions = @ApiKeyAuthDefinition
                         (name = "Authorization", in = ApiKeyAuthDefinition.ApiKeyLocation.HEADER, key = "Bearer"))
