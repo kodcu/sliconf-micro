@@ -21,4 +21,6 @@ public class About {
     private Location location;
 
     private String email;
+    
+    private String venue;
 }
