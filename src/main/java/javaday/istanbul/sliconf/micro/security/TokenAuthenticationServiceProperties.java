@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
  * değerdir.
  *
  */
+
 @Component
 @PropertySource("classpath:application-security.properties")
 @ConfigurationProperties(prefix = "sliconf.security.authentication")
@@ -22,9 +23,11 @@ public  class TokenAuthenticationServiceProperties {
 
     private static String tokenSecret;
 
-    public static String getTokenSecret() {
+    static String getTokenSecret() {
         return tokenSecret;
     }
+
+    private TokenAuthenticationServiceProperties() {}
 
     public static void setTokenSecret(String tokenSecret) {
         TokenAuthenticationServiceProperties.tokenSecret = tokenSecret;

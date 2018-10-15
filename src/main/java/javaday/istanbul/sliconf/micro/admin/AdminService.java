@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.admin;
 
 import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.model.event.LifeCycleState;
 import javaday.istanbul.sliconf.micro.repository.EventRepository;
-import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +26,6 @@ class AdminService {
         for (String lifeCycleState : lifeCycleStatesQuery)
             lifeCycleStates.add(LifeCycleState.EventStatus.valueOf(lifeCycleState));
 
-       return eventRepository.findByLifeCycleState_EventStatuses(lifeCycleStates, pageable);
+       return eventRepository.findByLifeCycleStateEventStatuses(lifeCycleStates, pageable);
     }
 }

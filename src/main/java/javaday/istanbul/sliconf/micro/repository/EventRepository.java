@@ -1,11 +1,10 @@
 package javaday.istanbul.sliconf.micro.repository;
 
-import javaday.istanbul.sliconf.micro.admin.LifeCycleState;
+import javaday.istanbul.sliconf.micro.model.event.LifeCycleState;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +20,7 @@ public interface EventRepository extends MongoRepository<Event, String>,
     Optional<Event> findById(String id);
     Optional<Event> findByKey(String key);
 
-    Page<Event> findByLifeCycleState_EventStatuses(List<LifeCycleState.EventStatus> eventStatuses, Pageable pageable);
+    Page<Event> findByLifeCycleStateEventStatuses(List<LifeCycleState.EventStatus> eventStatuses, Pageable pageable);
 
     List<Event> findByName(String name);
 

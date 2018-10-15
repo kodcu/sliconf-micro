@@ -1,7 +1,6 @@
 package javaday.istanbul.sliconf.micro.model.event;
 
 
-import javaday.istanbul.sliconf.micro.admin.LifeCycleState;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.controller.event;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.admin.LifeCycleState;
+import javaday.istanbul.sliconf.micro.model.event.LifeCycleState;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;

@@ -25,6 +25,7 @@ public class RootController {
 
     private static Logger logger = LoggerFactory.getLogger(RootController.class);
 
+    private static String contentType = "application/json";
     @Autowired
     public RootController(RouteObjects routeObjects) {// NOSONAR
         RootController.routeObjects = routeObjects;// NOSONAR
@@ -47,7 +48,7 @@ public class RootController {
 
         // Using Route
         notFound((req, res) -> {
-            res.type("application/json");
+            res.type(contentType);
 
             res.status(200);
 
@@ -170,7 +171,7 @@ public class RootController {
                         String message = exception.getMessage();
                         Object rejectedValue = exception.getRejectedValue();
                         ResponseMessage responseMessage = new ResponseMessage(false, message, rejectedValue);
-                        response1.type("application/json");
+                        response1.type(contentType);
                         response1.body(JsonUtil.toJson(responseMessage));
 
                     });
@@ -218,7 +219,7 @@ public class RootController {
         after((req, res) -> {
 
             if (!"image/png".equals(res.type())) {
-                res.type("application/json");
+                res.type(contentType);
             }
         });
 
