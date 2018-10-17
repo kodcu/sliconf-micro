@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.survey.service;
 
+import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.AnswerRepository;
 import javaday.istanbul.sliconf.micro.survey.SurveyException;
@@ -41,7 +42,12 @@ public class AnswerService {
         ResponseMessage responseMessage;
 
         generalService.findUserById(answer.getUserId());
-        generalService.findEventByIdOrEventKey(answer.getEventId()).getReturnObject();
+        Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
+        answer.setEventId(event.getId());
+        answer.setEventKey(event.getKey());
+
+        Survey survey = (Survey) generalService.findSurveyById(surveyId).getReturnObject();
+        answer.setSurveyId(survey.getId());
 
         List<Object> validatingObjects = new ArrayList<>();
         validatingObjects.add(answer);
@@ -50,12 +56,6 @@ public class AnswerService {
             return responseMessage;
         }
 
-        Survey survey = (Survey) generalService.findSurveyById(surveyId).getReturnObject();
-        generalService.findEventByIdOrEventKey(survey.getEventId());
-
-        // TODO: 17.09.2018 kullanıcı eğer anketin belirli sorularına cevap verdikten
-        // TODO: sonra cevap vermediği bir soruyu cevaplamak
-        // TODO: isterse zaten cevap verdin hatası alacaktır. bunu düzelt.
         boolean alreadyAnswered = this.checkIfUserAlreadyAnsweredSurvey(answer.getUserId(), surveyId).isStatus();
         if (alreadyAnswered) {
             responseMessage.setStatus(false);

@@ -26,7 +26,6 @@ import java.util.Map;
 public class Answer implements Serializable {
 
     @Id
-    @NotBlank(message = "{survey.answer.id.blank}")
     private String id;
 
     @NotBlank(message = "{survey.answer.surveyId.blank}")

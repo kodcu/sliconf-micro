@@ -13,15 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +27,6 @@ import java.util.Objects;
 @Service
 public class SurveyService {
 
-    private final Environment environment;
     private final GeneralService generalService;
     private final SurveyValidator surveyValidator;
     private final SurveyRepository surveyRepository;
@@ -40,13 +36,13 @@ public class SurveyService {
        bu sebeple bunları @Autowired ile lazy load ediyoruz. böylece circular dependency hatası almıyoruz.
     */
     @Autowired
-    private  AnswerService answerService;
+    private AnswerService answerService;
 
     @Transactional
     public ResponseMessage addNewSurvey(Survey survey, String eventIdentifier) {
 
-        ResponseMessage eventResponse= generalService.findEventByIdOrEventKey(eventIdentifier);
-        Event event = (Event)  eventResponse.getReturnObject();
+        ResponseMessage eventResponse = generalService.findEventByIdOrEventKey(eventIdentifier);
+        Event event = (Event) eventResponse.getReturnObject();
 
         survey.setEventId(event.getId());
         survey.setEventKey(event.getKey());
@@ -61,9 +57,7 @@ public class SurveyService {
         survey.setViewers(0);
         survey.setViewerList(new ArrayList<>());
 
-        // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
-        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("prod")))
-            this.generateQuestionIds(survey, event, user);
+        this.generateQuestionIds(survey);
 
         List<Object> validatingObjects = new ArrayList<>();
         // validate edilecek objeleri ekle.
@@ -84,16 +78,17 @@ public class SurveyService {
         return new ResponseMessage(true, message, survey);
 
     }
+
     @Transactional
     public ResponseMessage deleteSurvey(String surveyId) {
         ResponseMessage responseMessage = new ResponseMessage();
-        ResponseMessage surveyResponseMessage =  generalService.findSurveyById(surveyId);
+        ResponseMessage surveyResponseMessage = generalService.findSurveyById(surveyId);
         Survey survey = (Survey) surveyResponseMessage.getReturnObject();
 
         responseMessage.setReturnObject(survey);
         responseMessage.setStatus(true);
 
-        List<Answer> answers = (List<Answer>)  answerService.getSurveyAnswers(survey.getEventId(), surveyId).getReturnObject();
+        List<Answer> answers = (List<Answer>) answerService.getSurveyAnswers(survey.getEventId(), surveyId).getReturnObject();
         answerService.removeAnswers(answers);
         surveyRepository.delete(surveyId);
 
@@ -106,13 +101,10 @@ public class SurveyService {
         ResponseMessage responseMessage;
 
         Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
-        User user = (User) generalService.findUserById(event.getExecutiveUser()).getReturnObject();
+        generalService.findUserById(event.getExecutiveUser());
 
         this.generateDates(survey, event);
-        // mongodb embedded elemanlar icin id olusturmaz. biz olusturuyoruz. sadece app-prodda calisir.
-        if(Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.contains("prod")))
-            this.generateQuestionIds(survey, event, user);
-
+        this.generateQuestionIds(survey);
 
         List<Object> validatingObjects = new ArrayList<>();
         /* validate edilecek objeleri ekle. */
@@ -157,7 +149,7 @@ public class SurveyService {
         Survey survey = (Survey) generalService.findSurveyById(surveyId).getReturnObject();
         generalService.findUserById(userId);
         List<String> viewers = new ArrayList<>(survey.getViewerList());
-        if( viewers.stream().noneMatch(s -> s.equals(userId))) {
+        if (viewers.stream().noneMatch(s -> s.equals(userId))) {
             viewers.add(userId);
             survey.setViewerList(viewers);
             survey.setViewers(viewers.size());
@@ -165,25 +157,26 @@ public class SurveyService {
             responseMessage.setMessage("User has added viewerList list");
             responseMessage.setStatus(true);
             responseMessage.setReturnObject(userId);
-        }
-        else{
+        } else {
             responseMessage.setReturnObject(userId);
             responseMessage.setStatus(false);
             responseMessage.setMessage("User already view the survey");
         }
-        return  responseMessage;
+        return responseMessage;
     }
 
-    private void generateQuestionIds(Survey survey, Event event, User user) {
-        survey.setEventId(event.getId());
-        survey.setUserId(user.getId());
+    private void generateQuestionIds(Survey survey) {
         survey.getQuestions().forEach(question -> {
+            if (Objects.nonNull(question.getId()))
+                return;
             question.setId(new ObjectId().toString());
             question.getOptions()
                     .forEach(questionOption -> questionOption.setId(new ObjectId().toString()));
         });
 
         survey.getQuestions().forEach(question -> {
+            if (Objects.nonNull(question.getId()))
+                return;
             question.setTotalVoters(0);
             question.getOptions()
                     .forEach(questionOption -> questionOption.setVoters(0));
@@ -192,10 +185,10 @@ public class SurveyService {
 
     private void generateDates(Survey survey, Event event) {
 
-        if(Objects.isNull(survey.getEndTime()))
+        if (Objects.isNull(survey.getEndTime()))
             survey.setEndTime(String.valueOf(event.getEndDate().toEpochSecond(ZoneOffset.UTC)));
 
-        if(Objects.isNull(survey.getStartTime())) {
+        if (Objects.isNull(survey.getStartTime())) {
             if (event.getStartDate().isAfter(LocalDateTime.now()))
                 survey.setStartTime(String.valueOf(event.getStartDate().toEpochSecond(ZoneOffset.UTC)));
             else

@@ -29,18 +29,18 @@ public class StatisticsService {
         List<EventSessionStatisticsDTO> eventSessionStatisticsDTOList = new ArrayList<>();
 
         agendaElements.forEach(agendaElement -> speakers.forEach(speaker -> {
-                if(agendaElement.getSpeaker().equals(speaker.getId())) {
-                    EventSessionStatisticsDTO eventSessionStatisticsDTO = new EventSessionStatisticsDTO();
-                    eventSessionStatisticsDTO.setPhoto(speaker.getProfilePicture());
-                    String average = String.valueOf(agendaElement.getStar()) ;
-                    eventSessionStatisticsDTO.setAverage(average);
-                    eventSessionStatisticsDTO.setCount(String.valueOf(agendaElement.getVoteCount()));
-                    eventSessionStatisticsDTO.setTopic(agendaElement.getTopic());
-                    eventSessionStatisticsDTO.setWorkingAt(speaker.getWorkingAt());
-                    eventSessionStatisticsDTO.setSpeaker(speaker.getName());
-                    eventSessionStatisticsDTOList.add(eventSessionStatisticsDTO);
-                }
-            }));
+            if(agendaElement.getSpeaker().equals(speaker.getId())) {
+                EventSessionStatisticsDTO eventSessionStatisticsDTO = new EventSessionStatisticsDTO();
+                eventSessionStatisticsDTO.setPhoto(speaker.getProfilePicture());
+                String average = String.valueOf(agendaElement.getStar()) ;
+                eventSessionStatisticsDTO.setAverage(average);
+                eventSessionStatisticsDTO.setCount(String.valueOf(agendaElement.getVoteCount()));
+                eventSessionStatisticsDTO.setTopic(agendaElement.getTopic());
+                eventSessionStatisticsDTO.setWorkingAt(speaker.getWorkingAt());
+                eventSessionStatisticsDTO.setSpeaker(speaker.getName());
+                eventSessionStatisticsDTOList.add(eventSessionStatisticsDTO);
+            }
+        }));
 
 
         return new ResponseMessage(true, "Session Statistics Listed", eventSessionStatisticsDTOList);

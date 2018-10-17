@@ -14,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.Map;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Api(value = "survey", authorizations = {@Authorization(value = "Bearer")})
@@ -29,7 +30,7 @@ public class UserViewedSurvey implements Route {
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
-            @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "body"), //
+            @ApiImplicitParam(required = true, dataTypeClass = Map.Entry.class, name = "userId", paramType = "body"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "eventIdentifier", paramType = "request"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "surveyId", paramType = "request"), //
 
@@ -47,10 +48,13 @@ public class UserViewedSurvey implements Route {
         ResponseMessage responseMessage;
 
         String body = request.body();
-        Map<String, String> userIdFromBody = JsonUtil.fromJson(body, Map.class);
+        Map<String, String> userIdFromBody = body.isEmpty() ? null : JsonUtil.fromJson(body, Map.class);
+
         String surveyId = request.params("surveyId");
         String eventIdentifier = request.params("eventIdentifier");
-        String userId = userIdFromBody.values().stream().findFirst().orElse(null);
+
+        String userId = Objects.isNull(userIdFromBody) ? null : userIdFromBody.values().stream().findFirst().orElse(null);
+
         responseMessage = surveyService.updateSurveyViewers(userId, surveyId, eventIdentifier);
 
         return responseMessage;
