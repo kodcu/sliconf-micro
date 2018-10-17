@@ -2,6 +2,7 @@ package javaday.istanbul.sliconf.micro.survey.controller.answer;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.survey.SurveyException;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
 import javaday.istanbul.sliconf.micro.survey.service.AnswerService;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
@@ -56,7 +57,12 @@ public class UpdateAnswers implements Route {
             return responseMessage;
         }
 
-        Answer answer = JsonUtil.fromJson(body, Answer.class);
+        Answer answer;
+        try {
+            answer = JsonUtil.fromJson(body, Answer.class);
+        } catch (Exception e) {
+            throw  new SurveyException(e.getMessage(), e.getCause());
+        }
 
         responseMessage = answerService.updateSurveyAnswers(answer);
         return responseMessage;
