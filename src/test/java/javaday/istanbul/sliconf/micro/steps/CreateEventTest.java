@@ -67,7 +67,9 @@ public class CreateEventTest {// NOSONAR
         Event event1 = new EventBuilder()
                 .setName("Create Event 86")
                 .setExecutiveUser(userId1)
-                .setDate(LocalDateTime.now().plusMonths(2)).build();
+                .setDate(LocalDateTime.now().plusWeeks(2))
+                .setEndDate(LocalDateTime.now().plusWeeks(3))
+                .build();
 
         // invalid Date
         Event event2 = new EventBuilder()
@@ -79,11 +81,15 @@ public class CreateEventTest {// NOSONAR
         Event event3 = new EventBuilder()
                 .setName("Create Event 86")
                 .setExecutiveUser(userId2)
-                .setDate(LocalDateTime.now().plusMonths(2)).build();
+                .setDate(LocalDateTime.now().plusWeeks(2))
+                .setEndDate(LocalDateTime.now().plusWeeks(3))
+                .build();
 
         Event updateEvent1 = new EventBuilder().setName("Create Event saved")
                 .setExecutiveUser(userId1)
-                .setDate(LocalDateTime.now().plusMonths(2)).build();
+                .setDate(LocalDateTime.now().plusWeeks(2))
+                .setEndDate(LocalDateTime.now().plusWeeks(3))
+                .build();
 
         EventSpecs.generateKanbanNumber(updateEvent1, eventRepositoryService);
 
@@ -98,16 +104,22 @@ public class CreateEventTest {// NOSONAR
                 .setName("Create Event 89")
                 .setExecutiveUser(userId1)
                 .setKey("")
-                .setDate(LocalDateTime.now().plusMonths(2)).build();
+                .setDate(LocalDateTime.now().plusWeeks(2))
+                .setEndDate(LocalDateTime.now().plusWeeks(3))
+                .build();
 
         Event event5 = new EventBuilder()
                 .setName("Cre")
                 .setExecutiveUser(userId1)
-                .setDate(LocalDateTime.now().plusMonths(2)).build();
+                .setDate(LocalDateTime.now().plusWeeks(2))
+                .setEndDate(LocalDateTime.now().plusWeeks(3))
+                .build();
 
         Event updateEvent2 = new EventBuilder().setName("Update event 2")
                 .setExecutiveUser(userId1)
-                .setDate(LocalDateTime.now().plusMonths(2)).build();
+                .setDate(LocalDateTime.now().plusWeeks(2))
+                .setEndDate(LocalDateTime.now().plusWeeks(3))
+                .build();
 
         EventSpecs.generateKanbanNumber(updateEvent2, eventRepositoryService);
 
@@ -159,7 +171,7 @@ public class CreateEventTest {// NOSONAR
         updateEvent.setStartDate(LocalDateTime.now().minusMonths(2));
         ResponseMessage createEventMessage17 = createEventRoute.processEvent(updateEvent, "asd-13asd");
 
-        updateEvent.setStartDate(LocalDateTime.now().plusMonths(2));
+        updateEvent.setStartDate(LocalDateTime.now().plusWeeks(2));
 
 
 

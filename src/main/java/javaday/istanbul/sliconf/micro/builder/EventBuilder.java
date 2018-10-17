@@ -35,6 +35,11 @@ public class EventBuilder {
         return this;
     }
 
+    public EventBuilder setEndDate(LocalDateTime date) {
+        this.event.setEndDate(date);
+        return this;
+    }
+
     public EventBuilder setLogoPath(String logoPath) {
         this.event.setLogoPath(logoPath);
         return this;
