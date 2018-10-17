@@ -55,9 +55,7 @@ public class AnswerService {
         if (!responseMessage.isStatus()) {
             return responseMessage;
         }
-        // TODO: 17.09.2018 kullanıcı eğer anketin belirli sorularına cevap verdikten
-        // TODO: sonra cevap vermediği bir soruyu cevaplamak
-        // TODO: isterse zaten cevap verdin hatası alacaktır. bunu düzelt.
+
         boolean alreadyAnswered = this.checkIfUserAlreadyAnsweredSurvey(answer.getUserId(), surveyId).isStatus();
         if (alreadyAnswered) {
             responseMessage.setStatus(false);

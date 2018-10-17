@@ -164,7 +164,7 @@ public class VoteCommentRoute implements Route {
     }
 
     private ResponseMessage checkIfUserExists(String userId) {
-        User user = userRepositoryService.findById(userId).get();
+        User user = userRepositoryService.findById(userId).orElse(null);
 
         if (Objects.nonNull(user)) {
             return new ResponseMessage(true, voteMessageProvider.getMessage("userFoundWithGivenId"), user);
