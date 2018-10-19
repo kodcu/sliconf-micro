@@ -7,6 +7,7 @@ import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
+import javaday.istanbul.sliconf.micro.survey.util.SurveyUtil;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidator;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidatorSequence;
 import lombok.RequiredArgsConstructor;
@@ -50,14 +51,14 @@ public class SurveyService {
         ResponseMessage userResponse = generalService.findUserById(survey.getUserId());
         User user = (User) userResponse.getReturnObject();
 
-        this.generateDates(survey, event);
+        SurveyUtil.generateDates(survey, event);
         survey.setUserId(user.getId());
 
         survey.setParticipants(0);
         survey.setViewers(0);
         survey.setViewerList(new ArrayList<>());
 
-        this.generateQuestionIds(survey);
+        SurveyUtil.generateQuestionIds(survey);
 
         List<Object> validatingObjects = new ArrayList<>();
         // validate edilecek objeleri ekle.
@@ -103,8 +104,8 @@ public class SurveyService {
         Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
         generalService.findUserById(event.getExecutiveUser());
 
-        this.generateDates(survey, event);
-        this.generateQuestionIds(survey);
+        SurveyUtil.generateDates(survey, event);
+        SurveyUtil.generateQuestionIds(survey);
 
         List<Object> validatingObjects = new ArrayList<>();
         /* validate edilecek objeleri ekle. */
@@ -165,35 +166,7 @@ public class SurveyService {
         return responseMessage;
     }
 
-    private void generateQuestionIds(Survey survey) {
-        survey.getQuestions().forEach(question -> {
-            if (Objects.nonNull(question.getId()))
-                return;
-            question.setId(new ObjectId().toString());
-            question.getOptions()
-                    .forEach(questionOption -> questionOption.setId(new ObjectId().toString()));
-        });
 
-        survey.getQuestions().forEach(question -> {
-            if (Objects.nonNull(question.getId()))
-                return;
-            question.setTotalVoters(0);
-            question.getOptions()
-                    .forEach(questionOption -> questionOption.setVoters(0));
-        });
-    }
 
-    private void generateDates(Survey survey, Event event) {
 
-        if (Objects.isNull(survey.getEndTime()))
-            survey.setEndTime(String.valueOf(event.getEndDate().toEpochSecond(ZoneOffset.UTC)));
-
-        if (Objects.isNull(survey.getStartTime())) {
-            if (event.getStartDate().isAfter(LocalDateTime.now()))
-                survey.setStartTime(String.valueOf(event.getStartDate().toEpochSecond(ZoneOffset.UTC)));
-            else
-                survey.setStartTime(String.valueOf(event.getStartDate().plusMinutes(1).toEpochSecond(ZoneOffset.UTC)));
-
-        }
-    }
 }

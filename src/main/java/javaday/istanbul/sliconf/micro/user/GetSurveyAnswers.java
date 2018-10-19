@@ -14,7 +14,7 @@ import javax.ws.rs.Produces;
 
 @AllArgsConstructor
 @Path("service/events/:eventIdentifier/users/:userId/answers")
-@Api(value = "user", authorizations = {@Authorization(value = "Bearer" )})
+@Api(value = "user", authorizations = {@Authorization(value = "Bearer")})
 @Produces("application/json")
 @Component
 public class GetSurveyAnswers implements Route {
@@ -39,7 +39,9 @@ public class GetSurveyAnswers implements Route {
     })
 
     @Override
-    public ResponseMessage handle(Request request, Response response) throws Exception {
+    public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response)
+            throws Exception {
+
         ResponseMessage responseMessage;
         String eventIdentifier = request.params("eventIdentifier");
         String userId = request.params("userId");

@@ -9,6 +9,7 @@ import javaday.istanbul.sliconf.micro.survey.model.Answer;
 import javaday.istanbul.sliconf.micro.survey.model.Question;
 import javaday.istanbul.sliconf.micro.survey.model.QuestionOption;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
+import javaday.istanbul.sliconf.micro.survey.util.SurveyUtil;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidator;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidatorSequence;
 import lombok.RequiredArgsConstructor;
@@ -64,8 +65,8 @@ public class AnswerService {
             return responseMessage;
         }
 
-        this.checkAnsweredQuestions(survey, answer);
-        this.updateSurveyVoteCount(answer, survey);
+        SurveyUtil.checkAnsweredQuestions(survey, answer, surveyMessageProvider);
+        SurveyUtil.updateSurveyVoteCount(answer, survey);
 
         surveyService.updateSurvey(survey, eventIdentifier);
         answerRepository.save(answer);
@@ -112,7 +113,7 @@ public class AnswerService {
         return responseMessage;
     }
 
-    // Kullanicinin bir etkinlikteki anketlere vermis oldugu tüm cevaplari dondurur.
+    // Kullanicinin bir etkinlikteki tüm anketlere vermis oldugu tüm cevaplari dondurur.
     public ResponseMessage getEventSurveysAnswersOfUser(String eventId, String userId) {
         ResponseMessage responseMessage = new ResponseMessage();
         List<Answer> answers = answerRepository.findByEventIdAndUserId(eventId, userId);
@@ -122,57 +123,7 @@ public class AnswerService {
         return  responseMessage;
     }
 
-    private void updateSurveyVoteCount(Answer answer, Survey survey) {
 
-        survey.setParticipants(survey.getParticipants() + 1);
-
-        answer.getAnsweredQuestions().forEach((answeredQuestionId, answeredOption) -> {
-
-            Predicate<Question> questionPredicate;
-            Predicate<QuestionOption> optionPredicate;
-            questionPredicate = surveyQuestion -> surveyQuestion.getId().equals(answeredQuestionId);
-            optionPredicate = questionOption -> questionOption.getText().equals(answeredOption);
-
-            survey.getQuestions()
-                    .stream()
-                    .filter(questionPredicate)
-                    .forEach(question -> {
-                        question.setTotalVoters(question.getTotalVoters() + 1);
-                        question.getOptions()
-                                .stream()
-                                .filter(optionPredicate)
-                                .forEach(questionOption -> questionOption.setVoters(questionOption.getVoters() + 1));
-                    });
-        });
-    }
-
-    private void checkAnsweredQuestions(Survey survey, Answer answer) {
-
-        answer.getAnsweredQuestions().forEach((answeredQuestionId, answeredOption) -> {
-            Predicate<Question> questionPredicate;
-            questionPredicate = surveyQuestion -> surveyQuestion.getId().equals(answeredQuestionId);
-
-            if (survey.getQuestions().stream().noneMatch(questionPredicate)) {
-                log.error("Question not found by id: {}", answeredQuestionId);
-                String message = surveyMessageProvider.getMessage("questionCanNotFoundWithGivenId");
-                throw new SurveyException(message, answeredQuestionId);
-            }
-
-            Predicate<QuestionOption> questionOptionPredicate;
-            questionOptionPredicate = questionOption -> questionOption.getText().equals(answeredOption);
-
-            survey.getQuestions()
-                    .stream()
-                    .filter(questionPredicate)
-                    .forEach(question -> {
-                        if (question.getOptions().stream().noneMatch(questionOptionPredicate)) {
-                            log.error("Answer does not match with any question option: {}", answeredOption);
-                            String message = surveyMessageProvider.getMessage("questionAndAnswerMismatch");
-                            throw new SurveyException(message, answeredOption);
-                        }
-                    });
-        });
-    }
 
     private ResponseMessage checkIfUserAlreadyAnsweredSurvey(String userId, String surveyId) {
 

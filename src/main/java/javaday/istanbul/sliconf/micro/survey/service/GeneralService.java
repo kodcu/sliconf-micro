@@ -32,6 +32,7 @@ public class GeneralService {
             String message = surveyMessageProvider.getMessage("surveyCanNotFoundWithGivenId");
             return new SurveyException(message, surveyId);
         });
+
         responseMessage.setStatus(true);
         responseMessage.setReturnObject(survey);
         return responseMessage;
