@@ -1,12 +1,10 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.tr.Fakat;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
 import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,13 +24,11 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class AAA6 {
+public class AAA6 { // NOSONAR
 
     @Autowired
-    SurveyService surveyService;
-    @Autowired
     private InitialData initialData;
-    
+
     @Fakat("^Anket en az bir soru içermiyor ise$")
     public void anketEnAzBirSoruIçermiyorIse() throws Throwable {
         initialData.survey.setQuestions(new ArrayList<>());
@@ -42,7 +38,7 @@ public class AAA6 {
 
     @Ozaman("^Sistem anketi kayıt etmez ve ön tarafa ankette en az bir soru olmalı gibi bir hata mesajı gönderilir$")
     public void sistemAnketiKayıtEtmezVeÖnTarafaAnketteEnAzBirSoruOlmalıGibiBirHataMesajıGönderilir() throws Throwable {
-        String exceptedErrorMessage = "Survey questions can not be empty! ";
-        assertTrue(initialData.checkErrorMessages(exceptedErrorMessage, initialData.survey));
+        String exceptedErrorMessage = initialData.env.getProperty("survey.questions.empty");
+        assertTrue(initialData.checkCreateSurveyErrorMessages(exceptedErrorMessage, initialData.survey));
     }
 }

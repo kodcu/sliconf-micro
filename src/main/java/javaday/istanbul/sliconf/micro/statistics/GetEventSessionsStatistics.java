@@ -13,7 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 @AllArgsConstructor
-@Api(value = "statistics", authorizations = {@Authorization(value = "Bearer" )})
+@Api(value = "statistics", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/events/:eventKey/statistics/sessions")
 @Produces("application/json")
 @Component
@@ -26,7 +26,7 @@ public class GetEventSessionsStatistics implements Route {
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
-            @ApiImplicitParam(required = true, dataType= "string", name = "eventKey", paramType = "request"),
+            @ApiImplicitParam(required = true, dataType = "string", name = "eventKey", paramType = "request"),
 
 
     }) //
@@ -36,7 +36,6 @@ public class GetEventSessionsStatistics implements Route {
             @ApiResponse(code = 401, message = "Unauthorized", response = ResponseMessage.class), //
             @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
     })
-
 
 
     @Override

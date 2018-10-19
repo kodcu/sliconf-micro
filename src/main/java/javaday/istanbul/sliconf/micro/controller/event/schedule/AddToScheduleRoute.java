@@ -102,7 +102,6 @@ public class AddToScheduleRoute implements Route {
     }
 
 
-
     private Room getRoom(List<Room> rooms, String roomId) {
         Room returnRoom = null;
 

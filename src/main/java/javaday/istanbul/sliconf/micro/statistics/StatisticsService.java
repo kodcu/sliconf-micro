@@ -29,10 +29,10 @@ public class StatisticsService {
         List<EventSessionStatisticsDTO> eventSessionStatisticsDTOList = new ArrayList<>();
 
         agendaElements.forEach(agendaElement -> speakers.forEach(speaker -> {
-            if(agendaElement.getSpeaker().equals(speaker.getId())) {
+            if (agendaElement.getSpeaker().equals(speaker.getId())) {
                 EventSessionStatisticsDTO eventSessionStatisticsDTO = new EventSessionStatisticsDTO();
                 eventSessionStatisticsDTO.setPhoto(speaker.getProfilePicture());
-                String average = String.valueOf(agendaElement.getStar()) ;
+                String average = String.valueOf(agendaElement.getStar());
                 eventSessionStatisticsDTO.setAverage(average);
                 eventSessionStatisticsDTO.setCount(String.valueOf(agendaElement.getVoteCount()));
                 eventSessionStatisticsDTO.setTopic(agendaElement.getTopic());

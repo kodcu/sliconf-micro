@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.tr.Fakat;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
@@ -24,16 +23,14 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class AAA4 {
+public class AAA4 { // NOSONAR
 
-    @Autowired
-    SurveyService surveyService;
     @Autowired
     private InitialData initialData;
 
     @Fakat("^Anketin başlangıç tarihi bugün veya daha ileri bir tarih olarak belirtilmemiş ise$")
     public void anketinBaşlangıçTarihiBugünVeyaDahaIleriBirTarihOlarakBelirtilmemişIse() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
+
         LocalDateTime startTime = LocalDateTime.now().minusDays(1);
 
         String invalidStartTime = Long.toString(startTime.toEpochSecond(ZoneOffset.UTC));
@@ -44,8 +41,8 @@ public class AAA4 {
 
     @Ozaman("^Sistem anketi kayıt etmez ve ön tarafa başlangıç tarihi yanlış gibi bir hata mesajı gönderilir$")
     public void sistemAnketiKayıtEtmezVeÖnTarafaBirHataMesajıGönderilir() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        String exceptedErrorMessage = "Start time can not be lower than  current time! ";
-        assertTrue(initialData.checkErrorMessages(exceptedErrorMessage, initialData.survey));
+
+        String exceptedErrorMessage = initialData.env.getProperty("survey.startTime-before-now");
+        assertTrue(initialData.checkCreateSurveyErrorMessages(exceptedErrorMessage, initialData.survey));
     }
 }

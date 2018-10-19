@@ -1,12 +1,16 @@
 package javaday.istanbul.sliconf.micro.survey;
 
-public class SurveyException extends RuntimeException {
+import java.util.Objects;
+
+public class GeneralException extends RuntimeException {
 
     private final transient Object rejectedValue;
-    public SurveyException(String message, Object rejectedValue) {
+
+    public GeneralException(String message, Object rejectedValue) {
         super(message);
-        this.rejectedValue = rejectedValue != null ? rejectedValue : "null";
+        this.rejectedValue = Objects.nonNull(rejectedValue) ? rejectedValue : "null";
     }
+
     @Override
     public final String getMessage() {
         return super.getMessage();

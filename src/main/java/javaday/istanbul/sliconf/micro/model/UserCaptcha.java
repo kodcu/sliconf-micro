@@ -5,11 +5,11 @@ import lombok.Setter;
 
 /**
  * Created by ttayfur on 19/12/17.
- *
+ * <p>
  * Login sirasinda robot kontrolunde kullanilan captca nesnesi
- *
  */
-@Getter @Setter
+@Getter
+@Setter
 public class UserCaptcha {
 
     private String username;

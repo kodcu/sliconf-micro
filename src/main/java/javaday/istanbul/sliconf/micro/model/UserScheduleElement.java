@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by ttayfur on 13/3/17.
- *
+ * <p>
  * Kullanicinin katilacagi etkinligi tutan nesne
  */
 @Document(collection = "userSchedules")

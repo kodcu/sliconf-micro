@@ -1,10 +1,8 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.tr.Fakat;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +22,8 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class AAA3 {
+public class AAA3 { // NOSONAR
 
-    @Autowired
-    SurveyService surveyService;
     @Autowired
     private InitialData initialData;
 
@@ -41,8 +37,8 @@ public class AAA3 {
     @Ozaman("^Sistem anketi kayıt etmez ve ön tarafa hatali başlangıç tarihi gibi bir hata mesajı gönderilir$")
     public void sistemAnketiKayıtEtmezVeÖnTarafaHataliBaşlangıçTarihiGibiBirHataMesajıGönderilir() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        String exceptedErrorMessage = "Invalid localDateTime! ";
-        assertTrue(initialData.checkErrorMessages(exceptedErrorMessage, initialData.survey));
+        String exceptedErrorMessage = initialData.env.getProperty("survey.localDateTime.invalid");
+        assertTrue(initialData.checkCreateSurveyErrorMessages(exceptedErrorMessage, initialData.survey));
     }
 
     @Fakat("^Anketin bitiş tarihi uygun formatta değil ise$")
@@ -55,8 +51,8 @@ public class AAA3 {
     @Ozaman("^Sistem anketi kayıt etmez ve ön tarafa hatali bitiş tarihi gibi bir hata mesajı gönderilir$")
     public void sistemAnketiKayıtEtmezVeÖnTarafaHataliBitişTarihiGibiBirHataMesajıGönderilir() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        String exceptedErrorMessage = "Invalid localDateTime! ";
-        assertTrue(initialData.checkErrorMessages(exceptedErrorMessage, initialData.survey));
+        String exceptedErrorMessage = initialData.env.getProperty("survey.localDateTime.invalid");
+        assertTrue(initialData.checkCreateSurveyErrorMessages(exceptedErrorMessage, initialData.survey));
     }
 
 }

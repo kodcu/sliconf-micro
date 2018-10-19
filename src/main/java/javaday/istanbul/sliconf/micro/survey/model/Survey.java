@@ -2,11 +2,11 @@ package javaday.istanbul.sliconf.micro.survey.model;
 
 import io.swagger.annotations.ApiModel;
 import javaday.istanbul.sliconf.micro.survey.validator.ValidSurveyLocalDateTime;
-import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyQuestionValidatorGroup;
 import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyLocalDateTimeValidatorGroup;
+import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyQuestionValidatorGroup;
 import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyValidatorGroup;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
@@ -23,8 +23,8 @@ import java.util.List;
 @CompoundIndexes(
         @CompoundIndex(def = "{'id':1}")
 )
-@Getter
-@Setter
+@Builder
+@Data
 
 // anketin baslangic ve bitis tarihini kontrol icin custom validation.
 @ValidSurveyLocalDateTime(groups = SurveyLocalDateTimeValidatorGroup.class)
@@ -46,7 +46,7 @@ public class Survey implements Serializable {
     @NotBlank(message = "{survey.eventKey.blank}", groups = SurveyValidatorGroup.class)
     private String eventKey;
 
-    @Pattern(regexp = "^\\d+\\d$",  message = "{survey.localDateTime.invalid}", groups = SurveyValidatorGroup.class)
+    @Pattern(regexp = "^\\d+\\d$", message = "{survey.localDateTime.invalid}", groups = SurveyValidatorGroup.class)
     private String startTime;
 
     @Pattern(regexp = "^\\d+\\d$", message = "{survey.localDateTime.invalid}", groups = SurveyValidatorGroup.class)
@@ -62,4 +62,5 @@ public class Survey implements Serializable {
 
     @NotEmpty(message = "{survey.questions.empty}", groups = SurveyQuestionValidatorGroup.class)
     private List<Question> questions;
+
 }

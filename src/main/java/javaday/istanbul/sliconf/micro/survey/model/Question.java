@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.survey.model;
 
 import javaday.istanbul.sliconf.micro.survey.validator.groups.SurveyQuestionValidatorGroup;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
 
@@ -11,9 +11,8 @@ import java.io.Serializable;
 import java.util.List;
 
 
-@Getter
-@Setter
-
+@Data
+@Builder
 public class Question implements Serializable {
 
     @Id

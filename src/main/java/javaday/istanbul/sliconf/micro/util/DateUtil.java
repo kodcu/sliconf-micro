@@ -11,10 +11,10 @@ public class DateUtil {
 
     /**
      * Eger firstDateTime ve ya SecondDateTime null ise false doner
-     *
+     * <p>
      * Eger firstDateTime ve SecondDateTime null degil ise
      * firstDateTime, secondDateTime a esit ve ya once ise true doner
-     *
+     * <p>
      * Eger firstDateTime ve SecondDateTime null degil ise
      * firstDateTime, secondDateTime a esit ve ya once degil ise false doner
      *

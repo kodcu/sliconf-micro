@@ -27,7 +27,9 @@ public class EventRepositoryService implements EventService {
     @Autowired
     protected EventStateService eventStateService;
 
-    public Optional<Event> findById(String id) { return repo.findById(id); }
+    public Optional<Event> findById(String id) {
+        return repo.findById(id);
+    }
 
     public Event findOne(String id) {
         return repo.findOne(id);

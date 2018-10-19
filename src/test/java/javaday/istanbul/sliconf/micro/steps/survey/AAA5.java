@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.tr.Fakat;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
@@ -25,10 +24,8 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class AAA5 {
+public class AAA5 { // NOSONAR
 
-    @Autowired
-    SurveyService surveyService;
     @Autowired
     private InitialData initialData;
 
@@ -47,8 +44,8 @@ public class AAA5 {
 
     @Ozaman("^Sistem anketi kayıt etmez ve ön tarafa hatalı başlangıç-bitiş tarihi gibi bir hata mesajı gönderilir$")
     public void sistemAnketiKayıtEtmezVeÖnTarafaHatalıBaşlangıçBitişTarihiGibiBirHataMesajıGönderilir() throws Throwable {
-        String exceptedErrorMessage = "Start time can not be greater than end time! ";
-        assertTrue(initialData.checkErrorMessages(exceptedErrorMessage, initialData.survey));
+        String exceptedErrorMessage = initialData.env.getProperty("survey.startAndEndTime.invalid");
+        assertTrue(initialData.checkCreateSurveyErrorMessages(exceptedErrorMessage, initialData.survey));
 
 
     }

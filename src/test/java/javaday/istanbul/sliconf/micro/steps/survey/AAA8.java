@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.tr.Fakat;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.CucumberConfiguration;
@@ -26,10 +25,8 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 @SpringBootTest
 @ActiveProfiles("test")
-public class AAA8 {
+public class AAA8 { // NOSONAR
 
-    @Autowired
-    SurveyService surveyService;
     @Autowired
     private InitialData initialData;
 
@@ -44,7 +41,7 @@ public class AAA8 {
 
     @Ozaman("^Sistem anketi kayıt etmez ve ön tarafa sorular en az 2 şık içermeli gibi bir hata mesajı gönderilir$")
     public void sistemAnketiKayıtEtmezVeÖnTarafaSorularEnAz2ŞıkİçermeliGibiBirHataMesajıGönderilir() throws Throwable {
-        String exceptedErrorMessage = "Survey question must have to at least 2 question option! ";
-        assertTrue(initialData.checkErrorMessages(exceptedErrorMessage, initialData.survey));
+        String exceptedErrorMessage = initialData.env.getProperty("survey.question.questionOptions.size");
+        assertTrue(initialData.checkCreateSurveyErrorMessages(exceptedErrorMessage, initialData.survey));
     }
 }

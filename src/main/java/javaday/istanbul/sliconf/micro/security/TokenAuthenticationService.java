@@ -40,8 +40,6 @@ public class TokenAuthenticationService {
     private final DistributedMapProvider distributedMapProvider;
 
 
-
-
     public String addAuthentication(HttpServletResponse res, User user) {
         Date date = Date.from(Instant.now(Clock.system(
                 ZoneId.of("Asia/Istanbul")
@@ -117,14 +115,14 @@ public class TokenAuthenticationService {
                 Object user = claims.get("user", Object.class);
 
                 IMap<String, SecurityToken> securityTokenMap = distributedMapProvider.getSecurityTokenMap(SECURITY_TOKENS);
-                    if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
-                        SecurityToken securityToken = securityTokenMap.get(username);
+                if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
+                    SecurityToken securityToken = securityTokenMap.get(username);
 
-                        if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
-                                Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
-                            return generateAuthentication(username, role, user);
-                        }
+                    if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
+                            Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
+                        return generateAuthentication(username, role, user);
                     }
+                }
 
 
             } catch (ExpiredJwtException | UnsupportedJwtException |

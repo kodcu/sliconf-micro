@@ -83,7 +83,7 @@ public class GetStatisticsRoute implements Route {
         if (Objects.nonNull(event.getAgenda())) {
             List<AgendaElement> agendaElements = event.getAgenda().stream()
                     .filter(agendaElement -> Objects.nonNull(agendaElement) &&
-                    Objects.nonNull(agendaElement.getId()) && agendaElement.getId().equals(mostCommentedSessionId))
+                            Objects.nonNull(agendaElement.getId()) && agendaElement.getId().equals(mostCommentedSessionId))
                     .collect(Collectors.toList());
 
             if (Objects.nonNull(agendaElements) && !agendaElements.isEmpty() && Objects.nonNull(agendaElements.get(0))) {
