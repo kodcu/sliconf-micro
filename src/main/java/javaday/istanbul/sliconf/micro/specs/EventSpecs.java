@@ -133,7 +133,7 @@ public class EventSpecs {
                     Objects.isNull(event.getAbout().getLocation().getDescription()) ||
                     Objects.isNull(event.getAbout().getLocation().getLat()) ||
                     Objects.isNull(event.getAbout().getLocation().getLng()) ||
-                    Objects.isNull(event.getAbout().getVenue().getLng()) ||
+                    Objects.isNull(event.getAbout().getVenue().getVenue()) ||
                     event.getAbout().getLocation().getDescription().isEmpty() ||
                     event.getAbout().getLocation().getLng().isEmpty() ||
                     event.getAbout().getLocation().getLat().isEmpty() ||
