@@ -1,8 +1,8 @@
-package javaday.istanbul.sliconf.micro.steps;
+package javaday.istanbul.sliconf.micro.steps.other;
 
 
 import cucumber.api.java.tr.Diyelimki;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.builder.EventBuilder;
 import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRoute;
 import javaday.istanbul.sliconf.micro.model.User;
@@ -16,12 +16,8 @@ import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import javaday.istanbul.sliconf.micro.util.TestUtil;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,13 +26,8 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class AddSpeakerTest {// NOSONAR
+@Ignore
+public class AddSpeakerTest extends SpringBootTestConfig { // NOSONAR
 
 
     @Autowired

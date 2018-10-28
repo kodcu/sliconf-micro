@@ -1,31 +1,21 @@
-package javaday.istanbul.sliconf.micro.steps;
+package javaday.istanbul.sliconf.micro.steps.other;
 
 import com.couchbase.client.java.document.json.JsonObject;
-import cucumber.api.java.Before;
 import cucumber.api.java.tr.Diyelimki;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.controller.login.LoginUserRoute;
 import javaday.istanbul.sliconf.micro.controller.login.UpdateUserRoute;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class UpdateUserTest {// NOSONAR
+@Ignore
+public class UpdateUserTest extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     UserRepositoryService userRepositoryService;
@@ -92,7 +82,6 @@ public class UpdateUserTest {// NOSONAR
         ResponseMessage responseMessageUpdateDiffId = updateUserRoute.updateUser(updateParamsDiffrentId);
 
 
-
         User loginUser = new User();
         loginUser.setUsername("osmanbaykalUpdate");
         loginUser.setEmail("osmanUpdate@baykal.com");
@@ -136,7 +125,6 @@ public class UpdateUserTest {// NOSONAR
         loginUser1.setPassword("tlp123123");
         loginUser1.setUsername("username133123");
         ResponseMessage responseMessageLogin6 = loginUserRoute.loginUser(loginUser1);
-
 
 
         // Then

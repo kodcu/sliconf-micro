@@ -2,27 +2,15 @@ package javaday.istanbul.sliconf.micro.steps.survey;
 
 import cucumber.api.java.tr.Fakat;
 import cucumber.api.java.tr.Ozaman;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
-import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
-import lombok.extern.slf4j.Slf4j;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@Slf4j
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class AAA3 { // NOSONAR
+@Ignore
+public class AAA3 extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     private InitialData initialData;
@@ -38,7 +26,7 @@ public class AAA3 { // NOSONAR
     public void sistemAnketiKayıtEtmezVeÖnTarafaHataliBaşlangıçTarihiGibiBirHataMesajıGönderilir() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         String exceptedErrorMessage = initialData.env.getProperty("survey.localDateTime.invalid");
-        assertTrue(initialData.checkCreateSurveyErrorMessages(exceptedErrorMessage, initialData.survey));
+        assertTrue(initialData.checkSurveyCreateErrorMessages(exceptedErrorMessage, initialData.survey));
     }
 
     @Fakat("^Anketin bitiş tarihi uygun formatta değil ise$")
@@ -52,7 +40,7 @@ public class AAA3 { // NOSONAR
     public void sistemAnketiKayıtEtmezVeÖnTarafaHataliBitişTarihiGibiBirHataMesajıGönderilir() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         String exceptedErrorMessage = initialData.env.getProperty("survey.localDateTime.invalid");
-        assertTrue(initialData.checkCreateSurveyErrorMessages(exceptedErrorMessage, initialData.survey));
+        assertTrue(initialData.checkSurveyCreateErrorMessages(exceptedErrorMessage, initialData.survey));
     }
 
 }

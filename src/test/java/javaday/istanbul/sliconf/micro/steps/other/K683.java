@@ -1,10 +1,10 @@
-package javaday.istanbul.sliconf.micro.steps;
+package javaday.istanbul.sliconf.micro.steps.other;
 
 import cucumber.api.java.Before;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.builder.UserBuilder;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
@@ -13,60 +13,39 @@ import javaday.istanbul.sliconf.micro.service.PasswordResetService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.token.TokenRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.*;
 
-
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class K683 {
-
-    @Autowired
-    private EventRepositoryService eventRepositoryService;
-
-    @Autowired
-    private UserRepositoryService userRepositoryService;
-
-    @Autowired
-    private TokenRepositoryService tokenRepositoryService;
-
-    @Autowired
-    private PasswordResetService passwordResetService;
-
-    private User user;
-
-    private String email1 = "osman15@osman.com";
-    private boolean result1 = true;
-
-    private String email2 = "osman123@osman.com";
-    private boolean result2 = true;
-
-    private String email3 = "osman.osman.com";
-    private boolean result3 = false;
-
-    private String email4 = "osman@osman";
-    private boolean result4 = false;
-
-    private String email5 = "osman@osman.com.tr";
-    private boolean result5 = true;
-
-    private String email6 = "osman_uykulu-1a@osman.com";
-    private boolean result6 = true;
-
-    private boolean isPassworForgetten = true;
+@Ignore
+public class K683 extends SpringBootTestConfig {
 
     Token token;
     Token token1;
     Token token2;
+    @Autowired
+    private EventRepositoryService eventRepositoryService;
+    @Autowired
+    private UserRepositoryService userRepositoryService;
+    @Autowired
+    private TokenRepositoryService tokenRepositoryService;
+    @Autowired
+    private PasswordResetService passwordResetService;
+    private User user;
+    private String email1 = "osman15@osman.com";
+    private boolean result1 = true;
+    private String email2 = "osman123@osman.com";
+    private boolean result2 = true;
+    private String email3 = "osman.osman.com";
+    private boolean result3 = false;
+    private String email4 = "osman@osman";
+    private boolean result4 = false;
+    private String email5 = "osman@osman.com.tr";
+    private boolean result5 = true;
+    private String email6 = "osman_uykulu-1a@osman.com";
+    private boolean result6 = true;
+    private boolean isPassworForgetten = true;
 
     @Before
     public void init() {

@@ -3,32 +3,22 @@ package javaday.istanbul.sliconf.micro.steps.survey;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.util.SurveyGenerator;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-@Slf4j
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class GetSurveysTest { // NOSONAR
+@Ignore
+public class GetSurveysTest extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     InitialData initialData;

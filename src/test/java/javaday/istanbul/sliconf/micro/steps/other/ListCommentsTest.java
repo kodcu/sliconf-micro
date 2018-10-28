@@ -1,7 +1,7 @@
-package javaday.istanbul.sliconf.micro.steps;
+package javaday.istanbul.sliconf.micro.steps.other;
 
 import cucumber.api.java.tr.Diyelimki;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.builder.EventBuilder;
 import javaday.istanbul.sliconf.micro.controller.event.comment.AddNewCommentRoute;
 import javaday.istanbul.sliconf.micro.controller.event.comment.ListCommentsRoute;
@@ -14,12 +14,8 @@ import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import javaday.istanbul.sliconf.micro.util.TestUtil;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,13 +24,8 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class ListCommentsTest {// NOSONAR
+@Ignore
+public class ListCommentsTest extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     UserRepositoryService userRepositoryService;
@@ -146,7 +137,7 @@ public class ListCommentsTest {// NOSONAR
         ResponseMessage listMessage1 = listCommentsRoute.listComments(eventId, "agenda-element-1", userId, "pending", "0", null, null); // true
         ResponseMessage listMessage2 = listCommentsRoute.listComments(eventId, "agenda-element-1", "", "pending", "0", null, null); // true
         ResponseMessage listMessage3 = listCommentsRoute.listComments(eventId, "", userId, "", "0", null, null); // false
-        ResponseMessage listMessage4 = listCommentsRoute.listComments(eventId, "", "","", "0", null, null); // false
+        ResponseMessage listMessage4 = listCommentsRoute.listComments(eventId, "", "", "", "0", null, null); // false
 
         ResponseMessage listMessage5 = listCommentsRoute.listComments("", "agenda-element-1", userId, "approved", "0", null, null); // false
         ResponseMessage listMessage6 = listCommentsRoute.listComments("", "agenda-element-1", "", "approved", "0", null, null); // false

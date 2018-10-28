@@ -28,7 +28,7 @@
     Fakat En az 1 adet soruya cevap içermiyor ise
     O zaman Sistem cevabı kayıt etmez ve kullanıcıya en az 1 soru cevaplanmalı şeklinde bir uyarı mesajı gönderir
 
-  Senaryo: AAB6 -  Kullanıcı etkinlikteki bir ankete cevap veriyor
+  Senaryo: AAB9 -  Kullanıcı etkinlikteki bir ankete cevap veriyor
     Diyelim ki Kullanıcı etkinlikteki bir ankete cevap vermek istiyor
     Eğer ki Kullanıcı sistemde mevcut olan etkinlikteki bir ankete cevap vermek istiyor ise
     Ve Kullanıcı ankete daha önceden cevap vermemiş ise

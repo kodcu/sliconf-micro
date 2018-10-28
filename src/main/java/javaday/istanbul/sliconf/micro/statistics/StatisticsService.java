@@ -4,7 +4,6 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,12 +15,9 @@ import java.util.List;
 @Service
 public class StatisticsService {
 
-    private final EventRepositoryService eventRepositoryService;
-
     private final GeneralService generalService;
 
-
-    ResponseMessage getEventSessionsStatistics(String eventKey) {
+    public ResponseMessage getEventSessionsStatistics(String eventKey) {
 
         Event event = (Event) generalService.findEventByIdOrEventKey(eventKey).getReturnObject();
         List<AgendaElement> agendaElements = new ArrayList<>(event.getAgenda());
@@ -29,12 +25,14 @@ public class StatisticsService {
         List<EventSessionStatisticsDTO> eventSessionStatisticsDTOList = new ArrayList<>();
 
         agendaElements.forEach(agendaElement -> speakers.forEach(speaker -> {
+
             if (agendaElement.getSpeaker().equals(speaker.getId())) {
+
                 EventSessionStatisticsDTO eventSessionStatisticsDTO = new EventSessionStatisticsDTO();
                 eventSessionStatisticsDTO.setPhoto(speaker.getProfilePicture());
                 String average = String.valueOf(agendaElement.getStar());
                 eventSessionStatisticsDTO.setAverage(average);
-                eventSessionStatisticsDTO.setCount(String.valueOf(agendaElement.getVoteCount()));
+                eventSessionStatisticsDTO.setVoteCount(String.valueOf(agendaElement.getVoteCount()));
                 eventSessionStatisticsDTO.setTopic(agendaElement.getTopic());
                 eventSessionStatisticsDTO.setWorkingAt(speaker.getWorkingAt());
                 eventSessionStatisticsDTO.setSpeaker(speaker.getName());

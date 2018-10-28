@@ -1,43 +1,31 @@
-package javaday.istanbul.sliconf.micro.steps;
+package javaday.istanbul.sliconf.micro.steps.other;
 
 import cucumber.api.java.tr.Diyelimki;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.builder.EventBuilder;
 import javaday.istanbul.sliconf.micro.controller.event.agenda.VoteAgendaElementRoute;
-import javaday.istanbul.sliconf.micro.controller.event.comment.AddNewCommentRoute;
-import javaday.istanbul.sliconf.micro.controller.event.comment.VoteCommentRoute;
 import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.event.*;
+import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.model.event.Floor;
+import javaday.istanbul.sliconf.micro.model.event.Room;
+import javaday.istanbul.sliconf.micro.model.event.Speaker;
 import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.service.comment.CommentRepositoryService;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
 import javaday.istanbul.sliconf.micro.util.TestUtil;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
-import spark.Request;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class VoteAgendaElementTest {// NOSONAR
+@Ignore
+public class VoteAgendaElementTest extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     UserRepositoryService userRepositoryService;
@@ -119,9 +107,6 @@ public class VoteAgendaElementTest {// NOSONAR
         ResponseMessage responseMessage10 = voteAgendaElementRoute.voteAgenda(eventId, agendaElementId, userId2, "4");
 
 
-
-
-
         // Then
         assertFalse(responseMessage1.isStatus());
         assertFalse(responseMessage2.isStatus());
@@ -137,7 +122,7 @@ public class VoteAgendaElementTest {// NOSONAR
 
         AgendaElement agendaElement1 = (AgendaElement) responseMessage10.getReturnObject();
 
-        assertEquals(4.5,agendaElement1.getStar(), 0.01);
+        assertEquals(4.5, agendaElement1.getStar(), 0.01);
         assertEquals(2, agendaElement1.getVoteCount());
 
         ResponseMessage responseMessage11 = voteAgendaElementRoute.voteAgenda(eventId, agendaElementId, userId2, "2");

@@ -5,22 +5,17 @@ import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import cucumber.api.java.tr.Ve;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.model.Question;
 import javaday.istanbul.sliconf.micro.survey.model.QuestionOption;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.util.Constants;
-import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsEmptyCollection;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -28,16 +23,10 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.*;
 
-@Slf4j
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class UpdateSurveyTest { // NOSONAR
+@Ignore
+public class UpdateSurveyTest extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     InitialData initialData;
@@ -148,8 +137,8 @@ public class UpdateSurveyTest { // NOSONAR
     public void güncellenenAnkettekiSoruŞıklarınınIsimleriGeçerliIse() throws Throwable {
 
         survey.getQuestions()
-              .forEach(question -> question.getOptions()
-              .forEach(questionOption -> assertThat(questionOption.getText(), Matchers.not(isEmptyString()))));
+                .forEach(question -> question.getOptions()
+                        .forEach(questionOption -> assertThat(questionOption.getText(), Matchers.not(isEmptyString()))));
 
     }
 

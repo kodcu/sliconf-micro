@@ -46,7 +46,7 @@ public class InitialData { // NOSONAR
         return (exceptedErrorMessage.equals(returnedErrorMessage));
     }
 
-    boolean checkCreateSurveyErrorMessages(String exceptedErrorMessage, Survey invalidSurvey) {
+    boolean checkSurveyCreateErrorMessages(String exceptedErrorMessage, Survey invalidSurvey) {
         ResponseMessage responseMessage;
         responseMessage = surveyService.addNewSurvey(invalidSurvey, event.getKey());
         String[] message = responseMessage.getMessage().split(" -->");
@@ -59,10 +59,9 @@ public class InitialData { // NOSONAR
         exceptedErrorMessage += " -->";
         String[] message = responseMessage.getMessage().split(" -->");
         return checkErrorMessages(exceptedErrorMessage, message[0]);
-
     }
 
-    boolean checkCreateAnswerErrorMessages(String exceptedErrorMessage, String returnedErrorMessage) {
+    boolean checkAnswerCreateErrorMessages(String exceptedErrorMessage, String returnedErrorMessage) {
         String[] message = returnedErrorMessage.split(" -->");
         return checkErrorMessages(exceptedErrorMessage, message[0]);
     }

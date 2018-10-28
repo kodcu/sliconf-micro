@@ -1,32 +1,23 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
-import com.google.gson.JsonSyntaxException;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import cucumber.api.java.tr.Ve;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.GeneralException;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
-import javaday.istanbul.sliconf.micro.survey.model.Question;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.util.SurveyGenerator;
 import javaday.istanbul.sliconf.micro.survey.util.SurveyUtil;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsEmptyCollection;
-import org.junit.Rule;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.ExpectedException;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -36,13 +27,8 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.*;
 
-@Slf4j
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class AAA1 { // NOSONAR
+@Ignore
+public class AAA1 extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     InitialData initialData;
@@ -59,7 +45,7 @@ public class AAA1 { // NOSONAR
         String jsonTestBody = "{q!@!#!#$!@$}";
         try {
             JsonUtil.fromJsonOrElseThrow(jsonTestBody, Survey.class);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             assertEquals(e.getClass().getName(), GeneralException.class.getName());
         }
     }

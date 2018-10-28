@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
 import cucumber.api.java.tr.*;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.AnswerRepository;
@@ -15,15 +15,10 @@ import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.service.AnswerService;
 import javaday.istanbul.sliconf.micro.survey.util.SurveyGenerator;
 import javaday.istanbul.sliconf.micro.survey.util.SurveyUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Map;
 import java.util.Objects;
@@ -32,13 +27,8 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-@Slf4j
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class SubmitAnswersTest { // NOSONAR
+@Ignore
+public class SubmitAnswersTest extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     InitialData initialData;
@@ -247,7 +237,7 @@ public class SubmitAnswersTest { // NOSONAR
 
         responseMessage = answerService.answerSurvey(answer, initialData.survey.getId(), answer.getEventId());
         String exceptedMessage = initialData.env.getProperty("survey.answers.empty");
-        assertTrue(initialData.checkCreateAnswerErrorMessages(exceptedMessage, responseMessage.getMessage()));
+        assertTrue(initialData.checkAnswerCreateErrorMessages(exceptedMessage, responseMessage.getMessage()));
 
         answer.setAnsweredQuestions(tempAnsweredQuestions);
     }

@@ -2,29 +2,18 @@ package javaday.istanbul.sliconf.micro.steps.survey;
 
 import cucumber.api.java.tr.Fakat;
 import cucumber.api.java.tr.Ozaman;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
-import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
-import lombok.extern.slf4j.Slf4j;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import org.hamcrest.collection.IsEmptyCollection;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-@Slf4j
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class AAA6 { // NOSONAR
+@Ignore
+public class AAA6 extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     private InitialData initialData;
@@ -39,6 +28,6 @@ public class AAA6 { // NOSONAR
     @Ozaman("^Sistem anketi kayıt etmez ve ön tarafa ankette en az bir soru olmalı gibi bir hata mesajı gönderilir$")
     public void sistemAnketiKayıtEtmezVeÖnTarafaAnketteEnAzBirSoruOlmalıGibiBirHataMesajıGönderilir() throws Throwable {
         String exceptedErrorMessage = initialData.env.getProperty("survey.questions.empty");
-        assertTrue(initialData.checkCreateSurveyErrorMessages(exceptedErrorMessage, initialData.survey));
+        assertTrue(initialData.checkSurveyCreateErrorMessages(exceptedErrorMessage, initialData.survey));
     }
 }

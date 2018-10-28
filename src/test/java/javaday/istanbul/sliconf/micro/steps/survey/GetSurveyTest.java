@@ -1,29 +1,19 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
 import cucumber.api.java.tr.*;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.GeneralException;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
-import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.*;
 
-@Slf4j
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class GetSurveyTest { // NOSONAR
+@Ignore
+public class GetSurveyTest extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     InitialData initialData;
@@ -41,7 +31,7 @@ public class GetSurveyTest { // NOSONAR
         try {
             generalService.findUserById(initialData.user.getId());
 
-        } catch (GeneralException exp){
+        } catch (GeneralException exp) {
             fail();
         }
     }

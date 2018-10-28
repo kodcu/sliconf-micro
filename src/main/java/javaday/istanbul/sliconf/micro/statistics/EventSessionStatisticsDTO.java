@@ -11,7 +11,7 @@ public class EventSessionStatisticsDTO {
     private String speaker;
     private String workingAt;
     private String topic;
-    private String count;
+    private String voteCount;
     private String average;
 
 }
