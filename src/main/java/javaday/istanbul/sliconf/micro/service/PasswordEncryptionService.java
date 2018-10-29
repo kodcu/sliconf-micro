@@ -19,7 +19,7 @@ public class PasswordEncryptionService {
     // specifically names SHA-1 as an acceptable hashing algorithm for PBKDF2
     private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
 
-    // Pick an iteration count that works for you. The NIST recommends at
+    // Pick an iteration voteCount that works for you. The NIST recommends at
     // least 1,000 iterations:
     // http://csrc.nist.gov/publications/nistpubs/800-132/nist-sp800-132.pdf
     // iOS 4.x reportedly uses 10,000:

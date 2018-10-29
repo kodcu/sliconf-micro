@@ -3,11 +3,8 @@ package javaday.istanbul.sliconf.micro.survey.service;
 import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.AnswerRepository;
-import javaday.istanbul.sliconf.micro.survey.SurveyException;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
-import javaday.istanbul.sliconf.micro.survey.model.Question;
-import javaday.istanbul.sliconf.micro.survey.model.QuestionOption;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.util.SurveyUtil;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidator;
@@ -20,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -50,40 +45,14 @@ public class AnswerService {
         Survey survey = (Survey) generalService.findSurveyById(surveyId).getReturnObject();
         answer.setSurveyId(survey.getId());
 
-        List<Object> validatingObjects = new ArrayList<>();
-        validatingObjects.add(answer);
-        responseMessage = surveyValidator.validate(validatingObjects, SurveyValidatorSequence.class);
-        if (!responseMessage.isStatus()) {
-            return responseMessage;
-        }
-
-        boolean alreadyAnswered = this.checkIfUserAlreadyAnsweredSurvey(answer.getUserId(), surveyId).isStatus();
-        if (alreadyAnswered) {
+        if (SurveyUtil.checkIfUserAlreadyAnsweredSurvey(answer.getUserId(), surveyId, answerRepository).isStatus()) {
+            responseMessage = new ResponseMessage();
             responseMessage.setStatus(false);
             responseMessage.setMessage(surveyMessageProvider.getMessage("surveyAlreadyAnswered"));
             responseMessage.setReturnObject(answer);
             return responseMessage;
         }
 
-        SurveyUtil.checkAnsweredQuestions(survey, answer, surveyMessageProvider);
-        SurveyUtil.updateSurveyVoteCount(answer, survey);
-
-        surveyService.updateSurvey(survey, eventIdentifier);
-        answerRepository.save(answer);
-
-        responseMessage.setStatus(true);
-        responseMessage.setMessage(surveyMessageProvider.getMessage("surveyAnsweredSuccessfully"));
-        responseMessage.setReturnObject(answer);
-        return responseMessage;
-    }
-    @Transactional
-    public ResponseMessage updateSurveyAnswers(Answer answer) {
-        ResponseMessage responseMessage;
-
-        generalService.findUserById(answer.getUserId());
-        this.findAnswerById(answer.getId());
-        generalService.findSurveyById(answer.getSurveyId());
-
         List<Object> validatingObjects = new ArrayList<>();
         validatingObjects.add(answer);
         responseMessage = surveyValidator.validate(validatingObjects, SurveyValidatorSequence.class);
@@ -91,6 +60,11 @@ public class AnswerService {
             return responseMessage;
         }
 
+        SurveyUtil.checkAnsweredQuestions(survey, answer, surveyMessageProvider);
+
+        SurveyUtil.updateSurveyVoteCount(answer, survey);
+
+        surveyService.updateSurvey(survey, eventIdentifier);
         answerRepository.save(answer);
 
         responseMessage.setStatus(true);
@@ -120,29 +94,7 @@ public class AnswerService {
         responseMessage.setStatus(true);
         responseMessage.setReturnObject(answers);
         responseMessage.setMessage("Users answers of surveys in specific events listed, if any.");
-        return  responseMessage;
-    }
-
-
-
-    private ResponseMessage checkIfUserAlreadyAnsweredSurvey(String userId, String surveyId) {
-
-        ResponseMessage responseMessage = new ResponseMessage();
-        Answer answer = answerRepository.findByUserIdAndSurveyId(userId, surveyId).orElse(null);
-
-        responseMessage.setStatus(!Objects.isNull(answer));
         return responseMessage;
-    }
-
-
-    private void findAnswerById(String answerId) {
-        if(!answerRepository.findById(answerId).isPresent()) {
-            log.error("Answer not found by id: {}", answerId);
-            String message = surveyMessageProvider.getMessage("answerCanNotFoundWithGivenId");
-            throw  new SurveyException(message, answerId);
-        }
-
-
     }
 
     // Removes answers of deleted survey.

@@ -136,7 +136,7 @@ public class CreateSponsorRoute implements Route {
 
                 if (Objects.nonNull(tag.getKey()) && tag.getKey().contains("|")) {
                     int parserIndex = tag.getKey().indexOf('|');
-                    indexKey = tag.getKey().substring(0,parserIndex);
+                    indexKey = tag.getKey().substring(0, parserIndex);
 
                 }
 

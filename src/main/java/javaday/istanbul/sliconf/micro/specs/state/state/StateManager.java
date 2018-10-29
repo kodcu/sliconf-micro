@@ -39,15 +39,15 @@ public class StateManager {
         }
 
         if (!isRoomCountValid(newEvent.getRooms(), baseEventState.getRoomCount())) {
-            return new ResponseMessage(false, "Room count must be equal or below at " + baseEventState.getRoomCount(), "");
+            return new ResponseMessage(false, "Room voteCount must be equal or below at " + baseEventState.getRoomCount(), "");
         }
 
         if (!isSessionCountValid(newEvent.getAgenda(), baseEventState.getSessionCount())) {
-            return new ResponseMessage(false, "Session count must be equal or below at " + baseEventState.getSessionCount(), "");
+            return new ResponseMessage(false, "Session voteCount must be equal or below at " + baseEventState.getSessionCount(), "");
         }
 
         if (!isParticipiantCountValid(newEvent.getTotalUsers(), baseEventState.getParticipantCount())) {
-            return new ResponseMessage(false, "Participiant count must be equal or below at " + baseEventState.getParticipantCount(), "");
+            return new ResponseMessage(false, "Participiant voteCount must be equal or below at " + baseEventState.getParticipantCount(), "");
         }
 
         return new ResponseMessage(true, "Event state is valid", "");

@@ -2,7 +2,6 @@ package javaday.istanbul.sliconf.micro.survey.controller.survey;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.survey.SurveyException;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
@@ -18,7 +17,7 @@ import javax.ws.rs.Produces;
 import java.util.Objects;
 
 @AllArgsConstructor
-@Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
+@Api(value = "survey", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/events/:eventIdentifier/surveys")
 @Produces("application/json")
 @Component
@@ -54,12 +53,8 @@ public class UpdateSurvey implements Route {
             return responseMessage;
         }
 
-        Survey survey;
-        try {
-            survey = JsonUtil.fromJson(body, Survey.class);
-        } catch (Exception e) {
-            throw  new SurveyException(e.getMessage(), e.getCause());
-        }
+        Survey survey = JsonUtil.fromJsonOrElseThrow(body, Survey.class);
+
         responseMessage = surveyService.updateSurvey(survey, eventIdentifier);
         return responseMessage;
 

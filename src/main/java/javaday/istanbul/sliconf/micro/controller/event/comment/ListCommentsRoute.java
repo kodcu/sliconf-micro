@@ -49,7 +49,7 @@ public class ListCommentsRoute implements Route {
             @ApiImplicitParam(required = true, dataType = "string", name = "sessionId", paramType = "path"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "userId", paramType = "path"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "status", paramType = "path", example = "denied, pending, approved"), //
-            @ApiImplicitParam(dataType = "int", name = "count", paramType = "query"), //
+            @ApiImplicitParam(dataType = "int", name = "voteCount", paramType = "query"), //
             @ApiImplicitParam(dataType = "string", name = "type", paramType = "query", example = "top-rated, recent, oldest"), //
             @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", example = "1,2,5,10,100"), //
             @ApiImplicitParam(dataType = "string", name = "clientType", paramType = "query", example = "web"), //
@@ -68,7 +68,7 @@ public class ListCommentsRoute implements Route {
 
         String status = request.params("status");
 
-        String count = request.queryParams("count");
+        String count = request.queryParams("voteCount");
         String type = request.queryParams("type");
         String page = request.queryParams("page");
         String clientType = request.queryParams("clientType");

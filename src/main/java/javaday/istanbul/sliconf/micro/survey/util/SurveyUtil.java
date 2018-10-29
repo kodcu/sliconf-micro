@@ -2,7 +2,9 @@ package javaday.istanbul.sliconf.micro.survey.util;
 
 
 import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.survey.SurveyException;
+import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.survey.AnswerRepository;
+import javaday.istanbul.sliconf.micro.survey.GeneralException;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
 import javaday.istanbul.sliconf.micro.survey.model.Question;
@@ -19,23 +21,21 @@ import java.util.function.Predicate;
 @Slf4j
 public class SurveyUtil {
 
-    private SurveyUtil() {}
+    private SurveyUtil() {
+    }
 
     public static void generateQuestionIds(Survey survey) {
         survey.getQuestions().forEach(question -> {
-            if (Objects.nonNull(question.getId()))
-                return;
-            question.setId(new ObjectId().toString());
-            question.getOptions()
-                    .forEach(questionOption -> questionOption.setId(new ObjectId().toString()));
-        });
-
-        survey.getQuestions().forEach(question -> {
-            if (Objects.nonNull(question.getId()))
-                return;
             question.setTotalVoters(0);
+            if (Objects.isNull(question.getId()))
+                question.setId(new ObjectId().toString());
+
             question.getOptions()
-                    .forEach(questionOption -> questionOption.setVoters(0));
+                    .forEach(questionOption -> {
+                        questionOption.setVoters(0);
+                        if (Objects.isNull(questionOption.getId()))
+                            questionOption.setId(new ObjectId().toString());
+                    });
         });
     }
 
@@ -72,7 +72,7 @@ public class SurveyUtil {
             if (survey.getQuestions().stream().noneMatch(questionPredicate)) {
                 log.error("Question not found by id: {}", answeredQuestionId);
                 String message = surveyMessageProvider.getMessage("questionCanNotFoundWithGivenId");
-                throw new SurveyException(message, answeredQuestionId);
+                throw new GeneralException(message, answeredQuestionId);
             }
 
             Predicate<QuestionOption> questionOptionPredicate;
@@ -85,10 +85,20 @@ public class SurveyUtil {
                         if (question.getOptions().stream().noneMatch(questionOptionPredicate)) {
                             log.error("Answer does not match with any question option: {}", answeredOption);
                             String message = surveyMessageProvider.getMessage("questionAndAnswerMismatch");
-                            throw new SurveyException(message, answeredOption);
+                            throw new GeneralException(message, answeredOption);
                         }
                     });
         });
+    }
+
+    public static ResponseMessage checkIfUserAlreadyAnsweredSurvey(String userId, String surveyId,
+                                                                   AnswerRepository answerRepository) {
+
+        ResponseMessage responseMessage = new ResponseMessage();
+        Answer answer = answerRepository.findByUserIdAndSurveyId(userId, surveyId).orElse(null);
+
+        responseMessage.setStatus(!Objects.isNull(answer));
+        return responseMessage;
     }
 
     public static void generateDates(Survey survey, Event event) {

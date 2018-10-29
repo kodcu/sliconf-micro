@@ -12,16 +12,12 @@ import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidator;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidatorSequence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -155,18 +151,16 @@ public class SurveyService {
             survey.setViewerList(viewers);
             survey.setViewers(viewers.size());
             this.updateSurvey(survey, eventIdentifier);
-            responseMessage.setMessage("User has added viewerList list");
+            responseMessage.setMessage(surveyMessageProvider.getMessage("userHasAddedSurveyViewerList"));
             responseMessage.setStatus(true);
             responseMessage.setReturnObject(userId);
         } else {
             responseMessage.setReturnObject(userId);
             responseMessage.setStatus(false);
-            responseMessage.setMessage("User already view the survey");
+            responseMessage.setMessage(surveyMessageProvider.getMessage("userAlreadyViewedSurvey"));
         }
         return responseMessage;
     }
-
-
 
 
 }

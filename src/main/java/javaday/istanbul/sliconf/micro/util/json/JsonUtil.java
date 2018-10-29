@@ -4,6 +4,7 @@ package javaday.istanbul.sliconf.micro.util.json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import javaday.istanbul.sliconf.micro.survey.GeneralException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.ResponseTransformer;
@@ -60,9 +61,22 @@ public class JsonUtil {
             }
         } catch (JsonSyntaxException e) {
             logger.error(e.getMessage(), e);
+
         }
 
         return returnList;
+    }
+
+    // json çevirme başarılı olamaz ise ön tarafa ilgili exceptionu döndürür.
+    public static <T> T fromJsonOrElseThrow(String jsonString, Class<T> clazz) {
+        T object = null;
+        try {
+            object = JsonUtil.fromJson(jsonString, clazz);
+        } catch (Exception e) {
+            throw new GeneralException(e.getMessage(), e.getCause());
+        }
+
+        return object;
     }
 
     public static ResponseTransformer json() {

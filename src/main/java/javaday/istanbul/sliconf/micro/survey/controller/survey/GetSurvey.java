@@ -14,19 +14,20 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 @AllArgsConstructor
-@Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
+@Api(value = "survey", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/events/:eventIdentifier/surveys/:surveyId/")
 @Produces("application/json")
 @Component
 public class GetSurvey implements Route {
 
     private final SurveyService surveyService;
+
     @GET
     @ApiOperation(value = "Gets a given survey from specific event.", nickname = "GetSurveyRoute")
     @ApiImplicitParams({ //
             @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header",
                     example = "Authorization: Bearer <tokenValue>"), //
-            @ApiImplicitParam(required = true, dataType = "string", name = "eventIdentifier",   paramType = "path"),
+            @ApiImplicitParam(required = true, dataType = "string", name = "eventIdentifier", paramType = "path"),
             @ApiImplicitParam(required = true, dataType = "string", name = "surveyId", paramType = "path"),
     }) //
     @ApiResponses(value = { //
