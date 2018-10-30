@@ -5,7 +5,7 @@ import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
-import javaday.istanbul.sliconf.micro.survey.SurveyException;
+import javaday.istanbul.sliconf.micro.survey.GeneralException;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
@@ -30,8 +30,10 @@ public class GeneralService {
         Survey survey = surveyRepository.findById(surveyId).orElseThrow(() -> {
             log.error("survey not found by id: {}", surveyId);
             String message = surveyMessageProvider.getMessage("surveyCanNotFoundWithGivenId");
-            return new SurveyException(message, surveyId);
+            return new GeneralException(message, surveyId);
         });
+
+        responseMessage.setMessage("Survey has fetched successfully");
         responseMessage.setStatus(true);
         responseMessage.setReturnObject(survey);
         return responseMessage;
@@ -40,17 +42,17 @@ public class GeneralService {
     public ResponseMessage findEventByIdOrEventKey(String eventIdentifier) {
         ResponseMessage responseMessage = new ResponseMessage();
         Event event;
-        if(eventIdentifier.length() > Constants.EVENT_KEY_LENGTH)
+        if (eventIdentifier.length() > Constants.EVENT_KEY_LENGTH)
             event = eventRepositoryService.findById(eventIdentifier).orElseThrow(() -> {
-            log.error("event not found by given id: {}", eventIdentifier);
-            String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenId");
-            return new SurveyException(message, eventIdentifier);
-        });
+                log.error("event not found by given id: {}", eventIdentifier);
+                String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenId");
+                return new GeneralException(message, eventIdentifier);
+            });
         else
             event = eventRepositoryService.findByKey(eventIdentifier).orElseThrow(() -> {
                 log.error("event not found by given key: {}", eventIdentifier);
                 String message = surveyMessageProvider.getMessage("eventCanNotFoundWithGivenKey");
-                return new SurveyException(message, eventIdentifier);
+                return new GeneralException(message, eventIdentifier);
             });
 
         responseMessage.setStatus(true);
@@ -63,7 +65,7 @@ public class GeneralService {
         User user = userRepositoryService.findById(userId).orElseThrow(() -> {
             log.error("User not found by id: {}", userId);
             String message = surveyMessageProvider.getMessage("userCanNotFoundWithGivenId");
-            return new SurveyException(message, userId);
+            return new GeneralException(message, userId);
         });
         responseMessage.setStatus(true);
         responseMessage.setReturnObject(user);

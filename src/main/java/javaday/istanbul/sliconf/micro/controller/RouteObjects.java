@@ -18,11 +18,9 @@ import javaday.istanbul.sliconf.micro.controller.event.schedule.RemoveFromSchedu
 import javaday.istanbul.sliconf.micro.controller.event.speaker.CreateSpeakerRoute;
 import javaday.istanbul.sliconf.micro.controller.event.sponsor.CreateSponsorRoute;
 import javaday.istanbul.sliconf.micro.controller.login.*;
-
 import javaday.istanbul.sliconf.micro.statistics.GetEventSessionsStatistics;
 import javaday.istanbul.sliconf.micro.survey.controller.answer.GetAnswers;
 import javaday.istanbul.sliconf.micro.survey.controller.answer.SubmitAnswers;
-import javaday.istanbul.sliconf.micro.survey.controller.answer.UpdateAnswers;
 import javaday.istanbul.sliconf.micro.survey.controller.survey.*;
 import javaday.istanbul.sliconf.micro.user.GetSurveyAnswers;
 import lombok.AllArgsConstructor;
@@ -82,7 +80,6 @@ public class RouteObjects {
 
     public final SubmitAnswers submitAnswers;
     public final GetAnswers getAnswers;
-    public final UpdateAnswers updateAnswers;
 
     // event statistics
     public final GetEventSessionsStatistics getEventSessionsStatistics;

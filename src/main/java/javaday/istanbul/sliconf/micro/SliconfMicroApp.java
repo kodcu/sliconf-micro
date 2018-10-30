@@ -22,7 +22,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @EnableMongoRepositories
 //@SpringBootApplication
 @EnableAutoConfiguration(
-        exclude={MongoAutoConfiguration.class,
+        exclude = {MongoAutoConfiguration.class,
                 MongoDataAutoConfiguration.class,
                 MongoRepositoriesAutoConfiguration.class})
 

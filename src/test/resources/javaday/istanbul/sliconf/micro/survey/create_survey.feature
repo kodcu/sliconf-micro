@@ -17,7 +17,7 @@
 
   Senaryo: AAA2 - Etkinlik sahibi etkinlik genelinde bir anket oluşturmak istiyor
     Diyelim ki Etkinlik sahibi kendi etkinliğine bir anket eklemek istiyor
-    Eğer ki Etkinlik sahibi anket ismini boş bırakmış ise
+    Fakat Etkinlik sahibi anket ismini boş bırakmış ise
     O zaman Sistem anketi kayıt etmez ve ön tarafa anket ismi boş olamaz gibi bir hata mesajı gönderilir
 
 #    Eğer ki Etkinlik sahibi anket ismini asgari 4 karakterten olan sınırdan az girmiş ise

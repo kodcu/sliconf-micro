@@ -59,7 +59,7 @@ public class ResetPasswordRoute implements Route {
                     passData.getString("pass"), passData.getString("repass"));
 
 
-            if(Objects.nonNull(changeResponseMessage) && changeResponseMessage.isStatus()) {
+            if (Objects.nonNull(changeResponseMessage) && changeResponseMessage.isStatus()) {
                 Token token = tokenRepositoryService.findTokenByTokenValueEquals(tokenValue);
                 tokenRepositoryService.remove(token);
             }

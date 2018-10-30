@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class UserService {
     private final GeneralService generalService;
     private final AnswerService answerService;
+
     ResponseMessage getSurveyAnswers(String eventIdentifier, String userId) {
 
         Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();

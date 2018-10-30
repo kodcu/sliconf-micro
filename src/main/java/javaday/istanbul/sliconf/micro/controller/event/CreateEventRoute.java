@@ -114,7 +114,7 @@ public class CreateEventRoute implements Route {
             return responseMessage;
         }
 
-        if(event.getStartDate().plusWeeks(1).isBefore(event.getEndDate())) {
+        if (event.getStartDate().plusWeeks(1).isBefore(event.getEndDate())) {
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventStartAndEntDateInvalid"), event);
             return responseMessage;
@@ -168,7 +168,7 @@ public class CreateEventRoute implements Route {
             return responseMessage;
         }
 
-        if(event.getStartDate().plusWeeks(1).isBefore(event.getEndDate())) {
+        if (event.getStartDate().plusWeeks(1).isBefore(event.getEndDate())) {
             responseMessage = new ResponseMessage(false,
                     messageProvider.getMessage("eventStartAndEntDateInvalid"), event);
             return responseMessage;
@@ -202,9 +202,9 @@ public class CreateEventRoute implements Route {
 
         if (LocalDateTime.now().plusHours(48).isAfter(event.getStartDate()))
             event.setDateLock(true);
-        if((event.getStartDate() != dbEvent.getStartDate()) && event.isDateLock())
+        if ((event.getStartDate() != dbEvent.getStartDate()) && event.isDateLock())
             return new ResponseMessage(false, messageProvider.getMessage("eventStartDateCanNotBeUpdatedAnymore"), event);
-        if(event.getStartDate().minusWeeks(1).isBefore(LocalDateTime.now()))
+        if (event.getStartDate().minusWeeks(1).isBefore(LocalDateTime.now()))
             return new ResponseMessage(false, messageProvider.getMessage("eventStartDateCanNotBeUpdatedGivenDate"), event);
 
 

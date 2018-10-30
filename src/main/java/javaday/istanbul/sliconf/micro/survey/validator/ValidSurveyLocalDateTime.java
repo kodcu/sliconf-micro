@@ -10,15 +10,15 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({TYPE, ANNOTATION_TYPE })
+@Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = { SurveyLocalDateTimeValidator.class })
+@Constraint(validatedBy = {SurveyLocalDateTimeValidator.class})
 @Documented
 public @interface ValidSurveyLocalDateTime {
     String message() default "{javaday.istanbul.sliconf.micro." +
             "Invalid start and end date.}";
 
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 }

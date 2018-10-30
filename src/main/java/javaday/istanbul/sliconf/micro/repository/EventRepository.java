@@ -18,6 +18,7 @@ public interface EventRepository extends MongoRepository<Event, String>,
 
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND Meta(events).id = $1")
     Optional<Event> findById(String id);
+
     Optional<Event> findByKey(String key);
 
     Page<Event> findByLifeCycleStateEventStatuses(List<LifeCycleState.EventStatus> eventStatuses, Pageable pageable);

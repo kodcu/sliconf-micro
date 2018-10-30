@@ -32,9 +32,6 @@ public class SurveyLocalDateTimeValidator
 
     @Override
     public boolean isValid(Survey survey, ConstraintValidatorContext context) {
-        if (survey == null) {
-            return true;
-        }
 
         long epochSecondStartTime = Long.parseLong(survey.getStartTime());
         LocalDateTime startDateTime = LocalDateTime.ofEpochSecond(epochSecondStartTime, 0, ZoneOffset.UTC);
@@ -51,7 +48,7 @@ public class SurveyLocalDateTimeValidator
 
         if (startDateTime.isBefore(LocalDateTime.now().minusMinutes(1))) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("{survey.startTime-after-now}")
+            context.buildConstraintViolationWithTemplate("{survey.startTime-before-now}")
                     .addConstraintViolation();
             return false;
         }
