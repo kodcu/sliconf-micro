@@ -14,6 +14,6 @@ public class LifeCycleState {
     private List<EventStatus> eventStatuses;
 
     public enum EventStatus {
-        ACTIVE, PASSIVE, UPCOMING, HAPPENING, FINISHED, DELETED, FAILED
+        ACTIVE, PASSIVE, HAPPENING, FINISHED, DELETED, FAILED
     }
 }
