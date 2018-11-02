@@ -100,6 +100,9 @@ public class SurveyService {
         Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
         generalService.findUserById(event.getExecutiveUser());
 
+        survey.setEventId(event.getId());
+        survey.setEventKey(event.getKey());
+
         SurveyUtil.generateDates(survey, event);
         SurveyUtil.generateQuestionIds(survey);
 

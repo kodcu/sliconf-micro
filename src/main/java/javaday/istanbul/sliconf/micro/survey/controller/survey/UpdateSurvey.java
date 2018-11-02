@@ -46,6 +46,7 @@ public class UpdateSurvey implements Route {
 
         ResponseMessage responseMessage;
         String eventIdentifier = request.params("eventIdentifier");
+
         String body = request.body();
         if (Objects.isNull(body) || body.isEmpty()) {
             responseMessage = new ResponseMessage(false,
