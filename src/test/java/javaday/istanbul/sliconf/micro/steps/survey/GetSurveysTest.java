@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
@@ -29,8 +30,8 @@ public class GetSurveysTest extends SpringBootTestConfig { // NOSONAR
     @Autowired
     GetEventWithKeyRoute getEventWithKeyRoute;
 
-    @Diyelimki("^Kullanıcı bir etkinlikteki tüm anketlerin bilgilerine erişmek istiyor$")
-    public void kullanıcıBirEtkinliktekiTümAnketlerinBilgilerineErişmekIstiyor() throws Throwable {
+    @Diyelimki("^Etkinlik yöneticisi etkinliğindeki tüm anketlerin bilgilerine erişmek istiyor$")
+    public void etkinlikYöneticisiEtkinliğindekiTümAnketlerinBilgilerineErişmekIstiyor() throws Throwable {
         initialData.init();
         surveyRepository.deleteAll();
         surveyRepository
@@ -38,8 +39,8 @@ public class GetSurveysTest extends SpringBootTestConfig { // NOSONAR
 
     }
 
-    @Eğerki("^Kullanıcı sistemde mevcut olan bir etkinlikteki tüm anketlerin bilgilerine erişmek istiyor ise$")
-    public void kullanıcıSistemdeMevcutOlanBirEtkinliktekiTümAnketlerinBilgilerineErişmekIstiyorIse() throws Throwable {
+    @Eğerki("^Etkinlik yöneticisi sistemde mevcut olan etkinliğinin tüm anketlerinin bilgilerine erişmek istiyor ise$")
+    public void etkinlikYöneticisiSistemdeMevcutOlanEtkinliğininTümAnketlerininBilgilerineErişmekIstiyorIse() throws Throwable {
         ResponseMessage responseMessage;
 
         responseMessage = getEventWithKeyRoute.
@@ -48,8 +49,8 @@ public class GetSurveysTest extends SpringBootTestConfig { // NOSONAR
 
     }
 
-    @Ozaman("^Sistem kullanıcıya etkinlikte var olan tüm anketlerin bilgilerini gönderir$")
-    public void sistemKullanıcıyaEtkinlikteVarOlanTümAnketlerinBilgileriniGönderir() throws Throwable {
+    @Ozaman("^Sistem etkinlik yöneticisine etkinlikte var olan tüm anketlerin bilgilerini gönderir$")
+    public void sistemEtkinlikYöneticisineEtkinlikteVarOlanTümAnketlerinBilgileriniGönderir() throws Throwable {
 
         ResponseMessage responseMessage;
         responseMessage = initialData.surveyService.getSurveys(initialData.event.getId());
@@ -69,6 +70,4 @@ public class GetSurveysTest extends SpringBootTestConfig { // NOSONAR
         surveys = (List<Survey>) responseMessage.getReturnObject();
         assertThat(surveys, Matchers.hasSize(0));
     }
-
-
 }

@@ -26,15 +26,18 @@ public class SurveyUtil {
 
     public static void generateQuestionIds(Survey survey) {
         survey.getQuestions().forEach(question -> {
-            question.setTotalVoters(0);
-            if (Objects.isNull(question.getId()))
+
+            if (Objects.isNull(question.getId())) {
                 question.setId(new ObjectId().toString());
+                question.setTotalVoters(0);
+            }
 
             question.getOptions()
                     .forEach(questionOption -> {
-                        questionOption.setVoters(0);
-                        if (Objects.isNull(questionOption.getId()))
+                        if (Objects.isNull(questionOption.getId())) {
                             questionOption.setId(new ObjectId().toString());
+                            questionOption.setVoters(0);
+                        }
                     });
         });
     }

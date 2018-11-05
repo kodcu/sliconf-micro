@@ -43,7 +43,7 @@ public class AnswerService {
         answer.setEventKey(event.getKey());
 
         Survey survey = (Survey) generalService.findSurveyById(surveyId).getReturnObject();
-        answer.setSurveyId(survey.getId());
+        answer.setSurveyId(survey.getId())  ;
 
         if (SurveyUtil.checkIfUserAlreadyAnsweredSurvey(answer.getUserId(), surveyId, answerRepository).isStatus()) {
             responseMessage = new ResponseMessage();

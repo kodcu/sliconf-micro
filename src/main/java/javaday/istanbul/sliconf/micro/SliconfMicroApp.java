@@ -13,12 +13,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
  * Created by ttayfur on 7/4/17.
  */
-
+@EnableScheduling
 @EnableMongoRepositories
 //@SpringBootApplication
 @EnableAutoConfiguration(
