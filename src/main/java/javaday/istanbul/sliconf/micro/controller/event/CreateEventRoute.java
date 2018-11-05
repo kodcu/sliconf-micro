@@ -195,7 +195,8 @@ public class CreateEventRoute implements Route {
         }
         if (!(event.getStartDate().isEqual(dbEvent.getStartDate())) && event.isDateLock())
             return new ResponseMessage(false, messageProvider.getMessage("eventStartDateCanNotBeUpdatedAnymore"), event);
-        if (event.getStartDate().minusWeeks(1).isBefore(LocalDateTime.now()))
+        if (!(event.getStartDate().isEqual(dbEvent.getStartDate())) &&
+                event.getStartDate().minusWeeks(1).isBefore(LocalDateTime.now()))
             return new ResponseMessage(false, messageProvider.getMessage("eventStartDateCanNotBeUpdatedGivenDate"), event);
 
 

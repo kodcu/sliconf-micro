@@ -60,6 +60,8 @@ public class Survey implements Serializable {
 
     private Integer participants;
 
+    private Boolean isActive = false;
+
     @NotEmpty(message = "{survey.questions.empty}", groups = SurveyQuestionValidatorGroup.class)
     private List<Question> questions;
 

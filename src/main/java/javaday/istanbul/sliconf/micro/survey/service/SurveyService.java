@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +70,9 @@ public class SurveyService {
         if (!responseMessage.isStatus()) {
             return responseMessage;
         }
+        // etkinlik baslamis ise anket otomatik olarak aktif olur.
+        if(event.getStartDate().isBefore(LocalDateTime.now()))
+            survey.setIsActive(true);
         surveyRepository.save(survey);
 
         String message = surveyMessageProvider.getMessage("surveyCreatedSuccessfully");
