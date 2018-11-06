@@ -52,6 +52,7 @@ public class AuthUtil {
      * Frontend tafarindan saglanan token id ile google apisi uzerinden kullanici bilgilerine erisir
      * Eger kullanici bilgisi alindi ise bu bilgilerle {User} olusturur eger bilgiler bir sekilde alinamadiysa
      * {null} doner
+     *
      * @param idTokenString
      * @return
      */

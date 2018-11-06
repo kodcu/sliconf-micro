@@ -49,7 +49,6 @@ public class SpringConfigurations {
     }
 
 
-
     @Bean
     public FilterRegistrationBean sparkFilterRegistration() {
 

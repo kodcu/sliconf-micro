@@ -40,8 +40,6 @@ public class TokenAuthenticationService {
     private final DistributedMapProvider distributedMapProvider;
 
 
-
-
     public String addAuthentication(HttpServletResponse res, User user) {
         Date date = Date.from(Instant.now(Clock.system(
                 ZoneId.of("Asia/Istanbul")
@@ -117,33 +115,14 @@ public class TokenAuthenticationService {
                 Object user = claims.get("user", Object.class);
 
                 IMap<String, SecurityToken> securityTokenMap = distributedMapProvider.getSecurityTokenMap(SECURITY_TOKENS);
-//                JsonObject jsonObject;
-//                Gson gson = new Gson();
-//                try {
-//                   BufferedReader bufferedReader = request.getReader();
-//                    jsonObject = gson.fromJson(bufferedReader, JsonObject.class);
-//
-//               } catch (IOException e) {
-//                   return null;
-//               }
-//                String userIdFromRequest;
-//                String userIdFromToken;
-//                if(!Objects.nonNull(jsonObject)) {
-//                    // TODO: 28.08.2018 dinamik bir sekilde yap.
-//                    userIdFromRequest = "5b72dc350662c13c3378411f";
-//                }
-//                else
-//                    userIdFromRequest = jsonObject.get("userId").toString();
-//                userIdFromToken = userRepositoryService.findByUsername(username).get(0).getId();
+                if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
+                    SecurityToken securityToken = securityTokenMap.get(username);
 
-                    if (Objects.nonNull(securityTokenMap) && !securityTokenMap.isEmpty()) {
-                        SecurityToken securityToken = securityTokenMap.get(username);
-
-                        if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
-                                Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
-                            return generateAuthentication(username, role, user);
-                        }
+                    if (Objects.nonNull(securityToken) && Objects.nonNull(securityToken.getValidUntilDate()) &&
+                            Objects.nonNull(date) && !date.before(securityToken.getValidUntilDate())) {
+                        return generateAuthentication(username, role, user);
                     }
+                }
 
 
             } catch (ExpiredJwtException | UnsupportedJwtException |

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TokenRepository extends MongoRepository<Token, String>,
-        CrudRepository<Token, String>  {
+        CrudRepository<Token, String> {
 
     Token findTokenByTokenValueEquals(String tokenValue);
 

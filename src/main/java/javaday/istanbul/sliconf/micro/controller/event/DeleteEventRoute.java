@@ -82,7 +82,7 @@ public class DeleteEventRoute implements Route {
             return responseMessage;
         }
 
-        User user = userRepositoryService.findById(userId).get();
+        User user = userRepositoryService.findById(userId).orElse(null);
 
         if (Objects.isNull(user)) {
             responseMessage = new ResponseMessage(false,

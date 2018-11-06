@@ -54,7 +54,7 @@ public class SubmitAnswers implements Route {
                     "Body can not be empty!", new Object());
             return responseMessage;
         }
-        Answer answer = JsonUtil.fromJson(body, Answer.class);
+        Answer answer = JsonUtil.fromJsonOrElseThrow(body, Answer.class);
         responseMessage = answerService.answerSurvey(answer, surveyId, eventIdentifier);
         return responseMessage;
     }

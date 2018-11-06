@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.controller;
 
-import javaday.istanbul.sliconf.micro.survey.SurveyException;
 import javaday.istanbul.sliconf.micro.model.response.ResponseError;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.survey.GeneralException;
 import javaday.istanbul.sliconf.micro.util.SwaggerParser;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.slf4j.Logger;
@@ -32,6 +32,7 @@ public class RootController {
 
     public static void setPaths() {
 
+        String contentType = "application/json";
         try {
             // Build swagger json description
             final String swaggerJson = SwaggerParser.getSwaggerJson(APP_PACKAGE);
@@ -47,7 +48,7 @@ public class RootController {
 
         // Using Route
         notFound((req, res) -> {
-            res.type("application/json");
+            res.type(contentType);
 
             res.status(200);
 
@@ -154,8 +155,6 @@ public class RootController {
                         path("/:surveyId/answers", () -> {
                             post("", routeObjects.submitAnswers, JsonUtil.json());
                             get("", routeObjects.getAnswers, JsonUtil.json());
-                            put("/:answerId", routeObjects.updateAnswers, JsonUtil.json());
-
                         });
 
                     });
@@ -166,11 +165,11 @@ public class RootController {
                         });
                     });
 
-                    exception(SurveyException.class, (exception, request1, response1)-> {
+                    exception(GeneralException.class, (exception, request1, response1) -> {
                         String message = exception.getMessage();
                         Object rejectedValue = exception.getRejectedValue();
                         ResponseMessage responseMessage = new ResponseMessage(false, message, rejectedValue);
-                        response1.type("application/json");
+                        response1.type(contentType);
                         response1.body(JsonUtil.toJson(responseMessage));
 
                     });
@@ -196,7 +195,7 @@ public class RootController {
                 });
 
                 path("change/", () ->
-                    post("event-state/:eventId/:stateId", routeObjects.adminChangeEventStateForEventRoute, JsonUtil.json())
+                        post("event-state/:eventId/:stateId", routeObjects.adminChangeEventStateForEventRoute, JsonUtil.json())
                 );
 
                 path("users/", () ->
@@ -214,7 +213,7 @@ public class RootController {
         after((req, res) -> {
 
             if (!"image/png".equals(res.type())) {
-                res.type("application/json");
+                res.type(contentType);
             }
         });
 

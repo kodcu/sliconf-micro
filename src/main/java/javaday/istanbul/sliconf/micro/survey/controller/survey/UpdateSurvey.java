@@ -17,7 +17,7 @@ import javax.ws.rs.Produces;
 import java.util.Objects;
 
 @AllArgsConstructor
-@Api(value = "survey", authorizations = {@Authorization(value = "Bearer" )})
+@Api(value = "survey", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/events/:eventIdentifier/surveys")
 @Produces("application/json")
 @Component
@@ -46,6 +46,7 @@ public class UpdateSurvey implements Route {
 
         ResponseMessage responseMessage;
         String eventIdentifier = request.params("eventIdentifier");
+
         String body = request.body();
         if (Objects.isNull(body) || body.isEmpty()) {
             responseMessage = new ResponseMessage(false,
@@ -53,7 +54,7 @@ public class UpdateSurvey implements Route {
             return responseMessage;
         }
 
-        Survey survey = JsonUtil.fromJson(body, Survey.class);
+        Survey survey = JsonUtil.fromJsonOrElseThrow(body, Survey.class);
 
         responseMessage = surveyService.updateSurvey(survey, eventIdentifier);
         return responseMessage;

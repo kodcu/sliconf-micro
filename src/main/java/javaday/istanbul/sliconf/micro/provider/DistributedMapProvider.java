@@ -5,14 +5,14 @@ import com.hazelcast.core.IMap;
 import javaday.istanbul.sliconf.micro.model.token.SecurityToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.concurrent.TimeUnit;
 
 /**
  * Hazelcast ile alakali islemlerin yapildigi nesne.
- *
+ * <p>
  * Auth tokenlerin tutuldugu mapin getirilmesi ve mape yeni elemanlar eklenmesi ile alakali
  * islemler gerceklestiriliyor
- *
  */
 @Component
 public class DistributedMapProvider {
@@ -29,7 +29,7 @@ public class DistributedMapProvider {
     }
 
     public void putSecurityToken(String mapName, String key, SecurityToken securityToken,
-                                   long timeToLive, TimeUnit timeUnit) {
+                                 long timeToLive, TimeUnit timeUnit) {
         getSecurityTokenMap(mapName).put(key, securityToken, timeToLive, timeUnit);
     }
 

@@ -42,7 +42,7 @@ public class SurveyValidator {
             Predicate<Object> objectPredicate;
             objectPredicate = object -> object.hashCode() == constraintViolation.getLeafBean().hashCode();
             /* kisitlamalari ihlal eden model kisitlamalari ihlal eden objeler listesinde degilse ekliyoruz. */
-            if(violatingObjects.stream().noneMatch(objectPredicate))
+            if (violatingObjects.stream().noneMatch(objectPredicate))
                 violatingObjects.add(constraintViolation.getLeafBean());
         });
 

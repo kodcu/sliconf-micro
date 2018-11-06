@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.survey.model;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
@@ -21,12 +21,11 @@ import java.util.Map;
 @CompoundIndexes(
         @CompoundIndex(def = "{'id':1}")
 )
-@Getter
-@Setter
+@Builder
+@Data
 public class Answer implements Serializable {
 
     @Id
-    @NotBlank(message = "{survey.answer.id.blank}")
     private String id;
 
     @NotBlank(message = "{survey.answer.surveyId.blank}")
@@ -42,6 +41,6 @@ public class Answer implements Serializable {
     private String eventKey;
 
     //burada key question id, value ise verdigi cevaptir.
-    @NotEmpty(message = "survey.answers.empty")
+    @NotEmpty(message = "{survey.answers.empty}")
     private Map<String, String> answeredQuestions;
 }

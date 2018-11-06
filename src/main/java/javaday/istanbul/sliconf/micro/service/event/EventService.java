@@ -6,7 +6,6 @@ import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalLong;
 
 public interface EventService {
     Event findOne(String id);

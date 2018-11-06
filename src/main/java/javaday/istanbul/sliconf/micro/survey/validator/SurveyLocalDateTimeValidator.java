@@ -1,12 +1,6 @@
 package javaday.istanbul.sliconf.micro.survey.validator;
 
-import javaday.istanbul.sliconf.micro.model.event.Event;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
-import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
@@ -15,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 /**
-  * Anketin başlangıç ve bitiş tarihini iş mantığına göre kontrol etmemizi sağlayan custom validator.
+ * Anketin başlangıç ve bitiş tarihini iş mantığına göre kontrol etmemizi sağlayan custom validator.
  */
 @Component
 public class SurveyLocalDateTimeValidator
@@ -38,7 +32,6 @@ public class SurveyLocalDateTimeValidator
 
     @Override
     public boolean isValid(Survey survey, ConstraintValidatorContext context) {
-        if ( survey == null ) { return true; }
 
         long epochSecondStartTime = Long.parseLong(survey.getStartTime());
         LocalDateTime startDateTime = LocalDateTime.ofEpochSecond(epochSecondStartTime, 0, ZoneOffset.UTC);
@@ -55,8 +48,8 @@ public class SurveyLocalDateTimeValidator
 
         if (startDateTime.isBefore(LocalDateTime.now().minusMinutes(1))) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("{survey.startTime-after-now}")
-            .addConstraintViolation();
+            context.buildConstraintViolationWithTemplate("{survey.startTime-before-now}")
+                    .addConstraintViolation();
             return false;
         }
 
