@@ -12,5 +12,7 @@ public class Location {
     private String lng;
 
     private String description;
+    
+    private String venue;
 
 }
