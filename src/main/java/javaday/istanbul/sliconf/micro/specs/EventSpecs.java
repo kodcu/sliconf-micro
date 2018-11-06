@@ -136,7 +136,7 @@ public class EventSpecs {
                     Objects.isNull(event.getAbout().getLocation().getVenue()) ||
                     event.getAbout().getLocation().getDescription().isEmpty() ||
                     event.getAbout().getLocation().getLng().isEmpty() ||
-                    event.getAbout().getLocation().getLat().isEmpty()) ||
+                    event.getAbout().getLocation().getLat().isEmpty() ||
                     event.getAbout().getLocation().getVenue().isEmpty()){
                 failed.add("Event location must be filled correctly");
             } else {
