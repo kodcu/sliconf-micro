@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,11 +30,6 @@ public class UserRepositoryService implements UserService {
     private UserRepositoryMessageProvider userRepositoryMessageProvider;
 
     private String passDoNotMeetRequiredLength = "passwordDoNotMeetRequiredLength";
-
-    @Override
-    public User findOne(String id) {
-        return repo.findOne(id);
-    }
 
     @Override
     public List<User> findAll() {
@@ -242,8 +238,8 @@ public class UserRepositoryService implements UserService {
     }
 
     @Override
-    public User findById(String id) {
-        return repo.findOne(id);
+    public Optional<User> findById(String id) {
+        return repo.findById(id);
     }
 
     /**
@@ -287,4 +283,6 @@ public class UserRepositoryService implements UserService {
 
         return responseMessage;
     }
+
+
 }

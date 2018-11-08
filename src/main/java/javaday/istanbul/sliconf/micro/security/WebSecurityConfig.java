@@ -35,6 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/service/swagger").permitAll()
                 .antMatchers("/service/image/**").permitAll()
                 .antMatchers("/resources/**").permitAll()
+                .antMatchers("/service/admin/**")
+                .access("hasAnyRole('ROLE_ADMIN')")
                 .antMatchers("/service/**")
                 .access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_EVENT_MANAGER')")
                 .and()

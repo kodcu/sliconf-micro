@@ -44,6 +44,12 @@ public class SpringConfigurations {
     }
 
     @Bean
+    public Properties surveyProperties() throws IOException {
+        return PropertiesLoaderUtils.loadAllProperties("survey.properties");
+    }
+
+
+    @Bean
     public FilterRegistrationBean sparkFilterRegistration() {
 
         FilterRegistrationBean registration = new FilterRegistrationBean();

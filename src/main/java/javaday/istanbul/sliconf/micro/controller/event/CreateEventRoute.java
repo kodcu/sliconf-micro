@@ -9,8 +9,10 @@ import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.service.event.EventService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.specs.EventSpecs;
+import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -20,6 +22,7 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,22 +31,16 @@ import java.util.Objects;
 @Path("/service/events/create/:userId")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class CreateEventRoute implements Route {
 
 
-    private EventControllerMessageProvider messageProvider;
-    private EventService repositoryService;
+    private final EventControllerMessageProvider messageProvider;
+    private final EventService repositoryService;
 
-    private UserRepositoryService userRepositoryService;
+    private final UserRepositoryService userRepositoryService;
+    private final GeneralService generalService;
 
-    @Autowired
-    public CreateEventRoute(EventControllerMessageProvider messageProvider,
-                            EventRepositoryService eventRepositoryService,
-                            UserRepositoryService userRepositoryService) {
-        this.messageProvider = messageProvider;
-        this.repositoryService = eventRepositoryService;
-        this.userRepositoryService = userRepositoryService;
-    }
 
     @POST
     @ApiOperation(value = "Creates an event and bind with given userId", nickname = "CreateEventRoute")
@@ -112,6 +109,12 @@ public class CreateEventRoute implements Route {
             return responseMessage;
         }
 
+        if (event.getStartDate().plusWeeks(1).isBefore(event.getEndDate())) {
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventStartAndEndDateInvalid"), event);
+            return responseMessage;
+        }
+
         // event var mı diye kontrol et
         List<Event> dbEvents = repositoryService.findByNameAndDeleted(event.getName(), false);
 
@@ -124,7 +127,7 @@ public class CreateEventRoute implements Route {
         //Kanban numarası oluştur
         EventSpecs.generateKanbanNumber(event, repositoryService);
 
-        User user = userRepositoryService.findById(userId);
+        User user = userRepositoryService.findById(userId).orElse(null);
 
         if (Objects.isNull(user)) {
             responseMessage = new ResponseMessage(false,
@@ -156,6 +159,12 @@ public class CreateEventRoute implements Route {
             return responseMessage;
         }
 
+        if (event.getStartDate().plusWeeks(1).isBefore(event.getEndDate())) {
+            responseMessage = new ResponseMessage(false,
+                    messageProvider.getMessage("eventStartAndEntDateInvalid"), event);
+            return responseMessage;
+        }
+
         List<Event> dbEvents = repositoryService.findByNameAndNotKeyAndDeleted(event.getName(), event.getKey(), false);
 
         if (Objects.nonNull(dbEvents) && !dbEvents.isEmpty()) {
@@ -181,6 +190,14 @@ public class CreateEventRoute implements Route {
         if (Objects.nonNull(dbEvent.getExecutiveUser()) && !dbEvent.getExecutiveUser().equals(userId)) {
             return new ResponseMessage(false, messageProvider.getMessage("onlyOwnedEventsCanBeUpdated"), event);
         }
+        if(LocalDateTime.now().plusHours(48).isAfter(event.getStartDate())) {
+                event.setDateLock(true);
+        }
+        if (!(event.getStartDate().isEqual(dbEvent.getStartDate())) && event.isDateLock())
+            return new ResponseMessage(false, messageProvider.getMessage("eventStartDateCanNotBeUpdatedAnymore"), event);
+        if (event.getStartDate().minusWeeks(1).isBefore(LocalDateTime.now()))
+            return new ResponseMessage(false, messageProvider.getMessage("eventStartDateCanNotBeUpdatedGivenDate"), event);
+
 
         copyUpdatedFields(dbEvent, event);
 

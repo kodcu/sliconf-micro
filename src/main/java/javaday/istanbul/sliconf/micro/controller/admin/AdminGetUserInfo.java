@@ -60,8 +60,7 @@ public class AdminGetUserInfo implements Route {
             return new ResponseMessage(false, "You have no authorization to do this!", new Object());
         }
 
-        User persistedUser = userRepositoryService.findById(userId);
-        Optional<User> userOptional = Optional.of(persistedUser);
+        Optional<User> userOptional = userRepositoryService.findById(userId);
         return userOptional
                 .map(user -> {
                     user.setPassword("");

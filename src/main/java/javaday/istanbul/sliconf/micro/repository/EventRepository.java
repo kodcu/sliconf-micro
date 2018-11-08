@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -13,7 +14,9 @@ public interface EventRepository extends MongoRepository<Event, String>,
         CrudRepository<Event, String> {
 
     //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND Meta(events).id = $1")
-    Event findById(String id);
+    Optional<Event> findById(String id);
+
+    Optional<Event> findByKey(String key);
 
     List<Event> findByName(String name);
 
@@ -33,4 +36,5 @@ public interface EventRepository extends MongoRepository<Event, String>,
     List<Event> findByNameAndKeyNot(String name, String key);
 
     List<Event> findByNameAndKeyNotAndDeleted(String name, String key, Boolean deleted);
+
 }

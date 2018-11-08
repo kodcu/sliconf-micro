@@ -1,29 +1,21 @@
 package javaday.istanbul.sliconf.micro.steps.admin;
 
 import cucumber.api.java.tr.Diyelimki;
-import javaday.istanbul.sliconf.micro.CucumberConfiguration;
+import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.controller.admin.AdminListEventsRoute;
 import javaday.istanbul.sliconf.micro.model.User;
 import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.*;
 
-@ContextConfiguration(classes = {CucumberConfiguration.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-@SpringBootTest
-@ActiveProfiles("test")
-public class AdminListEventsTest {// NOSONAR
+@Ignore
+public class AdminListEventsTest extends SpringBootTestConfig { // NOSONAR
 
     @Autowired
     private UserRepositoryService userRepositoryService;

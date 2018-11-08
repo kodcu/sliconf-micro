@@ -27,8 +27,12 @@ public class EventRepositoryService implements EventService {
     @Autowired
     protected EventStateService eventStateService;
 
-    public Event findOne(String id) {
+    public Optional<Event> findById(String id) {
         return repo.findById(id);
+    }
+
+    public Event findOne(String id) {
+        return repo.findOne(id);
     }
 
     public List<Event> findAll() {
@@ -72,8 +76,9 @@ public class EventRepositoryService implements EventService {
     public ResponseMessage save(Event event) {
         ResponseMessage message = new ResponseMessage(false, "An error occured while saving event", null);
 
-        ResponseMessage eventStateMessage = StateManager.isEventCompatibleWithState(findOne(event.getId()), event, eventStateService);
-
+        // TODO: 02.10.2018 update ve create ayni yerden yapildigi icin bir takim sikintilar mevcut olabiliyor. bunlari ayirmali. #1158
+        Event dbEvent = this.findById(event.getId()).orElse(null);
+        ResponseMessage eventStateMessage = StateManager.isEventCompatibleWithState(dbEvent, event, eventStateService);
         if (!eventStateMessage.isStatus()) {
             return eventStateMessage;
         }
@@ -177,6 +182,11 @@ public class EventRepositoryService implements EventService {
         if (Objects.nonNull(event)) {
             event.setTotalUsers(null);
         }
+    }
+
+    @Override
+    public Optional<Event> findByKey(String eventKey) {
+        return repo.findByKey(eventKey);
     }
 
 }

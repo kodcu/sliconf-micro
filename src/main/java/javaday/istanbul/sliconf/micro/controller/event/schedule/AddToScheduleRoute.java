@@ -102,7 +102,6 @@ public class AddToScheduleRoute implements Route {
     }
 
 
-
     private Room getRoom(List<Room> rooms, String roomId) {
         Room returnRoom = null;
 
@@ -164,7 +163,7 @@ public class AddToScheduleRoute implements Route {
             return new ResponseMessage(false, "This element already added to schedule", userScheduleElement);
         }
 
-        User user = userRepositoryService.findById(userScheduleElement.getUserId());
+        User user = userRepositoryService.findById(userScheduleElement.getUserId()).orElse(null);
 
         if (Objects.isNull(user)) {
             return new ResponseMessage(false, "User can not found with given id", userScheduleElement);

@@ -67,7 +67,7 @@ public class CreateSponsorRoute implements Route {
     }
 
     /**
-     * Gelen sponsorMap ve sponsorTag gelen eventKey ile gerekli evente yazilir
+     * Gelen sponsorMap ve sponsorTag gelen eventId ile gerekli evente yazilir
      *
      * @param sponsorMap
      * @param sponsorTags
@@ -136,7 +136,7 @@ public class CreateSponsorRoute implements Route {
 
                 if (Objects.nonNull(tag.getKey()) && tag.getKey().contains("|")) {
                     int parserIndex = tag.getKey().indexOf('|');
-                    indexKey = tag.getKey().substring(0,parserIndex);
+                    indexKey = tag.getKey().substring(0, parserIndex);
 
                 }
 
