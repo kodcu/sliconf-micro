@@ -1,11 +1,12 @@
 package javaday.istanbul.sliconf.micro.survey;
 
-import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,7 @@ public class SurveyScheduledJobs {
     private final SurveyService surveyService;
     private final EventRepositoryService eventRepositoryService;
     // Her yarim saatte bir anketleri aktif veya passive yapar.
-    @Scheduled(fixedRate = 1800000, initialDelay = 1000)
+    @Scheduled(fixedRate = 1800000, initialDelay = 900000 )
     public void updateSurveysStatus() {
         log.info("survey status update started");
         List<Event> events = eventRepositoryService.findAll();

@@ -1,9 +1,9 @@
 package javaday.istanbul.sliconf.micro.util;
 
-import javaday.istanbul.sliconf.micro.model.event.Floor;
-import javaday.istanbul.sliconf.micro.model.event.Room;
-import javaday.istanbul.sliconf.micro.model.event.Speaker;
-import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
+import javaday.istanbul.sliconf.micro.floor.Floor;
+import javaday.istanbul.sliconf.micro.room.Room;
+import javaday.istanbul.sliconf.micro.speaker.Speaker;
+import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

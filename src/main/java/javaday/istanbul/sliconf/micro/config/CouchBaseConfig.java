@@ -1,11 +1,11 @@
 package javaday.istanbul.sliconf.micro.config;
 
 import com.couchbase.client.java.Bucket;
-import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.event.Comment;
-import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.event.agenda.Star;
-import javaday.istanbul.sliconf.micro.model.token.Token;
+import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.comment.model.Comment;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.agenda.model.Star;
+import javaday.istanbul.sliconf.micro.security.token.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

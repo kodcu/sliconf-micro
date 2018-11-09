@@ -3,15 +3,15 @@ package javaday.istanbul.sliconf.micro.steps.other;
 
 import cucumber.api.java.tr.Diyelimki;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
-import javaday.istanbul.sliconf.micro.builder.EventBuilder;
-import javaday.istanbul.sliconf.micro.controller.event.floor.CreateFloorRoute;
-import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.event.Floor;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
-import javaday.istanbul.sliconf.micro.specs.EventSpecs;
+import javaday.istanbul.sliconf.micro.event.EventBuilder;
+import javaday.istanbul.sliconf.micro.floor.CreateFloorRoute;
+import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.floor.Floor;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 

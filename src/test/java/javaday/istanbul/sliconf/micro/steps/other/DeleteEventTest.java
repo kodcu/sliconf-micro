@@ -2,14 +2,14 @@ package javaday.istanbul.sliconf.micro.steps.other;
 
 import cucumber.api.java.tr.Diyelimki;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
-import javaday.istanbul.sliconf.micro.controller.event.DeleteEventRoute;
-import javaday.istanbul.sliconf.micro.controller.login.LoginUserRoute;
-import javaday.istanbul.sliconf.micro.controller.login.UpdateUserRoute;
-import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.service.event.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.event.controller.DeleteEventRoute;
+import javaday.istanbul.sliconf.micro.user.controller.LoginUserRoute;
+import javaday.istanbul.sliconf.micro.user.controller.UpdateUserRoute;
+import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 

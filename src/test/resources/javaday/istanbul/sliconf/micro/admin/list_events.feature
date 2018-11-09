@@ -6,12 +6,11 @@
   Senaryo: 1 - Admin sistemdeki etkinlikleri görüntüleme sayfasına girdiğinde gerçekleşecek öntanımlı durum
     Diyelim ki Admin sistemdeki etkinlikleri görüntülemek istiyor
     Eğer ki Admin herhangi bir listeleme filtresi seçmediyse
-    O zaman Sistem aktif ve yaklaşmakta olan etkinlikleri bir sayfada 20 adet olacak şekilde sayfalar halinde Admine gösterir
+    O zaman Sistem aktif olan etkinlikleri bir sayfada 20 adet olacak şekilde sayfalar halinde Admine gösterir
 
-    Eğer ki Admin filtre olarak bir sayfada gösterilecek etkinlik sayısını 5 vermiş ise
-    Ve Sayfa numarası olarak 0 vermiş ise
-    Ve Sistemde aktif ve yaklaşmakta olan toplam 50 etkinlik var ise
-    O zaman Sistem aktif ve yaklaşmakta olan etkinlikleri bir sayfada 5 adet olacak şekilde 9 sayfa halinde Admine gösterir
+    Eğer ki Admin filtre olarak bir sayfada gösterilecek etkinlik sayısını 5 sayfa numarasıni 0 vermiş ise vermiş ise
+    Ve Sistemde aktif olan toplam 50 etkinlik var ise
+    O zaman Sistem aktif olan etkinlikleri bir sayfada 5 adet olacak şekilde 9 sayfa halinde Admine gösterir
 
   Senaryo: 2 - Admin sistemdeki etkinlikleri görüntülemek istiyor
     Diyelim ki Admin sistemdeki tüm etkinlikleri görüntülemek istiyor
@@ -19,9 +18,9 @@
     O zaman Sistem bütün etkinlikleri Admine gösterir
 
   Senaryo: 3 - Admin sistemdeki etkinlikleri görüntülemek istiyor
-    Diyelim ki Admin sistemdeki aktif veya pasif yaklaşmakta olan tüm etkinlikleri görüntülemek istiyor
-    Eğer ki Admin listeleme filtresi olarak aktif veya pasif ve yaklaşmakta olan etkinlikleri seçti ise
-    O zaman Sistem aktif veya pasif yaklaşmakta olan tüm etkinlikleri Admine gösterir
+    Diyelim ki Admin sistemdeki aktif veya pasif  olan tüm etkinlikleri görüntülemek istiyor
+    Eğer ki Admin listeleme filtresi olarak aktif veya pasif olan etkinlikleri seçti ise
+    O zaman Sistem aktif veya pasif olan tüm etkinlikleri Admine gösterir
 
   Senaryo: 4 - Admin sistemdeki etkinlikleri görüntülemek istiyor
     Diyelim ki Admin sistemdeki başarılı şekilde bitmiş olan tüm etkinlikleri görüntülemek istiyor

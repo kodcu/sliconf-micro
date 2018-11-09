@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.survey.util;
 
 import com.devskiller.jfairy.Fairy;
-import javaday.istanbul.sliconf.micro.model.event.Event;
+import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.survey.model.Question;
 import javaday.istanbul.sliconf.micro.survey.model.QuestionOption;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
@@ -71,7 +71,7 @@ public class SurveyGenerator {
             }
             LocalDateTime time = fairy
                     .dateProducer()
-                    .randomDateBetweenTwoDates(LocalDateTime.now().plusWeeks(1), LocalDateTime.now().plusYears(1));
+                    .randomDateBetweenTwoDates(LocalDateTime.now().plusMinutes(2), LocalDateTime.now().plusYears(1));
 
             Survey survey = Survey.builder()
                     .id(new ObjectId().toString())

@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.survey.controller.answer;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
 import javaday.istanbul.sliconf.micro.survey.service.AnswerService;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;

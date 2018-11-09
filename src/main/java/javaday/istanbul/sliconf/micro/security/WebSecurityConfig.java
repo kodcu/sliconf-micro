@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new Sliconf401AuthenticationEntryPoint())
                 .and()
-                // And filter other requests to check the presence of JWT in header
+                // And listEvents other requests to check the presence of JWT in header
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
                 .invalidateHttpSession(true)

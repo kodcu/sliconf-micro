@@ -1,9 +1,9 @@
 package javaday.istanbul.sliconf.micro.statistics;
 
-import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.event.Speaker;
-import javaday.istanbul.sliconf.micro.model.event.agenda.AgendaElement;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.speaker.Speaker;
+import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

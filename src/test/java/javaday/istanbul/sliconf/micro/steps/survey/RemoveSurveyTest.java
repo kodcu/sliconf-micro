@@ -1,13 +1,12 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import cucumber.api.java.tr.Ve;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
-import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.controller.GetEventWithKeyRoute;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
