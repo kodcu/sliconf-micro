@@ -13,6 +13,7 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,6 +49,7 @@ public class UserViewedSurvey implements Route {
         ResponseMessage responseMessage;
 
         String body = request.body();
+
         Map<String, String> userIdFromBody = body.isEmpty() ? null : JsonUtil.fromJson(body, Map.class);
 
         String surveyId = request.params("surveyId");

@@ -23,6 +23,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static java.lang.String.valueOf;
@@ -44,10 +45,10 @@ public class ListEvents implements Route {
 
             @ApiImplicitParam(
                     name = "lifeCycleStates", paramType = "query",
-                    defaultValue = "UPCOMING, ACTIVE",
+                    defaultValue = "ACTIVE",
                     dataType = "string",
-                    allowableValues = "ACTIVE, PASSIVE, UPCOMING, HAPPENING, FINISHED, DELETED, FAILED",
-                    example = "/events?lifeCycleStates=PASSIVE&lifeCycleStates=UPCOMING --> List upcoming passive events"
+                    allowableValues = "ACTIVE, PASSIVE, HAPPENING, FINISHED, DELETED, FAILED",
+                    example = "/events?lifeCycleStates=PASSIVE&lifeCycleStates=DELETED --> List deleted passive events"
             ),
 
             @ApiImplicitParam(dataType = "string", name = "pageSize",

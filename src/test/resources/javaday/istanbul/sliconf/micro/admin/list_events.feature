@@ -18,7 +18,7 @@
     O zaman Sistem bütün etkinlikleri Admine gösterir
 
   Senaryo: 3 - Admin sistemdeki etkinlikleri görüntülemek istiyor
-    Diyelim ki Admin sistemdeki aktif veya pasif  olan tüm etkinlikleri görüntülemek istiyor
+    Diyelim ki Admin sistemdeki aktif veya pasif olan tüm etkinlikleri görüntülemek istiyor
     Eğer ki Admin listeleme filtresi olarak aktif veya pasif olan etkinlikleri seçti ise
     O zaman Sistem aktif veya pasif olan tüm etkinlikleri Admine gösterir
 

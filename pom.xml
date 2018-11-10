@@ -44,6 +44,8 @@
 
         <cargo-maven2-plugin.version>1.6.4</cargo-maven2-plugin.version>
         <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
+
+
     </properties>
 
 
@@ -112,7 +114,7 @@
             <artifactId>spring-data-mongodb</artifactId>
         </dependency>
 
-        <dependency>
+         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
@@ -382,6 +384,8 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+
         </plugins>
     </build>
 </project>

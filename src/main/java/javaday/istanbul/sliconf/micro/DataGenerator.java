@@ -44,7 +44,7 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-@Profile({"make it dev if you need test data"})
+@Profile({"make it dev to generate test data"})
 public class DataGenerator implements CommandLineRunner {
 
     private final EventRepositoryService eventRepositoryService;
@@ -65,13 +65,12 @@ public class DataGenerator implements CommandLineRunner {
     public void run(String... args) throws Exception {
         log.info("Data generation starts...");
 
-        if (activeProfile.equals("prod"))
-            SpringApplication.run(SliconfMicroApp.class, args).close();
-
-        userRepository.deleteAll();
-        eventRepository.deleteAll();
-        surveyRepository.deleteAll();
-        answerRepository.deleteAll();
+        if (!(activeProfile.equals("prod"))) {
+            userRepository.deleteAll();
+            eventRepository.deleteAll();
+            surveyRepository.deleteAll();
+            answerRepository.deleteAll();
+        }
 
         Fairy fairy = Fairy.create();
         for (int i = 0; i < 10; i++) {
@@ -104,8 +103,9 @@ public class DataGenerator implements CommandLineRunner {
 
                 for (Survey survey : surveys) {
 
-                    responseMessage = surveyService.addNewSurvey(survey, event.getId());
-                    log.info(responseMessage.getMessage());
+                    surveyService.addNewSurvey(survey, event.getId());
+
+                    users.forEach(user1 -> surveyService.updateSurveyViewers(user1.getId(), survey.getId(), event.getId()));
 
                     for (Answer answer : AnswerGenerator.generateRandomAnswersToSurvey(survey, users)) {
                         responseMessage = answerService.answerSurvey(answer, survey.getId(), event.getId());

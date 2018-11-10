@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.event.model;
 
-
 import javaday.istanbul.sliconf.micro.floor.Floor;
 import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
 import javaday.istanbul.sliconf.micro.room.Room;
