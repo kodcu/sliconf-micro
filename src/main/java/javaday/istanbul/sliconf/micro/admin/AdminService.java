@@ -6,12 +6,9 @@ import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,11 +34,11 @@ public class AdminService {
             eventStatuses.add(LifeCycleState.EventStatus.valueOf(lifeCycleState1));
         // Query sorgulari test veritabani uzerinde calismiyor. o yuzden sadece prod ve devde calistiriyoruz.
         if(!activeProfile.equals("test"))
-            return eventRepository.findAllByLifeCycleState_EventStatuses(eventStatuses, pageable);
+            return eventRepository.findAllByLifeCycleStateEventStatuses(eventStatuses, pageable);
 
         Set<Event> events = new HashSet<>();
         for (LifeCycleState.EventStatus eventStatus : eventStatuses) {
-            events.addAll(eventRepository.findAllByLifeCycleState_EventStatusesLike(eventStatus));
+            events.addAll(eventRepository.findAllByLifeCycleStateEventStatusesLike(eventStatus));
         }
 
         return new PageImpl<>(Lists.newArrayList(events), pageable, events.size());

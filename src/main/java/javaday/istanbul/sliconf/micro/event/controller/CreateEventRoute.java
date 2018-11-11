@@ -1,15 +1,14 @@
 package javaday.istanbul.sliconf.micro.event.controller;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
-import javaday.istanbul.sliconf.micro.user.model.User;
-import javaday.istanbul.sliconf.micro.event.model.Event;
-import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
-import javaday.istanbul.sliconf.micro.event.service.EventService;
-import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.event.EventSpecs;
-import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
+import javaday.istanbul.sliconf.micro.event.service.EventService;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import lombok.AllArgsConstructor;
@@ -38,8 +37,6 @@ public class CreateEventRoute implements Route {
     private final EventService repositoryService;
 
     private final UserRepositoryService userRepositoryService;
-    private final GeneralService generalService;
-
 
     @POST
     @ApiOperation(value = "Creates an event and bind with given userId", nickname = "CreateEventRoute")
@@ -192,8 +189,8 @@ public class CreateEventRoute implements Route {
         if (Objects.nonNull(dbEvent.getExecutiveUser()) && !dbEvent.getExecutiveUser().equals(userId)) {
             return new ResponseMessage(false, messageProvider.getMessage("onlyOwnedEventsCanBeUpdated"), event);
         }
-        if(LocalDateTime.now().plusHours(48).isAfter(event.getStartDate())) {
-                event.setDateLock(true);
+        if (LocalDateTime.now().plusHours(48).isAfter(event.getStartDate())) {
+            event.setDateLock(true);
         }
         if (!(event.getStartDate().isEqual(dbEvent.getStartDate())) && event.isDateLock())
             return new ResponseMessage(false, messageProvider.getMessage("eventStartDateCanNotBeUpdatedAnymore"), event);

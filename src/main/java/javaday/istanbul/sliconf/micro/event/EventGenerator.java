@@ -11,6 +11,8 @@ import java.util.*;
 
 public class EventGenerator {
 
+    private EventGenerator() {}
+
     public static Set<Event> generateRandomEvents(int count, String userId) {
 
         Fairy fairy = Fairy.create();

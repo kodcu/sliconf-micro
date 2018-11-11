@@ -5,6 +5,7 @@ import cucumber.api.java.tr.Diyelimki;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.event.EventBuilder;
 import javaday.istanbul.sliconf.micro.agenda.controller.CreateAgendaRoute;
+import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.floor.Floor;
@@ -63,6 +64,10 @@ public class CreateAgendaTest extends SpringBootTestConfig { // NOSONAR
         event.setSpeakers(createSpeakers1());
         event.setRooms(createRooms1());
         event.setFloorPlan(createFLoors1());
+        LifeCycleState lifeCycleState = new LifeCycleState();
+        lifeCycleState.setEventStatuses(new ArrayList<>());
+        event.setLifeCycleState(lifeCycleState);
+
 
         ResponseMessage eventSaveMessage = eventRepositoryService.save(event);
         String eventKey = ((Event) eventSaveMessage.getReturnObject()).getKey();

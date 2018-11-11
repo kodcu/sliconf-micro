@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.event.service;
 
+import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 

@@ -2,12 +2,12 @@ package javaday.istanbul.sliconf.micro.user.controller;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.user.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
-import javaday.istanbul.sliconf.micro.user.service.UserPassService;
-import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.user.LoginControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.model.UserCaptcha;
+import javaday.istanbul.sliconf.micro.user.service.UserPassService;
+import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.EmailUtil;
 import javaday.istanbul.sliconf.micro.util.LoginTokenUtil;
 import javaday.istanbul.sliconf.micro.util.VerifyCaptcha;

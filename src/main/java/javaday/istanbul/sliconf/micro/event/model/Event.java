@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.event.model;
 
-import javaday.istanbul.sliconf.micro.floor.Floor;
 import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
+import javaday.istanbul.sliconf.micro.floor.Floor;
 import javaday.istanbul.sliconf.micro.room.Room;
 import javaday.istanbul.sliconf.micro.speaker.Speaker;
 import javaday.istanbul.sliconf.micro.sponsor.Sponsor;
@@ -47,6 +47,6 @@ public class Event {
     private StatusDetails statusDetails;
     private TotalUsers totalUsers;
     private BaseEventState eventState;
-    private LifeCycleState lifeCycleState;
+    private LifeCycleState lifeCycleState = new LifeCycleState();
 
 }

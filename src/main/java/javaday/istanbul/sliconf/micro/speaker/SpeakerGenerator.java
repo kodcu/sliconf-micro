@@ -9,6 +9,8 @@ import java.util.List;
 
 public class SpeakerGenerator {
 
+    private SpeakerGenerator() {}
+
     public static void generateRandomSpeakers(int count, Event event) {
 
         Fairy fairy = Fairy.create();

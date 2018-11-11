@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.user.schedule.controller;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.user.model.UserScheduleElement;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.model.UserScheduleElement;
 import javaday.istanbul.sliconf.micro.user.schedule.UserScheduleRepositoryService;
 import javaday.istanbul.sliconf.micro.user.schedule.UserScheduleService;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;

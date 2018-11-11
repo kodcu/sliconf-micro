@@ -1,12 +1,12 @@
 package javaday.istanbul.sliconf.micro.comment.controller;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.comment.model.Comment;
-import javaday.istanbul.sliconf.micro.comment.model.ListCommentResponseMessage;
-import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.comment.CommentMessageProvider;
 import javaday.istanbul.sliconf.micro.comment.CommentRepositoryService;
 import javaday.istanbul.sliconf.micro.comment.CommentSpecs;
+import javaday.istanbul.sliconf.micro.comment.model.Comment;
+import javaday.istanbul.sliconf.micro.comment.model.ListCommentResponseMessage;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

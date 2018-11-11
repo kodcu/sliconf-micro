@@ -2,7 +2,6 @@ package javaday.istanbul.sliconf.micro.steps.admin;
 
 import com.devskiller.jfairy.Fairy;
 import com.google.api.client.util.Lists;
-import cucumber.api.PendingException;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
@@ -34,12 +33,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
-import static org.mockito.AdditionalMatchers.not;
 
 @RequiredArgsConstructor
 @Ignore
@@ -69,10 +70,23 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
                 .generateAuthentication(adminUser.getUsername(), adminUser.getRole(), adminUser);
     }
 
+    private void generateActiveEvent(Set<Event> eventSet) {
+        eventSet.forEach(event -> {
+            FloorGenerator.generateRandomFlors(1, event);
+            RoomGenerator.generateRandomRooms(1, event);
+            SpeakerGenerator.generateRandomSpeakers(15, event);
+            AgendaGenerator.generateRandomAgendaElements(12, event);
+            SponsorGenerator.generateRandomSponsors(10, event);
+            EventSpecs.generateKanbanNumber(event, eventRepositoryService);
+            eventRepositoryService.save(event);
+        });
+    }
+
     @Diyelimki("^Admin sistemdeki etkinlikleri görüntülemek istiyor$")
     public void adminSistemdekiEtkinlikleriGörüntülemekIstiyor() throws Throwable {
         generateAdminUser();
-
+        Set<Event> eventSet = EventGenerator.generateRandomEvents(25, adminUser.getId());
+        generateActiveEvent(eventSet);
     }
 
     @Eğerki("^Admin herhangi bir listeleme filtresi seçmediyse$")
@@ -85,12 +99,17 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
     public void sistemAktifOlanEtkinlikleriBirSayfadaAdetOlacakŞekildeSayfalarHalindeAdmineGösterir(int size) throws Throwable {
 
         pageable = new PageRequest(0, size);
-        EnumSet<LifeCycleState.EventStatus> eventStatuses = EnumSet.allOf(LifeCycleState.EventStatus.class);
-        eventStatuses.remove(LifeCycleState.EventStatus.ACTIVE);
+        List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
+        for (String lifeCycleState1 : filters)
+            eventStatuses.add(LifeCycleState.EventStatus.valueOf(lifeCycleState1));
+        eventStatuses.clear();
+        eventStatuses.add(LifeCycleState.EventStatus.ACTIVE);
 
         Page<Event> events = adminService.listEvents(filters, pageable);
-        events.forEach(event -> assertThat(event.getLifeCycleState().getEventStatuses()
-                , not(Matchers.contains(eventStatuses))));
+        for (Event event : events) {
+            assertThat(event.getLifeCycleState().getEventStatuses(),
+                    Matchers.hasItems(Matchers.isOneOf(eventStatuses.get(0))));
+        }
 
     }
 
@@ -103,15 +122,7 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
     public void sistemdeAktifOlanToplamEtkinlikVarIse(int eventCount) throws Throwable {
         eventRepository.deleteAll();
         Set<Event> eventSet = EventGenerator.generateRandomEvents(eventCount, adminUser.getId());
-        eventSet.forEach(event -> {
-            FloorGenerator.generateRandomFlors(1, event);
-            RoomGenerator.generateRandomRooms(1, event);
-            SpeakerGenerator.generateRandomSpeakers(15, event);
-            AgendaGenerator.generateRandomAgendaElements(12, event);
-            SponsorGenerator.generateRandomSponsors(10, event);
-            EventSpecs.generateKanbanNumber(event, eventRepositoryService);
-            eventRepositoryService.save(event);
-        });
+        generateActiveEvent(eventSet);
 
         expectedEventCount = eventRepositoryService.findAll().size();
 
@@ -122,12 +133,17 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
             throws Throwable {
 
         pageable = new PageRequest(pageNumber, pageSize);
-        EnumSet<LifeCycleState.EventStatus> eventStatuses = EnumSet.allOf(LifeCycleState.EventStatus.class);
-        eventStatuses.remove(LifeCycleState.EventStatus.ACTIVE);
+        List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
+        for (String lifeCycleState1 : filters)
+            eventStatuses.add(LifeCycleState.EventStatus.valueOf(lifeCycleState1));
+        eventStatuses.clear();
+        eventStatuses.add(LifeCycleState.EventStatus.ACTIVE);
 
         Page<Event> events = adminService.listEvents(filters, pageable);
-        events.forEach(event ->
-                assertThat(event.getLifeCycleState().getEventStatuses(), Matchers.not(Matchers.contains(eventStatuses))));
+        for (Event event : events) {
+            assertThat(event.getLifeCycleState().getEventStatuses(),
+                    Matchers.hasItems(Matchers.isOneOf(eventStatuses.get(0))));
+        }
     }
 
 
@@ -147,7 +163,7 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
             EventSpecs.generateKanbanNumber(event, eventRepositoryService);
             event.getLifeCycleState()
                     .setEventStatuses(fairy.baseProducer()
-                            .randomElements(Lists.newArrayList(eventStatuses),1));
+                            .randomElements(Lists.newArrayList(eventStatuses), 1));
             eventRepositoryService.save(event);
         });
     }
@@ -159,8 +175,6 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
         filters.addAll(Stream.of(LifeCycleState.EventStatus.values())
                 .map(LifeCycleState.EventStatus::name)
                 .collect(Collectors.toList()));
-        filters.remove("FAILED");
-
     }
 
     @Ozaman("^Sistem bütün etkinlikleri Admine gösterir$")
@@ -202,7 +216,7 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
 
         for (Event event : events) {
             assertThat(event.getLifeCycleState().getEventStatuses(),
-                    Matchers.hasItems(Matchers.isOneOf(eventStatuses.get(0),eventStatuses.get(1))));
+                    Matchers.hasItems(Matchers.isOneOf(eventStatuses.get(0), eventStatuses.get(1))));
         }
     }
 
@@ -213,8 +227,8 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
 
     @Eğerki("^Admin listeleme filtresi olarak bitmiş etkinlikleri seçti ise$")
     public void adminListelemeFiltresiOlarakBitmişEtkinlikleriSeçtiIse() throws Throwable {
-       filters = new ArrayList<>();
-       filters.add("FINISHED");
+        filters = new ArrayList<>();
+        filters.add("FINISHED");
     }
 
     @Ozaman("^Sistem gerçekleşip bitmiş olan tüm etkinlikleri Admine gösterir$")

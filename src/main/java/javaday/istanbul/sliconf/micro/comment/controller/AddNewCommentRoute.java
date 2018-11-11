@@ -1,17 +1,17 @@
 package javaday.istanbul.sliconf.micro.comment.controller;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.comment.model.Comment;
-import javaday.istanbul.sliconf.micro.user.model.User;
-import javaday.istanbul.sliconf.micro.event.model.Event;
-import javaday.istanbul.sliconf.micro.room.Room;
 import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
-import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.comment.CommentMessageProvider;
 import javaday.istanbul.sliconf.micro.comment.CommentRepositoryService;
-import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.comment.CommentSpecs;
+import javaday.istanbul.sliconf.micro.comment.model.Comment;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.room.Room;
+import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

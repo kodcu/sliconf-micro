@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.event.model;
 
-import javaday.istanbul.sliconf.micro.event.model.Location;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

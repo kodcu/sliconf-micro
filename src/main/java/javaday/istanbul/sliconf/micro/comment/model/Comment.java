@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.comment.model;
 
-import javaday.istanbul.sliconf.micro.comment.model.VoteUser;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;

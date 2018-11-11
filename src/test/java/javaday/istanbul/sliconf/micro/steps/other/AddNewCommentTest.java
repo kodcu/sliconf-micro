@@ -6,6 +6,7 @@ import javaday.istanbul.sliconf.micro.comment.model.Comment;
 import javaday.istanbul.sliconf.micro.event.EventBuilder;
 import javaday.istanbul.sliconf.micro.comment.controller.AddNewCommentRoute;
 import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.floor.Floor;
 import javaday.istanbul.sliconf.micro.room.Room;
 import javaday.istanbul.sliconf.micro.speaker.Speaker;
@@ -74,6 +75,10 @@ public class AddNewCommentTest extends SpringBootTestConfig { // NOSONAR
         event.setRooms(rooms);
         event.setSpeakers(speakers);
         event.setAgenda(agendaElements);
+        LifeCycleState lifeCycleState = new LifeCycleState();
+        lifeCycleState.setEventStatuses(new ArrayList<>());
+        event.setLifeCycleState(lifeCycleState);
+
 
         ResponseMessage eventSaveMessage = eventRepositoryService.save(event);
         String eventId = ((Event) eventSaveMessage.getReturnObject()).getId();

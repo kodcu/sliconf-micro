@@ -1,12 +1,11 @@
 package javaday.istanbul.sliconf.micro.event.repository;
 
-import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,10 +20,10 @@ public interface EventRepository extends MongoRepository<Event, String> {
 
     Optional<Event> findByKey(String key);
     
-    List<Event> findAllByLifeCycleState_EventStatusesLike(LifeCycleState.EventStatus eventStatuses);
+    List<Event> findAllByLifeCycleStateEventStatusesLike(LifeCycleState.EventStatus eventStatuses);
 
     @Query(value = "{ 'lifeCycleState.eventStatuses': {'$in': ?0} }")
-    Page<Event> findAllByLifeCycleState_EventStatuses(List<LifeCycleState.EventStatus> eventStatuses, Pageable pageable);
+    Page<Event> findAllByLifeCycleStateEventStatuses(List<LifeCycleState.EventStatus> eventStatuses, Pageable pageable);
 
     List<Event> findByName(String name);
 

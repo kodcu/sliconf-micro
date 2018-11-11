@@ -93,6 +93,7 @@ public class InitialData { // NOSONAR
                 .name("Anket 01")
                 .eventKey(event.getKey())
                 .participants(0)
+                .isActive(true)
                 .build();
 
         long date = LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC);

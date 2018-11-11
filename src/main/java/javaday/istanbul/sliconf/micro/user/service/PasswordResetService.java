@@ -1,12 +1,12 @@
 package javaday.istanbul.sliconf.micro.user.service;
 
 
-import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.mail.IMailSendService;
+import javaday.istanbul.sliconf.micro.mail.MailMessageProvider;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.security.token.Token;
-import javaday.istanbul.sliconf.micro.mail.MailMessageProvider;
-import javaday.istanbul.sliconf.micro.mail.IMailSendService;
 import javaday.istanbul.sliconf.micro.security.token.TokenRepositoryService;
+import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;

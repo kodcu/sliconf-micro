@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.speaker;
 
-import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
+import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.SpeakerComparator;

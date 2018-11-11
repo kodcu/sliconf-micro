@@ -4,6 +4,7 @@ import cucumber.api.java.tr.Diyelimki;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.event.EventBuilder;
 import javaday.istanbul.sliconf.micro.event.controller.CreateEventRoute;
+import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
@@ -14,6 +15,7 @@ import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -83,6 +85,10 @@ public class CreateEventTest extends SpringBootTestConfig { // NOSONAR
                 .build();
 
         EventSpecs.generateKanbanNumber(updateEvent1, eventRepositoryService);
+        LifeCycleState lifeCycleState = new LifeCycleState();
+        lifeCycleState.setEventStatuses(new ArrayList<>());
+        updateEvent1.setLifeCycleState(lifeCycleState);
+
 
         ResponseMessage eventSaveMessage = eventRepositoryService.save(updateEvent1);
 

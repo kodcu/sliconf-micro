@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.user.service;
 
-import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.model.User;
 
 import java.util.List;
 import java.util.Optional;

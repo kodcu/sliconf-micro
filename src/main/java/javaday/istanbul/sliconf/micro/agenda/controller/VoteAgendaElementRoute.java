@@ -1,15 +1,15 @@
 package javaday.istanbul.sliconf.micro.agenda.controller;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.user.model.User;
-import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.agenda.AgendaSpecs;
 import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
 import javaday.istanbul.sliconf.micro.agenda.model.Star;
-import javaday.istanbul.sliconf.micro.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.comment.StarRepositoryService;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
-import javaday.istanbul.sliconf.micro.agenda.AgendaSpecs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

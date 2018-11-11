@@ -9,6 +9,8 @@ import java.util.List;
 
 public class RoomGenerator {
 
+    private RoomGenerator() {}
+
     private static int roomNumber = 1;
 
     public static void generateRandomRooms(int count, Event event) {

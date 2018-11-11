@@ -2,13 +2,13 @@ package javaday.istanbul.sliconf.micro.user;
 
 import com.devskiller.jfairy.Fairy;
 import javaday.istanbul.sliconf.micro.user.model.User;
-import javaday.istanbul.sliconf.micro.user.service.UserPassService;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class UserGenerator {
 
+    private UserGenerator() {}
 
     public static Set<User> generateRandomUsers(int count) {
 
@@ -30,10 +30,7 @@ public class UserGenerator {
 
     public static void generateRandomAnonynmusUsers(int count) {
 
-        Fairy fairy = Fairy.create();
-
-
-
+        throw new UnsupportedOperationException();
     }
 
 }

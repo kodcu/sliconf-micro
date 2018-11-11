@@ -13,7 +13,6 @@ import spark.Route;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 

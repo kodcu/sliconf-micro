@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.survey.service;
 
-import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
@@ -10,6 +9,7 @@ import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.util.SurveyUtil;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidator;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidatorSequence;
+import javaday.istanbul.sliconf.micro.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

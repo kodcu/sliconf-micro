@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.sponsor;
 
-import javaday.istanbul.sliconf.micro.sponsor.Sponsor;
 import lombok.Getter;
 import lombok.Setter;
 

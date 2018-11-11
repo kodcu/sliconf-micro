@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -14,7 +15,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class LifeCycleState implements Serializable {
 
-    private List<LifeCycleState.EventStatus> eventStatuses;
+    private List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
 
     public enum EventStatus {
         ACTIVE, PASSIVE, HAPPENING, FINISHED, DELETED, FAILED

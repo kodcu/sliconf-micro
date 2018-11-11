@@ -1,9 +1,9 @@
 package javaday.istanbul.sliconf.micro.user.model;
 
+import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
 import javaday.istanbul.sliconf.micro.floor.Floor;
 import javaday.istanbul.sliconf.micro.room.Room;
 import javaday.istanbul.sliconf.micro.speaker.Speaker;
-import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;

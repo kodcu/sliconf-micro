@@ -8,6 +8,8 @@ import java.util.List;
 
 public class FloorGenerator {
 
+    private FloorGenerator() {}
+
     private static int floorNumber = 0;
 
     public static void generateRandomFlors(int count, Event event) {

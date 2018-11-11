@@ -4,7 +4,6 @@ import com.devskiller.jfairy.Fairy;
 import com.google.common.collect.Maps;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
-import javaday.istanbul.sliconf.micro.user.UserGenerator;
 import javaday.istanbul.sliconf.micro.user.model.User;
 
 import java.util.*;

@@ -4,6 +4,7 @@ import cucumber.api.java.tr.Diyelimki;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.event.EventBuilder;
 import javaday.istanbul.sliconf.micro.agenda.controller.VoteAgendaElementRoute;
+import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.floor.Floor;
@@ -87,6 +88,9 @@ public class VoteAgendaElementTest extends SpringBootTestConfig { // NOSONAR
         event.setRooms(rooms);
         event.setSpeakers(speakers);
         event.setAgenda(agendaElements);
+        LifeCycleState lifeCycleState = new LifeCycleState();
+        lifeCycleState.setEventStatuses(new ArrayList<>());
+        event.setLifeCycleState(lifeCycleState);
 
         ResponseMessage eventSaveMessage = eventRepositoryService.save(event);
         String eventId = ((Event) eventSaveMessage.getReturnObject()).getId();

@@ -1,13 +1,13 @@
 package javaday.istanbul.sliconf.micro.event.controller;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.TotalUser;
 import javaday.istanbul.sliconf.micro.event.model.TotalUsers;
-import javaday.istanbul.sliconf.micro.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

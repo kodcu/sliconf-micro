@@ -1,12 +1,12 @@
 package javaday.istanbul.sliconf.micro.comment.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.comment.CommentRepositoryService;
+import javaday.istanbul.sliconf.micro.comment.VoteMessageProvider;
 import javaday.istanbul.sliconf.micro.comment.model.Comment;
 import javaday.istanbul.sliconf.micro.comment.model.VoteUser;
-import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.comment.VoteMessageProvider;
-import javaday.istanbul.sliconf.micro.comment.CommentRepositoryService;
+import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import org.slf4j.Logger;

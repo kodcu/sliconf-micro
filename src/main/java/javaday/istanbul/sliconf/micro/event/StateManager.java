@@ -1,12 +1,12 @@
 package javaday.istanbul.sliconf.micro.event;
 
+import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
 import javaday.istanbul.sliconf.micro.event.model.BaseEventState;
 import javaday.istanbul.sliconf.micro.event.model.Event;
-import javaday.istanbul.sliconf.micro.room.Room;
 import javaday.istanbul.sliconf.micro.event.model.TotalUsers;
-import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
-import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.event.service.EventStateService;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.room.Room;
 
 import java.util.List;
 import java.util.Objects;

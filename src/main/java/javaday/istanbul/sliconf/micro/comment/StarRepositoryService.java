@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.comment;
 
 import javaday.istanbul.sliconf.micro.agenda.model.Star;
-import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.comment.repository.StarRepository;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -25,7 +25,6 @@ public class RootController {
 
     private static Logger logger = LoggerFactory.getLogger(RootController.class);
 
-    private static String contentType = "application/json";
     @Autowired
     public RootController(RouteObjects routeObjects) {// NOSONAR
         RootController.routeObjects = routeObjects;// NOSONAR

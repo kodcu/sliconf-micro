@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 public class SponsorGenerator {
-    private static int SPONSOR_TYPE_COUNT = 5;
+
+    private SponsorGenerator() {}
+
     public static void generateRandomSponsors(int count, Event event) {
 
         event.setSponsorTags(generateSponsorTags());
@@ -19,7 +21,10 @@ public class SponsorGenerator {
 
         Map<String, List<Sponsor>> sponsorMap = new HashMap<>();
         List<List<Sponsor>>  lists = new ArrayList<>();
-        for (int i = 0; i < SPONSOR_TYPE_COUNT; i++) {
+
+        int sponsorTypeCount = 5;
+
+        for (int i = 0; i < sponsorTypeCount; i++) {
             lists.add(new ArrayList<>());
         }
         for (int i = 0; i < count; i++) {
@@ -27,7 +32,7 @@ public class SponsorGenerator {
                     .id(new ObjectId().toString())
                     .name(fairy.company().getName())
                     .build();
-            lists.get(i % SPONSOR_TYPE_COUNT).add(sponsor);
+            lists.get(i % sponsorTypeCount).add(sponsor);
         }
         for (List<Sponsor> sponsorList: lists) {
 

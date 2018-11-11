@@ -7,9 +7,13 @@ import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import org.bson.types.ObjectId;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AgendaGenerator {
+
+    private AgendaGenerator() {}
 
     public static void generateRandomAgendaElements(int count, Event event) {
 

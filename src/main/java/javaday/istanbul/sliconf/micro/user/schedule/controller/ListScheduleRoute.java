@@ -1,11 +1,11 @@
 package javaday.istanbul.sliconf.micro.user.schedule.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.model.UserScheduleElement;
-import javaday.istanbul.sliconf.micro.event.model.Event;
-import javaday.istanbul.sliconf.micro.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.user.schedule.UserScheduleRepositoryService;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
