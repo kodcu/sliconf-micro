@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -29,17 +30,18 @@ public class AdminService {
     @Transactional
     public Page<Event> listEvents(List<String> filters, Pageable pageable) {
 
-        List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
-        for (String lifeCycleState1 : filters)
-            eventStatuses.add(LifeCycleState.EventStatus.valueOf(lifeCycleState1));
+        List<LifeCycleState.EventStatus> eventStatuses;
+        if (filters.isEmpty()) {
+            filters.add("ACTIVE");
+        }
+        eventStatuses = filters.stream().map(LifeCycleState.EventStatus::valueOf).collect(Collectors.toList());
+
         // Query sorgulari test veritabani uzerinde calismiyor. o yuzden sadece prod ve devde calistiriyoruz.
         if(!activeProfile.equals("test"))
             return eventRepository.findAllByLifeCycleStateEventStatuses(eventStatuses, pageable);
 
         Set<Event> events = new HashSet<>();
-        for (LifeCycleState.EventStatus eventStatus : eventStatuses) {
-            events.addAll(eventRepository.findAllByLifeCycleStateEventStatusesLike(eventStatus));
-        }
+        eventStatuses.stream().map(eventRepository::findAllByLifeCycleStateEventStatusesLike).forEach(events::addAll);
 
         return new PageImpl<>(Lists.newArrayList(events), pageable, events.size());
     }

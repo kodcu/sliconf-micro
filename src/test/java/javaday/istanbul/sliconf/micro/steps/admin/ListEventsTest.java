@@ -92,7 +92,6 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
     @Eğerki("^Admin herhangi bir listeleme filtresi seçmediyse$")
     public void adminHerhangiBirListelemeFiltresiSeçmediyse() throws Throwable {
         filters = new ArrayList<>();
-        filters.add("ACTIVE");
     }
 
     @Ozaman("^Sistem aktif olan etkinlikleri bir sayfada (\\d+) adet olacak şekilde sayfalar halinde Admine gösterir$")
@@ -106,6 +105,7 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
         eventStatuses.add(LifeCycleState.EventStatus.ACTIVE);
 
         Page<Event> events = adminService.listEvents(filters, pageable);
+        assertFalse(events.getContent().isEmpty());
         for (Event event : events) {
             assertThat(event.getLifeCycleState().getEventStatuses(),
                     Matchers.hasItems(Matchers.isOneOf(eventStatuses.get(0))));
@@ -140,6 +140,8 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
         eventStatuses.add(LifeCycleState.EventStatus.ACTIVE);
 
         Page<Event> events = adminService.listEvents(filters, pageable);
+        assertFalse(events.getContent().isEmpty());
+
         for (Event event : events) {
             assertThat(event.getLifeCycleState().getEventStatuses(),
                     Matchers.hasItems(Matchers.isOneOf(eventStatuses.get(0))));
@@ -183,6 +185,7 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
         expectedEventCount = eventRepository.findAll().size();
         pageable = new PageRequest(0, 20);
         Page<Event> events = adminService.listEvents(filters, pageable);
+        assertFalse(events.getContent().isEmpty());
 
         assertEquals(expectedEventCount, events.getTotalElements());
 
@@ -206,6 +209,7 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
 
         pageable = new PageRequest(0, 20);
         Page<Event> events = adminService.listEvents(filters, pageable);
+        assertFalse(events.getContent().isEmpty());
 
         List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
         for (String lifeCycleState1 : filters)
@@ -235,6 +239,7 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
     public void sistemGerçekleşipBitmişOlanTümEtkinlikleriAdmineGösterir() throws Throwable {
         pageable = new PageRequest(0, 20);
         Page<Event> events = adminService.listEvents(filters, pageable);
+        assertFalse(events.getContent().isEmpty());
 
         List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
         for (String lifeCycleState1 : filters)
@@ -263,6 +268,7 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
     public void sistemGerçekleşmedenBitipBaşarısızOlanTümEtkinlikleriAdmineGösterir() throws Throwable {
         pageable = new PageRequest(0, 20);
         Page<Event> events = adminService.listEvents(filters, pageable);
+        assertFalse(events.getContent().isEmpty());
 
         List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
         for (String lifeCycleState1 : filters)
@@ -290,7 +296,8 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
     @Ozaman("^Sistem şu anda gerçekleşen tüm etkinlikleri Admine gösterir$")
     public void sistemŞuAndaGerçekleşenTümEtkinlikleriAdmineGösterir() throws Throwable {
         pageable = new PageRequest(0, 20);
-        Page<Event> events = adminService.listEvents(filters, pageable);
+        Page<Event> events = adminService.listEvents(filters, pageable);        
+        assertFalse(events.getContent().isEmpty());
 
         List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
         for (String lifeCycleState1 : filters)

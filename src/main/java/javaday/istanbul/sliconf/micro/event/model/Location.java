@@ -16,8 +16,4 @@ public class Location {
     private String description;
     
     private String venue;
-
-    private String venue;
-
-
 }

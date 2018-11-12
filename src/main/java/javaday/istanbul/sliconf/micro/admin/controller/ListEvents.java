@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -23,6 +24,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static java.lang.String.valueOf;
@@ -47,7 +49,7 @@ public class ListEvents implements Route {
                     defaultValue = "ACTIVE",
                     dataType = "string",
                     allowableValues = "ACTIVE, PASSIVE, HAPPENING, FINISHED, DELETED, FAILED",
-                    example = "/events?lifeCycleStates=PASSIVE&lifeCycleStates=DELETED --> List deleted passive events"
+                    example = "/events?lifeCycleStates=PASSIVE,ACTIVE --> List active or passive events"
             ),
 
             @ApiImplicitParam(dataType = "string", name = "pageSize",
@@ -79,7 +81,9 @@ public class ListEvents implements Route {
             return new ResponseMessage(false, "You have no authorization to do this!", new Object());
         }
 
-        String[] lifeCycleStatesQuery = request.queryParamsValues("lifeCycleStates");
+        QueryParamsMap lifeCycleStates =  request.queryMap("lifeCycleStates");
+
+        List<String> filters = Lists.newArrayList(Arrays.asList(lifeCycleStates.values()[0].split(",")));
 
         String pageSize = request.queryParamOrDefault("pageSize", "20");
         String pageNumber = request.queryParamOrDefault("pageNumber", "0");
@@ -91,9 +95,9 @@ public class ListEvents implements Route {
             pageable = new PageRequest(0, 20);
         }
 
-        Page<Event> events = adminService.listEvents(Lists.newArrayList(Arrays.asList(lifeCycleStatesQuery)), pageable);
-
-        return new ResponseMessage(true, "Events listed. Total Events = " + valueOf(events.getTotalElements()), events.getContent());
+        Page<Event> events = adminService.listEvents(filters, pageable);
+        String message = "Events listed. Total Events = " + valueOf(events.getTotalElements());
+        return new ResponseMessage(true, message, events.getContent());
 
     }
 }

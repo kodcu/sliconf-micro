@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
-@Api
+@Api(value = "admin", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/admin/users/:userId")
 @Produces("application/json")
 @Component
