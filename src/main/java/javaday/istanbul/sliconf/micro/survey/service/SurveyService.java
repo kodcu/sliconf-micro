@@ -1,5 +1,6 @@
 package javaday.istanbul.sliconf.micro.survey.service;
 
+import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
@@ -41,6 +42,12 @@ public class SurveyService {
 
         ResponseMessage eventResponse = generalService.findEventByIdOrEventKey(eventIdentifier);
         Event event = (Event) eventResponse.getReturnObject();
+
+        eventResponse = EventSpecs.checkIfEventStateFinished(event);
+        if (eventResponse.isStatus()) {
+            eventResponse.setMessage(surveyMessageProvider.getMessage("eventIsFinished"));
+            return eventResponse;
+        }
 
         survey.setEventId(event.getId());
         survey.setEventKey(event.getKey());
@@ -103,6 +110,12 @@ public class SurveyService {
 
         Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
         generalService.findUserById(event.getExecutiveUser());
+
+        responseMessage = EventSpecs.checkIfEventStateFinished(event);
+        if (responseMessage.isStatus()) {
+            responseMessage.setMessage(surveyMessageProvider.getMessage("eventIsFinished"));
+            return responseMessage;
+        }
 
         survey.setEventId(event.getId());
         survey.setEventKey(event.getKey());

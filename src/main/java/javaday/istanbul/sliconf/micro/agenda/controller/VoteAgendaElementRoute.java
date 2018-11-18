@@ -5,6 +5,8 @@ import javaday.istanbul.sliconf.micro.agenda.AgendaSpecs;
 import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
 import javaday.istanbul.sliconf.micro.agenda.model.Star;
 import javaday.istanbul.sliconf.micro.comment.StarRepositoryService;
+import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
@@ -129,6 +131,13 @@ public class VoteAgendaElementRoute implements Route {
         }
 
         Event event = eventRepositoryService.findOne(eventId);
+        EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
+        userResponseMessage = EventSpecs.checkIfEventStateFinished(event);
+        if (userResponseMessage.isStatus()) {
+            userResponseMessage.setMessage(ecmp.getMessage("voteFinishedEvent"));
+            return userResponseMessage;
+        }
+
 
         if (Objects.isNull(event)) {
             return new ResponseMessage(false, "Event can not found with given id", new Object());

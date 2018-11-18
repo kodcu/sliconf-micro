@@ -144,6 +144,13 @@ public class CreateEventRoute implements Route {
     private ResponseMessage updateEvent(Event event, String userId) {
         ResponseMessage responseMessage;
 
+        EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
+        responseMessage = EventSpecs.checkIfEventStateFinished(event);
+        if (responseMessage.isStatus()) {
+            responseMessage.setMessage(ecmp.getMessage("updateFinishedEvent"));
+            return responseMessage;
+        }
+
         //isim uzunluğu minimumdan düşük mü diye kontrol et
         if (!EventSpecs.checkEventName(event, 4)) {
             responseMessage = new ResponseMessage(false,

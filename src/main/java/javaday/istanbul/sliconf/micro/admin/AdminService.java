@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +36,7 @@ public class AdminService {
         eventStatuses = filters.stream().map(LifeCycleState.EventStatus::valueOf).collect(Collectors.toList());
 
         // Query sorgulari test veritabani uzerinde calismiyor. o yuzden sadece prod ve devde calistiriyoruz.
-        if(!activeProfile.equals("test"))
+        if (!activeProfile.equals("test"))
             return eventRepository.findAllByLifeCycleStateEventStatuses(eventStatuses, pageable);
 
         Set<Event> events = new HashSet<>();

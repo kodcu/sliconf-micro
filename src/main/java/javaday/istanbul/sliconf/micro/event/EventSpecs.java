@@ -5,6 +5,7 @@ import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.model.StatusDetails;
 import javaday.istanbul.sliconf.micro.event.service.EventService;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.RandomGenerator;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 
 /**
@@ -267,5 +269,37 @@ public class EventSpecs {
         } else {
             optionalPassed.add("E-mail address added");
         }
+    }
+
+    public static ResponseMessage checkIfEventStateFinished(Event event) {
+
+        ResponseMessage responseMessage = new ResponseMessage(false, "", event);
+
+        List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
+
+        eventStatuses.add(LifeCycleState.EventStatus.FAILED);
+        eventStatuses.add(LifeCycleState.EventStatus.FINISHED);
+        eventStatuses.add(LifeCycleState.EventStatus.DELETED);
+
+        Predicate<LifeCycleState.EventStatus> eventStatusPredicate = eventStatuses::contains;
+
+        if(event.getLifeCycleState().getEventStatuses().stream().anyMatch(eventStatusPredicate)){
+            responseMessage.setStatus(true);
+        }
+
+        return responseMessage;
+
+    }
+
+    public static ResponseMessage checkIfEventStateHappening (Event event) {
+
+        ResponseMessage responseMessage = new ResponseMessage(true, "", event);
+
+        if(event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.HAPPENING)){
+            responseMessage.setStatus(false);
+        }
+
+        return responseMessage;
+
     }
 }

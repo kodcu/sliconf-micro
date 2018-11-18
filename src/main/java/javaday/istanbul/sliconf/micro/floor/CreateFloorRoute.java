@@ -1,6 +1,8 @@
 package javaday.istanbul.sliconf.micro.floor;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
@@ -75,6 +77,13 @@ public class CreateFloorRoute implements Route {
         }
 
         Event event = repositoryService.findEventByKeyEquals(eventKey);
+
+        EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
+        responseMessage = EventSpecs.checkIfEventStateFinished(event);
+        if (responseMessage.isStatus()) {
+            responseMessage.setMessage(ecmp.getMessage("updateFinishedEvent"));
+            return responseMessage;
+        }
 
         if (Objects.isNull(event)) {
             responseMessage = new ResponseMessage(false,

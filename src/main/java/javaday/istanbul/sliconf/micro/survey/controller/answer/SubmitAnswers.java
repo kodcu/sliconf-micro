@@ -1,9 +1,11 @@
 package javaday.istanbul.sliconf.micro.survey.controller.answer;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
 import javaday.istanbul.sliconf.micro.survey.service.AnswerService;
+import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,10 @@ import java.util.Objects;
 public class SubmitAnswers implements Route {
 
     private final AnswerService answerService;
+
+    private final GeneralService generalService;
+
+    private final EventRepositoryService eventRepositoryService;
 
     @POST
     @ApiOperation(value = "Submits the user's answers to a specific survey.", nickname = "SubmitSurveyAnswersRoute")

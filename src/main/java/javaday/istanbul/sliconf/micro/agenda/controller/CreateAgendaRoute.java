@@ -3,6 +3,8 @@ package javaday.istanbul.sliconf.micro.agenda.controller;
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.agenda.AgendaSpecs;
 import javaday.istanbul.sliconf.micro.agenda.model.AgendaElement;
+import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
@@ -31,6 +33,8 @@ public class CreateAgendaRoute implements Route {
 
 
     private EventRepositoryService repositoryService;
+
+    private EventControllerMessageProvider eventControllerMessageProvider;
 
     @Autowired
     public CreateAgendaRoute(EventRepositoryService eventRepositoryService) {
@@ -87,6 +91,13 @@ public class CreateAgendaRoute implements Route {
         }
 
         Event event = repositoryService.findEventByKeyEquals(eventKey);
+
+        responseMessage = EventSpecs.checkIfEventStateFinished(event);
+        if (responseMessage.isStatus()) {
+            responseMessage.setMessage(eventControllerMessageProvider.getMessage("updateFinishedEvent"));
+            return responseMessage;
+        }
+
 
         if (Objects.isNull(event)) {
             responseMessage = new ResponseMessage(false,

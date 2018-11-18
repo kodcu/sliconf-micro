@@ -1,15 +1,15 @@
 package javaday.istanbul.sliconf.micro.steps.survey;
 
 import javaday.istanbul.sliconf.micro.event.EventBuilder;
-import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.event.model.Event;
-import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
-import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.model.Question;
 import javaday.istanbul.sliconf.micro.survey.model.QuestionOption;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
+import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;

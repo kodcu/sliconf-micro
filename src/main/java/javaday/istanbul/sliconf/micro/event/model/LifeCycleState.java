@@ -13,10 +13,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode
+/**
+ * 
+ */
+// TODO: 13.11.2018 aciklama yaz. 
 public class LifeCycleState implements Serializable {
 
     private List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
-
+    
     public enum EventStatus {
         ACTIVE, PASSIVE, HAPPENING, FINISHED, DELETED, FAILED
     }
