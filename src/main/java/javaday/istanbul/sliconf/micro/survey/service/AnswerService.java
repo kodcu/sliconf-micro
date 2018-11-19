@@ -28,7 +28,6 @@ public class AnswerService {
     private final SurveyValidator surveyValidator;
     private final SurveyMessageProvider surveyMessageProvider;
     private final AnswerRepository answerRepository;
-    private final EventControllerMessageProvider eventControllerMessageProvider;
 
     /* Answer service surveyservice'e surveyservice ise answerService' bağımlı.
        bu sebeple bunları @Autowired ile lazy load ediyoruz. böylece circular dependency hatası almıyoruz.

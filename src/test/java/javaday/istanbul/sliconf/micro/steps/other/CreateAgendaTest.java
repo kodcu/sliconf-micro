@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -65,7 +66,7 @@ public class CreateAgendaTest extends SpringBootTestConfig { // NOSONAR
         event.setRooms(createRooms1());
         event.setFloorPlan(createFLoors1());
         LifeCycleState lifeCycleState = new LifeCycleState();
-        lifeCycleState.setEventStatuses(new ArrayList<>());
+        lifeCycleState.setEventStatuses(new HashSet<>());
         event.setLifeCycleState(lifeCycleState);
 
 

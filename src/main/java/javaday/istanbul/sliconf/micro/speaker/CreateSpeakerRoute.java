@@ -85,16 +85,16 @@ public class CreateSpeakerRoute implements Route {
 
         Event event = repositoryService.findEventByKeyEquals(eventKey);
 
+        if (Objects.isNull(event)) {
+            responseMessage = new ResponseMessage(false,
+                    "Event can not found by given key", speakers);
+            return responseMessage;
+        }
+
         EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
         responseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (responseMessage.isStatus()) {
             responseMessage.setMessage(ecmp.getMessage("updateFinishedEvent"));
-            return responseMessage;
-        }
-
-        if (Objects.isNull(event)) {
-            responseMessage = new ResponseMessage(false,
-                    "Event can not found by given key", speakers);
             return responseMessage;
         }
 
