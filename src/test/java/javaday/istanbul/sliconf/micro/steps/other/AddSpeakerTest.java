@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -75,7 +76,7 @@ public class AddSpeakerTest extends SpringBootTestConfig { // NOSONAR
         event.setSpeakers(speakers);
         event.setAgenda(agendaElements);
         LifeCycleState lifeCycleState = new LifeCycleState();
-        lifeCycleState.setEventStatuses(new ArrayList<>());
+        lifeCycleState.setEventStatuses(new HashSet<>());
         event.setLifeCycleState(lifeCycleState);
 
 

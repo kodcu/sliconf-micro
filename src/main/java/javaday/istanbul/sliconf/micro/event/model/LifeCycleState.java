@@ -7,13 +7,16 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
  * @author Murat Özer
  * Etkinliğin olusturulma aşamasından sistemden kalıcı olarak silinme sürecine kadar ki durumlarını barındıran nesne.
- * Bu durumlar toplamda altı adet enum ile temsil edilmiştir. Şu an için bir etkinlik en fazla iki durumda bulunabilir.
+ * Bu durumlar toplamda altı adet enum ile temsil edilmiştir.
+ * Şu an için bir etkinlik en fazla iki durumda bulunabilir.
+
  * Bunlardan biri her zaman {@link EventStatus#DELETED} durumudur.
  * Bunun dışında etkinliğin hangi durumda silindiğine bağlı olarak diğer durumlardan bir tanesini alabilir.
  */
@@ -26,7 +29,7 @@ public class LifeCycleState implements Serializable {
     /**
      * Etkinliğin durumlarını tutan liste nesnesi.
      */
-    private List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
+    private Set<EventStatus> eventStatuses = new HashSet<>();
 
     public enum EventStatus {
 

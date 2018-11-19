@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -86,7 +87,7 @@ public class CreateEventTest extends SpringBootTestConfig { // NOSONAR
 
         EventSpecs.generateKanbanNumber(updateEvent1, eventRepositoryService);
         LifeCycleState lifeCycleState = new LifeCycleState();
-        lifeCycleState.setEventStatuses(new ArrayList<>());
+        lifeCycleState.setEventStatuses(new HashSet<>());
         updateEvent1.setLifeCycleState(lifeCycleState);
 
 

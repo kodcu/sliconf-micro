@@ -7,6 +7,7 @@ import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -24,15 +25,12 @@ import java.util.Objects;
 @Path("/service/events/speaker/create/:event-key")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class CreateSpeakerRoute implements Route {
 
 
-    private EventRepositoryService repositoryService;
-
-    @Autowired
-    public CreateSpeakerRoute(EventRepositoryService eventRepositoryService) {
-        this.repositoryService = eventRepositoryService;
-    }
+    private final EventRepositoryService repositoryService;
+    private final EventControllerMessageProvider ecmp;
 
     @POST
     @ApiOperation(value = "Creates a spakers", nickname = "CreateSpeakerRoute")
@@ -91,7 +89,6 @@ public class CreateSpeakerRoute implements Route {
             return responseMessage;
         }
 
-        EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
         responseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (responseMessage.isStatus()) {
             responseMessage.setMessage(ecmp.getMessage("updateFinishedEvent"));

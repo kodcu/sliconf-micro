@@ -26,6 +26,7 @@ import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.util.Sets;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.springframework.data.domain.Page;
@@ -164,8 +165,8 @@ public class ListEventsTest extends SpringBootTestConfig { // NOSONAR
         eventSet.forEach(event -> {
             EventSpecs.generateKanbanNumber(event, eventRepositoryService);
             event.getLifeCycleState()
-                    .setEventStatuses(fairy.baseProducer()
-                            .randomElements(Lists.newArrayList(eventStatuses), 1));
+                    .setEventStatuses(Sets.newHashSet(fairy.baseProducer()
+                            .randomElements(eventStatuses, 1)));
             eventRepositoryService.save(event);
         });
     }

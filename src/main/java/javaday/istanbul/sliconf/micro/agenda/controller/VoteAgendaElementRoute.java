@@ -12,9 +12,9 @@ import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -31,22 +31,16 @@ import java.util.Objects;
 @Path("/service/events/agenda/vote/:eventId/:sessionId/:userId/:voteValue")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class VoteAgendaElementRoute implements Route {
 
-    private UserRepositoryService userRepositoryService;
-    private StarRepositoryService starRepositoryService;
-    private EventRepositoryService eventRepositoryService;
+    private final UserRepositoryService userRepositoryService;
+    private final StarRepositoryService starRepositoryService;
+    private final EventRepositoryService eventRepositoryService;
+    private final EventControllerMessageProvider ecmp;
 
     private Logger logger = LoggerFactory.getLogger(VoteAgendaElementRoute.class);
 
-    @Autowired
-    public VoteAgendaElementRoute(UserRepositoryService userRepositoryService,
-                                  EventRepositoryService eventRepositoryService,
-                                  StarRepositoryService starRepositoryService) {
-        this.userRepositoryService = userRepositoryService;
-        this.starRepositoryService = starRepositoryService;
-        this.eventRepositoryService = eventRepositoryService;
-    }
 
     @POST
     @ApiOperation(value = "Votes a agenda element", nickname = "VoteAgendaElementRoute")
@@ -131,7 +125,6 @@ public class VoteAgendaElementRoute implements Route {
         }
 
         Event event = eventRepositoryService.findOne(eventId);
-        EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
         userResponseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (userResponseMessage.isStatus()) {
             userResponseMessage.setMessage(ecmp.getMessage("voteFinishedEvent"));
