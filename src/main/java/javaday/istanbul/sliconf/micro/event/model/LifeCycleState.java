@@ -15,7 +15,7 @@ import java.util.Set;
  * @author Murat Özer
  * Etkinliğin olusturulma aşamasından sistemden kalıcı olarak silinme sürecine kadar ki durumlarını barındıran nesne.
  * Bu durumlar toplamda altı adet enum ile temsil edilmiştir.
- * Şu an için bir etkinlik en fazla iki durumda bulunabilir.
+ *  Şu an için bir etkinlik en fazla iki durumda bulunabilir.
  * Bunlardan biri her zaman {@link EventStatus#DELETED} durumudur.
  * Bunun dışında etkinliğin hangi durumda silindiğine bağlı olarak diğer durumlardan bir tanesini alabilir.
  */

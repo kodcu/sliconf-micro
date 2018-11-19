@@ -7,6 +7,7 @@ import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -23,15 +24,12 @@ import java.util.*;
 @Path("/service/events/sponsor/create/:event-key")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class CreateSponsorRoute implements Route {
 
 
     private EventRepositoryService repositoryService;
-
-    @Autowired
-    public CreateSponsorRoute(EventRepositoryService eventRepositoryService) {
-        this.repositoryService = eventRepositoryService;
-    }
+    private final EventControllerMessageProvider ecmp;
 
     @POST
     @ApiOperation(value = "Creates a sponsor", nickname = "CreateSponsorRoute")
@@ -99,7 +97,6 @@ public class CreateSponsorRoute implements Route {
 
         Event event = repositoryService.findEventByKeyEquals(eventKey);
 
-        EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
         responseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (responseMessage.isStatus()) {
             responseMessage.setMessage(ecmp.getMessage("updateFinishedEvent"));

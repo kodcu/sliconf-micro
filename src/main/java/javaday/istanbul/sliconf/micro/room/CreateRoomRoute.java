@@ -7,6 +7,7 @@ import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -25,15 +26,12 @@ import java.util.UUID;
 @Path("/service/events/room/create/:event-key")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class CreateRoomRoute implements Route {
 
+    private final EventControllerMessageProvider ecmp;
 
-    private EventRepositoryService repositoryService;
-
-    @Autowired
-    public CreateRoomRoute(EventRepositoryService eventRepositoryService) {
-        this.repositoryService = eventRepositoryService;
-    }
+    private final EventRepositoryService repositoryService;
 
     @POST
     @ApiOperation(value = "Creates a room", nickname = "CreateRoomRoute")
@@ -84,7 +82,6 @@ public class CreateRoomRoute implements Route {
             return responseMessage;
         }
 
-        EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
         responseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (responseMessage.isStatus()) {
             responseMessage.setMessage(ecmp.getMessage("updateFinishedEvent"));
