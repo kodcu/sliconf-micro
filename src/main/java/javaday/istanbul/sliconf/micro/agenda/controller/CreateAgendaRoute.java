@@ -92,18 +92,18 @@ public class CreateAgendaRoute implements Route {
 
         Event event = repositoryService.findEventByKeyEquals(eventKey);
 
+        if (Objects.isNull(event)) {
+            responseMessage = new ResponseMessage(false,
+                    "Event can not found by given key", new Object());
+            return responseMessage;
+        }
+
         responseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (responseMessage.isStatus()) {
             responseMessage.setMessage(eventControllerMessageProvider.getMessage("updateFinishedEvent"));
             return responseMessage;
         }
 
-
-        if (Objects.isNull(event)) {
-            responseMessage = new ResponseMessage(false,
-                    "Event can not found by given key", new Object());
-            return responseMessage;
-        }
 
         ResponseMessage responseMessageValid = AgendaSpecs.isAgendaValid(agenda);
 

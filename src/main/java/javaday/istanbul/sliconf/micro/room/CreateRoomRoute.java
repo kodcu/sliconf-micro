@@ -78,6 +78,12 @@ public class CreateRoomRoute implements Route {
 
         Event event = repositoryService.findEventByKeyEquals(eventKey);
 
+        if (Objects.isNull(event)) {
+            responseMessage = new ResponseMessage(false,
+                    "Event can not found by given key", new Object());
+            return responseMessage;
+        }
+
         EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
         responseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (responseMessage.isStatus()) {
@@ -85,11 +91,6 @@ public class CreateRoomRoute implements Route {
             return responseMessage;
         }
 
-        if (Objects.isNull(event)) {
-            responseMessage = new ResponseMessage(false,
-                    "Event can not found by given key", new Object());
-            return responseMessage;
-        }
 
         generateRoomId(roomList);
 

@@ -35,7 +35,7 @@ public class CreateEventRoute implements Route {
 
     private final EventControllerMessageProvider messageProvider;
     private final EventService repositoryService;
-
+    private final EventControllerMessageProvider ecmp;
     private final UserRepositoryService userRepositoryService;
 
     @POST
@@ -144,8 +144,9 @@ public class CreateEventRoute implements Route {
     private ResponseMessage updateEvent(Event event, String userId) {
         ResponseMessage responseMessage;
 
-        EventControllerMessageProvider ecmp = new EventControllerMessageProvider();
-        responseMessage = EventSpecs.checkIfEventStateFinished(event);
+        Event dbEvent = repositoryService.findByKey(event.getKey()).orElse(null);
+
+        responseMessage = EventSpecs.checkIfEventStateFinished(dbEvent);
         if (responseMessage.isStatus()) {
             responseMessage.setMessage(ecmp.getMessage("updateFinishedEvent"));
             return responseMessage;
@@ -181,7 +182,7 @@ public class CreateEventRoute implements Route {
         }
 
         // event var mı diye kontrol et
-        Event dbEvent = repositoryService.findEventByKeyEquals(event.getKey());
+        dbEvent = repositoryService.findEventByKeyEquals(event.getKey());
 
         if (Objects.isNull(dbEvent)) {
             responseMessage = new ResponseMessage(false,
