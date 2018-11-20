@@ -1,8 +1,9 @@
 package javaday.istanbul.sliconf.micro.survey.util;
 
 
-import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.AnswerRepository;
 import javaday.istanbul.sliconf.micro.survey.GeneralException;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
@@ -15,6 +16,8 @@ import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -117,5 +120,4 @@ public class SurveyUtil {
 
         }
     }
-
 }

@@ -2,7 +2,6 @@ package javaday.istanbul.sliconf.micro;
 
 
 import javaday.istanbul.sliconf.micro.config.CorsFilter;
-import javaday.istanbul.sliconf.micro.controller.RootController;
 import org.springframework.beans.factory.annotation.Autowired;
 import spark.servlet.SparkApplication;
 

@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.survey.service;
 
-import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.EventSpecs;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
@@ -10,12 +10,14 @@ import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.util.SurveyUtil;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidator;
 import javaday.istanbul.sliconf.micro.survey.validator.SurveyValidatorSequence;
+import javaday.istanbul.sliconf.micro.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,12 @@ public class SurveyService {
 
         ResponseMessage eventResponse = generalService.findEventByIdOrEventKey(eventIdentifier);
         Event event = (Event) eventResponse.getReturnObject();
+
+        eventResponse = EventSpecs.checkIfEventStateFinished(event);
+        if (eventResponse.isStatus()) {
+            eventResponse.setMessage(surveyMessageProvider.getMessage("eventIsFinished"));
+            return eventResponse;
+        }
 
         survey.setEventId(event.getId());
         survey.setEventKey(event.getKey());
@@ -69,6 +77,9 @@ public class SurveyService {
         if (!responseMessage.isStatus()) {
             return responseMessage;
         }
+        // etkinlik baslamis ise anket otomatik olarak aktif olur.
+        if(event.getStartDate().isBefore(LocalDateTime.now()))
+            survey.setIsActive(true);
         surveyRepository.save(survey);
 
         String message = surveyMessageProvider.getMessage("surveyCreatedSuccessfully");
@@ -99,6 +110,12 @@ public class SurveyService {
 
         Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
         generalService.findUserById(event.getExecutiveUser());
+
+        responseMessage = EventSpecs.checkIfEventStateFinished(event);
+        if (responseMessage.isStatus()) {
+            responseMessage.setMessage(surveyMessageProvider.getMessage("eventIsFinished"));
+            return responseMessage;
+        }
 
         survey.setEventId(event.getId());
         survey.setEventKey(event.getKey());

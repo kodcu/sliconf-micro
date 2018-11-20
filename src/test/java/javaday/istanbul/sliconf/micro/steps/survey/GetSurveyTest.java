@@ -2,8 +2,8 @@ package javaday.istanbul.sliconf.micro.steps.survey;
 
 import cucumber.api.java.tr.*;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
-import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.controller.GetEventWithKeyRoute;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.GeneralException;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
@@ -48,8 +48,8 @@ public class GetSurveyTest extends SpringBootTestConfig { // NOSONAR
 
     }
 
-    @Ve("^Kullanıcı sistemde mevcut olan bir anketin bilgilerine erişmek istiyor ise$")
-    public void kullanıcıSistemdeMevcutOlanBirAnketinBilgilerineErişmekIstiyorIse() throws Throwable {
+    @Ve("^Anket silinmemiş ise$")
+    public void anketSilinmemişIse() throws Throwable {
 
         ResponseMessage responseMessage;
         int oldSurveyViewersCount = initialData.survey.getViewers();

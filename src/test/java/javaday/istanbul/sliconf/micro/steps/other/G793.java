@@ -4,12 +4,12 @@ import cucumber.api.java.Before;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
-import javaday.istanbul.sliconf.micro.builder.UserBuilder;
-import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.provider.LoginControllerMessageProvider;
-import javaday.istanbul.sliconf.micro.service.UserPassService;
-import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.LoginControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.user.UserBuilder;
+import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.user.service.UserPassService;
+import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 

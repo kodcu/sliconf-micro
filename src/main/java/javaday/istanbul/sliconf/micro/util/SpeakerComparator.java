@@ -1,6 +1,6 @@
 package javaday.istanbul.sliconf.micro.util;
 
-import javaday.istanbul.sliconf.micro.model.event.Speaker;
+import javaday.istanbul.sliconf.micro.speaker.Speaker;
 
 import java.text.Collator;
 import java.util.Comparator;

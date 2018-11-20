@@ -1,7 +1,9 @@
 package javaday.istanbul.sliconf.micro.survey.service;
 
-import javaday.istanbul.sliconf.micro.model.event.Event;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
+import javaday.istanbul.sliconf.micro.event.EventSpecs;
+import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.AnswerRepository;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
 import javaday.istanbul.sliconf.micro.survey.model.Answer;
@@ -36,9 +38,14 @@ public class AnswerService {
     @Transactional
     public ResponseMessage answerSurvey(Answer answer, String surveyId, String eventIdentifier) {
         ResponseMessage responseMessage;
-
         generalService.findUserById(answer.getUserId());
         Event event = (Event) generalService.findEventByIdOrEventKey(eventIdentifier).getReturnObject();
+
+        responseMessage = EventSpecs.checkIfEventStateHappening(event);
+        if (!responseMessage.isStatus()) {
+            responseMessage.setMessage(surveyMessageProvider.getMessage("eventIsNotStartedYet"));
+            return responseMessage;
+        }
         answer.setEventId(event.getId());
         answer.setEventKey(event.getKey());
 

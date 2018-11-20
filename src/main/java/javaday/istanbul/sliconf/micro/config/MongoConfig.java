@@ -26,7 +26,7 @@ import java.util.Collections;
  * Created by ttayfur on 7/3/18.
  */
 @Configuration
-@EnableMongoRepositories(basePackages = {"javaday.istanbul.sliconf.micro.repository"})
+@EnableMongoRepositories(basePackages = {"javaday.istanbul.sliconf.micro"})
 @Profile({"prod", "dev"})
 public class MongoConfig extends AbstractMongoConfiguration {
 

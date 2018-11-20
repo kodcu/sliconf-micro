@@ -1,7 +1,7 @@
 package javaday.istanbul.sliconf.micro.statistics;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import spark.Request;

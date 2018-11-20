@@ -13,17 +13,17 @@ import org.springframework.stereotype.Component;
  * Buradaki "secret" tokenların şifrelenmesi ve çözülmesinde kullanılacak olan
  * değerdir.
  */
+
 @Component
 @PropertySource("classpath:application-security.properties")
 @ConfigurationProperties(prefix = "sliconf.security.authentication")
 public class TokenAuthenticationServiceProperties {
 
-    private TokenAuthenticationServiceProperties() {
-    }
+    private TokenAuthenticationServiceProperties() {}
 
     private static String tokenSecret;
 
-    public static String getTokenSecret() {
+    static String getTokenSecret() {
         return tokenSecret;
     }
 

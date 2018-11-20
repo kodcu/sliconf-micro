@@ -2,8 +2,8 @@ package javaday.istanbul.sliconf.micro.steps.survey;
 
 import cucumber.api.java.tr.*;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
-import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.controller.GetEventWithKeyRoute;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.AnswerRepository;
 import javaday.istanbul.sliconf.micro.survey.GeneralException;
 import javaday.istanbul.sliconf.micro.survey.SurveyMessageProvider;
@@ -117,6 +117,11 @@ public class SubmitAnswersTest extends SpringBootTestConfig { // NOSONAR
         } catch (GeneralException sExp) {
             fail();
         }
+    }
+
+    @Ve("^Anket aktif ise$")
+    public void anketAktifIse() throws Throwable {
+        assertTrue(initialData.survey.getIsActive());
     }
 
     @Ozaman("^Anketin katılanların sayısı güncellenir$")
@@ -296,4 +301,5 @@ public class SubmitAnswersTest extends SpringBootTestConfig { // NOSONAR
 
         }
     }
+
 }

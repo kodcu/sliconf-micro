@@ -5,8 +5,8 @@ import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import cucumber.api.java.tr.Ve;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
-import javaday.istanbul.sliconf.micro.controller.event.GetEventWithKeyRoute;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.event.controller.GetEventWithKeyRoute;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.SurveyRepository;
 import javaday.istanbul.sliconf.micro.survey.model.Survey;
 import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
@@ -60,8 +60,13 @@ public class RemoveSurveyTest extends SpringBootTestConfig { // NOSONAR
 
     }
 
-    @Ozaman("^Sistem anketi ve var ise ankete verilmiş cevapları siler$")
-    public void sistemAnketiVeVarIseAnketeVerilmişCevaplarıSiler() throws Throwable {
+    @Ve("^Anketi o an aktif olarak kullanan birisi yoksa - ekrana yansıltılma gibi$")
+    public void anketiOAnAktifOlarakKullananBirisiYoksaEkranaYansıltılmaGibi() throws Throwable {
+        assertTrue(true);
+    }
+
+    @Ozaman("^Sistem anketi ve ona bağlı cevapları siler ve etkinlik yöneticisine geri bildirim verir$")
+    public void sistemAnketiVeOnaBağlıCevaplarıSilerVeEtkinlikYöneticisineGeriBildirimVerir() throws Throwable {
 
         ResponseMessage responseMessage;
         responseMessage = surveyService.deleteSurvey(initialData.survey.getId());
@@ -75,4 +80,5 @@ public class RemoveSurveyTest extends SpringBootTestConfig { // NOSONAR
         assertFalse(survey.isPresent());
 
     }
-}
+
+ }

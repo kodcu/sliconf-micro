@@ -1,8 +1,8 @@
 package javaday.istanbul.sliconf.micro.util;
 
-import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
+import javaday.istanbul.sliconf.micro.user.model.User;
 import spark.Response;
 
 import java.util.Objects;

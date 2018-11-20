@@ -2,10 +2,9 @@ package javaday.istanbul.sliconf.micro.security;
 
 import com.hazelcast.core.IMap;
 import io.jsonwebtoken.*;
-import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.token.SecurityToken;
-import javaday.istanbul.sliconf.micro.provider.DistributedMapProvider;
-import javaday.istanbul.sliconf.micro.service.user.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.security.token.SecurityToken;
+import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

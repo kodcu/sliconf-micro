@@ -2,9 +2,9 @@ package javaday.istanbul.sliconf.micro.steps.other;
 
 import cucumber.api.java.tr.Diyelimki;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
-import javaday.istanbul.sliconf.micro.controller.login.CreateUserRoute;
-import javaday.istanbul.sliconf.micro.model.User;
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.controller.CreateUserRoute;
+import javaday.istanbul.sliconf.micro.user.model.User;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 

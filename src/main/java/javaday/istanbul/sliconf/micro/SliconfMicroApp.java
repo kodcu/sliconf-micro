@@ -13,12 +13,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
  * Created by ttayfur on 7/4/17.
  */
-
+@EnableScheduling
 @EnableMongoRepositories
 //@SpringBootApplication
 @EnableAutoConfiguration(
@@ -38,8 +39,14 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
         schemes = {SwaggerDefinition.Scheme.HTTP, SwaggerDefinition.Scheme.HTTPS}, //
         consumes = {"application/json"}, //
         produces = {"application/json"}, //
-        tags = {@Tag(name = "survey", description = "Survey Operations"),
-                @Tag(name = "statistics", description = "Statistics about app")},
+        tags = {
+                @Tag(name = "survey", description = "Survey Operations"),
+                @Tag(name = "statistics", description = "Statistics about app"),
+                @Tag(name = "user", description = "User related endpoints"),
+                @Tag(name = "admin", description = "Admin related endpoints"),
+
+        },
+
         securityDefinition = @SecurityDefinition(
                 apiKeyAuthDefinitions = @ApiKeyAuthDefinition
                         (name = "Authorization", in = ApiKeyAuthDefinition.ApiKeyLocation.HEADER, key = "Bearer"))

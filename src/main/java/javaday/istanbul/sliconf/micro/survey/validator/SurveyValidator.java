@@ -1,6 +1,6 @@
 package javaday.istanbul.sliconf.micro.survey.validator;
 
-import javaday.istanbul.sliconf.micro.model.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
