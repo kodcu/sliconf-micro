@@ -77,6 +77,7 @@ public class GandiMailSendService implements IMailSendService {
 
             message.setSubject(subject);
             message.setText(text);
+            message.setContent(text, "text/html; charset=utf-8");
 
             if (!isTest) {
                 Transport.send(message);
