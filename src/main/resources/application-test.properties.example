@@ -5,31 +5,29 @@ server.port=8090
 spring.data.couchbase.auto-index=true
 sliconf.couchbase.host-name=127.0.0.1
 sliconf.couchbase.default-host-name=localhost
-sliconf.couchbase.bucket-pass=<bucket-password>
+sliconf.couchbase.bucket-pass=jfFMd8Nd
 
 # Mongo Settings
-# Mongo Port default is 27017
 sliconf.mongo.host-name=127.0.0.1
-sliconf.mongo.password=<mongo-password>
-sliconf.mongo.port=<mongo-port>
-sliconf.mongo.username=<mongo-user>
-sliconf.mongo.database=<mongo-dbname>
+sliconf.mongo.password=LJYKkAw6b3TtQt3f
+sliconf.mongo.port=27017
+sliconf.mongo.username=sliconfSecretUser
+sliconf.mongo.database=sliconf
 
 # Hazelcast Settings
-# 224.2.2.3 is default multicast group
 sliconf.hazelcast.multicast-group=224.2.2.3
 sliconf.hazelcast.tcp-ip=127.0.0.1
-sliconf.hazelcast.group-name=<group-name>
-sliconf.hazelcast.group-pass=<group-pass>
+sliconf.hazelcast.group-name=kodcu
+sliconf.hazelcast.group-pass=g54kSRnPSCM638Lz
 
 # Mail Settings
-sliconf.mail.username=<smtp-mail-username>
-sliconf.mail.password=<smtp-mail-password>
-sliconf.mail.from=<smtp-mail-from>
-sliconf.mail.isTest=true
+sliconf.mail.username=contact@sliconf.com
+sliconf.mail.password=Lessismore2018!
+sliconf.mail.from=info@sliconf.com
+sliconf.mail.isTest=false
 sliconf.mail.smtp.auth=true
-sliconf.mail.smtp.host=<smtp-hostname>
-sliconf.mail.smtp.port=<smtp-port>
+sliconf.mail.smtp.host=mail.gandi.net
+sliconf.mail.smtp.port=587
 sliconf.mail.smtp.starttls=true
 
 sliconf.user.fullname=Guest
