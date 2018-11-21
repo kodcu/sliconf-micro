@@ -13,6 +13,7 @@ import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ import java.util.Objects;
 @Path("/service/events/agenda/vote/:eventId/:sessionId/:userId/:voteValue")
 @Produces("application/json")
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VoteAgendaElementRoute implements Route {
 
     private final UserRepositoryService userRepositoryService;
