@@ -17,7 +17,7 @@ public class StatisticsService {
 
     private final GeneralService generalService;
 
-    public ResponseMessage getEventSessionsStatistics(String eventKey) {
+    ResponseMessage getEventSessionsStatistics(String eventKey) {
 
         Event event = (Event) generalService.findEventByIdOrEventKey(eventKey).getReturnObject();
         List<AgendaElement> agendaElements = new ArrayList<>(event.getAgenda());
