@@ -1,10 +1,12 @@
 package javaday.istanbul.sliconf.micro.admin.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.admin.AdminService;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.Constants;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -26,14 +28,12 @@ import java.util.Objects;
 @Path("/service/admin/list/events")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class AdminListEventsRoute implements Route {
 
-    private EventRepositoryService eventRepositoryService;
+    private final EventRepositoryService eventRepositoryService;
+    private final AdminService adminService;
 
-    @Autowired
-    public AdminListEventsRoute(EventRepositoryService eventRepositoryService) {
-        this.eventRepositoryService = eventRepositoryService;
-    }
 
     @POST
     @ApiOperation(value = "Lists events for admin", nickname = "AdminListEventsRoute")
@@ -54,13 +54,11 @@ public class AdminListEventsRoute implements Route {
 
     public ResponseMessage getEvents(Authentication authentication) {
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = adminService.checkUserRoleIsAdmin(authentication);
+
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         List<Event> events = eventRepositoryService.findAll();
 

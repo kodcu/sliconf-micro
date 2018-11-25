@@ -1,10 +1,12 @@
 package javaday.istanbul.sliconf.micro.admin.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.admin.AdminService;
 import javaday.istanbul.sliconf.micro.event.model.BaseEventState;
 import javaday.istanbul.sliconf.micro.event.service.EventStateService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.Constants;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -26,14 +28,11 @@ import java.util.Objects;
 @Path("/service/admin/list/event-states")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class AdminListEventStatesRoute implements Route {
 
-    private EventStateService eventStateService;
-
-    @Autowired
-    public AdminListEventStatesRoute(EventStateService eventStateService) {
-        this.eventStateService = eventStateService;
-    }
+    private final EventStateService eventStateService;
+    private final AdminService adminService;
 
     @GET
     @ApiOperation(value = "Lists event states for admin", nickname = "AdminListEventStatesRoute")
@@ -54,13 +53,10 @@ public class AdminListEventStatesRoute implements Route {
 
     public ResponseMessage getEventStates(Authentication authentication) {
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = adminService.checkUserRoleIsAdmin(authentication);
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         List<BaseEventState> eventStates = eventStateService.findAll();
 

@@ -9,8 +9,12 @@ import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -83,7 +87,11 @@ public class GetEventWithKeyRoute implements Route {
                     messageProvider.getMessage("eventCanNotFound"), new Object());
         }
 
-        this.addUserToEvent(event, userId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(Constants.DEFAULT_USER_ROLE);
+        boolean isUser = authentication.getAuthorities().contains(simpleGrantedAuthority);
+        if (isUser)
+            this.addUserToEvent(event, userId);
 
         repositoryService.save(event);
 

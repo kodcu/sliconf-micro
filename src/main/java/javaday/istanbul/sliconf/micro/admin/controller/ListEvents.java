@@ -73,13 +73,10 @@ public class ListEvents implements Route {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = adminService.checkUserRoleIsAdmin(authentication);
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         QueryParamsMap lifeCycleStates =  request.queryMap("lifeCycleStates");
 

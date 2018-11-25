@@ -1,13 +1,12 @@
 package javaday.istanbul.sliconf.micro.admin.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.admin.AdminService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
-import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -17,7 +16,6 @@ import spark.Route;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -28,6 +26,8 @@ import java.util.Optional;
 public class AdminGetUserInfo implements Route {
 
     private final UserRepositoryService userRepositoryService;
+
+    private final AdminService adminService;
 
 
     @GET
@@ -52,13 +52,10 @@ public class AdminGetUserInfo implements Route {
 
     public ResponseMessage getUser(Authentication authentication, String userId) {
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = adminService.checkUserRoleIsAdmin(authentication);
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         Optional<User> userOptional = userRepositoryService.findById(userId);
         return userOptional

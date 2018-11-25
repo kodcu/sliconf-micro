@@ -4,16 +4,21 @@ import com.google.api.client.util.Lists;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.repository.EventRepository;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,5 +48,18 @@ public class AdminService {
         eventStatuses.stream().map(eventRepository::findAllByLifeCycleStateEventStatusesLike).forEach(events::addAll);
 
         return new PageImpl<>(Lists.newArrayList(events), pageable, events.size());
+    }
+
+    public ResponseMessage checkUserRoleIsAdmin(Authentication authentication) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN));
+        if (!isAdmin) {
+            responseMessage.setStatus(false);
+            responseMessage.setMessage("You have no authorization to do this!");
+            responseMessage.setReturnObject(new Object());
+        }
+
+
+        return responseMessage;
     }
 }

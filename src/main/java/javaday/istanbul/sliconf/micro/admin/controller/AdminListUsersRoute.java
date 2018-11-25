@@ -1,10 +1,12 @@
 package javaday.istanbul.sliconf.micro.admin.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.admin.AdminService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -26,14 +28,11 @@ import java.util.Objects;
 @Path("/service/admin/list/users")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class AdminListUsersRoute implements Route {
 
-    private UserRepositoryService userRepositoryService;
-
-    @Autowired
-    public AdminListUsersRoute(UserRepositoryService userRepositoryService) {
-        this.userRepositoryService = userRepositoryService;
-    }
+    private final UserRepositoryService userRepositoryService;
+    private final AdminService adminService;
 
     @POST
     @ApiOperation(value = "Lists users for admin", nickname = "AdminListUsersRoute")
@@ -54,13 +53,10 @@ public class AdminListUsersRoute implements Route {
 
     public ResponseMessage getUsers(Authentication authentication) {
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = adminService.checkUserRoleIsAdmin(authentication);
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         List<User> users = userRepositoryService.findAllByAnonymous();
 

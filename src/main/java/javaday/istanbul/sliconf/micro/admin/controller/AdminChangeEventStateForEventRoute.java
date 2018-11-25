@@ -1,12 +1,14 @@
 package javaday.istanbul.sliconf.micro.admin.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.admin.AdminService;
 import javaday.istanbul.sliconf.micro.event.model.BaseEventState;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.event.service.EventStateService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.Constants;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -27,17 +29,12 @@ import java.util.Objects;
 @Path("/service/admin/change/event-state/:eventId/:stateId")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class AdminChangeEventStateForEventRoute implements Route {
 
-    private EventStateService eventStateService;
-    private EventRepositoryService eventRepositoryService;
-
-    @Autowired
-    public AdminChangeEventStateForEventRoute(EventStateService eventStateService,
-                                              EventRepositoryService eventRepositoryService) {
-        this.eventStateService = eventStateService;
-        this.eventRepositoryService = eventRepositoryService;
-    }
+    private final EventStateService eventStateService;
+    private final EventRepositoryService eventRepositoryService;
+    private final AdminService adminService;
 
     @POST
     @ApiOperation(value = "Change event state", nickname = "AdminChangeEventStateForEventRoute")
@@ -61,13 +58,11 @@ public class AdminChangeEventStateForEventRoute implements Route {
 
     public ResponseMessage changeEventState(Authentication authentication, String eventId, String stateId) {
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = adminService.checkUserRoleIsAdmin(authentication);
+
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         if (Objects.isNull(eventId)) {
             return new ResponseMessage(false, "Event Id can not be null!", "");
@@ -92,7 +87,7 @@ public class AdminChangeEventStateForEventRoute implements Route {
 
         event.setEventState(eventState);
 
-        ResponseMessage responseMessage = eventRepositoryService.saveAdmin(event);
+        responseMessage = eventRepositoryService.saveAdmin(event);
 
         if (!responseMessage.isStatus()) {
             return responseMessage;
