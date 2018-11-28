@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.Template.Service;
+package javaday.istanbul.sliconf.micro.template.Service;
 
 public interface TemplateService {
 

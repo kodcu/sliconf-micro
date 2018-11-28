@@ -1,17 +1,23 @@
 package javaday.istanbul.sliconf.micro.event.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.template.Service.TemplateRepositoryService;
+import javaday.istanbul.sliconf.micro.template.model.Template;
 import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.service.EventService;
+import javaday.istanbul.sliconf.micro.mail.IMailSendService;
+import javaday.istanbul.sliconf.micro.mail.MailMessageProvider;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -37,6 +43,11 @@ public class CreateEventRoute implements Route {
     private final EventService repositoryService;
     private final EventControllerMessageProvider ecmp;
     private final UserRepositoryService userRepositoryService;
+    private final MailMessageProvider mailMessageProvider;
+    private final TemplateRepositoryService tempService;
+    @Autowired
+    @Qualifier("gandiMailSendService")
+    private IMailSendService mailSendService;
 
     @POST
     @ApiOperation(value = "Creates an event and bind with given userId", nickname = "CreateEventRoute")
@@ -220,11 +231,21 @@ public class CreateEventRoute implements Route {
         return saveResponse;
     }
 
+    /**
+     *
+     * @param event
+     * @return
+     */
     private ResponseMessage saveEvent(Event event) {
         // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
 
         if (!dbResponse.isStatus()) {
+            return dbResponse;
+        }
+        String templateCode="textMail4";
+        ResponseMessage mailResponse=sendCompleteEventStateMail(event,templateCode);
+        if (!mailResponse.isStatus()) {
             return dbResponse;
         }
 
@@ -233,6 +254,7 @@ public class CreateEventRoute implements Route {
     }
 
     /**
+
      * Eger kullanici bir event olusturmus ise rolu ROLE_USER dan ROLE_EVENT_MANAGER a degisir
      */
     private void updateUserRoleAndSave(User user) {
@@ -251,5 +273,34 @@ public class CreateEventRoute implements Route {
         dbEvent.setLogoPath(updatedEvent.getLogoPath());
         dbEvent.setDescription(updatedEvent.getDescription());
         dbEvent.setAbout(updatedEvent.getAbout());
+    }
+
+    /**
+     * ADMİNE COPMLETE OLAN YADA UPDATE EDİLEN EVENTLERİ MAİL ATAN FONKSİYON
+     * @param event
+     * @param templateCode
+     * @return
+     */
+    public ResponseMessage sendCompleteEventStateMail(Event event, String templateCode){
+        ResponseMessage responseMessage;
+        if(Objects.isNull(event))
+        {
+            return new ResponseMessage(false, "mail can not send",null);
+        }
+        String   email = mailMessageProvider.getMessage("email"); //emaili source dan alıyoruz
+        String   mailTitle = "New Complete Event";
+        Template template = tempService.findByCode(templateCode); //template kodu ile template çekiyoruz
+        if (Objects.isNull(template)||template.getCode().isEmpty())
+        {
+            responseMessage=mailSendService.sendMail(email,mailTitle,mailMessageProvider.getMessage("errorMailBody"),new String[]{}, new String[]{});
+            responseMessage.setMessage(mailMessageProvider.getMessage("errorMailBody"));// veri tabanından cektiğimiz template nullsa admine template silindi mesajı gider
+            return responseMessage;
+        }
+        String mailbody=template.getContent();
+        mailbody=mailbody.replace("{Event}",event.getName()); //cektiğimiz template de  {Event} yazan yer ile event ismi ile degistiriyoruz.
+        responseMessage=mailSendService.sendMail(email,mailTitle,mailbody,new String[]{},new String[]{});
+
+        return responseMessage;
+
     }
 }
