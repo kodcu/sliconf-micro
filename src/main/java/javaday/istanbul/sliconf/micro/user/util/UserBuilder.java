@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.user;
+package javaday.istanbul.sliconf.micro.user.util;
 
 import javaday.istanbul.sliconf.micro.user.model.User;
 

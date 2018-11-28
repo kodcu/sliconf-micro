@@ -8,13 +8,13 @@ import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.user.UserBuilder;
+import javaday.istanbul.sliconf.micro.user.util.UserBuilder;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserPassService;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import org.junit.Ignore;
 
-import static javaday.istanbul.sliconf.micro.user.UserSpecs.checkUserParams;
+import static javaday.istanbul.sliconf.micro.user.util.UserSpecs.checkUserParams;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;

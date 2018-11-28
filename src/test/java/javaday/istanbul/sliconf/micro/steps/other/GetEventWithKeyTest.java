@@ -9,10 +9,13 @@ import javaday.istanbul.sliconf.micro.event.controller.GetEventWithKeyRoute;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +34,9 @@ public class GetEventWithKeyTest extends SpringBootTestConfig { // NOSONAR
     @Autowired
     GetEventWithKeyRoute getEventWithKeyRoute;
 
+    @Autowired
+    TokenAuthenticationService tokenAuthenticationService;
+
 
     @Diyelimki("^Event key ile getiriliyor")
     public void eventKeyIleGetiriliyor() throws Throwable {
@@ -39,6 +45,9 @@ public class GetEventWithKeyTest extends SpringBootTestConfig { // NOSONAR
         user1.setUsername("getEventWithKeyUser1");
         user1.setEmail("getEventWithKeyUser1@sliconf.com");
         user1.setPassword("123123123");
+
+        Authentication authentication1 = tokenAuthenticationService.generateAuthentication(user1.getUsername(), "ROLE_USER", user1);
+        SecurityContextHolder.getContext().setAuthentication(authentication1);
 
         ResponseMessage savedUserMessage = userRepositoryService.saveUser(user1);
 

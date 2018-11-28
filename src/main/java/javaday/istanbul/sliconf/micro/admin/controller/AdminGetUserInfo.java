@@ -1,10 +1,11 @@
 package javaday.istanbul.sliconf.micro.admin.controller;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.admin.AdminService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.user.util.UserHelper;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,8 +28,7 @@ public class AdminGetUserInfo implements Route {
 
     private final UserRepositoryService userRepositoryService;
 
-    private final AdminService adminService;
-
+    private final UserHelper userHelper;
 
     @GET
     @ApiOperation(value = "Gets a specific user info for admin", nickname = "AdminGetUserInfoRoute")
@@ -45,14 +45,15 @@ public class AdminGetUserInfo implements Route {
 
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = request.params("userId");
-        return getUser(authentication, userId);
+
+        return getUser(userId);
     }
 
-    public ResponseMessage getUser(Authentication authentication, String userId) {
+    public ResponseMessage getUser(String userId) {
 
-        ResponseMessage responseMessage = adminService.checkUserRoleIsAdmin(authentication);
+
+        ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.ROLE_ADMIN);
 
         if(!responseMessage.isStatus())
             return responseMessage;

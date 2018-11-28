@@ -5,7 +5,7 @@ import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.service.AnswerService;
 import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
 import javaday.istanbul.sliconf.micro.user.UserRepositoryMessageProvider;
-import javaday.istanbul.sliconf.micro.user.UserSpecs;
+import javaday.istanbul.sliconf.micro.user.util.UserSpecs;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.repository.UserRepository;
 import javaday.istanbul.sliconf.micro.util.Constants;

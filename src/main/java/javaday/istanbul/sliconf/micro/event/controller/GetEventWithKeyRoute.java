@@ -9,7 +9,9 @@ import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -32,20 +34,14 @@ import java.util.Objects;
 @Path("/service/events/get/with-key/:key")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class GetEventWithKeyRoute implements Route {
 
-    private EventControllerMessageProvider messageProvider;
-    private EventRepositoryService repositoryService;
-    private UserRepositoryService userRepositoryService;
+    private final EventControllerMessageProvider messageProvider;
+    private final EventRepositoryService repositoryService;
+    private final UserRepositoryService userRepositoryService;
+    private final UserHelper userHelper;
 
-    @Autowired
-    public GetEventWithKeyRoute(EventControllerMessageProvider messageProvider,
-                                EventRepositoryService eventRepositoryService,
-                                UserRepositoryService userRepositoryService) {
-        this.messageProvider = messageProvider;
-        this.repositoryService = eventRepositoryService;
-        this.userRepositoryService = userRepositoryService;
-    }
 
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GET
@@ -87,10 +83,9 @@ public class GetEventWithKeyRoute implements Route {
                     messageProvider.getMessage("eventCanNotFound"), new Object());
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(Constants.DEFAULT_USER_ROLE);
-        boolean isUser = authentication.getAuthorities().contains(simpleGrantedAuthority);
-        if (isUser)
+
+        ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.DEFAULT_USER_ROLE);
+        if (responseMessage.isStatus())
             this.addUserToEvent(event, userId);
 
         repositoryService.save(event);

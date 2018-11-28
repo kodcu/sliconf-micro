@@ -1,18 +1,16 @@
 package javaday.istanbul.sliconf.micro.admin.controller;
 
 import io.swagger.annotations.*;
-import javaday.istanbul.sliconf.micro.admin.AdminService;
 import javaday.istanbul.sliconf.micro.event.model.BaseEventState;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.event.service.EventStateService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -34,7 +32,7 @@ public class AdminChangeEventStateForEventRoute implements Route {
 
     private final EventStateService eventStateService;
     private final EventRepositoryService eventRepositoryService;
-    private final AdminService adminService;
+    private final UserHelper userHelper;
 
     @POST
     @ApiOperation(value = "Change event state", nickname = "AdminChangeEventStateForEventRoute")
@@ -48,18 +46,17 @@ public class AdminChangeEventStateForEventRoute implements Route {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String eventId = request.params("eventId");
         String stateId = request.params("stateId");
 
-        return changeEventState(authentication, eventId, stateId);
+        return changeEventState(eventId, stateId);
     }
 
-    public ResponseMessage changeEventState(Authentication authentication, String eventId, String stateId) {
+    public ResponseMessage changeEventState(String eventId, String stateId) {
 
 
-        ResponseMessage responseMessage = adminService.checkUserRoleIsAdmin(authentication);
+        ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.ROLE_ADMIN);
 
         if(!responseMessage.isStatus())
             return responseMessage;

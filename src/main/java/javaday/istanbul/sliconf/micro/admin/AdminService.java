@@ -13,12 +13,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,16 +50,4 @@ public class AdminService {
         return new PageImpl<>(Lists.newArrayList(events), pageable, events.size());
     }
 
-    public ResponseMessage checkUserRoleIsAdmin(Authentication authentication) {
-        ResponseMessage responseMessage = new ResponseMessage();
-        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN));
-        if (!isAdmin) {
-            responseMessage.setStatus(false);
-            responseMessage.setMessage("You have no authorization to do this!");
-            responseMessage.setReturnObject(new Object());
-        }
-
-
-        return responseMessage;
-    }
 }

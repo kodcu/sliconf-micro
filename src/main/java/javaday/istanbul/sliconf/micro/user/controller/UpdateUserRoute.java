@@ -4,7 +4,7 @@ import com.couchbase.client.java.document.json.JsonObject;
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.LoginControllerMessageProvider;
-import javaday.istanbul.sliconf.micro.user.UserSpecs;
+import javaday.istanbul.sliconf.micro.user.util.UserSpecs;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserPassService;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
