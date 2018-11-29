@@ -1,17 +1,23 @@
 package javaday.istanbul.sliconf.micro.event.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.admin.AdminMailService;
+import javaday.istanbul.sliconf.micro.template.Service.TemplateRepositoryService;
+import javaday.istanbul.sliconf.micro.template.model.Template;
 import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.service.EventService;
+import javaday.istanbul.sliconf.micro.mail.IMailSendService;
+import javaday.istanbul.sliconf.micro.mail.MailMessageProvider;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -37,7 +43,6 @@ public class CreateEventRoute implements Route {
     private final EventService repositoryService;
     private final EventControllerMessageProvider ecmp;
     private final UserRepositoryService userRepositoryService;
-
     @POST
     @ApiOperation(value = "Creates an event and bind with given userId", nickname = "CreateEventRoute")
     @ApiImplicitParams({ //
@@ -215,11 +220,19 @@ public class CreateEventRoute implements Route {
             return saveResponse;
         }
 
+
+
+
         saveResponse.setMessage(messageProvider.getMessage("eventSuccessfullyUpdated"));
 
         return saveResponse;
     }
 
+    /**
+     *
+     * @param event
+     * @return
+     */
     private ResponseMessage saveEvent(Event event) {
         // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
@@ -228,11 +241,13 @@ public class CreateEventRoute implements Route {
             return dbResponse;
         }
 
+
         return new ResponseMessage(true,
                 messageProvider.getMessage("eventCreatedSuccessfully"), event);
     }
 
     /**
+
      * Eger kullanici bir event olusturmus ise rolu ROLE_USER dan ROLE_EVENT_MANAGER a degisir
      */
     private void updateUserRoleAndSave(User user) {
@@ -252,4 +267,8 @@ public class CreateEventRoute implements Route {
         dbEvent.setDescription(updatedEvent.getDescription());
         dbEvent.setAbout(updatedEvent.getAbout());
     }
+
+
+
+
 }

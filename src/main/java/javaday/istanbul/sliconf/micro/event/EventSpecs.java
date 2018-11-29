@@ -1,5 +1,4 @@
 package javaday.istanbul.sliconf.micro.event;
-
 import javaday.istanbul.sliconf.micro.event.model.About;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
@@ -8,7 +7,6 @@ import javaday.istanbul.sliconf.micro.event.service.EventService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.RandomGenerator;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +17,17 @@ import java.util.function.Predicate;
 /**
  * Event ile ilgili cok kullanilan isleri barindiran sinif
  */
+
 public class EventSpecs {
+
 
     private EventSpecs() {
         // private constructor for static
     }
+
+
+
+
 
     /**
      * Event name'in minimum uzunlugunu gelen parametreye gore kontrol eder
@@ -84,7 +88,7 @@ public class EventSpecs {
      *
      * @param event
      */
-    public static void generateStatusDetails(Event event) {
+    public static boolean generateStatusDetails(Event event) {
         if (Objects.nonNull(event)) {
 
             StatusDetails statusDetails = new StatusDetails();
@@ -113,10 +117,16 @@ public class EventSpecs {
 
             if (percentage >= 100) {
                 event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.ACTIVE);
+                return true;
+
             } else {
                 event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.PASSIVE);
+                return false;
             }
+
+
         }
+        return false;
     }
 
     /**
@@ -302,4 +312,6 @@ public class EventSpecs {
         return responseMessage;
 
     }
+
+
 }

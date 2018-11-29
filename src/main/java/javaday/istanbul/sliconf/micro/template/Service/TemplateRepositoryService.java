@@ -1,7 +1,7 @@
-package javaday.istanbul.sliconf.micro.Template.Service;
+package javaday.istanbul.sliconf.micro.template.Service;
 
-import javaday.istanbul.sliconf.micro.Template.Template;
-import javaday.istanbul.sliconf.micro.Template.repository.TemplateRepository;
+import javaday.istanbul.sliconf.micro.template.model.Template;
+import javaday.istanbul.sliconf.micro.template.repository.TemplateRepository;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
