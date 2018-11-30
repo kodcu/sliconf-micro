@@ -7,6 +7,7 @@ import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
 import javaday.istanbul.sliconf.micro.event.EventBuilder;
 import javaday.istanbul.sliconf.micro.event.controller.CreateEventRoute;
 import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.mail.IMailSendService;
 import javaday.istanbul.sliconf.micro.template.Service.TemplateRepositoryService;
 import javaday.istanbul.sliconf.micro.template.model.Template;
 import javaday.istanbul.sliconf.micro.admin.EventStateSendMailTest;
@@ -16,6 +17,8 @@ import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.junit.Ignore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.time.LocalDateTime;
 
@@ -26,16 +29,19 @@ import static org.junit.Assert.*;
 public class AdminSendMailTest extends SpringBootTestConfig {
 
     private final   TemplateRepositoryService templateRepositoryService;
-    private String email;
-    private String sub;
     private ResponseMessage responseMessage;
     private String code;
+    private String email;
+    private String sub;
     private final MailMessageProvider    mailMessageProvider;
     private final EventStateSendMailTest  eventStateSendMailTest;
     private final CreateEventRoute createEventRoute;
     private final UserRepositoryService userRepositoryService;
     private final TemplateRepositoryService tempService;
     private Event event1;
+    @Autowired
+    @Qualifier("gandiMailSendService")
+    private IMailSendService mailSendService;
 
     @Diyelimki("^Yeni bir sablon olusturuluyor$")
     public void yeniSablon()throws Throwable{
@@ -263,7 +269,7 @@ public class AdminSendMailTest extends SpringBootTestConfig {
     }
     @Ozaman("^Admine kaydedilen event mail gonderilir$")
     public void eventMailGonderilir()throws Throwable{
-        responseMessage=createEventRoute.sendCompleteEventStateMail(event1,code);
+        responseMessage = mailSendService.sendCompleteEventStateMail(event1,code);
         assertTrue(responseMessage.isStatus());
     }
     @Eğerki("^Template null ise$")
@@ -274,7 +280,7 @@ public class AdminSendMailTest extends SpringBootTestConfig {
     }
     @Ozaman("^Admine template null maili gonderlir$")
     public void templateNullMailiGonderilir()throws Throwable{
-        responseMessage=createEventRoute.sendCompleteEventStateMail(event1,code);
+        responseMessage=mailSendService.sendCompleteEventStateMail(event1,code);
         String message=mailMessageProvider.getMessage("errorMailBody");
         assertEquals(message,responseMessage.getMessage());
     }
@@ -298,7 +304,7 @@ public class AdminSendMailTest extends SpringBootTestConfig {
     }
     @Ozaman("^Admine mail gonderilmez$")
     public void mailGonderilmez()throws Throwable{
-        responseMessage= createEventRoute.sendCompleteEventStateMail(null,code);
+        responseMessage= mailSendService.sendCompleteEventStateMail(null,code);
         assertFalse(responseMessage.isStatus());
     }
 
