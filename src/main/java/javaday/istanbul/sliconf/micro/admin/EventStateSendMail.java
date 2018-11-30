@@ -19,11 +19,11 @@ public class EventStateSendMail {
     private final AdminMailService adminMailService;
     private final MailMessageProvider mailMessageProvider;
 
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
     @Autowired
     @Qualifier("gandiMailSendService")
     private IMailSendService mailSendService;
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
     @Scheduled(cron = "0 00  10 ? * MON")
     public ResponseMessage sendEmailUpcomingEvents() {
 

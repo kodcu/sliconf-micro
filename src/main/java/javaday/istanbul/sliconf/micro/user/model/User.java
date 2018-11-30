@@ -24,7 +24,7 @@ public class User implements Serializable {
     @Id
     private String id;
     private String username;
-    private String fullname;
+    private String fullName;
     private String email;
     private String password;
     private byte[] hashedPassword;
@@ -36,8 +36,8 @@ public class User implements Serializable {
 
 
     public User() {
-        if (Objects.isNull(fullname) || fullname.isEmpty()) {
-            this.fullname = Constants.DEFAULT_USER_FULLNAME;
+        if (Objects.isNull(fullName) || fullName.isEmpty()) {
+            this.fullName = Constants.DEFAULT_USER_FULLNAME;
         }
 
         if (Objects.isNull(role) || role.isEmpty()) {
@@ -57,7 +57,7 @@ public class User implements Serializable {
         this.setId(user.getId());
         this.setSalt(user.getSalt());
         this.setHashedPassword(user.getHashedPassword());
-        this.setFullname(user.getFullname());
+        this.setFullName(user.getFullName());
         this.setAnonymous(user.getAnonymous());
         this.setDeviceId(user.getDeviceId());
         this.setRole(user.getRole());
