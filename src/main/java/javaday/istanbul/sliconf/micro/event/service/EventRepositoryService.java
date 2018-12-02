@@ -85,14 +85,8 @@ public class EventRepositoryService implements EventService {
             return eventStateMessage;
         }
 
-        boolean isStatusActived = EventSpecs.generateStatusDetails(event);
-        if(isStatusActived){
-            String templateCode="textMail4";
-            ResponseMessage mailResponse= mailSendService.sendCompleteEventStateMail(event,templateCode);
-            if (!mailResponse.isStatus()) {
-                return mailResponse;
-            }
-        }
+        EventSpecs.generateStatusDetails(event,mailSendService);
+
 
         saveEvent(event, message);
 
@@ -102,7 +96,7 @@ public class EventRepositoryService implements EventService {
     public ResponseMessage saveAdmin(Event event) {
         ResponseMessage message = new ResponseMessage(false, "An error occured while saving event", null);
 
-        EventSpecs.generateStatusDetails(event);
+        EventSpecs.generateStatusDetails(event,mailSendService);
 
         saveEvent(event, message);
 
