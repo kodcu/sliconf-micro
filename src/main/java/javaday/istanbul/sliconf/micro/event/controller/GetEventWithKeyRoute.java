@@ -9,7 +9,9 @@ import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import javaday.istanbul.sliconf.micro.user.util.UserHelper;
+import javaday.istanbul.sliconf.micro.util.Constants;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -28,20 +30,14 @@ import java.util.Objects;
 @Path("/service/events/get/with-key/:key")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class GetEventWithKeyRoute implements Route {
 
-    private EventControllerMessageProvider messageProvider;
-    private EventRepositoryService repositoryService;
-    private UserRepositoryService userRepositoryService;
+    private final EventControllerMessageProvider messageProvider;
+    private final EventRepositoryService repositoryService;
+    private final UserRepositoryService userRepositoryService;
+    private final UserHelper userHelper;
 
-    @Autowired
-    public GetEventWithKeyRoute(EventControllerMessageProvider messageProvider,
-                                EventRepositoryService eventRepositoryService,
-                                UserRepositoryService userRepositoryService) {
-        this.messageProvider = messageProvider;
-        this.repositoryService = eventRepositoryService;
-        this.userRepositoryService = userRepositoryService;
-    }
 
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     @GET
@@ -83,7 +79,20 @@ public class GetEventWithKeyRoute implements Route {
                     messageProvider.getMessage("eventCanNotFound"), new Object());
         }
 
-        this.addUserToEvent(event, userId);
+        // Anonim kullanici daha onceden totalusers listesine eklendi ise onu siliyoruz.
+        User user = userRepositoryService.findById(userId).orElse(new User());
+        if(Objects.isNull(user.getAnonymous()) && Objects.nonNull(user.getDeviceId())) {
+            TotalUser oldTotalUser = event.getTotalUsers()
+                    .getUsers()
+                    .stream()
+                    .filter(totalUser -> totalUser.getDeviceId().equals(user.getDeviceId()))
+                    .findFirst().orElse(new TotalUser());
+            event.getTotalUsers().getUsers().remove(oldTotalUser);
+        }
+
+        ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.DEFAULT_USER_ROLE);
+        if (responseMessage.isStatus())
+            this.addUserToEvent(event, userId);
 
         repositoryService.save(event);
 
@@ -124,7 +133,7 @@ public class GetEventWithKeyRoute implements Route {
                     totalUser.setAnonymous(user.getAnonymous());
                     totalUser.setDeviceId(user.getDeviceId());
                     totalUser.setEmail(user.getEmail());
-                    totalUser.setFullname(user.getFullname());
+                    totalUser.setFullname(user.getFullName());
                     totalUser.setUsername(user.getUsername());
 
                     event.getTotalUsers().getUsers().add(totalUser);

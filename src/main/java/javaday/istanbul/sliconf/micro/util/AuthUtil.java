@@ -6,7 +6,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-import javaday.istanbul.sliconf.micro.user.UserBuilder;
+import javaday.istanbul.sliconf.micro.user.util.UserBuilder;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.user;
+package javaday.istanbul.sliconf.micro.user.util;
 
 import javaday.istanbul.sliconf.micro.user.model.User;
 
@@ -19,7 +19,7 @@ public class UserBuilder {
     }
 
     public UserBuilder setFullName(String fullName) {
-        this.user.setFullname(fullName);
+        this.user.setFullName(fullName);
         return this;
     }
 

@@ -4,11 +4,16 @@ import com.google.api.client.util.Lists;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.repository.EventRepository;
+import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,4 +49,5 @@ public class AdminService {
 
         return new PageImpl<>(Lists.newArrayList(events), pageable, events.size());
     }
+
 }

@@ -20,13 +20,17 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @Component
-@Profile("dev, prod")
+@Profile({"prod", "dev"})
 public class EventScheduledJobs {
 
     private final AdminService adminService;
     private final EventRepository eventRepository;
 
-    // Her yarim saatte bir aktif ,pasif ve gerceklesmekte olan eventlerin durumunu gunceller.
+    /**
+     *  Her yarim saatte bir aktif ,pasif ve gerceklesmekte olan eventlerin durumunu gunceller.
+     * {@link LifeCycleState}
+     * {@link LifeCycleState.EventStatus}
+     */
     @Scheduled(fixedRate = 1800000, initialDelay = 1000 )
     private void updateEventLifeCycles() {
 

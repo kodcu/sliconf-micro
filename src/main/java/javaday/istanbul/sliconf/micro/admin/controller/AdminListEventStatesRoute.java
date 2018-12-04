@@ -4,11 +4,11 @@ import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.event.model.BaseEventState;
 import javaday.istanbul.sliconf.micro.event.service.EventStateService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -19,21 +19,17 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.List;
-import java.util.Objects;
 
 
 @Api
 @Path("/service/admin/list/event-states")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class AdminListEventStatesRoute implements Route {
 
-    private EventStateService eventStateService;
-
-    @Autowired
-    public AdminListEventStatesRoute(EventStateService eventStateService) {
-        this.eventStateService = eventStateService;
-    }
+    private final EventStateService eventStateService;
+    private final UserHelper userHelper;
 
     @GET
     @ApiOperation(value = "Lists event states for admin", nickname = "AdminListEventStatesRoute")
@@ -47,20 +43,16 @@ public class AdminListEventStatesRoute implements Route {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return getEventStates(authentication);
+        return getEventStates();
     }
 
-    public ResponseMessage getEventStates(Authentication authentication) {
+    public ResponseMessage getEventStates() {
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.ROLE_ADMIN);
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         List<BaseEventState> eventStates = eventStateService.findAll();
 

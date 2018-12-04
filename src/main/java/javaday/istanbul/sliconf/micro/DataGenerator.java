@@ -20,7 +20,7 @@ import javaday.istanbul.sliconf.micro.survey.service.AnswerService;
 import javaday.istanbul.sliconf.micro.survey.service.SurveyService;
 import javaday.istanbul.sliconf.micro.survey.util.AnswerGenerator;
 import javaday.istanbul.sliconf.micro.survey.util.SurveyGenerator;
-import javaday.istanbul.sliconf.micro.user.UserGenerator;
+import javaday.istanbul.sliconf.micro.user.util.UserGenerator;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.repository.UserRepository;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;

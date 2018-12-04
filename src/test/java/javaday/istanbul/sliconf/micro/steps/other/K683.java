@@ -9,7 +9,7 @@ import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.security.token.Token;
 import javaday.istanbul.sliconf.micro.security.token.TokenRepositoryService;
-import javaday.istanbul.sliconf.micro.user.UserBuilder;
+import javaday.istanbul.sliconf.micro.user.util.UserBuilder;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.PasswordResetService;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;

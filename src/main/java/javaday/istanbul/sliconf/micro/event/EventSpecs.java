@@ -1,29 +1,36 @@
 package javaday.istanbul.sliconf.micro.event;
-
 import javaday.istanbul.sliconf.micro.event.model.About;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.model.StatusDetails;
 import javaday.istanbul.sliconf.micro.event.service.EventService;
+import javaday.istanbul.sliconf.micro.mail.IMailSendService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.RandomGenerator;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import static javaday.istanbul.sliconf.micro.event.model.LifeCycleState.EventStatus.ACTIVE;
+
 
 /**
  * Event ile ilgili cok kullanilan isleri barindiran sinif
  */
+
 public class EventSpecs {
+
 
     private EventSpecs() {
         // private constructor for static
     }
+
+
+
+
 
     /**
      * Event name'in minimum uzunlugunu gelen parametreye gore kontrol eder
@@ -84,7 +91,7 @@ public class EventSpecs {
      *
      * @param event
      */
-    public static void generateStatusDetails(Event event) {
+    public static void generateStatusDetails(Event event, IMailSendService mailSendService) {
         if (Objects.nonNull(event)) {
 
             StatusDetails statusDetails = new StatusDetails();
@@ -112,11 +119,20 @@ public class EventSpecs {
             event.setStatusDetails(statusDetails);
 
             if (percentage >= 100) {
-                event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.ACTIVE);
+                if(!event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.ACTIVE) ){
+                    ResponseMessage mailResponse=completeEventSendMail(event,mailSendService);
+                }
+                event.getLifeCycleState().getEventStatuses().add(ACTIVE);
+
+
             } else {
                 event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.PASSIVE);
+
             }
+
+
         }
+
     }
 
     /**
@@ -302,4 +318,15 @@ public class EventSpecs {
         return responseMessage;
 
     }
+    public static ResponseMessage completeEventSendMail(Event event,IMailSendService mailSendService){
+        String templateCode="textMail4";
+        ResponseMessage mailResponse= mailSendService.sendCompleteEventStateMail(event,templateCode);
+        if (!mailResponse.isStatus()) {
+            return mailResponse;
+        }
+        return mailResponse;
+
+    }
+
+
 }

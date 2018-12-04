@@ -6,11 +6,11 @@ import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.event.service.EventStateService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -27,17 +27,12 @@ import java.util.Objects;
 @Path("/service/admin/change/event-state/:eventId/:stateId")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class AdminChangeEventStateForEventRoute implements Route {
 
-    private EventStateService eventStateService;
-    private EventRepositoryService eventRepositoryService;
-
-    @Autowired
-    public AdminChangeEventStateForEventRoute(EventStateService eventStateService,
-                                              EventRepositoryService eventRepositoryService) {
-        this.eventStateService = eventStateService;
-        this.eventRepositoryService = eventRepositoryService;
-    }
+    private final EventStateService eventStateService;
+    private final EventRepositoryService eventRepositoryService;
+    private final UserHelper userHelper;
 
     @POST
     @ApiOperation(value = "Change event state", nickname = "AdminChangeEventStateForEventRoute")
@@ -51,23 +46,20 @@ public class AdminChangeEventStateForEventRoute implements Route {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String eventId = request.params("eventId");
         String stateId = request.params("stateId");
 
-        return changeEventState(authentication, eventId, stateId);
+        return changeEventState(eventId, stateId);
     }
 
-    public ResponseMessage changeEventState(Authentication authentication, String eventId, String stateId) {
+    public ResponseMessage changeEventState(String eventId, String stateId) {
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.ROLE_ADMIN);
+
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         if (Objects.isNull(eventId)) {
             return new ResponseMessage(false, "Event Id can not be null!", "");
@@ -92,7 +84,7 @@ public class AdminChangeEventStateForEventRoute implements Route {
 
         event.setEventState(eventState);
 
-        ResponseMessage responseMessage = eventRepositoryService.saveAdmin(event);
+        responseMessage = eventRepositoryService.saveAdmin(event);
 
         if (!responseMessage.isStatus()) {
             return responseMessage;

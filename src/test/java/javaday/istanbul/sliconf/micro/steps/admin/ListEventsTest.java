@@ -21,7 +21,7 @@ import javaday.istanbul.sliconf.micro.room.RoomGenerator;
 import javaday.istanbul.sliconf.micro.security.TokenAuthenticationService;
 import javaday.istanbul.sliconf.micro.speaker.SpeakerGenerator;
 import javaday.istanbul.sliconf.micro.sponsor.SponsorGenerator;
-import javaday.istanbul.sliconf.micro.user.UserGenerator;
+import javaday.istanbul.sliconf.micro.user.util.UserGenerator;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;

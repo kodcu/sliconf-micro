@@ -4,10 +4,10 @@ import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -17,7 +17,6 @@ import spark.Route;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -29,6 +28,7 @@ public class AdminGetUserInfo implements Route {
 
     private final UserRepositoryService userRepositoryService;
 
+    private final UserHelper userHelper;
 
     @GET
     @ApiOperation(value = "Gets a specific user info for admin", nickname = "AdminGetUserInfoRoute")
@@ -45,20 +45,18 @@ public class AdminGetUserInfo implements Route {
 
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = request.params("userId");
-        return getUser(authentication, userId);
+
+        return getUser(userId);
     }
 
-    public ResponseMessage getUser(Authentication authentication, String userId) {
+    public ResponseMessage getUser(String userId) {
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.ROLE_ADMIN);
+
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         Optional<User> userOptional = userRepositoryService.findById(userId);
         return userOptional

@@ -4,11 +4,11 @@ import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
+import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
@@ -19,21 +19,17 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.List;
-import java.util.Objects;
 
 
 @Api
 @Path("/service/admin/list/users")
 @Produces("application/json")
 @Component
+@AllArgsConstructor
 public class AdminListUsersRoute implements Route {
 
-    private UserRepositoryService userRepositoryService;
-
-    @Autowired
-    public AdminListUsersRoute(UserRepositoryService userRepositoryService) {
-        this.userRepositoryService = userRepositoryService;
-    }
+    private final UserRepositoryService userRepositoryService;
+    private final UserHelper userHelper;
 
     @POST
     @ApiOperation(value = "Lists users for admin", nickname = "AdminListUsersRoute")
@@ -47,20 +43,16 @@ public class AdminListUsersRoute implements Route {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return getUsers(authentication);
+        return getUsers();
     }
 
-    public ResponseMessage getUsers(Authentication authentication) {
+    public ResponseMessage getUsers() {
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.ROLE_ADMIN);
 
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         List<User> users = userRepositoryService.findAllByAnonymous();
 

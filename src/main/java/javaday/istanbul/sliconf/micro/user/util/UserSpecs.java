@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.user;
+package javaday.istanbul.sliconf.micro.user.util;
 
 import javaday.istanbul.sliconf.micro.util.Constants;
 
@@ -39,4 +39,6 @@ public class UserSpecs {
                 pass.length() >= Constants.MIN_PASS_LENGTH &&
                 pass.length() <= Constants.MAX_PASS_LENGTH;
     }
+
+
 }

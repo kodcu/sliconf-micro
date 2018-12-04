@@ -4,10 +4,12 @@ import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.StateManager;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.repository.EventRepository;
+import javaday.istanbul.sliconf.micro.mail.IMailSendService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,9 @@ public class EventRepositoryService implements EventService {
 
     @Autowired
     protected EventStateService eventStateService;
-
+    @Autowired
+    @Qualifier("gandiMailSendService")
+    private IMailSendService mailSendService;
     public Optional<Event> findById(String id) { return repo.findById(id); }
 
     public Event findOne(String id) {
@@ -81,7 +85,8 @@ public class EventRepositoryService implements EventService {
             return eventStateMessage;
         }
 
-        EventSpecs.generateStatusDetails(event);
+        EventSpecs.generateStatusDetails(event,mailSendService);
+
 
         saveEvent(event, message);
 
@@ -91,7 +96,7 @@ public class EventRepositoryService implements EventService {
     public ResponseMessage saveAdmin(Event event) {
         ResponseMessage message = new ResponseMessage(false, "An error occured while saving event", null);
 
-        EventSpecs.generateStatusDetails(event);
+        EventSpecs.generateStatusDetails(event,mailSendService);
 
         saveEvent(event, message);
 

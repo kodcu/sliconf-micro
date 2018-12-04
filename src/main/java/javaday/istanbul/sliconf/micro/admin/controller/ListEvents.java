@@ -5,14 +5,13 @@ import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.admin.AdminService;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.QueryParamsMap;
@@ -25,7 +24,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static java.lang.String.valueOf;
 
@@ -36,6 +34,7 @@ import static java.lang.String.valueOf;
 @Component
 public class ListEvents implements Route {
 
+    private final UserHelper userHelper;
     private final AdminService adminService;
 
     @GET
@@ -66,20 +65,14 @@ public class ListEvents implements Route {
             @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
     })
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public ResponseMessage handle(@ApiParam(hidden = true) Request request,
                                   @ApiParam(hidden = true) Response response) throws Exception {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.ROLE_ADMIN);
 
-        if (Objects.isNull(authentication)) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
-
-        if (!authentication.getAuthorities().contains(new SimpleGrantedAuthority(Constants.ROLE_ADMIN))) {
-            return new ResponseMessage(false, "You have no authorization to do this!", new Object());
-        }
+        if(!responseMessage.isStatus())
+            return responseMessage;
 
         QueryParamsMap lifeCycleStates =  request.queryMap("lifeCycleStates");
 
@@ -96,7 +89,7 @@ public class ListEvents implements Route {
         }
 
         Page<Event> events = adminService.listEvents(filters, pageable);
-        String message = "Events listed. Total Events = " + valueOf(events.getTotalElements());
+        String message = "Events listed. Total Events = " + events.getTotalElements();
         return new ResponseMessage(true, message, events.getContent());
 
     }

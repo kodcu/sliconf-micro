@@ -1,6 +1,9 @@
 package javaday.istanbul.sliconf.micro.mail;
 
+import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
+import javaday.istanbul.sliconf.micro.template.Service.TemplateRepositoryService;
+import javaday.istanbul.sliconf.micro.template.model.Template;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +13,14 @@ import org.springframework.stereotype.Service;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Objects;
 import java.util.Properties;
 
 @Service("gandiMailSendService")
 public class GandiMailSendService implements IMailSendService {
 
     private final Logger logger = LoggerFactory.getLogger(GandiMailSendService.class);
+
 
     @Value("${sliconf.mail.username}")
     private String username;
@@ -44,6 +49,8 @@ public class GandiMailSendService implements IMailSendService {
 
     @Autowired
     private MailMessageProvider mailMessageProvider;
+    @Autowired
+    private  TemplateRepositoryService tempService;
 
     @Override
     public ResponseMessage sendMail(String email, String subject, String text, String[] cc, String[] bcc) {
@@ -77,6 +84,7 @@ public class GandiMailSendService implements IMailSendService {
 
             message.setSubject(subject);
             message.setText(text);
+            message.setContent(text, "text/html; charset=utf-8");
 
             if (!isTest) {
                 Transport.send(message);
@@ -94,5 +102,33 @@ public class GandiMailSendService implements IMailSendService {
         }
 
         return responseMessage;
+    }
+    /**
+     * ADMİNE COPMLETE OLAN YADA UPDATE EDİLEN EVENTLERİ MAİL ATAN FONKSİYON
+     * @param event
+     * @param templateCode
+     * @return
+     */
+    public ResponseMessage sendCompleteEventStateMail(Event event, String templateCode){
+        ResponseMessage responseMessage;
+        if(Objects.isNull(event))
+        {
+            return new ResponseMessage(false, "mail can not send",null);
+        }
+        String   email = mailMessageProvider.getMessage("email"); //emaili source dan alıyoruz
+        String   mailTitle = "New Complete Event";
+        Template template = tempService.findByCode(templateCode); //template kodu ile template çekiyoruz
+        if (Objects.isNull(template)||template.getCode().isEmpty())
+        {
+            responseMessage=sendMail(email,mailTitle,mailMessageProvider.getMessage("errorMailBody"),new String[]{}, new String[]{});
+            responseMessage.setMessage(mailMessageProvider.getMessage("errorMailBody"));// veri tabanından cektiğimiz template nullsa admine template silindi mesajı gider
+            return responseMessage;
+        }
+        String mailbody=template.getContent();
+        mailbody=mailbody.replace("{Event}",event.getName()); //cektiğimiz template de  {Event} yazan yer ile event ismi ile degistiriyoruz.
+        responseMessage=sendMail(email,mailTitle,mailbody,new String[]{},new String[]{});
+
+        return responseMessage;
+
     }
 }

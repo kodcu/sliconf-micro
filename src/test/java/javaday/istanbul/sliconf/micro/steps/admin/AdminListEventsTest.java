@@ -11,6 +11,7 @@ import javaday.istanbul.sliconf.micro.util.Constants;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.junit.Assert.*;
 
@@ -44,15 +45,20 @@ public class AdminListEventsTest extends SpringBootTestConfig { // NOSONAR
         Authentication authentication2 = tokenAuthenticationService.generateAuthentication(adminUser.getUsername(), "ROLE_USER", adminUser);
 
         // When
-        ResponseMessage responseMessage1 = adminListEventsRoute.getEvents(authentication1);
-        ResponseMessage responseMessage2 = adminListEventsRoute.getEvents(authentication2);
-        ResponseMessage responseMessage3 = adminListEventsRoute.getEvents(null);
 
-        // Then
+        SecurityContextHolder.getContext().setAuthentication(authentication1);
+        ResponseMessage responseMessage1 = adminListEventsRoute.getEvents();
         assertTrue(responseMessage1.isStatus());
         assertNotNull(responseMessage1.getReturnObject());
 
+
+        SecurityContextHolder.getContext().setAuthentication(authentication2);
+
+        ResponseMessage responseMessage2 = adminListEventsRoute.getEvents();
         assertFalse(responseMessage2.isStatus());
+
+
+        ResponseMessage responseMessage3 = adminListEventsRoute.getEvents();
         assertFalse(responseMessage3.isStatus());
     }
 }

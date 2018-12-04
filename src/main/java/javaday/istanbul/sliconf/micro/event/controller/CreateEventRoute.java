@@ -12,6 +12,7 @@ import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -37,7 +38,6 @@ public class CreateEventRoute implements Route {
     private final EventService repositoryService;
     private final EventControllerMessageProvider ecmp;
     private final UserRepositoryService userRepositoryService;
-
     @POST
     @ApiOperation(value = "Creates an event and bind with given userId", nickname = "CreateEventRoute")
     @ApiImplicitParams({ //
@@ -215,11 +215,19 @@ public class CreateEventRoute implements Route {
             return saveResponse;
         }
 
+
+
+
         saveResponse.setMessage(messageProvider.getMessage("eventSuccessfullyUpdated"));
 
         return saveResponse;
     }
 
+    /**
+     *
+     * @param event
+     * @return
+     */
     private ResponseMessage saveEvent(Event event) {
         // eger event yoksa kayit et
         ResponseMessage dbResponse = repositoryService.save(event);
@@ -228,11 +236,13 @@ public class CreateEventRoute implements Route {
             return dbResponse;
         }
 
+
         return new ResponseMessage(true,
                 messageProvider.getMessage("eventCreatedSuccessfully"), event);
     }
 
     /**
+
      * Eger kullanici bir event olusturmus ise rolu ROLE_USER dan ROLE_EVENT_MANAGER a degisir
      */
     private void updateUserRoleAndSave(User user) {
@@ -252,4 +262,8 @@ public class CreateEventRoute implements Route {
         dbEvent.setDescription(updatedEvent.getDescription());
         dbEvent.setAbout(updatedEvent.getAbout());
     }
+
+
+
+
 }

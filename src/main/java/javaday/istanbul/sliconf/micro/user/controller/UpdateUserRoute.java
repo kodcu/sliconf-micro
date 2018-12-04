@@ -4,7 +4,7 @@ import com.couchbase.client.java.document.json.JsonObject;
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.LoginControllerMessageProvider;
-import javaday.istanbul.sliconf.micro.user.UserSpecs;
+import javaday.istanbul.sliconf.micro.user.util.UserSpecs;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserPassService;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
@@ -71,7 +71,7 @@ public class UpdateUserRoute implements Route {
         User user = userRepositoryService.findById(id).orElse(null);
 
         String stringUsername = "username";
-        String stringFullname = "fullname";
+        String stringFullname = "fullName";
         String stringPass = "password";
         String stringOldPass = "oldpassword";
 
@@ -93,7 +93,7 @@ public class UpdateUserRoute implements Route {
                     return new ResponseMessage(false, "New username must be at least 4", new Object());
             }
             if (Objects.nonNull(updateParams.getString(stringFullname))) {
-                user.setFullname(updateParams.getString(stringFullname));
+                user.setFullName(updateParams.getString(stringFullname));
                 changed = true;
             }
             if (Objects.nonNull(updateParams.getString(stringPass)) && Objects.nonNull(updateParams.getString(stringOldPass))) {

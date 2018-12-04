@@ -12,7 +12,7 @@ import javaday.istanbul.sliconf.micro.floor.Floor;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.room.Room;
 import javaday.istanbul.sliconf.micro.speaker.Speaker;
-import javaday.istanbul.sliconf.micro.user.UserBuilder;
+import javaday.istanbul.sliconf.micro.user.util.UserBuilder;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.model.UserScheduleElement;
 import javaday.istanbul.sliconf.micro.user.schedule.UserScheduleRepositoryService;
