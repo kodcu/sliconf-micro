@@ -22,10 +22,14 @@ public class EventStateSendMail {
     private final AdminMailService adminMailService;
     private final MailMessageProvider mailMessageProvider;
 
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
     @Autowired
     @Qualifier("gandiMailSendService")
     private IMailSendService mailSendService;
+
     @Scheduled(cron = "0 30 15 ? * TUE",zone="Europe/Istanbul")
+
     public ResponseMessage sendEmailUpcomingEvents() {
 
         ResponseMessage responseMessage ;

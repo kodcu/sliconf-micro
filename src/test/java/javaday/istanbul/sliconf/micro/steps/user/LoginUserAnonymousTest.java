@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.steps.other;
+package javaday.istanbul.sliconf.micro.steps.user;
 
 import cucumber.api.java.tr.Diyelimki;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;

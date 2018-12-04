@@ -12,11 +12,7 @@ import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -83,6 +79,16 @@ public class GetEventWithKeyRoute implements Route {
                     messageProvider.getMessage("eventCanNotFound"), new Object());
         }
 
+        // Anonim kullanici daha onceden totalusers listesine eklendi ise onu siliyoruz.
+        User user = userRepositoryService.findById(userId).orElse(new User());
+        if(Objects.isNull(user.getAnonymous()) && Objects.nonNull(user.getDeviceId())) {
+            TotalUser oldTotalUser = event.getTotalUsers()
+                    .getUsers()
+                    .stream()
+                    .filter(totalUser -> totalUser.getDeviceId().equals(user.getDeviceId()))
+                    .findFirst().orElse(new TotalUser());
+            event.getTotalUsers().getUsers().remove(oldTotalUser);
+        }
 
         ResponseMessage responseMessage = userHelper.checkUserRoleIs(Constants.DEFAULT_USER_ROLE);
         if (responseMessage.isStatus())
@@ -127,7 +133,7 @@ public class GetEventWithKeyRoute implements Route {
                     totalUser.setAnonymous(user.getAnonymous());
                     totalUser.setDeviceId(user.getDeviceId());
                     totalUser.setEmail(user.getEmail());
-                    totalUser.setFullname(user.getFullname());
+                    totalUser.setFullname(user.getFullName());
                     totalUser.setUsername(user.getUsername());
 
                     event.getTotalUsers().getUsers().add(totalUser);
