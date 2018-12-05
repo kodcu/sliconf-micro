@@ -4,6 +4,8 @@ import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.template.Service.TemplateRepositoryService;
 import javaday.istanbul.sliconf.micro.template.model.Template;
+import javaday.istanbul.sliconf.micro.user.model.User;
+import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,9 @@ import org.springframework.stereotype.Service;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Properties;
 
 @Service("gandiMailSendService")
@@ -51,6 +55,8 @@ public class GandiMailSendService implements IMailSendService {
     private MailMessageProvider mailMessageProvider;
     @Autowired
     private  TemplateRepositoryService tempService;
+    @Autowired
+    private   UserRepositoryService userRepositoryService;
 
     @Override
     public ResponseMessage sendMail(String email, String subject, String text, String[] cc, String[] bcc) {
@@ -111,6 +117,15 @@ public class GandiMailSendService implements IMailSendService {
      */
     public ResponseMessage sendCompleteEventStateMail(Event event, String templateCode){
         ResponseMessage responseMessage;
+        User user =new User();
+        Optional<User> userOptional=userRepositoryService.findById(event.getExecutiveUser());
+        userOptional.ifPresent(user1 -> {
+            user.setRole(user1.getRole());
+            user.setUsername(user1.getUsername());
+            user.setEmail(user1.getEmail());
+            user.setFullname(user1.getFullname());
+
+        });
         if(Objects.isNull(event))
         {
             return new ResponseMessage(false, "mail can not send",null);
@@ -125,7 +140,22 @@ public class GandiMailSendService implements IMailSendService {
             return responseMessage;
         }
         String mailbody=template.getContent();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String eventStartDate=event.getStartDate().format(formatter);
+        String eventFinishDate=event.getEndDate().format(formatter);
+        String eventPackage=event.getEventState().getType();
+        String eventWebSite=event.getAbout().getWeb();
         mailbody=mailbody.replace("{Event}",event.getName()); //cektiğimiz template de  {Event} yazan yer ile event ismi ile degistiriyoruz.
+        mailbody=mailbody.replace("{ESD}",eventStartDate);
+        mailbody=mailbody.replace("{EFD}",eventFinishDate);
+        mailbody=mailbody.replace("{EventWeb}",eventWebSite);
+        if(Objects.nonNull(eventPackage))
+           mailbody=mailbody.replace("{PackageType}",eventPackage);
+        else
+            mailbody=mailbody.replace("{PackageType}","");
+        mailbody=mailbody.replace("{UserMail}",user.getEmail());
+
+
         responseMessage=sendMail(email,mailTitle,mailbody,new String[]{},new String[]{});
 
         return responseMessage;

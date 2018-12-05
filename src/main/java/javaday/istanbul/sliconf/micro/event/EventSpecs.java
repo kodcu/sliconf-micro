@@ -319,7 +319,7 @@ public class EventSpecs {
 
     }
     public static ResponseMessage completeEventSendMail(Event event,IMailSendService mailSendService){
-        String templateCode="textMail4";
+        String templateCode="textMail7";
         ResponseMessage mailResponse= mailSendService.sendCompleteEventStateMail(event,templateCode);
         if (!mailResponse.isStatus()) {
             return mailResponse;

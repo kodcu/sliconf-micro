@@ -25,7 +25,7 @@ public class EventStateSendMail {
     @Autowired
     @Qualifier("gandiMailSendService")
     private IMailSendService mailSendService;
-    @Scheduled(cron = "0 30 15 ? * TUE",zone="Europe/Istanbul")
+    @Scheduled(cron = "0 30 11 ? * WED",zone="Europe/Istanbul")
     public ResponseMessage sendEmailUpcomingEvents() {
 
         ResponseMessage responseMessage ;
@@ -39,6 +39,7 @@ public class EventStateSendMail {
             String mailBody=mailMessageProvider.getMessage("errorMailBody");
             responseMessage = mailSendService.sendMail(email, mailTitle, mailBody, new String[]{}, new String[]{});
             responseMessage.setMessage(mailBody);
+            log.info("mail template did not received");
             return responseMessage;
         }
         log.info("mail template received");
