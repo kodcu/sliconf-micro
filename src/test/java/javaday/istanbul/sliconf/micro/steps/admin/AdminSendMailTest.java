@@ -162,30 +162,98 @@ public class AdminSendMailTest extends SpringBootTestConfig {
                 "</tbody>\n" +
                 "</table>\n" +
                 "</div>";
+        String x5="<html>\n" +
+                "<body>\n" +
+                "<p>&nbsp;</p>\n" +
+                "<div style=\"width: 100%;\">\n" +
+                "<table style=\"margin: 0px auto; width: 428px; height: 723px;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n" +
+                "<tbody>\n" +
+                "<tr style=\"height: 21px;\">\n" +
+                "<td style=\"background-color: #29b573; width: 440px; height: 21px;\">&nbsp;</td>\n" +
+                "</tr>\n" +
+                "<tr style=\"height: 685px;\">\n" +
+                "<td style=\"border-radius: 4px; padding: 20px; width: 400px; height: 710px;\" rowspan=\"2\"><a style=\"border: none;\" href=\"https://sliconf.com\" target=\"_blank\" rel=\"noopener noreferrer\" data-auth=\"NotApplicable\"><img style=\"border: none;\" src=\"https://sliconf.com/wp-content/uploads/2018/08/logo.png\" width=\"130\" data-imagetype=\"External\" /> </a>\n" +
+                "<p>There is a new event.</p>\n" +
+                "<table style=\"width: 400px;\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\">\n" +
+                "<tbody>\n" +
+                "<tr style=\"height: 46px;\">\n" +
+                "<td style=\"height: 46px; width: 392px;\">\n" +
+                "<p>Event Name:{Event}</p>\n" +
+                "</td>\n" +
+                "</tr>\n" +
+                "<tr style=\"height: 46px;\">\n" +
+                "<td style=\"height: 46px; width: 392px;\">\n" +
+                "<p>Event Web Page:{EventWeb}&nbsp;</p>\n" +
+                "</td>\n" +
+                "</tr>\n" +
+                "<tr style=\"height: 46px;\">\n" +
+                "<td style=\"height: 46px; width: 392px;\">\n" +
+                "<p>Event Start Date:{ESD}</p>\n" +
+                "</td>\n" +
+                "</tr>\n" +
+                "<tr style=\"height: 45px;\">\n" +
+                "<td style=\"height: 45px; width: 392px;\">\n" +
+                "<p>Event Finish Date:{EFD}</p>\n" +
+                "</td>\n" +
+                "</tr>\n" +
+                "<tr style=\"height: 40px;\">\n" +
+                "<td style=\"height: 40px; width: 392px;\">\n" +
+                "<p>User Email:{UserMail}</p>\n" +
+                "</td>\n" +
+                "</tr>\n" +
+                "<tr style=\"height: 51px;\">\n" +
+                "<td style=\"height: 51px; width: 392px;\">\n" +
+                "<p>Package Type :{PackageType}</p>\n" +
+                "</td>\n" +
+                "</tr>\n" +
+                "</tbody>\n" +
+                "</table>\n" +
+                "<p>&nbsp;</p>\n" +
+                "<p>Sliconf Team</p>\n" +
+                "<p>&nbsp;</p>\n" +
+                "</td>\n" +
+                "</tr>\n" +
+                "<tr style=\"height: 25px;\">\n" +
+                "<td style=\"background: #f7f7f7; width: 5px; height: 25px;\">&nbsp;</td>\n" +
+                "</tr>\n" +
+                "<tr>\n" +
+                "<td style=\"background-color: #29b573; width: 440px;\">&nbsp;</td>\n" +
+                "</tr>\n" +
+                "</tbody>\n" +
+                "</table>\n" +
+                "</div>\n" +
+                "</body>\n" +
+                "</html>";
         Template template7 =new Template();
+        Template template10=new Template();
         template1.setContent(x1);
         template2.setContent(x2);
         template3.setContent(x3);
         template7.setContent(x4);
+        template10.setContent(x5);
         //everything is ok
         template.setContent(x);
         template.setCode("textMail");
         template1.setCode("teefef");
         template2.setCode("sdedef");
         template3.setCode("xssds");
-        template7.setCode("textMailComplete");
+        template7.setCode("rereererere");
         template7.setTitle("textMailComplete");
+        template10.setCode("textMailComplete");
+        template10.setTitle("textMail5");
 
         ResponseMessage savedTemplateMessage=  templateRepositoryService.save(template);
         ResponseMessage savedTemplateMessage2= templateRepositoryService.save(template1);
         ResponseMessage savedTemplateMessage3= templateRepositoryService.save(template2);
         ResponseMessage savedTemplateMessage4= templateRepositoryService.save(template3);
         ResponseMessage savedTemplateMessage8=templateRepositoryService.save(template7);
+        ResponseMessage savedTemplateMessage9=templateRepositoryService.save(template10);
         assertTrue(savedTemplateMessage.isStatus());
         assertTrue(savedTemplateMessage2.isStatus());
         assertTrue(savedTemplateMessage3.isStatus());
         assertTrue(savedTemplateMessage4.isStatus());
         assertTrue(savedTemplateMessage8.isStatus());
+        assertTrue(savedTemplateMessage9.isStatus());
         //if  code null
         Template template4=new Template();
         template4.setCode(null);

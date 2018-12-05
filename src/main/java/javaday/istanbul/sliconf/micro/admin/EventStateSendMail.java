@@ -29,9 +29,8 @@ public class EventStateSendMail {
     @Qualifier("gandiMailSendService")
     private IMailSendService mailSendService;
 
-    @Scheduled(cron = "0 30 15 ? * TUE",zone="Europe/Istanbul")
-
-    public ResponseMessage sendEmailUpcomingEvents() {
+    @Scheduled(cron = "0 30 11 ? * WED",zone="Europe/Istanbul")
+     public ResponseMessage sendEmailUpcomingEvents() {
 
         ResponseMessage responseMessage ;
         String email = mailMessageProvider.getMessage("email"); //emaili source dan alıyoruz
@@ -44,6 +43,7 @@ public class EventStateSendMail {
             String mailBody=mailMessageProvider.getMessage("errorMailBody");
             responseMessage = mailSendService.sendMail(email, mailTitle, mailBody, new String[]{}, new String[]{});
             responseMessage.setMessage(mailBody);
+            log.info("mail template did not received");
             return responseMessage;
         }
         log.info("mail template received");
@@ -67,6 +67,7 @@ public class EventStateSendMail {
        String finalMailBody = mailBody.replace("{Name}","Nursel C.");
        responseMessage = mailSendService.sendMail(email, mailTitle, finalMailBody, new String[]{}, new String[]{});
        log.info("mail send to admin");
+        log.info(mailBody);
 
        return responseMessage;
     }
