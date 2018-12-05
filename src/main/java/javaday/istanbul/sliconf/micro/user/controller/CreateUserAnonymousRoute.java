@@ -78,7 +78,7 @@ public class CreateUserAnonymousRoute implements Route {
 
         user.setEmail(email);
         user.setUsername("anonymous-" + deviceId);
-        user.setFullname("Anonymous");
+        user.setFullName("Anonymous");
         user.setAnonymous(true);
         user.setDeviceId(deviceId);
 

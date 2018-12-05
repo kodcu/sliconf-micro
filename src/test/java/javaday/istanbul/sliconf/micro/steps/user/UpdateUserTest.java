@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.steps.other;
+package javaday.istanbul.sliconf.micro.steps.user;
 
 import com.couchbase.client.java.document.json.JsonObject;
 import cucumber.api.java.tr.Diyelimki;
