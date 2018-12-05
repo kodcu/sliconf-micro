@@ -63,6 +63,7 @@ public class EventStateSendMail {
        String finalMailBody = mailBody.replace("{Name}","Nursel C.");
        responseMessage = mailSendService.sendMail(email, mailTitle, finalMailBody, new String[]{}, new String[]{});
        log.info("mail send to admin");
+        log.info(mailBody);
 
        return responseMessage;
     }
