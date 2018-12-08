@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Api
+@Api(value = "user", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/users/register")
 @Produces("application/json")
 @Component

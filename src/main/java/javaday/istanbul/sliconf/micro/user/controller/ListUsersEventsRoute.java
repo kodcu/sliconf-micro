@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.event.controller;
+package javaday.istanbul.sliconf.micro.user.controller;
 
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
@@ -19,18 +19,18 @@ import java.util.Map;
 import java.util.Objects;
 
 
-@Api
+@Api(value = "user", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/events/list/:userId")
 @Produces("application/json")
 @Component
-public class ListEventsRoute implements Route {
+public class ListUsersEventsRoute implements Route {
 
     private EventControllerMessageProvider messageProvider;
     private EventRepositoryService repositoryService;
 
     @Autowired
-    public ListEventsRoute(EventControllerMessageProvider messageProvider,
-                           EventRepositoryService eventRepositoryService) {
+    public ListUsersEventsRoute(EventControllerMessageProvider messageProvider,
+                                EventRepositoryService eventRepositoryService) {
         this.messageProvider = messageProvider;
         this.repositoryService = eventRepositoryService;
     }

@@ -123,7 +123,7 @@ public class GandiMailSendService implements IMailSendService {
             user.setRole(user1.getRole());
             user.setUsername(user1.getUsername());
             user.setEmail(user1.getEmail());
-            user.setFullname(user1.getFullname());
+            user.setFullName(user1.getFullName());
 
         });
         if(Objects.isNull(event))

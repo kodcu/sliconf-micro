@@ -17,7 +17,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.Objects;
 
-@Api
+@Api(value = "user", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/users/password-reset/reset/:token")
 @Produces("application/json")
 @Component
