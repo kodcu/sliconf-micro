@@ -12,12 +12,10 @@ import spark.QueryParamsMap;
 import spark.Request;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 
+import static java.util.stream.Stream.of;
 import static javaday.istanbul.sliconf.micro.event.model.LifeCycleState.EventStatus.ACTIVE;
 
 
@@ -52,7 +50,11 @@ public class EventSpecs {
         QueryParamsMap lifeCycleStates =  request.queryMap("lifeCycleStates");
         String name = request.queryParamOrDefault("name", "");
 
-        List<String> filters = Lists.newArrayList(Arrays.asList(lifeCycleStates.values()[0].split(",")));
+        List<String> filters;
+        if(lifeCycleStates.hasValue())
+            filters = Lists.newArrayList(Arrays.asList(lifeCycleStates.values()[0].split(",")));
+        else
+            filters =  new ArrayList<>();
         name = "^.*" + name;
         return EventFilter.builder().eventStatuses(filters).name(name).build();
 
