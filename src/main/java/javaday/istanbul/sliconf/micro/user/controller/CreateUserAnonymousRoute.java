@@ -19,7 +19,7 @@ import javax.ws.rs.Produces;
 import java.util.List;
 import java.util.Objects;
 
-@Api
+@Api(value = "user", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/users/register/anonymous/:deviceId")
 @Produces("application/json")
 @Component
@@ -78,7 +78,7 @@ public class CreateUserAnonymousRoute implements Route {
 
         user.setEmail(email);
         user.setUsername("anonymous-" + deviceId);
-        user.setFullname("Anonymous");
+        user.setFullName("Anonymous");
         user.setAnonymous(true);
         user.setDeviceId(deviceId);
 

@@ -20,7 +20,7 @@ import javax.ws.rs.Produces;
 import java.io.IOException;
 import java.util.Objects;
 
-@Api
+@Api(value = "user", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/users/password-reset/send/:email")
 @Produces("application/json")
 @Component

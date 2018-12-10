@@ -20,7 +20,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findUserByEmailEquals(String email);
 
     // @Query("SELECT * FROM users WHERE META(users).id != $2 AND username = $1 ")
-    //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.listEvents} AND username = $1 AND META().id != $2")
+    //@Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND username = $1 AND META().id != $2")
     List<User> findByUsernameAndIdNot(String username, String id);
 
     Optional<User> findById(String id);

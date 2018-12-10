@@ -20,7 +20,7 @@ import javax.ws.rs.Produces;
 import java.util.List;
 import java.util.Objects;
 
-@Api
+@Api(value = "user", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/users/update")
 @Produces("application/json")
 @Component
@@ -71,7 +71,7 @@ public class UpdateUserRoute implements Route {
         User user = userRepositoryService.findById(id).orElse(null);
 
         String stringUsername = "username";
-        String stringFullname = "fullname";
+        String stringFullname = "fullName";
         String stringPass = "password";
         String stringOldPass = "oldpassword";
 
@@ -93,7 +93,7 @@ public class UpdateUserRoute implements Route {
                     return new ResponseMessage(false, "New username must be at least 4", new Object());
             }
             if (Objects.nonNull(updateParams.getString(stringFullname))) {
-                user.setFullname(updateParams.getString(stringFullname));
+                user.setFullName(updateParams.getString(stringFullname));
                 changed = true;
             }
             if (Objects.nonNull(updateParams.getString(stringPass)) && Objects.nonNull(updateParams.getString(stringOldPass))) {

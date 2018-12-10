@@ -44,11 +44,15 @@ public class RouteObjects {
     public final ResetPasswordRoute resetPasswordRoute;
     public final UpdateUserRoute updateUserRoute;
 
+    public final ListUsersEventsRoute listUsersEventsRoute;
+    public final ListEventsForUser listEventsForUser;
+
+
+
     // Event related controller
     public final CreateEventRoute createEventRoute;
     public final DeleteEventRoute deleteEventRoute;
     public final GetEventWithKeyRoute getEventWithKeyRoute;
-    public final ListEventsRoute listEventsRoute;
     public final GetStatisticsRoute getStatisticsRoute;
 
     public final CreateFloorRoute createFloorRoute;
@@ -100,6 +104,6 @@ public class RouteObjects {
     public final AdminListEventStatesRoute adminListEventStatesRoute;
     public final AdminChangeEventStateForEventRoute adminChangeEventStateForEventRoute;
     public final AdminGetUserInfo adminGetUserInfo;
-    public final ListEvents listEvents;
+    public final ListEventsForAdmin listEventsForAdmin;
 
 }

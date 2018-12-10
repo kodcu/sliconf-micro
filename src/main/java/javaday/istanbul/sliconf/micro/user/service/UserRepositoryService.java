@@ -1,6 +1,8 @@
 package javaday.istanbul.sliconf.micro.user.service;
 
 import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.model.EventFilter;
+import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.survey.service.AnswerService;
 import javaday.istanbul.sliconf.micro.survey.service.GeneralService;
@@ -9,9 +11,12 @@ import javaday.istanbul.sliconf.micro.user.util.UserSpecs;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.repository.UserRepository;
 import javaday.istanbul.sliconf.micro.util.Constants;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,6 +40,9 @@ public class UserRepositoryService implements UserService {
 
     @Autowired
     private UserRepositoryMessageProvider userRepositoryMessageProvider;
+
+    @Autowired
+    private EventRepositoryService eventRepositoryService;
 
     private String passDoNotMeetRequiredLength = "passwordDoNotMeetRequiredLength";
 
@@ -303,4 +311,7 @@ public class UserRepositoryService implements UserService {
     }
 
 
+    public Page<Event> filter(EventFilter eventFilter, Pageable pageable) {
+        return eventRepositoryService.filter(eventFilter, pageable);
+    }
 }

@@ -125,7 +125,9 @@ public class GandiMailSendService implements IMailSendService {
             user.setRole(user1.getRole());
             user.setUsername(user1.getUsername());
             user.setEmail(user1.getEmail());
+
         });}}
+
         if(Objects.isNull(event))
         {
             return new ResponseMessage(false, "mail can not send",null);

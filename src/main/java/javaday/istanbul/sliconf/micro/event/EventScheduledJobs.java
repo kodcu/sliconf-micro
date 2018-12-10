@@ -2,6 +2,7 @@ package javaday.istanbul.sliconf.micro.event;
 
 import javaday.istanbul.sliconf.micro.admin.AdminService;
 import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.model.EventFilter;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.repository.EventRepository;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,8 @@ public class EventScheduledJobs {
         filters.add("PASSIVE");
         filters.add("HAPPENING");
         Pageable pageable = new PageRequest(0,10000);
-        Page<Event> events = adminService.listEvents(filters, pageable);
+        EventFilter eventFilter = EventFilter.builder().eventStatuses(filters).name("").build();
+        Page<Event> events = adminService.filter(eventFilter, pageable);
         events.forEach(event -> {
            boolean isActive = event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.ACTIVE);
            boolean isPassive = event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.PASSIVE);
