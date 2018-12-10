@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class EventFilter {
 
-    private String name;
+    private String nameLike;
 
     private List<String> eventStatuses;
 }

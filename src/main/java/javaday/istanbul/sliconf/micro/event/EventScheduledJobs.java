@@ -40,7 +40,7 @@ public class EventScheduledJobs {
         filters.add("PASSIVE");
         filters.add("HAPPENING");
         Pageable pageable = new PageRequest(0,10000);
-        EventFilter eventFilter = EventFilter.builder().eventStatuses(filters).name("").build();
+        EventFilter eventFilter = EventFilter.builder().eventStatuses(filters).nameLike("").build();
         Page<Event> events = adminService.filter(eventFilter, pageable);
         events.forEach(event -> {
            boolean isActive = event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.ACTIVE);
@@ -54,8 +54,8 @@ public class EventScheduledJobs {
            }
 
            if(isHappening && event.getEndDate().isBefore(LocalDateTime.now())) {
-               event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.HAPPENING);
-               event.getLifeCycleState().getEventStatuses().remove(LifeCycleState.EventStatus.FINISHED);
+               event.getLifeCycleState().getEventStatuses().remove(LifeCycleState.EventStatus.HAPPENING);
+               event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.FINISHED);
                log.info("event status updated from happening to finished");
            }
 

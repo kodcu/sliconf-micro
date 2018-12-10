@@ -42,7 +42,7 @@ public class AAA1 extends SpringBootTestConfig { // NOSONAR
     @Diyelimki("^Etkinlik sahibi kendi etkinliğine bir anket eklemek istiyor$")
     public void etkinlikSahibiKendiEtkinliğineBirAnketEklemekIstiyor() throws Throwable {
         initialData.init();
-        String jsonTestBody = "{q!@!#!#$!@$}";
+        String jsonTestBody = "{\"q!@!#!#$!@$\":\"!@#$%*()\"}";
         try {
             JsonUtil.fromJsonOrElseThrow(jsonTestBody, Survey.class);
         } catch (RuntimeException e) {

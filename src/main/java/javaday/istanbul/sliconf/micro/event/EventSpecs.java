@@ -56,12 +56,12 @@ public class EventSpecs {
         else
             filters =  new ArrayList<>();
         name = "^.*" + name;
-        return EventFilter.builder().eventStatuses(filters).name(name).build();
+        return EventFilter.builder().eventStatuses(filters).nameLike(name).build();
 
     }
 
     /**
-     * Event name'in minimum uzunlugunu gelen parametreye gore kontrol eder
+     * Event nameLike'in minimum uzunlugunu gelen parametreye gore kontrol eder
      *
      * @param event
      * @param nameLength
@@ -228,9 +228,9 @@ public class EventSpecs {
         }
 
         if (Objects.isNull(event.getName()) || event.getName().isEmpty()) {
-            failed.add("Event name must be added");
+            failed.add("Event nameLike must be added");
         } else {
-            passed.add("Event name added");
+            passed.add("Event nameLike added");
         }
     }
 

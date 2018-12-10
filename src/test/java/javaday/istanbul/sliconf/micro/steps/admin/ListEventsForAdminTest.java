@@ -106,7 +106,7 @@ public class ListEventsForAdminTest extends SpringBootTestConfig { // NOSONAR
         eventStatuses.clear();
         eventStatuses.add(LifeCycleState.EventStatus.ACTIVE);
 
-        EventFilter eventFilter = EventFilter.builder().name("").eventStatuses(filters).build();
+        EventFilter eventFilter = EventFilter.builder().nameLike("").eventStatuses(filters).build();
 
         Page<Event> events = adminService.filter(eventFilter, pageable);
         assertFalse(events.getContent().isEmpty());
@@ -144,7 +144,7 @@ public class ListEventsForAdminTest extends SpringBootTestConfig { // NOSONAR
         eventStatuses.add(LifeCycleState.EventStatus.ACTIVE);
 
 
-        EventFilter eventFilter = EventFilter.builder().name("").eventStatuses(filters).build();
+        EventFilter eventFilter = EventFilter.builder().nameLike("").eventStatuses(filters).build();
 
         Page<Event> events = adminService.filter(eventFilter, pageable);
         assertFalse(events.getContent().isEmpty());
@@ -192,7 +192,7 @@ public class ListEventsForAdminTest extends SpringBootTestConfig { // NOSONAR
         expectedEventCount = eventRepository.findAll().size();
         pageable = new PageRequest(0, 20);
 
-        EventFilter eventFilter = EventFilter.builder().name("").eventStatuses(filters).build();
+        EventFilter eventFilter = EventFilter.builder().nameLike("").eventStatuses(filters).build();
 
         Page<Event> events = adminService.filter(eventFilter, pageable);
 
@@ -219,7 +219,7 @@ public class ListEventsForAdminTest extends SpringBootTestConfig { // NOSONAR
     public void sistemAktifVeyaPasifOlanTümEtkinlikleriAdmineGösterir() throws Throwable {
 
         pageable = new PageRequest(0, 20);
-        EventFilter eventFilter = EventFilter.builder().name("").eventStatuses(filters).build();
+        EventFilter eventFilter = EventFilter.builder().nameLike("").eventStatuses(filters).build();
 
         Page<Event> events = adminService.filter(eventFilter, pageable);        assertFalse(events.getContent().isEmpty());
 
@@ -250,7 +250,7 @@ public class ListEventsForAdminTest extends SpringBootTestConfig { // NOSONAR
     @Ozaman("^Sistem gerçekleşip bitmiş olan tüm etkinlikleri Admine gösterir$")
     public void sistemGerçekleşipBitmişOlanTümEtkinlikleriAdmineGösterir() throws Throwable {
         pageable = new PageRequest(0, 20);
-        EventFilter eventFilter = EventFilter.builder().name("").eventStatuses(filters).build();
+        EventFilter eventFilter = EventFilter.builder().nameLike("").eventStatuses(filters).build();
 
         Page<Event> events = adminService.filter(eventFilter, pageable);        assertFalse(events.getContent().isEmpty());
 
@@ -280,7 +280,7 @@ public class ListEventsForAdminTest extends SpringBootTestConfig { // NOSONAR
     @Ozaman("^Sistem gerçekleşmeden bitip başarısız olan tüm etkinlikleri Admine gösterir$")
     public void sistemGerçekleşmedenBitipBaşarısızOlanTümEtkinlikleriAdmineGösterir() throws Throwable {
         pageable = new PageRequest(0, 20);
-        EventFilter eventFilter = EventFilter.builder().name("").eventStatuses(filters).build();
+        EventFilter eventFilter = EventFilter.builder().nameLike("").eventStatuses(filters).build();
 
         Page<Event> events = adminService.filter(eventFilter, pageable);
         assertFalse(events.getContent().isEmpty());
@@ -311,7 +311,7 @@ public class ListEventsForAdminTest extends SpringBootTestConfig { // NOSONAR
     @Ozaman("^Sistem şu anda gerçekleşen tüm etkinlikleri Admine gösterir$")
     public void sistemŞuAndaGerçekleşenTümEtkinlikleriAdmineGösterir() throws Throwable {
         pageable = new PageRequest(0, 20);
-        EventFilter eventFilter = EventFilter.builder().name("").eventStatuses(filters).build();
+        EventFilter eventFilter = EventFilter.builder().nameLike("").eventStatuses(filters).build();
 
         Page<Event> events = adminService.filter(eventFilter, pageable);
 
