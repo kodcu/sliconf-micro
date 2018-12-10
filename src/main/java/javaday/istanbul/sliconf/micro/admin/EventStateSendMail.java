@@ -25,7 +25,7 @@ public class EventStateSendMail {
     @Autowired
     @Qualifier("gandiMailSendService")
     private IMailSendService mailSendService;
-    @Scheduled(cron = "0 28 18 ? * MON",zone="Europe/Istanbul")
+    @Scheduled(cron = "0 30 10 ? * MON",zone="Europe/Istanbul")
     public ResponseMessage sendEmailUpcomingEvents() {
 
         ResponseMessage responseMessage ;
