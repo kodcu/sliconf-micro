@@ -34,7 +34,7 @@ public class SurveyValidator {
             String constraintViolationMessages = responseMessage.getMessage();
             boolean isNull = Objects.isNull(constraintViolation.getInvalidValue());
             String rejectedValue = " --> Invalid Value = ";
-            rejectedValue += isNull ? "null" : rejectedValue + constraintViolation.getInvalidValue().toString();
+            rejectedValue += isNull ? "null" : constraintViolation.getInvalidValue().toString();
 
             String newConstraintMessage = constraintViolation.getMessage() + rejectedValue + ", ";
             responseMessage.setMessage(constraintViolationMessages + newConstraintMessage);

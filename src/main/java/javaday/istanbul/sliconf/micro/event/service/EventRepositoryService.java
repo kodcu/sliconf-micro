@@ -218,7 +218,7 @@ public class EventRepositoryService implements EventService {
 
         // Query sorgulari test veritabani uzerinde calismiyor. o yuzden sadece prod ve devde calistiriyoruz.
         if (!activeProfile.equals("test"))
-            return repo.findAllByLifeCycleStateEventStatusesAndNameLike(eventStatuses, eventFilter.getName(), pageable);
+            return repo.findAllByLifeCycleStateEventStatusesAndNameLike(eventStatuses, eventFilter.getNameLike(), pageable);
 
         Set<Event> events = new HashSet<>();
         eventStatuses.stream().map(repo::findAllByLifeCycleStateEventStatusesLike).forEach(events::addAll);

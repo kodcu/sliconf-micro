@@ -47,7 +47,7 @@ public class ListEventsForAdmin implements Route {
             ),
 
             @ApiImplicitParam(dataType = "string", name = "name",
-                    paramType = "query", defaultValue = ""),
+                    paramType = "query"),
 
             @ApiImplicitParam(dataType = "string", name = "pageSize",
                     paramType = "query", defaultValue = "20"),
