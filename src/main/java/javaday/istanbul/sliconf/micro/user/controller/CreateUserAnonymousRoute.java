@@ -19,7 +19,7 @@ import javax.ws.rs.Produces;
 import java.util.List;
 import java.util.Objects;
 
-@Api
+@Api(value = "user", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/users/register/anonymous/:deviceId")
 @Produces("application/json")
 @Component

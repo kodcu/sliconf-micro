@@ -15,15 +15,19 @@ import java.util.Optional;
 @Repository
 public interface EventRepository extends MongoRepository<Event, String> {
 
-    //@Query('#{#n1ql.selectEntity} WHERE #{#n1ql.listEvents} AND Meta(events).id = $1')
+    //@Query('#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND Meta(events).id = $1')
     Optional<Event> findById(String id);
 
     Optional<Event> findByKey(String key);
     
     List<Event> findAllByLifeCycleStateEventStatusesLike(LifeCycleState.EventStatus eventStatuses);
 
-    @Query(value = "{ 'lifeCycleState.eventStatuses': {'$in': ?0} }")
-    Page<Event> findAllByLifeCycleStateEventStatuses(List<LifeCycleState.EventStatus> eventStatuses, Pageable pageable);
+    /** $and: [ {'lifeCycleState.eventStatuses': {$in : ["PASSIVE","HAPPENING"]}}
+, {name: { $regex : /lus/}}] */
+    @Query(value = "{ $and : [ {'lifeCycleState.eventStatuses': {'$in': ?0}}, {name: { '$regex' : ?1 }} ] }")
+    Page<Event> findAllByLifeCycleStateEventStatusesAndNameLike(List<LifeCycleState.EventStatus> eventStatuses,
+                                                                 String name,
+                                                                 Pageable pageable);
 
     List<Event> findByName(String name);
 
@@ -33,7 +37,7 @@ public interface EventRepository extends MongoRepository<Event, String> {
 
     List<Event> findAllByExecutiveUserEquals(String executiveUser);
 
-    //@Query('#{#n1ql.selectEntity} WHERE #{#n1ql.listEvents} AND executiveUser = $1 AND deleted = $2')
+    //@Query('#{#n1ql.selectEntity} WHERE #{#n1ql.filter} AND executiveUser = $1 AND deleted = $2')
     List<Event> findAllByExecutiveUserEqualsAndDeleted(String executiveUser, Boolean deleted);
 
     List<Event> findAllByExecutiveUserAndDeleted(String executiveUser, Boolean deleted);

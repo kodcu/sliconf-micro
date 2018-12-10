@@ -1,20 +1,17 @@
 package javaday.istanbul.sliconf.micro.admin.controller;
 
-import com.google.api.client.util.Lists;
 import io.swagger.annotations.*;
 import javaday.istanbul.sliconf.micro.admin.AdminService;
+import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.model.EventFilter;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -22,8 +19,6 @@ import spark.Route;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.util.Arrays;
-import java.util.List;
 
 import static java.lang.String.valueOf;
 
@@ -32,7 +27,7 @@ import static java.lang.String.valueOf;
 @Path("/service/admin/events")
 @Produces("application/json")
 @Component
-public class ListEvents implements Route {
+public class ListEventsForAdmin implements Route {
 
     private final UserHelper userHelper;
     private final AdminService adminService;
@@ -50,6 +45,9 @@ public class ListEvents implements Route {
                     allowableValues = "ACTIVE, PASSIVE, HAPPENING, FINISHED, DELETED, FAILED",
                     example = "/events?lifeCycleStates=PASSIVE,ACTIVE --> List active or passive events"
             ),
+
+            @ApiImplicitParam(dataType = "string", name = "name",
+                    paramType = "query", defaultValue = ""),
 
             @ApiImplicitParam(dataType = "string", name = "pageSize",
                     paramType = "query", defaultValue = "20"),
@@ -74,21 +72,10 @@ public class ListEvents implements Route {
         if(!responseMessage.isStatus())
             return responseMessage;
 
-        QueryParamsMap lifeCycleStates =  request.queryMap("lifeCycleStates");
+        EventFilter eventFilter = EventSpecs.getEventFilterFromRequest(request);
+        Pageable pageable = EventSpecs.getPageableFromRequest(request);
 
-        List<String> filters = Lists.newArrayList(Arrays.asList(lifeCycleStates.values()[0].split(",")));
-
-        String pageSize = request.queryParamOrDefault("pageSize", "20");
-        String pageNumber = request.queryParamOrDefault("pageNumber", "0");
-        Pageable pageable;
-
-        try {
-            pageable = new PageRequest(Integer.parseInt(pageNumber), Integer.parseInt(pageSize));
-        } catch (NumberFormatException e) {
-            pageable = new PageRequest(0, 20);
-        }
-
-        Page<Event> events = adminService.listEvents(filters, pageable);
+        Page<Event> events = adminService.filter(eventFilter, pageable);
         String message = "Events listed. Total Events = " + events.getTotalElements();
         return new ResponseMessage(true, message, events.getContent());
 

@@ -1,8 +1,11 @@
 package javaday.istanbul.sliconf.micro.event.service;
 
+import com.google.api.client.util.Lists;
 import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.StateManager;
 import javaday.istanbul.sliconf.micro.event.model.Event;
+import javaday.istanbul.sliconf.micro.event.model.EventFilter;
+import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.repository.EventRepository;
 import javaday.istanbul.sliconf.micro.mail.IMailSendService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
@@ -10,7 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +28,9 @@ import java.util.stream.Collectors;
 @Profile({"prod", "dev"})
 public class EventRepositoryService implements EventService {
 
+    @Value("${spring.profiles.active}")
+    String activeProfile;
+
     protected Logger logger = LoggerFactory.getLogger(EventRepositoryService.class);
 
     @Autowired
@@ -28,10 +38,14 @@ public class EventRepositoryService implements EventService {
 
     @Autowired
     protected EventStateService eventStateService;
+
     @Autowired
     @Qualifier("gandiMailSendService")
     private IMailSendService mailSendService;
-    public Optional<Event> findById(String id) { return repo.findById(id); }
+
+    public Optional<Event> findById(String id) {
+        return repo.findById(id);
+    }
 
     public Event findOne(String id) {
         return repo.findOne(id);
@@ -85,7 +99,7 @@ public class EventRepositoryService implements EventService {
             return eventStateMessage;
         }
 
-        EventSpecs.generateStatusDetails(event,mailSendService);
+        EventSpecs.generateStatusDetails(event, mailSendService);
 
 
         saveEvent(event, message);
@@ -96,7 +110,7 @@ public class EventRepositoryService implements EventService {
     public ResponseMessage saveAdmin(Event event) {
         ResponseMessage message = new ResponseMessage(false, "An error occured while saving event", null);
 
-        EventSpecs.generateStatusDetails(event,mailSendService);
+        EventSpecs.generateStatusDetails(event, mailSendService);
 
         saveEvent(event, message);
 
@@ -122,7 +136,6 @@ public class EventRepositoryService implements EventService {
     public Event findEventByKeyEquals(String key) {
         return repo.findEventByKeyEquals(key);
     }
-
 
     public List<Event> getNotDeletedEvents(List<Event> events) {
         if (Objects.nonNull(events)) {
@@ -192,4 +205,24 @@ public class EventRepositoryService implements EventService {
         return repo.findByKey(eventKey);
     }
 
+
+    public Page<Event> filter(EventFilter eventFilter, Pageable pageable) {
+        List<LifeCycleState.EventStatus> eventStatuses;
+        if (eventFilter.getEventStatuses().isEmpty()) {
+            eventFilter.getEventStatuses().add("ACTIVE");
+        }
+        eventStatuses = eventFilter.getEventStatuses()
+                .stream()
+                .map(LifeCycleState.EventStatus::valueOf)
+                .collect(Collectors.toList());
+
+        // Query sorgulari test veritabani uzerinde calismiyor. o yuzden sadece prod ve devde calistiriyoruz.
+        if (!activeProfile.equals("test"))
+            return repo.findAllByLifeCycleStateEventStatusesAndNameLike(eventStatuses, eventFilter.getName(), pageable);
+
+        Set<Event> events = new HashSet<>();
+        eventStatuses.stream().map(repo::findAllByLifeCycleStateEventStatusesLike).forEach(events::addAll);
+
+        return new PageImpl<>(Lists.newArrayList(events), pageable, events.size());
+    }
 }

@@ -1,19 +1,21 @@
 package javaday.istanbul.sliconf.micro.event;
-import javaday.istanbul.sliconf.micro.event.model.About;
-import javaday.istanbul.sliconf.micro.event.model.Event;
-import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
-import javaday.istanbul.sliconf.micro.event.model.StatusDetails;
+import com.google.api.client.util.Lists;
+import javaday.istanbul.sliconf.micro.event.model.*;
 import javaday.istanbul.sliconf.micro.event.service.EventService;
 import javaday.istanbul.sliconf.micro.mail.IMailSendService;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.RandomGenerator;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import spark.QueryParamsMap;
+import spark.Request;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 
+import static java.util.stream.Stream.of;
 import static javaday.istanbul.sliconf.micro.event.model.LifeCycleState.EventStatus.ACTIVE;
 
 
@@ -30,7 +32,33 @@ public class EventSpecs {
 
 
 
+    public static Pageable getPageableFromRequest(Request request) {
+        String pageSize = request.queryParamOrDefault("pageSize", "20");
+        String pageNumber = request.queryParamOrDefault("pageNumber", "0");
+        Pageable pageable;
 
+        try {
+            pageable = new PageRequest(Integer.parseInt(pageNumber), Integer.parseInt(pageSize));
+        } catch (NumberFormatException e) {
+            pageable = new PageRequest(0, 20);
+        }
+
+        return pageable;
+    }
+
+    public static EventFilter getEventFilterFromRequest(Request request) {
+        QueryParamsMap lifeCycleStates =  request.queryMap("lifeCycleStates");
+        String name = request.queryParamOrDefault("name", "");
+
+        List<String> filters;
+        if(lifeCycleStates.hasValue())
+            filters = Lists.newArrayList(Arrays.asList(lifeCycleStates.values()[0].split(",")));
+        else
+            filters =  new ArrayList<>();
+        name = "^.*" + name;
+        return EventFilter.builder().eventStatuses(filters).name(name).build();
+
+    }
 
     /**
      * Event name'in minimum uzunlugunu gelen parametreye gore kontrol eder
@@ -319,7 +347,7 @@ public class EventSpecs {
 
     }
     public static ResponseMessage completeEventSendMail(Event event,IMailSendService mailSendService){
-        String templateCode="textMail4";
+        String templateCode="textMail7";
         ResponseMessage mailResponse= mailSendService.sendCompleteEventStateMail(event,templateCode);
         if (!mailResponse.isStatus()) {
             return mailResponse;
