@@ -118,14 +118,16 @@ public class GandiMailSendService implements IMailSendService {
     public ResponseMessage sendCompleteEventStateMail(Event event, String templateCode){
         ResponseMessage responseMessage;
         User user =new User();
+        if(Objects.nonNull(event)){
         Optional<User> userOptional=userRepositoryService.findById(event.getExecutiveUser());
+           if (Objects.nonNull(userOptional)){
         userOptional.ifPresent(user1 -> {
             user.setRole(user1.getRole());
             user.setUsername(user1.getUsername());
             user.setEmail(user1.getEmail());
-            user.setFullName(user1.getFullName());
 
-        });
+        });}}
+
         if(Objects.isNull(event))
         {
             return new ResponseMessage(false, "mail can not send",null);
@@ -141,19 +143,27 @@ public class GandiMailSendService implements IMailSendService {
         }
         String mailbody=template.getContent();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String eventStartDate=event.getStartDate().format(formatter);
-        String eventFinishDate=event.getEndDate().format(formatter);
-        String eventPackage=event.getEventState().getType();
-        String eventWebSite=event.getAbout().getWeb();
-        mailbody=mailbody.replace("{Event}",event.getName()); //cektiğimiz template de  {Event} yazan yer ile event ismi ile degistiriyoruz.
-        mailbody=mailbody.replace("{ESD}",eventStartDate);
-        mailbody=mailbody.replace("{EFD}",eventFinishDate);
-        mailbody=mailbody.replace("{EventWeb}",eventWebSite);
-        if(Objects.nonNull(eventPackage))
-           mailbody=mailbody.replace("{PackageType}",eventPackage);
-        else
-            mailbody=mailbody.replace("{PackageType}","");
-        mailbody=mailbody.replace("{UserMail}",user.getEmail());
+        if (Objects.nonNull(event)) {
+            String eventStartDate = event.getStartDate().format(formatter);
+            String eventFinishDate = event.getEndDate().format(formatter);
+            mailbody = mailbody.replace("{Event}", event.getName()); //cektiğimiz template de  {Event} yazan yer ile event ismi ile degistiriyoruz.
+            mailbody = mailbody.replace("{ESD}", eventStartDate);
+            mailbody = mailbody.replace("{EFD}", eventFinishDate);
+            if (Objects.nonNull(event.getAbout()))
+                mailbody = mailbody.replace("{EventWeb}", event.getAbout().getWeb());
+            else
+                mailbody = mailbody.replace("{EventWeb}", "");
+            if (Objects.nonNull(event.getEventState()))
+                mailbody = mailbody.replace("{PackageType}",  event.getEventState().getType());
+            else
+                mailbody = mailbody.replace("{PackageType}", "");
+            if (Objects.nonNull(user))
+                mailbody = mailbody.replace("{UserMail}", user.getEmail());
+            else
+                mailbody = mailbody.replace("{UserMail}","");
+
+        }
+
 
 
         responseMessage=sendMail(email,mailTitle,mailbody,new String[]{},new String[]{});
