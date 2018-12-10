@@ -27,7 +27,7 @@ import java.util.Collections;
  */
 @Configuration
 @EnableMongoRepositories(basePackages = {"javaday.istanbul.sliconf.micro"})
-@Profile({"prod", "dev","test"})
+@Profile({"prod", "dev"})
 public class MongoConfig extends AbstractMongoConfiguration {
 
     @Value("${sliconf.mongo.host-name}")
