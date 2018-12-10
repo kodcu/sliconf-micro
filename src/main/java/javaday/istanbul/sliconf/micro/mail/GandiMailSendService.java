@@ -110,7 +110,7 @@ public class GandiMailSendService implements IMailSendService {
         return responseMessage;
     }
     /**
-     * ADMİNE COPMLETE OLAN YADA UPDATE EDİLEN EVENTLERİ MAİL ATAN FONKSİYON
+     * ADMİNE COPMLETE OLAN  EVENTLERİ MAİL ATAN FONKSİYON
      * @param event
      * @param templateCode
      * @return
