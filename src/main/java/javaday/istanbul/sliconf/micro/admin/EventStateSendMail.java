@@ -29,10 +29,13 @@ public class EventStateSendMail {
     @Qualifier("gandiMailSendService")
     private IMailSendService mailSendService;
 
-    @Scheduled(cron = "0 30 11 ? * WED",zone="Europe/Istanbul")
-     public ResponseMessage sendEmailUpcomingEvents() {
+    @Scheduled(cron = "0 30 10 ? * MON",zone="Europe/Istanbul")
+public ResponseMessage sendEmailUpcomingEvents() {
+
 
         ResponseMessage responseMessage ;
+
+
         String email = mailMessageProvider.getMessage("email"); //emaili source dan alıyoruz
         String mailTitle = mailMessageProvider.getMessage("mailTitle");//mail title source dan  alıyoruz
         log.info("email and title received");

@@ -53,49 +53,40 @@ public class AdminSendMailTest extends SpringBootTestConfig {
         template1.setTitle("teffe");
         template2.setTitle("erfe");
         template3.setTitle("sdsds");
-        String x="<div style=\"width:100%\">\n" +
-                "<table width=\"540\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 auto\">\n" +
+        String x="<html>\n" +
+                "<body>\n" +
+                "<p>&nbsp;</p>\n" +
+                "<div style=\"width: 100%;\">\n" +
+                "<table style=\"margin: 0px auto; width: 428px; height: 723px;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n" +
                 "<tbody>\n" +
-                "<tr>\n" +
-                "<td colspan=\"3\" width=\"540\" height=\"21\" style=\"background:url(https://image.ibb.co/iSWEZf/layout-03.jpg) #f7f7f7 no-repeat\">\n" +
-                "</td>\n" +
+                "<tr style=\"height: 21px;\">\n" +
+                "<td style=\"background-color: #29b573; width: 440px; height: 21px;\">&nbsp;</td>\n" +
                 "</tr>\n" +
-                "<tr>\n" +
-                "<td rowspan=\"2\" width=\"30\" height=\"65\" style=\"background:url(https://image.ibb.co/hwUF70/layout-05.png) #f7f7f7 no-repeat\">\n" +
-                "</td>\n" +
-                "<td width=\"480\" height=\"1\" style=\"background:url(https://image.ibb.co/jHhk70/layout-06.png) #f7f7f7 no-repeat\">\n" +
-                "</td>\n" +
-                "<td rowspan=\"2\" width=\"30\" height=\"65\" style=\"background:url(https://image.ibb.co/caH2n0/layout-07.png) #f7f7f7 no-repeat\">\n" +
-                "</td>\n" +
-                "</tr>\n" +
-                "<tr>\n" +
-                "<td rowspan=\"2\" width=\"440\" style=\"border-radius:4px; padding:20px\"><a href=\"https://sliconf.com\" target=\"_blank\" rel=\"noopener noreferrer\" data-auth=\"NotApplicable\" style=\"border:none\"><img data-imagetype=\"External\" src=\"https://sliconf.com/wp-content/uploads/2018/08/logo.png\" width=\"130\" style=\"border:none\"> </a>\n" +
-                "<p>Merhaba {Name},</p>\n" +
-                "<p>Sliconf is here with the events of the week.Below you can see what's happening this week and next week's digital world events.See you next week.  </p>\n" +
+                "<tr style=\"height: 685px;\">\n" +
+                "<td style=\"border-radius: 4px; padding: 20px; width: 400px; height: 710px;\" rowspan=\"2\"><a style=\"border: none;\" href=\"https://sliconf.com\" target=\"_blank\" rel=\"noopener noreferrer\" data-auth=\"NotApplicable\"><img style=\"border: none;\" src=\"https://sliconf.com/wp-content/uploads/2018/08/logo.jpg\" width=\"130\" data-imagetype=\"External\" /> </a>\n" +
+                "<p>Sliconf is here with the events of the week.Below you can see what's happening this week and next week's digital world events.See you next week.</p>\n" +
+                "<p>\n" +
                 "<p><b>Events of this week </b></p>\n" +
-
-                "{Events of this week}</ul>\n" +
+                "<ul>\n" +
+                "{Events of this week}\n" +
+                "</ul>\n" +
                 "<p><b>Events of next week</b></p>\n" +
-
-                "{Events of next week}</ul>\n" +
-
-                "Sliconf Team </p>\n" +
-                "</td>\n" +
+                "<ul>\n" +
+                "{Events of next week}\n" +
+                "</ul>\n" +
+                "<p>Sliconf Team</p>\n" +
                 "</tr>\n" +
                 "<tr>\n" +
-                "<td rowspan=\"2\" width=\"30\" style=\"background:#f7f7f7\">&nbsp;</td>\n" +
-                "<td rowspan=\"2\" width=\"30\" style=\"background:#f7f7f7\">&nbsp;</td>\n" +
+                "<td style=\"background: #f7f7f7;\" width=\"480\" height=\"25\">&nbsp;</td>\n" +
                 "</tr>\n" +
                 "<tr>\n" +
-                "<td width=\"480\" height=\"25\" style=\"background:#f7f7f7\">&nbsp;</td>\n" +
-                "</tr>\n" +
-                "<tr>\n" +
-                "<td colspan=\"3\" width=\"540\" height=\"13\" style=\"background:url(https://image.ibb.co/m7M6Ef/layout-12.png) #f7f7f7 no-repeat\">\n" +
-                "</td>\n" +
+                "<td style=\"background-color: #29b573; width: 440px; height: 21px;\" width=\"540\" height=\"13\">&nbsp;</td>\n" +
                 "</tr>\n" +
                 "</tbody>\n" +
                 "</table>\n" +
-                "</div>";
+                "</div>\n" +
+                "</body>\n" +
+                "</html>";
         String x1="`<div style=\\\"width:100%\\\">\\n\" +\n" +
                 "                \"<table width=\\\"540\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" style=\\\"margin:0 auto\\\">\\n\" +\n" +
                 "                \"<tbody>\\n\" +\n" +
