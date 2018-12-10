@@ -91,6 +91,9 @@ public class RootController {
                 post("update", routeObjects.updateUserRoute, JsonUtil.json());
                 post("password-reset/send/:email", routeObjects.sendPasswordResetRoute, JsonUtil.json());
                 post("password-reset/reset/:token", routeObjects.resetPasswordRoute, JsonUtil.json());
+
+                path("events", () -> get("", routeObjects.listEventsForUser, JsonUtil.json()));
+
             });
 
             path("events/", () -> {
@@ -98,7 +101,7 @@ public class RootController {
                 post("create/:userId", routeObjects.createEventRoute, JsonUtil.json());
                 delete("delete/:eventId/:userId", routeObjects.deleteEventRoute, JsonUtil.json());
 
-                get("list/:userId", routeObjects.listEventsRoute, JsonUtil.json());
+                get("list/:userId", routeObjects.listUsersEventsRoute, JsonUtil.json());
 
                 path("get/", () -> {
                     get("with-key/:key", routeObjects.getEventWithKeyRoute, JsonUtil.json());
@@ -203,7 +206,7 @@ public class RootController {
                 );
 
                 path("events", () ->
-                        get("", routeObjects.listEvents, JsonUtil.json())
+                        get("", routeObjects.listEventsForAdmin, JsonUtil.json())
                 );
             });
 

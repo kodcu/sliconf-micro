@@ -10,6 +10,8 @@ import javaday.istanbul.sliconf.micro.util.EmailUtil;
 import javaday.istanbul.sliconf.micro.util.LoginTokenUtil;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -19,9 +21,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-@Api
+@Api(value = "user", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/users/register")
 @Produces("application/json")
 @Component
@@ -57,8 +60,15 @@ public class CreateUserRoute implements Route {
             @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
     })
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
+
+        // anonim olarak giris yapmis kullanicinin deviceid sini alip yeni olusacak hesaba ekliyoruz.
+        // boylece kullaniciyi unique kullanicilar listesine iki defa eklemiyoruz.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Map<String, String> userMap = ((Map) authentication.getCredentials());
+
         String body = request.body();
         User user = JsonUtil.fromJson(body, User.class);
+        user.setDeviceId(userMap.get("deviceId"));
 
         ResponseMessage responseMessage = registerUser(user);
 
