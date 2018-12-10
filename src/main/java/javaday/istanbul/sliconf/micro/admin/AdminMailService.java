@@ -4,13 +4,15 @@ import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
-
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class AdminMailService {
@@ -37,8 +39,10 @@ public class AdminMailService {
         StringBuilder thisWeek=new StringBuilder();
         Set<Event> events =getEvents();
 
-        LocalDateTime today7 =  LocalDateTime.now().plusDays(7);//thisweekvariable
-        LocalDateTime now=LocalDateTime.now();//now
+        LocalDateTime today7 =  LocalDateTime.now(ZoneId.of("Europe/Istanbul")).plusDays(7);//thisweekvariable
+        LocalDateTime now=LocalDateTime.now(ZoneId.of("Europe/Istanbul"));
+        log.info("now +7 :"+today7.toString());
+        log.info("now :"+now.toString());//now
         for (Event event:events) {
             if (event.getStartDate().compareTo(today7) <= 0&& event.getStartDate().compareTo(now)>0) {
                 thisWeek.append("<li>"+event.getName() + "</li>");        //get events of this week
@@ -53,8 +57,9 @@ public class AdminMailService {
     public String getNextWeek(){
         StringBuilder nextWeek=new StringBuilder();
         Set<Event> events = getEvents();
-        LocalDateTime today7 =  LocalDateTime.now().plusDays(7);      //thisweekvariable
-        LocalDateTime today14 = LocalDateTime.now().plusDays(14);      //nextweekvariable
+        LocalDateTime today7 =  LocalDateTime.now(ZoneId.of("Europe/Istanbul")).plusDays(7);      //thisweekvariable
+        LocalDateTime today14 = LocalDateTime.now(ZoneId.of("Europe/Istanbul")).plusDays(14);
+        log.info("now  +14:"+today14.toString());//nextweekvariable
         for (Event event:events) {
             if(event.getStartDate().compareTo(today14) <= 0 && event.getStartDate().compareTo(today7) > 0 )
             {
