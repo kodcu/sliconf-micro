@@ -61,7 +61,7 @@ public class EventSpecs {
     }
 
     /**
-     * Event nameLike'in minimum uzunlugunu gelen parametreye gore kontrol eder
+     * Event name'in minimum uzunlugunu gelen parametreye gore kontrol eder
      *
      * @param event
      * @param nameLength
@@ -228,9 +228,9 @@ public class EventSpecs {
         }
 
         if (Objects.isNull(event.getName()) || event.getName().isEmpty()) {
-            failed.add("Event nameLike must be added");
+            failed.add("Event name must be added");
         } else {
-            passed.add("Event nameLike added");
+            passed.add("Event name added");
         }
     }
 

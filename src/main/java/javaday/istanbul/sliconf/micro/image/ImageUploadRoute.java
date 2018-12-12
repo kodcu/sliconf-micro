@@ -57,7 +57,7 @@ public class ImageUploadRoute implements Route {
 
         request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
 
-        try (InputStream input = request.raw().getPart("uploaded_file").getInputStream()) { // getPart needs to use same "nameLike" as input field in form
+        try (InputStream input = request.raw().getPart("uploaded_file").getInputStream()) { // getPart needs to use same "name" as input field in form
 
             if (Constants.MAX_UPLOADED_FILE_SIZE < input.available()) {
                 responseMessage.setStatus(false);
