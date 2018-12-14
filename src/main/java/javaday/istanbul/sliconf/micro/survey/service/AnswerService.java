@@ -1,6 +1,5 @@
 package javaday.istanbul.sliconf.micro.survey.service;
 
-import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;

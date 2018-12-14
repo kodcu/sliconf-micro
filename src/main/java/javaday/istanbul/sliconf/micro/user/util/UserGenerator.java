@@ -2,7 +2,6 @@ package javaday.istanbul.sliconf.micro.user.util;
 
 import com.devskiller.jfairy.Fairy;
 import javaday.istanbul.sliconf.micro.user.model.User;
-import javaday.istanbul.sliconf.micro.user.util.UserBuilder;
 
 import java.util.HashSet;
 import java.util.Set;

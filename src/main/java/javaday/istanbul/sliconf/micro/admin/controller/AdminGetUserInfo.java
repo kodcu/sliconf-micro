@@ -7,8 +7,6 @@ import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;

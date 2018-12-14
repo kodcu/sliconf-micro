@@ -210,6 +210,8 @@ public class EventRepositoryService implements EventService {
         List<LifeCycleState.EventStatus> eventStatuses;
         if (eventFilter.getEventStatuses().isEmpty()) {
             eventFilter.getEventStatuses().add("ACTIVE");
+            eventFilter.getEventStatuses().add("HAPPENING");
+
         }
         eventStatuses = eventFilter.getEventStatuses()
                 .stream()

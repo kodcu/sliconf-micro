@@ -20,8 +20,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import static java.lang.String.valueOf;
-
 @AllArgsConstructor
 @Api(value = "admin", authorizations = {@Authorization(value = "Bearer")})
 @Path("/service/admin/events")
@@ -40,21 +38,39 @@ public class ListEventsForAdmin implements Route {
 
             @ApiImplicitParam(
                     name = "lifeCycleStates", paramType = "query",
-                    defaultValue = "ACTIVE",
+                    defaultValue = "ACTIVE, HAPPENING",
                     dataType = "string",
                     allowableValues = "ACTIVE, PASSIVE, HAPPENING, FINISHED, DELETED, FAILED",
-                    example = "/events?lifeCycleStates=PASSIVE,ACTIVE --> List active or passive events"
+                    example = "/events?lifeCycleStates=PASSIVE,ACTIVE --> List active or passive events",
+                    value = "We use this parameter to list events by life cycle status. An event can have different status.\n" +
+                            "\n" +
+                            "ACTIVE = It means that the event is created and the necessary information is filled out and" +
+                            " visible from the mobile.\n" +
+                            "\n" +
+                            "PASSIVE =  It means that the event was created but the required information has not yet been entered.\n" +
+                            "\n" +
+                            "\n" +
+                            "HAPPENING = Indicates that the event is currently happening. If the event starts in the ACTIVE " +
+                            "state, the status of the event will be HAPPENING.\n" +
+                            "\n" +
+                            "FINISHED = It means that the event is finished successfully. This is the case if the event " +
+                            "ends when have the status HAPPENING.\n" +
+                            "\n" +
+                            "FAILED = If the event starts and the required information is not yet entered, the status " +
+                            "is received. In other words, if the event starts in PASSIVE status, the status will be FAILED.\n" +
+                            "\n" +
+                            "DELETED = Means the event has been deleted by the event manager."
             ),
 
             @ApiImplicitParam(dataType = "string", name = "name",
-                    paramType = "query"),
+                    paramType = "query",
+                    example = "/events?name=Java&lifeCycleStates=PASSIVE,ACTIVE " +
+                            "--> Lists active or passive events that event name contains 'Java'"),
 
             @ApiImplicitParam(dataType = "string", name = "pageSize",
                     paramType = "query", defaultValue = "20"),
             @ApiImplicitParam(dataType = "string", name = "pageNumber",
-                    paramType = "query", defaultValue = "0"),
-
-
+                    paramType = "query", defaultValue = "0")
     })
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //

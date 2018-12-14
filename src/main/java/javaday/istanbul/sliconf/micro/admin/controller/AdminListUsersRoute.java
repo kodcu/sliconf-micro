@@ -8,8 +8,6 @@ import javaday.istanbul.sliconf.micro.user.util.UserHelper;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;

@@ -12,7 +12,6 @@ import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import lombok.AllArgsConstructor;
-
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;

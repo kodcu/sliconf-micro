@@ -1,4 +1,5 @@
 package javaday.istanbul.sliconf.micro.event;
+
 import com.google.api.client.util.Lists;
 import javaday.istanbul.sliconf.micro.event.model.*;
 import javaday.istanbul.sliconf.micro.event.service.EventService;
@@ -12,10 +13,12 @@ import spark.QueryParamsMap;
 import spark.Request;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
-import static java.util.stream.Stream.of;
 import static javaday.istanbul.sliconf.micro.event.model.LifeCycleState.EventStatus.ACTIVE;
 
 

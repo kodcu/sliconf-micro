@@ -24,7 +24,7 @@ public interface EventRepository extends MongoRepository<Event, String> {
 
     /** $and: [ {'lifeCycleState.eventStatuses': {$in : ["PASSIVE","HAPPENING"]}}
 , {name: { $regex : /lus/}}] */
-    @Query(value = "{ $and : [ {'lifeCycleState.eventStatuses': {'$in': ?0}}, {name: { '$regex' : ?1 }} ] }")
+    @Query(value = "{ $and : [ {'lifeCycleState.eventStatuses': {'$in': ?0}}, {name: { '$regex' : ?1, '$options' : 'i' }} ] }")
     Page<Event> findAllByLifeCycleStateEventStatusesAndNameLike(List<LifeCycleState.EventStatus> eventStatuses,
                                                                  String name,
                                                                  Pageable pageable);

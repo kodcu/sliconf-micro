@@ -2,7 +2,6 @@ package javaday.istanbul.sliconf.micro.admin;
 
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.EventFilter;
-import javaday.istanbul.sliconf.micro.event.repository.EventRepository;
 import javaday.istanbul.sliconf.micro.event.service.EventRepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +21,7 @@ public class AdminService {
 
     @Transactional
     public Page<Event> filter(EventFilter eventFilter, Pageable pageable) {
-        return  eventRepositoryService.filter(eventFilter, pageable);
+        return eventRepositoryService.filter(eventFilter, pageable);
 
     }
 
