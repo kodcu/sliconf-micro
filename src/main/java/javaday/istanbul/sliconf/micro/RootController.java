@@ -219,6 +219,7 @@ public class RootController {
 
         after((req, res) -> {
 
+            // dont convert images into json
             if (!"image/png".equals(res.type())) {
                 res.type(contentType);
             }

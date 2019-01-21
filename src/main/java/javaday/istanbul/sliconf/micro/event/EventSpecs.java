@@ -24,6 +24,7 @@ import static javaday.istanbul.sliconf.micro.event.model.LifeCycleState.EventSta
 
 /**
  * Event ile ilgili cok kullanilan isleri barindiran sinif
+ * Business rules checklist
  */
 
 public class EventSpecs {
