@@ -1,0 +1,1 @@
+sliconf.security.authentication.tokenSecret=enter jwt secret here
