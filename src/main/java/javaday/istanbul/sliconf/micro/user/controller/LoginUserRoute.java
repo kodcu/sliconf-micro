@@ -134,6 +134,8 @@ public class LoginUserRoute implements Route {
 
                 if (userService.checkIfUserAuthenticated(dbUser, requestUser)) {
                     User responseUser = new User(dbUser);
+
+                    // security purpose, set to null
                     responseUser.setHashedPassword(null);
                     responseUser.setSalt(null);
 

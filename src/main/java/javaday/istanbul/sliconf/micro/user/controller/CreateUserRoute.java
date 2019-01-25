@@ -61,14 +61,20 @@ public class CreateUserRoute implements Route {
     })
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
 
+        String body = request.body();
+        User user = JsonUtil.fromJson(body, User.class);
+
         // anonim olarak giris yapmis kullanicinin deviceid sini alip yeni olusacak hesaba ekliyoruz.
         // boylece kullaniciyi unique kullanicilar listesine iki defa eklemiyoruz.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Map<String, String> userMap = ((Map) authentication.getCredentials());
+        if (Objects.nonNull(authentication.getCredentials())  && !authentication.getCredentials().toString().isEmpty()) {
+            // mobil den register oluyor.
+            Map<String, String> userMap = ((Map) authentication.getCredentials());
+            user.setDeviceId(userMap.get("deviceId"));
+        }
 
-        String body = request.body();
-        User user = JsonUtil.fromJson(body, User.class);
-        user.setDeviceId(userMap.get("deviceId"));
+
+
 
         ResponseMessage responseMessage = registerUser(user);
 
