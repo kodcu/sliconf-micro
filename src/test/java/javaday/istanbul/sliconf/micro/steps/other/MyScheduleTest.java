@@ -62,8 +62,13 @@ public class MyScheduleTest extends SpringBootTestConfig { // NOSONAR
     private Event event1 = new Event();
     private User user1 = new User();
 
-    @Before
-    public void init() {
+
+
+
+    @Diyelimki("^Kullanici gitmek istedigi konusmaya abone oluyor$")
+    public void kullaniciGitmekIstedigiKonusmayaAboneOluyor() throws Throwable {
+        // Given
+
         User user = new UserBuilder()
                 .setName("userSchedule")
                 .setEmail("userSchedule@sliconf.com")
@@ -100,12 +105,6 @@ public class MyScheduleTest extends SpringBootTestConfig { // NOSONAR
         assertTrue(eventSaveMessage.isStatus());
 
         this.event1 = (Event) eventSaveMessage.getReturnObject();
-    }
-
-
-    @Diyelimki("^Kullanici gitmek istedigi konusmaya abone oluyor$")
-    public void kullaniciGitmekIstedigiKonusmayaAboneOluyor() throws Throwable {
-        // Given
 
         // True
         UserScheduleElement userScheduleElement1 = new UserScheduleElement();
@@ -344,6 +343,45 @@ public class MyScheduleTest extends SpringBootTestConfig { // NOSONAR
     @Diyelimki("^Kullanici gitmek istedigi konusmalari listeliyor$")
     public void kullaniciGitmekIstedigiKonusmalariListeliyor() throws Throwable {
         // Given
+
+        // Given
+
+        User user = new UserBuilder()
+                .setName("userSchedule")
+                .setEmail("userSchedule@sliconf.com")
+                .setPassword("123123123")
+                .build();
+
+        ResponseMessage userSaveMessage = userRepositoryService.saveUser(user);
+
+        assertTrue(userSaveMessage.isStatus());
+
+        this.user1 = (User) userSaveMessage.getReturnObject();
+
+
+        Event event = new EventBuilder()
+                .setName("User Schedule Event Test")
+                .setKey("USET1")
+                .setExecutiveUser(this.user1.getId())
+                .setDate(LocalDateTime.now().plusMonths(1))
+                .build();
+
+        TestUtil.generateFields(floors, rooms, speakers, agendaElements);
+
+        event.setFloorPlan(floors);
+        event.setRooms(rooms);
+        event.setSpeakers(speakers);
+        event.setAgenda(agendaElements);
+
+        LifeCycleState lifeCycleState = new LifeCycleState();
+        lifeCycleState.setEventStatuses(new HashSet<>());
+        event.setLifeCycleState(lifeCycleState);
+
+        ResponseMessage eventSaveMessage = eventRepositoryService.save(event);
+
+        assertTrue(eventSaveMessage.isStatus());
+
+        this.event1 = (Event) eventSaveMessage.getReturnObject();
 
         // When
         ResponseMessage listResponseMessage1 = listScheduleRoute.listSchedule(this.user1.getId(), this.event1.getId());
