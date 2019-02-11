@@ -46,7 +46,7 @@ public class CreateUserViaRest extends SpringBootTestConfig {  // NOSONAR
 
         // Given
 
-
+/*
         requestBuilder = MockMvcRequestBuilders.get(
                 "/service/users/register").accept(
                 MediaType.APPLICATION_JSON);
@@ -59,7 +59,7 @@ public class CreateUserViaRest extends SpringBootTestConfig {  // NOSONAR
                 .andExpect(ok);
 
 
-
+*/
 
 
 
