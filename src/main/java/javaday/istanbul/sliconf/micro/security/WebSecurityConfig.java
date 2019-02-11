@@ -24,6 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/favicon.ico").anonymous()
                 .antMatchers("/").permitAll()
                 .antMatchers("/service/users/login").permitAll()
+                .antMatchers("/service/users/events/**").permitAll()
                 .antMatchers("/service/users/login/auth/**").permitAll()
                 .antMatchers("/service/users/login/anonymous/**").permitAll()
                 .antMatchers("/service/users/register").permitAll()
