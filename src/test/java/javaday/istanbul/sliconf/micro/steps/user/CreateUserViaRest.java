@@ -1,43 +1,40 @@
 package javaday.istanbul.sliconf.micro.steps.user;
 
 
-import cucumber.api.java.Before;
 import cucumber.api.java.tr.Diyelimki;
 import cucumber.api.java.tr.Eğerki;
 import cucumber.api.java.tr.Ozaman;
 import javaday.istanbul.sliconf.micro.SpringBootTestConfig;
-import javaday.istanbul.sliconf.micro.user.controller.CreateUserRoute;
+import javaday.istanbul.sliconf.micro.user.model.User;
 import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+
+import java.net.URI;
+
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @Ignore
 public class CreateUserViaRest extends SpringBootTestConfig {  // NOSONAR
 
+
     RequestBuilder requestBuilder;
 
+    @LocalServerPort
+    private int port;
+
+
     @Autowired
-    private WebApplicationContext wac;
+    private TestRestTemplate restTemplate;
 
-    private MockMvc mockMvc;
-
-
-    @Before
-    public void init() {
-        DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
-        this.mockMvc = builder.build();
-    }
 
     @Diyelimki("^: Yeni kullanıcı mobil üzerinden kayıt oluyor$")
     public void yeniKullanıcıMobilÜzerindenKayıtOluyor() throws Throwable {
@@ -46,20 +43,15 @@ public class CreateUserViaRest extends SpringBootTestConfig {  // NOSONAR
 
         // Given
 
-/*
-        requestBuilder = MockMvcRequestBuilders.get(
-                "/service/users/register").accept(
-                MediaType.APPLICATION_JSON);
-
-        ResultMatcher ok = MockMvcResultMatchers.status()
-                .isOk();
-
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/api/users/register");
-        this.mockMvc.perform(builder)
-                .andExpect(ok);
+        String user = "{email: \"altuga@ymail.com\", username: \"turkkahvesi\", password: \"upux1234\"}";
+        HttpEntity<String> request = new HttpEntity<>(user);
+        ResponseEntity<String> response = restTemplate
+                .exchange("http://localhost:" + port + "/service/users/register", HttpMethod.POST, request, String.class);
 
 
-*/
+
+        //URI location = this.restTemplate.postForLocation("http://localhost:" + port + "/service/users/register", request);
+        assertThat(200 , is(response.getStatusCode().value()));
 
 
 

@@ -33,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/service/users/password-reset/reset/**").permitAll()
                 .antMatchers("/service/events/comment/list/**").permitAll()
                 .antMatchers("/service/events/get/with-key/**").permitAll()
+                .antMatchers("/service/events/comment/add-new/**").permitAll()
                 .antMatchers("/service/swagger").permitAll()
                 .antMatchers("/service/image/**").permitAll()
                 .antMatchers("/resources/**").permitAll()

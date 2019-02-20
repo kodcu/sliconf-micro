@@ -18,7 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
         features = {"src/test/resources"},
         plugin = "pretty",
         snippets = SnippetType.CAMELCASE,
-        strict = true, tags = {"@insert_user"})
+        strict = true/*, tags = {"@insert_user"}*/)
 
 @ActiveProfiles("test")
 public class RunCukesTest {

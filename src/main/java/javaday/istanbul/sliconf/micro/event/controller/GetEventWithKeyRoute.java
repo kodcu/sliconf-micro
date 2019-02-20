@@ -27,7 +27,7 @@ import java.util.Objects;
 
 
 @Api
-@Path("/service/events/get/with-key/:key")
+@Path("get:key")
 @Produces("application/json")
 @Component
 @AllArgsConstructor

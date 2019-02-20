@@ -1,40 +1,28 @@
 spring.profiles.active=prod
 server.port=8090
-
 # Couchbase Settings
 spring.data.couchbase.auto-index=true
-sliconf.couchbase.host-name=<server-external-ip>
-sliconf.couchbase.default-host-name=<server-external-ip>
-sliconf.couchbase.bucket-pass=<bucket-password>
-
+sliconf.couchbase.host-name=51.15.94.70
+sliconf.couchbase.default-host-name=51.15.94.70
+sliconf.couchbase.bucket-pass=jfFMd8Nd
 # Mongo Settings
-# You can show <docker-inet-address> using with "ip addr show". It must be
-# docker0:
-# ...
-# inet X.X.X.X/X => You need only "X.X.X.X"
-# 
-# Mongo Port default is 27017
-sliconf.mongo.host-name=<docker-inet-address>
-sliconf.mongo.password=<mongo-password>
-sliconf.mongo.port=<mongo-port>
-sliconf.mongo.username=<mongo-user>
-sliconf.mongo.database=<mongo-dbname>
-
+sliconf.mongo.host-name=51.15.94.70
+sliconf.mongo.password=LJYKkAw6b3TtQt3f
+sliconf.mongo.port=27017
+sliconf.mongo.username=sliconfSecretUser
+sliconf.mongo.database=sliconf
 # Hazelcast Settings
-# 224.2.2.3 is default multicast group
 sliconf.hazelcast.multicast-group=224.2.2.3
 sliconf.hazelcast.tcp-ip=127.0.0.1
-sliconf.hazelcast.group-name=<group-name>
-sliconf.hazelcast.group-pass=<group-pass>
-
+sliconf.hazelcast.group-name=kodcu
+sliconf.hazelcast.group-pass=Kodcu2018*/!
 # Mail Settings
-sliconf.mail.username=<smtp-mail-username>
-sliconf.mail.password=<smtp-mail-password>
-sliconf.mail.from=<smtp-mail-from>
+sliconf.mail.username=info@sliconf.com
+sliconf.mail.password=HzX8Rurz
+sliconf.mail.from=info@sliconf.com
 sliconf.mail.isTest=false
 sliconf.mail.smtp.auth=true
-sliconf.mail.smtp.host=<smtp-hostname>
-sliconf.mail.smtp.port=<smtp-port>
+sliconf.mail.smtp.host=mail.gandi.net
+sliconf.mail.smtp.port=587
 sliconf.mail.smtp.starttls=true
-
 sliconf.user.fullname=Guest
