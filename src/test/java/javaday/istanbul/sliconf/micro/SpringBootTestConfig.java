@@ -17,4 +17,5 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public abstract class SpringBootTestConfig {
+     // test them all
 }
