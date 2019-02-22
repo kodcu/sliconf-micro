@@ -1,4 +1,4 @@
-package javaday.istanbul.sliconf.micro.template.Service;
+package javaday.istanbul.sliconf.micro.template.service;
 
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.template.model.Template;

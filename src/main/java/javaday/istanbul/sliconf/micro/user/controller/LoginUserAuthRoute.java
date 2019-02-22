@@ -59,7 +59,7 @@ public class LoginUserAuthRoute implements Route {
         } else if (AuthUtil.SERVICE_LINKEDIN.equalsIgnoreCase(serviceName)) {
             user = AuthUtil.loginLinkedIn(token);
         } else {
-            return new ResponseMessage(false, "Service name did not recognized", serviceName);
+            return new ResponseMessage(false, "service name did not recognized", serviceName);
         }
 
         ResponseMessage responseMessage = loginUser(user);

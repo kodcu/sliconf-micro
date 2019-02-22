@@ -4,7 +4,7 @@ import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.mail.IMailSendService;
 import javaday.istanbul.sliconf.micro.mail.MailMessageProvider;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.template.Service.TemplateRepositoryService;
+import javaday.istanbul.sliconf.micro.template.service.TemplateRepositoryService;
 import javaday.istanbul.sliconf.micro.template.model.Template;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

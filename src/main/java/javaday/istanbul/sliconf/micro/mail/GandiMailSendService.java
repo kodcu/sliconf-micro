@@ -2,7 +2,7 @@ package javaday.istanbul.sliconf.micro.mail;
 
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
-import javaday.istanbul.sliconf.micro.template.Service.TemplateRepositoryService;
+import javaday.istanbul.sliconf.micro.template.service.TemplateRepositoryService;
 import javaday.istanbul.sliconf.micro.template.model.Template;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
@@ -154,7 +154,11 @@ public class GandiMailSendService implements IMailSendService {
             else
                 mailbody = mailbody.replace("{EventWeb}", "");
             if (Objects.nonNull(event.getEventState()))
-                mailbody = mailbody.replace("{PackageType}",  event.getEventState().getType());
+                try {
+                    mailbody = mailbody.replace("{PackageType}", event.getEventState().getType());
+                } catch (Exception ex) {
+                    logger.error(ex.toString());
+                }
             else
                 mailbody = mailbody.replace("{PackageType}", "");
             if (Objects.nonNull(user))
