@@ -9,7 +9,7 @@ FROM pom as source
 COPY src/ /sliconf-micro/src/
 
 # run in non-interactive mode
-RUN mvn clean install -B -ff -f /sliconf-micro/pom.xml
+RUN mvn clean install -B -ff -f /sliconf-micro/pom.xml -DskipTests=true
 
 # 3 final (production) image
 FROM openjdk:8-jre-alpine as final
