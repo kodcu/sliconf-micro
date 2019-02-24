@@ -34,6 +34,7 @@ public class CreateAgendaRoute implements Route {
 
     private EventRepositoryService repositoryService;
 
+    @Autowired
     private EventControllerMessageProvider eventControllerMessageProvider;
 
     @Autowired
