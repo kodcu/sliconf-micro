@@ -99,11 +99,13 @@ public class CreateAgendaRoute implements Route {
             return responseMessage;
         }
 
+        /*
         responseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (responseMessage.isStatus()) {
             responseMessage.setMessage(eventControllerMessageProvider.getMessage("updateFinishedEvent"));
             return responseMessage;
         }
+        */
 
 
         ResponseMessage responseMessageValid = AgendaSpecs.isAgendaValid(agenda);
