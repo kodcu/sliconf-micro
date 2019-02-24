@@ -100,6 +100,7 @@ public class CreateAgendaRoute implements Route {
         }
 
         /*
+         **  for more info please look : https://redmine.kodcu.com/issues/1508
         responseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (responseMessage.isStatus()) {
             responseMessage.setMessage(eventControllerMessageProvider.getMessage("updateFinishedEvent"));
