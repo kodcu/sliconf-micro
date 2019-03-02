@@ -43,7 +43,7 @@ public class GetEventWithKeyRoute implements Route {
     @GET
     @ApiOperation(value = "Returns event with given key", nickname = "GetEventWithKeyRoute")
     @ApiImplicitParams({ //
-            @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
+           // @ApiImplicitParam(required = true, dataType = "string", name = "token", paramType = "header"), //
             @ApiImplicitParam(required = true, dataType = "string", name = "key", paramType = "path"),
             @ApiImplicitParam(dataType = "string", name = "userId", paramType = "query"),
             @ApiImplicitParam(dataType = "string", name = "statistic", paramType = "query", allowableValues = "true"),
@@ -51,7 +51,7 @@ public class GetEventWithKeyRoute implements Route {
     @ApiResponses(value = { //
             @ApiResponse(code = 200, message = "Success", response = ResponseMessage.class), //
             @ApiResponse(code = 400, message = "Invalid input data", response = ResponseMessage.class), //
-            @ApiResponse(code = 401, message = "Unauthorized", response = ResponseMessage.class), //
+            //@ApiResponse(code = 401, message = "Unauthorized", response = ResponseMessage.class), //
             @ApiResponse(code = 404, message = "User not found", response = ResponseMessage.class) //
     })
     @Override

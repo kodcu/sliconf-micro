@@ -219,8 +219,16 @@ public class EventRepositoryService implements EventService {
                 .collect(Collectors.toList());
 
         // Query sorgulari test veritabani uzerinde calismiyor. o yuzden sadece prod ve devde calistiriyoruz.
-        if (!activeProfile.equals("test"))
-            return repo.findAllByLifeCycleStateEventStatusesAndNameLike(eventStatuses, eventFilter.getNameLike(), pageable);
+        if (!activeProfile.equals("test")) {
+            Page<Event> result = repo.findAllByLifeCycleStateEventStatusesAndNameLike(eventStatuses, eventFilter.getNameLike(), pageable);
+            // sort according to dates. closest event should be at top
+            List<Event> sortableList = new ArrayList<>(result.getContent());
+            Collections.sort(sortableList, (o1, o2) -> o1.getStartDate().compareTo(o2.getStartDate()));
+            Page<Event> pages = new PageImpl<Event>(sortableList, pageable, sortableList.size());
+
+            return pages;
+
+        }
 
         Set<Event> events = new HashSet<>();
         eventStatuses.stream().map(repo::findAllByLifeCycleStateEventStatusesLike).forEach(events::addAll);
