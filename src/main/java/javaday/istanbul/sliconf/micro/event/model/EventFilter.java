@@ -12,4 +12,7 @@ public class EventFilter {
     private String nameLike;
 
     private List<String> eventStatuses;
+
+    private String sort;
+
 }

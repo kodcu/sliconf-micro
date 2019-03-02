@@ -54,13 +54,15 @@ public class EventSpecs {
         QueryParamsMap lifeCycleStates =  request.queryMap("lifeCycleStates");
         String name = request.queryParamOrDefault("name", "");
 
+        String sort = request.queryParamOrDefault("sort", "");
+
         List<String> filters;
         if(lifeCycleStates.hasValue())
             filters = Lists.newArrayList(Arrays.asList(lifeCycleStates.values()[0].split(",")));
         else
             filters =  new ArrayList<>();
         name = "^.*" + name;
-        return EventFilter.builder().eventStatuses(filters).nameLike(name).build();
+        return EventFilter.builder().eventStatuses(filters).nameLike(name).sort(sort).build();
 
     }
 
