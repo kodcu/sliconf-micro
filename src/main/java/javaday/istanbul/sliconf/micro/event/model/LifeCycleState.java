@@ -30,6 +30,7 @@ public class LifeCycleState implements Serializable {
      */
     private Set<EventStatus> eventStatuses = new HashSet<>();
 
+    // TODO this will be critical, apply this status to all events
     public enum EventStatus {
 
         /**

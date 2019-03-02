@@ -1,17 +1,23 @@
 package javaday.istanbul.sliconf.micro.event.controller;
 
 import io.swagger.annotations.*;
+import javaday.istanbul.sliconf.micro.comment.controller.VoteCommentRoute;
 import javaday.istanbul.sliconf.micro.event.EventControllerMessageProvider;
 import javaday.istanbul.sliconf.micro.event.EventSpecs;
 import javaday.istanbul.sliconf.micro.event.model.Event;
 import javaday.istanbul.sliconf.micro.event.model.LifeCycleState;
 import javaday.istanbul.sliconf.micro.event.service.EventService;
+import javaday.istanbul.sliconf.micro.mail.IMailSendService;
+import javaday.istanbul.sliconf.micro.mail.MailMessageProvider;
 import javaday.istanbul.sliconf.micro.response.ResponseMessage;
 import javaday.istanbul.sliconf.micro.user.model.User;
 import javaday.istanbul.sliconf.micro.user.service.UserRepositoryService;
 import javaday.istanbul.sliconf.micro.util.Constants;
 import javaday.istanbul.sliconf.micro.util.json.JsonUtil;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
@@ -33,10 +39,21 @@ import java.util.Objects;
 public class CreateEventRoute implements Route {
 
 
+    @Autowired
+    IMailSendService mailSendService;
+
+    @Autowired
+    private final MailMessageProvider mailMessageProvider;
+
+
+    private Logger logger = LoggerFactory.getLogger(CreateEventRoute.class);
+
     private final EventControllerMessageProvider messageProvider;
     private final EventService repositoryService;
     private final EventControllerMessageProvider ecmp;
     private final UserRepositoryService userRepositoryService;
+
+
     @POST
     @ApiOperation(value = "Creates an event and bind with given userId", nickname = "CreateEventRoute")
     @ApiImplicitParams({ //
@@ -134,6 +151,17 @@ public class CreateEventRoute implements Route {
         event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.PASSIVE);
         event.setLifeCycleState(lifeCycleState);
         event.setExecutiveUser(userId);
+
+        // TODO sent email to admin - https://redmine.kodcu.com/issues/1492
+
+
+        try {
+            String subject = "New event created " + event.getKey() + " " + event.getName() ;
+            String body = "New event created " + event.getKey() + " " + event.getName() ;
+            mailSendService.sendMail(mailMessageProvider.getMessage("email"), subject, body, null, null);
+        } catch (Exception ex) {
+            logger.error(" Error sending email " + ex);
+        }
 
         updateUserRoleAndSave(user);
 
