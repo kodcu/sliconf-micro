@@ -46,7 +46,8 @@ public class CreateEventRoute implements Route {
     private final MailMessageProvider mailMessageProvider;
 
 
-    private Logger logger = LoggerFactory.getLogger(CreateEventRoute.class);
+    private final Logger logger = LoggerFactory.getLogger(CreateEventRoute.class);
+
 
     private final EventControllerMessageProvider messageProvider;
     private final EventService repositoryService;
@@ -152,7 +153,7 @@ public class CreateEventRoute implements Route {
         event.setLifeCycleState(lifeCycleState);
         event.setExecutiveUser(userId);
 
-        // TODO sent email to admin - https://redmine.kodcu.com/issues/1492
+        // TODO sent email to admin - https://redmine.kodcu.com/issues/1492 - check if done ? 
 
 
         try {
@@ -161,6 +162,7 @@ public class CreateEventRoute implements Route {
             mailSendService.sendMail(mailMessageProvider.getMessage("email"), subject, body, null, null);
         } catch (Exception ex) {
             logger.error(" Error sending email " + ex);
+            //System.err.println(  " --> " + ex);
         }
 
         updateUserRoleAndSave(user);
