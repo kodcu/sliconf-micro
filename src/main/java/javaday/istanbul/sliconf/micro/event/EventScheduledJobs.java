@@ -36,6 +36,7 @@ public class EventScheduledJobs {
      */
     @Scheduled(fixedRate = 1800000, initialDelay = 1000 )
     private void updateEventLifeCycles() {
+        // TODO Scheduled mantıgı kontrol
 
         List<String> filters = new ArrayList<>();
         filters.add("ACTIVE");

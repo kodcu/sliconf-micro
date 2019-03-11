@@ -128,6 +128,7 @@ public class VoteAgendaElementRoute implements Route {
         userResponseMessage = EventSpecs.checkIfEventStateFinished(event);
         if (userResponseMessage.isStatus()) {
             userResponseMessage.setMessage(ecmp.getMessage("voteFinishedEvent"));
+            userResponseMessage.setStatus(false);  // mobile client can understand that something went wrong
             return userResponseMessage;
         }
 

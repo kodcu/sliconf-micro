@@ -23,6 +23,7 @@ public class GeneralService {
     private final SurveyMessageProvider surveyMessageProvider;
     private final SurveyRepository surveyRepository;
     private final EventRepositoryService eventRepositoryService;
+
     @Autowired
     private UserRepositoryService userRepositoryService;
 
