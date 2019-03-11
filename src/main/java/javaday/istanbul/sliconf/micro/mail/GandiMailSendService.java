@@ -50,6 +50,9 @@ public class GandiMailSendService implements IMailSendService {
     @Value("${sliconf.mail.smtp.starttls}")
     private String startTls;
 
+    @Value("${sliconf.email}")
+    private String email;
+
 
     @Autowired
     private MailMessageProvider mailMessageProvider;
@@ -133,6 +136,9 @@ public class GandiMailSendService implements IMailSendService {
             return new ResponseMessage(false, "mail can not send",null);
         }
         String   email = mailMessageProvider.getMessage("email"); //emaili source dan alıyoruz
+        if (email == null) {
+            email = this.email; // read from application-XXX.properties
+        }
         String   mailTitle = "New Complete Event";
         Template template = tempService.findByCode(templateCode); //template kodu ile template çekiyoruz
         if (Objects.isNull(template)||template.getCode().isEmpty())
