@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import static javaday.istanbul.sliconf.micro.event.model.LifeCycleState.EventStatus.ACTIVE;
+import static javaday.istanbul.sliconf.micro.event.model.LifeCycleState.EventStatus.PASSIVE;
 
 
 /**
@@ -167,14 +168,13 @@ public class EventSpecs {
                     ResponseMessage mailResponse=completeEventSendMail(event,mailSendService);
                 }
                 event.getLifeCycleState().getEventStatuses().add(ACTIVE);
-
+                event.getLifeCycleState().getEventStatuses().remove(PASSIVE);
 
             } else {
-                event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.PASSIVE);
+                event.getLifeCycleState().getEventStatuses().remove(ACTIVE);
+                event.getLifeCycleState().getEventStatuses().add(PASSIVE);
 
             }
-
-
         }
 
     }
@@ -353,10 +353,10 @@ public class EventSpecs {
 
     public static ResponseMessage checkIfEventStateHappening (Event event) {
 
-        ResponseMessage responseMessage = new ResponseMessage(true, "", event);
+        ResponseMessage responseMessage = new ResponseMessage(false, "", event);
 
         if(event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.HAPPENING)){
-            responseMessage.setStatus(false);
+            responseMessage.setStatus(true);
         }
 
         return responseMessage;

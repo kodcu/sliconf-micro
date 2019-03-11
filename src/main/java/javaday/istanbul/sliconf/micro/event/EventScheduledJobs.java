@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javaday.istanbul.sliconf.micro.event.model.LifeCycleState.EventStatus.*;
+
 @Slf4j
 @AllArgsConstructor
 @Component
@@ -43,25 +45,26 @@ public class EventScheduledJobs {
         EventFilter eventFilter = EventFilter.builder().eventStatuses(filters).nameLike("").build();
         Page<Event> events = adminService.filter(eventFilter, pageable);
         events.forEach(event -> {
-           boolean isActive = event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.ACTIVE);
-           boolean isPassive = event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.PASSIVE);
-           boolean isHappening = event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.HAPPENING);
+           boolean isActive = event.getLifeCycleState().getEventStatuses().contains(ACTIVE);
+           boolean isPassive = event.getLifeCycleState().getEventStatuses().contains(PASSIVE);
+           boolean isHappening = event.getLifeCycleState().getEventStatuses().contains(HAPPENING);
 
+           // Eğer etkinlik ACTIVE durumda ise ve zamanı gelip başlamışsa etkinliği HAPPENING durumuna geçirir.
            if(isActive && event.getStartDate().isBefore(LocalDateTime.now())) {
-               event.getLifeCycleState().getEventStatuses().remove(LifeCycleState.EventStatus.ACTIVE);
-               event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.HAPPENING);
+               event.getLifeCycleState().getEventStatuses().remove(ACTIVE);
+               event.getLifeCycleState().getEventStatuses().add(HAPPENING);
                log.info("event status updated from active to happening");
            }
 
            if(isHappening && event.getEndDate().isBefore(LocalDateTime.now())) {
-               event.getLifeCycleState().getEventStatuses().remove(LifeCycleState.EventStatus.HAPPENING);
-               event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.FINISHED);
+               event.getLifeCycleState().getEventStatuses().remove(HAPPENING);
+               event.getLifeCycleState().getEventStatuses().add(FINISHED);
                log.info("event status updated from happening to finished");
            }
 
            if(isPassive && event.getStartDate().isBefore(LocalDateTime.now())) {
-               event.getLifeCycleState().getEventStatuses().remove(LifeCycleState.EventStatus.PASSIVE);
-               event.getLifeCycleState().getEventStatuses().add(LifeCycleState.EventStatus.FAILED);
+               event.getLifeCycleState().getEventStatuses().remove(PASSIVE);
+               event.getLifeCycleState().getEventStatuses().add(FAILED);
                log.info("event status updated from passive to failed");
 
            }
