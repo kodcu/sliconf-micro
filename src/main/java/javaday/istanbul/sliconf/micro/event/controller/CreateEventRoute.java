@@ -142,6 +142,16 @@ public class CreateEventRoute implements Route {
 
         User user = userRepositoryService.findById(userId).orElse(null);
 
+        // if event has no email address then assign user email address to event email addess
+        // https://redmine.kodcu.com/issues/1503
+        if (event.getAbout().getEmail() == null && event.getAbout().getEmail().equals("")) {
+
+            if(user !=null) {
+                event.getAbout().setEmail(user.getEmail());
+            }
+
+        }
+
         if (Objects.isNull(user)) {
             responseMessage = new ResponseMessage(false,
                     "User can not found with given id", event);

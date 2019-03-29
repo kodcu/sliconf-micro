@@ -288,6 +288,7 @@ public class EventSpecs {
         if (Objects.nonNull(event.getAbout())) {
             About about = event.getAbout();
 
+
             checkSocial(about, optionalPassed, optionalFailed);
             checkWeb(about, optionalPassed, optionalFailed);
             checkPhone(about, optionalPassed, optionalFailed);
