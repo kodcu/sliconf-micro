@@ -153,7 +153,8 @@ public class CreateEventRoute implements Route {
         event.setLifeCycleState(lifeCycleState);
         event.setExecutiveUser(userId);
 
-        // TODO sent email to admin - https://redmine.kodcu.com/issues/1492 - check if done ? 
+        // sent email to admin - https://redmine.kodcu.com/issues/1492 - check if done ?
+        // 2019-03-26  - controlled and done
 
 
         try {

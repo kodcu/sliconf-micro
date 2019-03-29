@@ -164,9 +164,10 @@ public class EventSpecs {
             event.setStatusDetails(statusDetails);
 
             if (percentage >= 100) {
-                if(!event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.ACTIVE) ){
-                    ResponseMessage mailResponse=completeEventSendMail(event,mailSendService);
-                }
+                // if are there any acive event in the system
+                //if(!event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.ACTIVE) ){
+                //    ResponseMessage mailResponse=completeEventSendMail(event,mailSendService);
+                //}
                 event.getLifeCycleState().getEventStatuses().add(ACTIVE);
                 event.getLifeCycleState().getEventStatuses().remove(PASSIVE);
 

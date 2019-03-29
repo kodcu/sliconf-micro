@@ -59,7 +59,8 @@ public class EventScheduledJobs {
 
            if(isHappening && event.getEndDate().isBefore(LocalDateTime.now())) {
                event.getLifeCycleState().getEventStatuses().remove(HAPPENING);
-               event.getLifeCycleState().getEventStatuses().add(FINISHED);
+               event.getLifeCycleState().getEventStatuses().remove(ACTIVE);
+               event.getLifeCycleState().getEventStatuses().add(FINISHED); // only one state
                log.info("event status updated from happening to finished");
            }
 
