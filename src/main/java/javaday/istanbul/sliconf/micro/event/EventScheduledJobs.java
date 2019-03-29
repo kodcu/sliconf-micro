@@ -53,6 +53,11 @@ public class EventScheduledJobs {
            // Eğer etkinlik ACTIVE durumda ise ve zamanı gelip başlamışsa etkinliği HAPPENING durumuna geçirir.
            if(isActive && event.getStartDate().isBefore(LocalDateTime.now())) {
                event.getLifeCycleState().getEventStatuses().remove(ACTIVE);
+               event.getLifeCycleState().getEventStatuses().remove(FINISHED);
+               event.getLifeCycleState().getEventStatuses().remove(FAILED);
+               event.getLifeCycleState().getEventStatuses().remove(PASSIVE);
+
+
                event.getLifeCycleState().getEventStatuses().add(HAPPENING);
                log.info("event status updated from active to happening");
            }
@@ -60,12 +65,19 @@ public class EventScheduledJobs {
            if(isHappening && event.getEndDate().isBefore(LocalDateTime.now())) {
                event.getLifeCycleState().getEventStatuses().remove(HAPPENING);
                event.getLifeCycleState().getEventStatuses().remove(ACTIVE);
+               event.getLifeCycleState().getEventStatuses().remove(FAILED);
+               event.getLifeCycleState().getEventStatuses().remove(PASSIVE);
+
                event.getLifeCycleState().getEventStatuses().add(FINISHED); // only one state
                log.info("event status updated from happening to finished");
            }
 
            if(isPassive && event.getStartDate().isBefore(LocalDateTime.now())) {
                event.getLifeCycleState().getEventStatuses().remove(PASSIVE);
+               event.getLifeCycleState().getEventStatuses().remove(ACTIVE);
+               event.getLifeCycleState().getEventStatuses().remove(HAPPENING);
+               event.getLifeCycleState().getEventStatuses().remove(PASSIVE);
+
                event.getLifeCycleState().getEventStatuses().add(FAILED);
                log.info("event status updated from passive to failed");
 

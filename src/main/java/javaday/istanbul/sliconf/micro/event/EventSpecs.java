@@ -339,7 +339,7 @@ public class EventSpecs {
 
         List<LifeCycleState.EventStatus> eventStatuses = new ArrayList<>();
 
-        eventStatuses.add(LifeCycleState.EventStatus.FAILED);
+        //eventStatuses.add(LifeCycleState.EventStatus.FAILED); // risk, no need
         eventStatuses.add(LifeCycleState.EventStatus.FINISHED);
         eventStatuses.add(LifeCycleState.EventStatus.DELETED);
 
