@@ -229,12 +229,13 @@ public class EventRepositoryService implements EventService {
             if(eventFilter.getSort()!= null && eventFilter.getSort().equalsIgnoreCase("desc") ) {
 
                 //  01 April, 23 march  ...
-                Collections.sort(sortableList,Collections.reverseOrder());
+                Collections.sort(sortableList, Comparator.comparing(Event::getStartDate).reversed());
+
 
             }
 
             Page<Event> pages = new PageImpl<Event>(sortableList, pageable, sortableList.size());
-            return result;
+            return pages;
 
 
         }
