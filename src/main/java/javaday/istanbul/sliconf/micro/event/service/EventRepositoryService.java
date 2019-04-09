@@ -209,8 +209,10 @@ public class EventRepositoryService implements EventService {
     public Page<Event> filter(EventFilter eventFilter, Pageable pageable) {
         List<LifeCycleState.EventStatus> eventStatuses;
         if (eventFilter.getEventStatuses().isEmpty()) {
-            eventFilter.getEventStatuses().add("ACTIVE");
-            eventFilter.getEventStatuses().add("HAPPENING");
+            eventFilter.getEventStatuses().add(LifeCycleState.EventStatus.ACTIVE.toString());
+            eventFilter.getEventStatuses().add(LifeCycleState.EventStatus.HAPPENING.toString());
+
+
 
         }
         eventStatuses = eventFilter.getEventStatuses()
@@ -269,10 +271,7 @@ public class EventRepositoryService implements EventService {
             List<Event> allbutNotDeleted =
                     newResultList.stream().
                             filter(p ->
-                                    (!p.getLifeCycleState().getEventStatuses().
-                                            contains((LifeCycleState.EventStatus.DELETED)))
-
-                            ).collect(Collectors.toList());
+                                    (!p.getDeleted().booleanValue() == false)).collect(Collectors.toList());
 
 
             result = new PageImpl<>(allbutNotDeleted);
@@ -285,8 +284,9 @@ public class EventRepositoryService implements EventService {
 
             List<Event> deleted =
                     newResultList.stream().
-                            filter(p -> p.getLifeCycleState().equals(LifeCycleState.EventStatus.DELETED)).
-                            collect(Collectors.toList());
+                            filter(p ->
+                                    (!p.getDeleted().booleanValue() == true)).collect(Collectors.toList());
+
 
 
             result = new PageImpl<>(deleted);
