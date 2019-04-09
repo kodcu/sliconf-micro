@@ -15,4 +15,6 @@ public class EventFilter {
 
     private String sort;
 
+    private String showDeleted;
+
 }

@@ -226,6 +226,11 @@ public class EventRepositoryService implements EventService {
                 logger.debug("total result " + result.getSize());
             }
 
+
+            result = filterByshowDeleted(eventFilter, result) ;
+
+
+
             // sort according to dates. closest event should be at top
             List<Event> sortableList = new ArrayList<>(result.getContent());
             Collections.sort(sortableList, Comparator.comparing(Event::getStartDate)); // defaul asc mode
@@ -239,6 +244,8 @@ public class EventRepositoryService implements EventService {
 
             }
 
+
+
             Page<Event> pages = new PageImpl<Event>(sortableList, pageable, sortableList.size());
             return pages;
 
@@ -249,5 +256,43 @@ public class EventRepositoryService implements EventService {
         eventStatuses.stream().map(repo::findAllByLifeCycleStateEventStatusesLike).forEach(events::addAll);
 
         return new PageImpl<>(Lists.newArrayList(events), pageable, events.size());
+    }
+
+    private Page<Event> filterByshowDeleted(EventFilter eventFilter, Page result) {
+
+
+
+        if (eventFilter.getShowDeleted()!= null && eventFilter.getShowDeleted().equalsIgnoreCase("no")) {
+            // bring  all NON-deleted
+            List<Event> newResultList = new ArrayList(result.getContent());
+
+            List<Event> allbutNotDeleted =
+                    newResultList.stream().
+                            filter(p ->
+                                    (!p.getLifeCycleState().getEventStatuses().
+                                            contains((LifeCycleState.EventStatus.DELETED)))
+
+                            ).collect(Collectors.toList());
+
+
+            result = new PageImpl<>(allbutNotDeleted);
+
+        }
+
+        if (eventFilter.getShowDeleted()!= null && eventFilter.getShowDeleted().equalsIgnoreCase("yes")) {
+            // bring  all deleted
+            List<Event> newResultList = new ArrayList(result.getContent());
+
+            List<Event> deleted =
+                    newResultList.stream().
+                            filter(p -> p.getLifeCycleState().equals(LifeCycleState.EventStatus.DELETED)).
+                            collect(Collectors.toList());
+
+
+            result = new PageImpl<>(deleted);
+
+        }
+
+        return result;
     }
 }

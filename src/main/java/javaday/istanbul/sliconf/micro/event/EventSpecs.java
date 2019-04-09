@@ -57,6 +57,8 @@ public class EventSpecs {
 
         String sort = request.queryParamOrDefault("sort", "");
 
+        String showDeleted = request.queryParamOrDefault("showDeleted", "");
+
         List<String> filters = null;
         if(lifeCycleStates.hasValue())
             filters = Lists.newArrayList(Arrays.asList(lifeCycleStates.values()[0].split(",")));
@@ -73,7 +75,7 @@ public class EventSpecs {
 
         }
         name = "^.*" + name;
-        return EventFilter.builder().eventStatuses(filters).nameLike(name).sort(sort).build();
+        return EventFilter.builder().eventStatuses(filters).nameLike(name).sort(sort).showDeleted(showDeleted).build();
 
     }
 
