@@ -224,7 +224,6 @@ public class EventRepositoryService implements EventService {
 
             if (result !=null) {
                 logger.debug("total result " + result.getSize());
-                System.out.println("total result " + result.getSize());
             }
 
             // sort according to dates. closest event should be at top
