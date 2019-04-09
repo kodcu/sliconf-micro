@@ -222,18 +222,19 @@ public class EventRepositoryService implements EventService {
         if (!activeProfile.equals("test")) {
             Page<Event> result = repo.findAllByLifeCycleStateEventStatusesAndNameLike(eventStatuses, eventFilter.getNameLike(), pageable);
             // sort according to dates. closest event should be at top
+            List<Event> sortableList = new ArrayList<>(result.getContent());
+            Collections.sort(sortableList, Comparator.comparing(Event::getStartDate)); // defaul asc mode
+
+            // TODO : testing this part - https://redmine.kodcu.com/issues/1489
             if(eventFilter.getSort()!= null && eventFilter.getSort().equalsIgnoreCase("desc") ) {
 
                 //  01 April, 23 march  ...
-                return result;
-            } else {
+                Collections.sort(sortableList,Collections.reverseOrder());
 
-                //  default mode  closest first - 23 march , 01 April ...
-                List<Event> sortableList = new ArrayList<>(result.getContent());
-                Collections.sort(sortableList, (o1, o2) -> o1.getStartDate().compareTo(o2.getStartDate()));
-                Page<Event> pages = new PageImpl<Event>(sortableList, pageable, sortableList.size());
-                return pages;
             }
+
+            Page<Event> pages = new PageImpl<Event>(sortableList, pageable, sortableList.size());
+            return result;
 
 
         }
