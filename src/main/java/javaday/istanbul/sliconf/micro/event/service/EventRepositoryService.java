@@ -225,7 +225,7 @@ public class EventRepositoryService implements EventService {
             List<Event> sortableList = new ArrayList<>(result.getContent());
             Collections.sort(sortableList, Comparator.comparing(Event::getStartDate)); // defaul asc mode
 
-            // TODO : testing this part - https://redmine.kodcu.com/issues/1489
+            // testing this part - https://redmine.kodcu.com/issues/1489
             if(eventFilter.getSort()!= null && eventFilter.getSort().equalsIgnoreCase("desc") ) {
 
                 //  01 April, 23 march  ...
