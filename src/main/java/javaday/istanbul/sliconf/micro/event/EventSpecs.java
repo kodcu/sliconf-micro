@@ -170,12 +170,21 @@ public class EventSpecs {
                 //if(!event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.ACTIVE) ){
                 //    ResponseMessage mailResponse=completeEventSendMail(event,mailSendService);
                 //}
-                event.getLifeCycleState().getEventStatuses().add(ACTIVE);
-                event.getLifeCycleState().getEventStatuses().remove(PASSIVE);
+                //Bug fixed : https://redmine.kodcu.com/issues/1604 issue
+                // if event is finished don't touch
+                if ( !event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.FINISHED)) {
+                    event.getLifeCycleState().getEventStatuses().add(ACTIVE);
+                    event.getLifeCycleState().getEventStatuses().remove(PASSIVE);
+                }
+
+
 
             } else {
-                event.getLifeCycleState().getEventStatuses().remove(ACTIVE);
-                event.getLifeCycleState().getEventStatuses().add(PASSIVE);
+
+                if (!event.getLifeCycleState().getEventStatuses().contains(LifeCycleState.EventStatus.FINISHED)) {
+                    event.getLifeCycleState().getEventStatuses().remove(ACTIVE);
+                    event.getLifeCycleState().getEventStatuses().add(PASSIVE);
+                }
 
             }
         }

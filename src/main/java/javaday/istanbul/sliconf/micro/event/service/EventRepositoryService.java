@@ -92,7 +92,7 @@ public class EventRepositoryService implements EventService {
     public ResponseMessage save(Event event) {
         ResponseMessage message = new ResponseMessage(false, "An error occurred while saving event", null);
 
-        // TODO: 02.10.2018 update ve create ayni yerden yapildigi icin bir takim sikintilar mevcut olabiliyor. bunlari ayirmali. #1158
+        //  02.10.2018 update ve create ayni yerden yapildigi icin bir takim sikintilar mevcut olabiliyor. bunlari ayirmali. #1158
         Event dbEvent = this.findById(event.getId()).orElse(null);
         ResponseMessage eventStateMessage = StateManager.isEventCompatibleWithState(dbEvent, event, eventStateService);
         if (!eventStateMessage.isStatus()) {
