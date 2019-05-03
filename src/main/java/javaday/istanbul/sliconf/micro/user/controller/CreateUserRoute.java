@@ -96,6 +96,7 @@ public class CreateUserRoute implements Route {
             return responseMessage;
         }
 
+        /**
         List<User> dbUsers = userRepositoryService.findByUsername(user.getUsername());
 
         // eger user yoksa kayit et
@@ -104,6 +105,8 @@ public class CreateUserRoute implements Route {
                     loginControllerMessageProvider.getMessage("userNameAlreadyUsed"), new Object());
             return responseMessage;
         }
+
+         */
 
         if (userRepositoryService.controlIfEmailIsExists(user.getEmail())) {
             responseMessage = new ResponseMessage(false,
