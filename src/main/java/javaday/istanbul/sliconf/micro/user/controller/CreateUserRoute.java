@@ -75,8 +75,6 @@ public class CreateUserRoute implements Route {
         }
 
 
-
-
         ResponseMessage responseMessage = registerUser(user);
 
         LoginTokenUtil.addAuthenticationTokenOnLogin(responseMessage, response, tokenAuthenticationService);
@@ -86,21 +84,21 @@ public class CreateUserRoute implements Route {
 
     public ResponseMessage registerUser(User user) {
         ResponseMessage responseMessage;
-        System.out.println(" --> " + user);
+
 
         if (Objects.isNull(user)) {
             responseMessage = new ResponseMessage(false, "User can not be empty", "");
             return responseMessage;
         }
 
-        System.out.println(" --> " + user.getEmail());
+
         if (!EmailUtil.validateEmail(user.getEmail())) {
             responseMessage = new ResponseMessage(false, "Email is not valid", user.getEmail());
-            System.out.println(" -->  Email is not valid  " );
+
             return responseMessage;
         }
 
-        /**
+
         List<User> dbUsers = userRepositoryService.findByUsername(user.getUsername());
 
         // eger user yoksa kayit et
@@ -110,7 +108,7 @@ public class CreateUserRoute implements Route {
             return responseMessage;
         }
 
-         */
+
 
         if (userRepositoryService.controlIfEmailIsExists(user.getEmail())) {
             responseMessage = new ResponseMessage(false,
@@ -119,11 +117,11 @@ public class CreateUserRoute implements Route {
             return responseMessage;
         }
 
-        System.out.println(" -->  before save "  + user);
+
 
         ResponseMessage dbResponse = userRepositoryService.saveUser(user);
 
-        System.out.println(" -->  after save "  + user);
+
 
         if (!dbResponse.isStatus()) {
             System.out.println(" -->  !dbResponse.isStatus() "  + !dbResponse.isStatus());
@@ -133,7 +131,7 @@ public class CreateUserRoute implements Route {
         responseMessage = new ResponseMessage(true,
                 loginControllerMessageProvider.getMessage("userSaveSuccessful"), dbResponse.getReturnObject());
 
-        System.out.println(" --> responseMessage "  + responseMessage);
+
 
         return responseMessage;
     }
