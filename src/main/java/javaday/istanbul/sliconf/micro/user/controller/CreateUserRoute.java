@@ -62,6 +62,7 @@ public class CreateUserRoute implements Route {
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
 
         String body = request.body();
+        System.out.println("-->  request.body " + body);
         User user = JsonUtil.fromJson(body, User.class);
 
         // anonim olarak giris yapmis kullanicinin deviceid sini alip yeni olusacak hesaba ekliyoruz.
@@ -125,13 +126,15 @@ public class CreateUserRoute implements Route {
         System.out.println(" -->  after save "  + user);
 
         if (!dbResponse.isStatus()) {
+            System.out.println(" -->  !dbResponse.isStatus() "  + !dbResponse.isStatus());
             return dbResponse;
         }
 
         responseMessage = new ResponseMessage(true,
                 loginControllerMessageProvider.getMessage("userSaveSuccessful"), dbResponse.getReturnObject());
 
-        System.out.println(" --> method return"  + user);
+        System.out.println(" --> responseMessage "  + responseMessage);
+
         return responseMessage;
     }
 
