@@ -19,7 +19,7 @@ public class UserBuilder {
     }
 
     public UserBuilder setFullName(String fullName) {
-        this.user.setFullName(fullName);
+        this.user.setFullname(fullName);
         return this;
     }
 

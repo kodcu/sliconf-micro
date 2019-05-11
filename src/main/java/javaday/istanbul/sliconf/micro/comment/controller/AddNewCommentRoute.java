@@ -173,7 +173,7 @@ public class AddNewCommentRoute implements Route {
                 comment.setFullname("Anonymous");
             }
         } else {
-            comment.setFullname(user.getFullName());
+            comment.setFullname(user.getFullname());
         }
 
     }

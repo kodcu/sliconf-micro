@@ -71,7 +71,7 @@ public class UpdateUserRoute implements Route {
         User user = userRepositoryService.findById(id).orElse(null);
 
         String stringUsername = "username";
-        String stringFullname = "fullName";
+        String stringFullname = "fullname";
         String stringPass = "password";
         String stringOldPass = "oldpassword";
 
@@ -93,7 +93,7 @@ public class UpdateUserRoute implements Route {
                     return new ResponseMessage(false, "New username must be at least 4", new Object());
             }
             if (Objects.nonNull(updateParams.getString(stringFullname))) {
-                user.setFullName(updateParams.getString(stringFullname));
+                user.setFullname(updateParams.getString(stringFullname));
                 changed = true;
             }
             if (Objects.nonNull(updateParams.getString(stringPass)) && Objects.nonNull(updateParams.getString(stringOldPass))) {

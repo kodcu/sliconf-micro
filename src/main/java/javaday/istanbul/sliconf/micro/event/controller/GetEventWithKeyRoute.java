@@ -133,7 +133,7 @@ public class GetEventWithKeyRoute implements Route {
                     totalUser.setAnonymous(user.getAnonymous());
                     totalUser.setDeviceId(user.getDeviceId());
                     totalUser.setEmail(user.getEmail());
-                    totalUser.setFullname(user.getFullName());
+                    totalUser.setFullname(user.getFullname());
                     totalUser.setUsername(user.getUsername());
 
                     event.getTotalUsers().getUsers().add(totalUser);

@@ -335,7 +335,7 @@ public class VoteCommentRoute implements Route {
                 VoteUser voteUser = new VoteUser();
                 voteUser.setUserId(user.getId());
                 voteUser.setUsername(user.getUsername());
-                voteUser.setFullname(user.getFullName());
+                voteUser.setFullname(user.getFullname());
 
                 voteUsers.add(voteUser);
             }
