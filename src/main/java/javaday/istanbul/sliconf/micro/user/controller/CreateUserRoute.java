@@ -62,7 +62,6 @@ public class CreateUserRoute implements Route {
     public ResponseMessage handle(@ApiParam(hidden = true) Request request, @ApiParam(hidden = true) Response response) throws Exception {
 
         String body = request.body();
-        System.out.println("-->  request.body " + body);
         User user = JsonUtil.fromJson(body, User.class);
 
         // anonim olarak giris yapmis kullanicinin deviceid sini alip yeni olusacak hesaba ekliyoruz.
