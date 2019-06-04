@@ -126,6 +126,9 @@ public class TokenAuthenticationService {
 
             } catch (ExpiredJwtException | UnsupportedJwtException |
                     MalformedJwtException | SignatureException | IllegalArgumentException e) {
+                System.err.println(e.getMessage());
+                System.err.println(e);
+                System.err.println(e.getLocalizedMessage());
                 return null;
             }
         }
